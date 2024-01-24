@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.LimelightHelpers;
+import frc.robot.utils.LimelightHelpers.LimelightTarget_Fiducial;
 
 @SuppressWarnings("unused") // Used in order to remove warnings
 public class Limelight extends SubsystemBase {
@@ -30,6 +31,7 @@ public class Limelight extends SubsystemBase {
   LimelightHelpers.LimelightResults llresults;
   double tv, tx, ty, ta = 0.0;
   private Pose2d robotPose_FieldSpace;
+  private Pose2d robotPose_TargetSpace;
   private GenericEntry vision;
 
   private double[] robotPoseTargetSpace;
@@ -50,6 +52,7 @@ public class Limelight extends SubsystemBase {
     tx = m_limelightTable.getEntry("tx").getDouble(0);
     ty = m_limelightTable.getEntry("ty").getDouble(0);
     ta = m_limelightTable.getEntry("ta").getDouble(0);
+    
 
     if (DriverStation.getAlliance().equals(DriverStation.Alliance.Red)) {
       robotPose_FieldSpace = llresults.targetingResults.getBotPose2d_wpiRed();
@@ -77,6 +80,11 @@ public class Limelight extends SubsystemBase {
 
   public double getTy() {
     return ty;
+  }
+
+  public Pose2d getRobotPose_TargetSpace2D()
+  {
+      return llresults.targetingResults.targets_Fiducials[0].getRobotPose_TargetSpace2D();
   }
 
   public boolean isTarget() {

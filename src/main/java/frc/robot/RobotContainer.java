@@ -6,7 +6,7 @@
 
 package frc.robot;
 
-// import frc.robot.commands.AutoAlign;
+import frc.robot.commands.AutoAlign;
 import frc.robot.commands.PadDrive;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
@@ -83,8 +83,8 @@ public class RobotContainer {
     leftBumper = new JoystickButton(pad, 5);
 
     swerveSubsystem = new SwerveSubsystem();
-    // swerveSubsystem.setDefaultCommand(new AutoAlign(swerveSubsystem, limelety, led));
-    swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveConstants.isFieldOriented, limelety, led));
+    swerveSubsystem.setDefaultCommand(new AutoAlign(swerveSubsystem, limelety, led));
+    // swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveConstants.isFieldOriented, limelety, led));
 
     //Configure auto chooser
     configureBindings();
@@ -123,7 +123,7 @@ public class RobotContainer {
     // PathPlannerPath path = PathPlannerPath.fromPathFile("Test Path");
     // return AutoBuilder.followPath(path);
 
-    return new PathPlannerAuto("Straight Auto");
+    return new PathPlannerAuto("curveAuto");
   }
 
   /**

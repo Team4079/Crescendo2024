@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2,
-      "y": 1.0
+      "x": 1.8625257653836784,
+      "y": 5.404696930390302
     },
     "rotation": 0
   },
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Straight Path"
+            "pathName": "Shawn Path"
           }
         }
       ]

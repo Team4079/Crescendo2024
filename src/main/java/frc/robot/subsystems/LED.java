@@ -56,10 +56,10 @@ public class LED extends SubsystemBase {
   }
 
   public void rainbowOn(){
-    rainbowOn = false;
+    rainbowOn = true;
   }
 
   public void rainbowOff(){
-    rainbowOn = true;
+    rainbowOn = false;
   }
 }

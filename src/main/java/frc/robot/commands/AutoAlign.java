@@ -16,6 +16,7 @@ public class AutoAlign extends Command {
   private Limelight limelight;
   private SwerveSubsystem swerveSubsystem;
   private LED led;
+  
   private PID horizontalPID;
   private double horizontalError;
 
@@ -23,13 +24,15 @@ public class AutoAlign extends Command {
   private double verticalError;
 
   private PID rotationalPID;
+  private double rotationalError;
+  public double printSlow = 0;
 
   public AutoAlign(SwerveSubsystem swerveSubsystem, Limelight limelight, LED led) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.swerveSubsystem = swerveSubsystem;
     this.limelight = limelight;
     this.led = led;
-    horizontalPID = new PID(0.1, 0, 0);
+    horizontalPID = new PID(0.02, 0, 0);
     verticalPID = new PID(0.1, 0.0, 0.0);
     rotationalPID = new PID(0.1, 0, 0);
     addRequirements(swerveSubsystem, limelight);
@@ -45,15 +48,28 @@ public class AutoAlign extends Command {
   @Override
   public void execute() {
     if (limelight.isTarget()) {
-      led.setRainbow();
+      led.rainbowOn();
+      swerveSubsystem.addVision(limelight.getRobotPosition());
+    } else {
+      led.rainbowOff();
     }
-    else 
-    {
-      led.setColor(0, 182, 174);
-    }
+
+    rotationalError = limelight.getRobotPose_TargetSpace2D().getRotation().getDegrees(); // Only runs when detects an AprilTag
     horizontalError = -limelight.getTx();
-    verticalError = -limelight.getTy();
-    swerveSubsystem.drive(verticalPID.calculate(verticalError, 0), horizontalPID.calculate(horizontalError, 0), 0, false);
+    
+    
+    if (printSlow == 50)
+    {
+      System.out.println("Horizontal Error: " + horizontalError);
+      System.out.println("Rotational Error: " + rotationalError);
+      printSlow = 0;
+    }
+    else
+    {
+      printSlow += 1;
+    }
+    // verticalError = -limelight.getTy();
+    swerveSubsystem.drive(0, horizontalPID.calculate(horizontalError, 0), rotationalPID.calculate(rotationalError, 0), false);
   }
 
   // Called once the command ends or is interrupted.
