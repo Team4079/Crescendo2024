@@ -54,18 +54,13 @@ public class SwerveSubsystem extends SubsystemBase {
   private double turnSpeed = 0;
   private Timer timer;
 
-  public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-      new PIDConstants(0, 0, 0),
-      new PIDConstants(0, 0, 0),
-      MotorConstants.MAX_SPEED,
-      Math.hypot(SwerveConstants.robotSize / 2, SwerveConstants.robotSize / 2),
-      new ReplanningConfig());
-
   private Field2d field = new Field2d();
 
   /** Creates a new DriveTrain. */
   public SwerveSubsystem() {
     pidggy = new Pigeon2(16);
+    pidggy.reset();
+
     modules = new SwerveModule[] {
         new SwerveModule(
             MotorConstants.FRONT_LEFT_DRIVE_ID,
@@ -106,14 +101,21 @@ public class SwerveSubsystem extends SubsystemBase {
     addRotorPositionsforModules();
     timer = new Timer();
 
+
+    // forward + x
+    // backward - x
+    // left - y
+    // right + y
+    // theta = we dont know lol
+
     AutoBuilder.configureHolonomic(
         this::getPose, // Robot pose supplier
         this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
         this::getAutoSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         this::chassisSpeedsDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            new PIDConstants(0.14, 0.0002, 0.0),
-            new PIDConstants(0.01, 0.0, 0.0),
+            new PIDConstants(0.14, 0.0002, 0.005),
+            new PIDConstants(0. , 0.0, 0.0),
             4.96824, // Max module speed, in m/s
             SwerveConstants.robotSize / 2, // Drive base radius in meters. Distance from robot center to furthest module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -228,13 +230,18 @@ public class SwerveSubsystem extends SubsystemBase {
     return swerveOdometry.getPoseMeters();
   }
 
+  public void printPose() {
+    // frickty you
+    // System.out.println(swerveOdometry.getPoseMeters());
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     pidggy.getYaw().refresh();
 
     swerveOdometry.update(Rotation2d.fromDegrees(getYaw()), getModulePositions());
-
+    printPose();
     if (vision) {
       // updatePosition();
     }

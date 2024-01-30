@@ -11,6 +11,7 @@ import frc.robot.commands.PadDrive;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.utils.Constants;
 import frc.robot.utils.LogitechGamingPad;
 import frc.robot.utils.Constants.SwerveConstants;
 
@@ -83,15 +84,20 @@ public class RobotContainer {
     leftBumper = new JoystickButton(pad, 5);
 
     swerveSubsystem = new SwerveSubsystem();
-    swerveSubsystem.setDefaultCommand(new AutoAlign(swerveSubsystem, limelety, led));
-    // swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveConstants.isFieldOriented, limelety, led));
+
+    // USE CONSTANT
+    // if (Constants.SwerveConstants.useLimelightAutoAlign) {
+    //   swerveSubsystem.setDefaultCommand(new AutoAlign(swerveSubsystem, limelety, led));
+    // } else {
+    swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveConstants.isFieldOriented, limelety, led));
+    // }
 
     //Configure auto chooser
     configureBindings();
     // autoChooser = AutoBuilder.buildAutoChooser("New Auto");
     // SmartDashboard.putData("Auto Chooser", autoChooser);
   }
-  
+
   /**
    * Use this method to define your trigger->command mappings. Triggers can be
    * created via the
@@ -110,7 +116,7 @@ public class RobotContainer {
     padA.onTrue(new InstantCommand(swerveSubsystem::addRotorPositionsforModules));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
     padY.onTrue(new InstantCommand(swerveSubsystem::configAAcornMode));
-    padX.onTrue(new InstantCommand(swerveSubsystem::configSlowMode));
+    padX.whileTrue(new AutoAlign(swerveSubsystem, limelety, led));
   }
   
   /**
@@ -123,7 +129,7 @@ public class RobotContainer {
     // PathPlannerPath path = PathPlannerPath.fromPathFile("Test Path");
     // return AutoBuilder.followPath(path);
 
-    return new PathPlannerAuto("curveAuto");
+    return new PathPlannerAuto("Test Auto");
   }
 
   /**

@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
@@ -24,7 +25,7 @@ public class AutoAlign extends Command {
   private double verticalError;
 
   private PID rotationalPID;
-  private double rotationalError;
+  private double[] rotationalError;
   public double printSlow = 0;
 
   public AutoAlign(SwerveSubsystem swerveSubsystem, Limelight limelight, LED led) {
@@ -32,9 +33,9 @@ public class AutoAlign extends Command {
     this.swerveSubsystem = swerveSubsystem;
     this.limelight = limelight;
     this.led = led;
-    horizontalPID = new PID(0.02, 0, 0);
-    verticalPID = new PID(0.1, 0.0, 0.0);
-    rotationalPID = new PID(0.1, 0, 0);
+    horizontalPID = new PID(0.05, 0.007, 0.01, 0);
+    verticalPID = new PID(0.24, 0.0085, 0.03, 0);
+    rotationalPID = new PID(0.05, 0.007, 0.01, 0);
     addRequirements(swerveSubsystem, limelight);
   }
 
@@ -54,14 +55,17 @@ public class AutoAlign extends Command {
       led.rainbowOff();
     }
 
-    rotationalError = limelight.getRobotPose_TargetSpace2D().getRotation().getDegrees(); // Only runs when detects an AprilTag
+    // rotationalError = limelight.getRobotPose_TargetSpace2D().getRotation().getDegrees(); // Only runs when detects an AprilTag
+    rotationalError = limelight.getRobotPose_TargetSpace2D();// limelight.getTs();
     horizontalError = -limelight.getTx();
-    
-    
-    if (printSlow == 50)
+
+    if (printSlow == 100)
     {
-      System.out.println("Horizontal Error: " + horizontalError);
-      System.out.println("Rotational Error: " + rotationalError);
+      for (int i = 0; i < rotationalError.length; i++) {
+        System.out.println(i + "th vaule: " + rotationalError[i] + "\n-------------------------------------");
+      }
+
+      // Rotational Value = index of 3 (value 4)
       printSlow = 0;
     }
     else
@@ -69,7 +73,7 @@ public class AutoAlign extends Command {
       printSlow += 1;
     }
     // verticalError = -limelight.getTy();
-    swerveSubsystem.drive(0, horizontalPID.calculate(horizontalError, 0), rotationalPID.calculate(rotationalError, 0), false);
+    swerveSubsystem.drive(0, horizontalPID.calculate(horizontalError, 0), rotationalPID.calculate(-rotationalError[4], 0) , false);
   }
 
   // Called once the command ends or is interrupted.

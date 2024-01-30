@@ -79,7 +79,7 @@ public final class Constants {
         frontRightLocation,
         backLeftLocation,
         backRightLocation);
-    public static final Pose2d STARTING_POSE = new Pose2d(2, 1, new Rotation2d());
+    public static final Pose2d STARTING_POSE = new Pose2d(0, 0, new Rotation2d());
     // STARTING_POSE = new Pose2d(14, 3, new Rotation2d());
     public static final double STATE_SPEED_THRESHOLD = 0.05;
 
@@ -91,11 +91,15 @@ public final class Constants {
     public static final boolean usingVision = false;
     public static final boolean isFieldOriented = true;
 
+    public static final boolean useLimelightAutoAlign = true;
+    
     public static final double DEADBAND = 0.08;
 
     public static class PIDConstants {
-      public static final PID STEER_PID = new PID(0.14, 0.00002, 0.008, 0);
-      public static final PID DRIVE_PID = new PID(0.01, 0.0, 0.0, 0);
+      // public static final PID STEER_PID = new PID(0.14, 0.00002, 0.008, 0);
+      public static final PID STEER_PID = new PID(0.24, 0.0085, 0.03, 0); // 0.05 P, 0 D
+      public static final PID DRIVE_PID = new PID(0.24, 0.0085, 0.03, 0);
+      // DON'T SET D PAST 0.03 - Erick.
     }
 
     public static final double offBalanceAngleThreshold = 10;
