@@ -127,6 +127,7 @@ public class PadDrive extends Command {
       }
       swerveSubsystem.addVision(limelety.getRobotPosition());
     } else {
+      // Remove Red LED light when in competition.
       led.rainbow(0, 255, 255); // Set led to red
     }
 
