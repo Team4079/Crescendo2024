@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class LED extends SubsystemBase {
   AddressableLED m_led;
   AddressableLEDBuffer m_ledBuffer;
-  private int rainbowFirstPixelHue = 0;
-  private int hue = 0;
-  private boolean rainbowOn = false;
+  // private int rainbowFirstPixelHue = 0;
+  // private int hue = 0;
+  // private boolean rainbowOn = false;
 
   public LED() {
     m_led = new AddressableLED(5);
@@ -17,35 +17,35 @@ public class LED extends SubsystemBase {
     m_led.setLength(m_ledBuffer.getLength());
     m_led.setData(m_ledBuffer);
     m_led.start();
-    rainbowFirstPixelHue = 0;
+    // rainbowFi, rstPixelHue = 0;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if (rainbowOn){
-      setRainbow();
-    }
-    else{
-      setColor(0, 182, 174);
-    }
+    // if (rainbowOn){
+    //   setRainbowMove();
+    // }
+    // else{
+    //   setColor(0, 182, 174);
+    // }
   }
 
-  public void setRainbow() {
-    if (rainbowOn) {
-      for (int i = 0; i < m_ledBuffer.getLength(); i++) {
-        hue = (rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
-        // Set the value
-        m_ledBuffer.setHSV(i, hue, 255, 180);
-      }
-      // Increase by to make the rainbow "move"
-      rainbowFirstPixelHue += 4.5;
-      // Check bounds
-      rainbowFirstPixelHue %= 180;
+  // public void setRainbowMove() {
+  //   if (rainbowOn) {
+  //     for (int i = 0; i < m_ledBuffer.getLength(); i++) {
+  //       hue = (rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
+  //       // Set the value\
+  //       m_ledBuffer.setHSV(i, hue, 255, 180);
+  //     }
+  //     // Increase by to make the rainbow "move"
+  //     rainbowFirstPixelHue += 4.5;
+  //     // Check bounds
+  //     rainbowFirstPixelHue %= 180;
 
-      m_led.setData(m_ledBuffer);
-    }
-  }
+  //     m_led.setData(m_ledBuffer);
+  //   }
+  // }
 
   public void setColor(int r, int g, int b){
     for (int i = 0; i < m_ledBuffer.getLength(); i++){
@@ -55,11 +55,12 @@ public class LED extends SubsystemBase {
     m_led.setData(m_ledBuffer);
   }
 
-  public void rainbowOn(){
-    rainbowOn = true;
-  }
-
-  public void rainbowOff(){
-    rainbowOn = false;
+  // HSV values
+  public void rainbow(int h, int s, int v){
+    // rainbowOn = true;
+    for (int i = 0; i < m_ledBuffer.getLength(); i++){
+      m_ledBuffer.setHSV(i, h, s, v);
+    }
+    m_led.setData(m_ledBuffer);
   }
 }

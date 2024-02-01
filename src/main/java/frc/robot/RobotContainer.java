@@ -8,6 +8,7 @@ package frc.robot;
 
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.PadDrive;
+// import frc.robot.commands.TargetLED;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -90,6 +91,7 @@ public class RobotContainer {
     //   swerveSubsystem.setDefaultCommand(new AutoAlign(swerveSubsystem, limelety, led));
     // } else {
     swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveConstants.isFieldOriented, limelety, led));
+    // led.setDefaultCommand(new TargetLED(limelety, led, swerveSubsystem));
     // }
 
     //Configure auto chooser

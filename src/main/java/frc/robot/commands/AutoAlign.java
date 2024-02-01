@@ -25,15 +25,17 @@ public class AutoAlign extends Command {
   private double verticalError;
 
   private PID rotationalPID;
-  private double[] rotationalError;
-  public double printSlow = 0;
+  private double rotationalError;
+  private double printSlow = 0;
+
+  private double limelightDeadband = 5.0;
 
   public AutoAlign(SwerveSubsystem swerveSubsystem, Limelight limelight, LED led) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.swerveSubsystem = swerveSubsystem;
     this.limelight = limelight;
     this.led = led;
-    horizontalPID = new PID(0.05, 0.007, 0.01, 0);
+    horizontalPID = new PID(0.05, 0.075, 0.03, 0);
     verticalPID = new PID(0.24, 0.0085, 0.03, 0);
     rotationalPID = new PID(0.05, 0.007, 0.01, 0);
     addRequirements(swerveSubsystem, limelight);
@@ -48,22 +50,14 @@ public class AutoAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (limelight.isTarget()) {
-      led.rainbowOn();
-      swerveSubsystem.addVision(limelight.getRobotPosition());
-    } else {
-      led.rainbowOff();
-    }
 
     // rotationalError = limelight.getRobotPose_TargetSpace2D().getRotation().getDegrees(); // Only runs when detects an AprilTag
-    rotationalError = limelight.getRobotPose_TargetSpace2D();// limelight.getTs();
+    rotationalError = -limelight.getRobotPose_TargetSpace2D()[4];// limelight.getTs();
     horizontalError = -limelight.getTx();
 
     if (printSlow == 100)
     {
-      for (int i = 0; i < rotationalError.length; i++) {
-        System.out.println(i + "th vaule: " + rotationalError[i] + "\n-------------------------------------");
-      }
+      System.out.println(horizontalError);
 
       // Rotational Value = index of 3 (value 4)
       printSlow = 0;
@@ -73,7 +67,15 @@ public class AutoAlign extends Command {
       printSlow += 1;
     }
     // verticalError = -limelight.getTy();
-    swerveSubsystem.drive(0, horizontalPID.calculate(horizontalError, 0), rotationalPID.calculate(-rotationalError[4], 0) , false);
+
+    if (Math.abs(horizontalError) >= limelightDeadband)
+    {
+      swerveSubsystem.drive(0, 0, rotationalPID.calculate(horizontalError, 0), false);
+    }
+    else
+    {
+      swerveSubsystem.stopModules();
+    }
   }
 
   // Called once the command ends or is interrupted.

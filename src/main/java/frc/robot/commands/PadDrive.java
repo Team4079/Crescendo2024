@@ -12,6 +12,7 @@ import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
+import frc.robot.utils.PID;
 
 public class PadDrive extends Command {
 
@@ -20,7 +21,17 @@ public class PadDrive extends Command {
   private final LogitechGamingPad pad;
   private final Limelight limelety;
   private final LED led;
+  private PID horizontalPID;
+  private double horizontalError;
 
+  private PID verticalPID;
+  private double verticalError;
+
+  private PID rotationalPID;
+  private double rotationalError;
+  private double printSlow = 0;
+
+  private double limelightDeadband = 5.0;
   /** Creates a new SwerveJoystick. */
   public PadDrive(SwerveSubsystem swerveSubsystem,
       LogitechGamingPad pad,
@@ -109,11 +120,20 @@ public class PadDrive extends Command {
 
     // Vision LED
     if (limelety.isTarget()) {
-      led.rainbowOn();
+      if (Math.abs(horizontalError) <= 5) {
+        led.rainbow(60, 255, 255); // Set led to green
+      } else {
+        led.rainbow(30, 255, 255); // Set led to orange
+      }
       swerveSubsystem.addVision(limelety.getRobotPosition());
     } else {
-      led.rainbowOff();
+      led.rainbow(0, 255, 255); // Set led to red
     }
+
+    // rotationalError = limelight.getRobotPose_TargetSpace2D().getRotation().getDegrees(); // Only runs when detects an AprilTag
+    rotationalError = -limelety.getRobotPose_TargetSpace2D()[4];// limelight.getTs();
+    horizontalError = -limelety.getTx();
+
   }
 
   // Called once the command ends or is interrupted.
