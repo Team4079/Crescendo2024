@@ -27,6 +27,7 @@ import frc.robot.utils.Constants;
 // import frc.robot.utils.PID;
 import frc.robot.utils.Constants.MotorConstants;
 import frc.robot.utils.Constants.SwerveConstants;
+import frc.robot.utils.Constants.SwerveConstants.BasePIDConstants;
 
 @SuppressWarnings("unused") // Used in order to remove warnings
 public class SwerveModule {
@@ -86,13 +87,13 @@ public class SwerveModule {
     driveConfigurator.apply(motorConfigs);
     steerConfigurator.apply(motorConfigs);
 
-    driveslot0Configs.kP = SwerveConstants.PIDConstants.DRIVE_PID.p;
-    driveslot0Configs.kI = SwerveConstants.PIDConstants.DRIVE_PID.i;
-    driveslot0Configs.kD = SwerveConstants.PIDConstants.DRIVE_PID.d;
+    driveslot0Configs.kP = BasePIDConstants.DRIVE_PID.p;
+    driveslot0Configs.kI = BasePIDConstants.DRIVE_PID.i;
+    driveslot0Configs.kD = BasePIDConstants.DRIVE_PID.d;
 
-    steerslot0Configs.kP = SwerveConstants.PIDConstants.STEER_PID.p; // original 0.06
-    steerslot0Configs.kI = SwerveConstants.PIDConstants.STEER_PID.i;
-    steerslot0Configs.kD = SwerveConstants.PIDConstants.STEER_PID.d; // Original 0.008
+    steerslot0Configs.kP = BasePIDConstants.STEER_PID.p; // original 0.06
+    steerslot0Configs.kI = BasePIDConstants.STEER_PID.i;
+    steerslot0Configs.kD = BasePIDConstants.STEER_PID.d; // Original 0.008
 
     driveMotor.getConfigurator().apply(driveslot0Configs);
     steerMotor.getConfigurator().apply(steerslot0Configs);

@@ -4,11 +4,16 @@
 
 package frc.robot.commands;
 
+import com.pathplanner.lib.util.PIDConstants;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.utils.Constants;
+import frc.robot.utils.Constants.SwerveConstants;
+import frc.robot.utils.Constants.SwerveConstants.BasePIDConstants;
 import frc.robot.utils.PID;
 
 @SuppressWarnings("unused")
@@ -18,26 +23,28 @@ public class AutoAlign extends Command {
   private SwerveSubsystem swerveSubsystem;
   private LED led;
   
+  // Horizontal PID and offset
   private PID horizontalPID;
   private double horizontalError;
 
+  // Vertical PID and offset
   private PID verticalPID;
   private double verticalError;
 
+  // Rotation PID and offset
   private PID rotationalPID;
   private double rotationalError;
-  private double printSlow = 0;
 
-  private double limelightDeadband = 5.0;
+  private double printSlow = 0;
 
   public AutoAlign(SwerveSubsystem swerveSubsystem, Limelight limelight, LED led) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.swerveSubsystem = swerveSubsystem;
     this.limelight = limelight;
     this.led = led;
-    horizontalPID = new PID(0.05, 0.075, 0.03, 0);
-    verticalPID = new PID(0.24, 0.0085, 0.03, 0);
-    rotationalPID = new PID(0.05, 0.007, 0.01, 0);
+    horizontalPID = BasePIDConstants.horizontalPID;
+    verticalPID = BasePIDConstants.verticalPID;
+    rotationalPID = BasePIDConstants.rotationalPID;
     addRequirements(swerveSubsystem, limelight);
   }
 
@@ -50,7 +57,6 @@ public class AutoAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
     // rotationalError = limelight.getRobotPose_TargetSpace2D().getRotation().getDegrees(); // Only runs when detects an AprilTag
     rotationalError = -limelight.getRobotPose_TargetSpace2D()[4];// limelight.getTs();
     horizontalError = -limelight.getTx();
@@ -68,7 +74,7 @@ public class AutoAlign extends Command {
     }
     // verticalError = -limelight.getTy();
 
-    if (Math.abs(horizontalError) >= limelightDeadband)
+    if (Math.abs(horizontalError) >= SwerveConstants.limelightDeadband)
     {
       swerveSubsystem.drive(0, 0, rotationalPID.calculate(horizontalError, 0), false);
     }
@@ -76,6 +82,22 @@ public class AutoAlign extends Command {
     {
       swerveSubsystem.stopModules();
     }
+
+    
+    // Vision LED
+    if (limelight.isTarget()) {
+      if (Math.abs(horizontalError) <= SwerveConstants.limelightDeadband) {
+        led.rainbow(SwerveConstants.greenLED[0], SwerveConstants.greenLED[1], SwerveConstants.greenLED[2]); // Set led to green
+      } else {
+        led.rainbow(SwerveConstants.orangeLED[0], SwerveConstants.orangeLED[1], SwerveConstants.orangeLED[2]); // Set led to orange
+      }
+      swerveSubsystem.addVision(limelight.getRobotPosition());
+    } else {
+      // Remove Red LED light when in competition.
+      led.rainbow(SwerveConstants.redLED[0], SwerveConstants.redLED[1], SwerveConstants.redLED[2]); // Set led to red
+    }
+
+    
   }
 
   // Called once the command ends or is interrupted.

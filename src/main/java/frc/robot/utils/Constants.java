@@ -92,17 +92,95 @@ public final class Constants {
     public static final boolean isFieldOriented = true;
 
     public static final boolean useLimelightAutoAlign = true;
+    public static final double limelightDeadband = 3.5;
     
     public static final double DEADBAND = 0.08;
 
-    public static class PIDConstants {
+    public static final int[] greenLED = {60, 255, 255};
+    public static final int[] orangeLED = {30, 255, 255};
+    public static final int[] redLED = {0, 255, 255};
+
+    public static class BasePIDConstants {
       // public static final PID STEER_PID = new PID(0.14, 0.00002, 0.008, 0);
       public static final PID STEER_PID = new PID(0.2, 0.0085, 0.01, 0); // 0.05 P, 0 D
       public static final PID DRIVE_PID = new PID(0.2, 0.0085, 0.01, 0);
       // DON'T SET D PAST 0.03 - Erick or else the swerve moduls make funny nosie
+    
+      // AutoAlign PID
+      public static final PID horizontalPID = new PID(0.05, 0.075, 0.03, 0);
+      public static final PID verticalPID = new PID(0.25, 0.0085, 0.03);
+      public static final PID rotationalPID = new PID(0.05, 0.003, 0.003, 0);
     }
 
     public static final double offBalanceAngleThreshold = 10;
     public static final double onBalanceAngleThreshold = 5;
+  }
+
+  public static class IntakeConstants {
+    private IntakeConstants() {
+      throw new IllegalStateException(UTILITY_CLASS);
+    }
+
+    public static final boolean isInverted = false;
+
+    public static final int INTAKE_MOTOR_TOP_ID = 0;
+    public static final int INTAKE_MOTOR_BOTTOM_ID = 1;
+
+    public static final double INTAKE_PID_TOP_P = 0.0002;
+    public static final double INTAKE_PID_TOP_I = 0.0;
+    public static final double INTAKE_PID_TOP_D = 0.0;
+
+    public static final double INTAKE_PID_BOTTOM_P = 0.0002;
+    public static final double INTAKE_PID_BOTTOM_I = 0.0;
+    public static final double INTAKE_PID_BOTTOM_D = 0.0;
+  }
+
+  public static class PassthroughConstants {
+    private PassthroughConstants() {
+      throw new IllegalStateException(UTILITY_CLASS);
+    }
+
+    public static final boolean isInverted = false;
+
+    public static final int PASSTHROUGH_MOTOR_TOP_ID = 2;
+    public static final int PASSTHROUGH_MOTOR_BOTTOM_ID = 3;
+
+    public static final double PASSTHROUGH_PID_TOP_P = 0.0002;
+    public static final double PASSTHROUGH_PID_TOP_I = 0.0;
+    public static final double PASSTHROUGH_PID_TOP_D = 0.0;
+
+    public static final double PASSTHROUGH_PID_BOTTOM_P = 0.0002;
+    public static final double PASSTHROUGH_PID_BOTTOM_I = 0.0;
+    public static final double PASSTHROUGH_PID_BOTTOM_D = 0.0;
+  }
+
+  public static class PivotConstants {
+    private PivotConstants() {
+      throw new IllegalStateException(UTILITY_CLASS);
+    }
+
+    public static final boolean isInverted = false;
+
+    public static final int PIVOT_MOTOR_TOP_ID = 4;
+    public static final int PIVOT_MOTOR_BOTTOM_ID = 5;
+
+    public static final double PIVOT_PID_TOP_P = 0.0002;
+    public static final double PIVOT_PID_TOP_I = 0.0;
+    public static final double PIVOT_PID_TOP_D = 0.0;
+
+    public static final double PIVOT_PID_BOTTOM_P = 0.0002;
+    public static final double PIVOT_PID_BOTTOM_I = 0.0;
+    public static final double PIVOT_PID_BOTTOM_D = 0.0;
+  }
+
+  public static class ShooterConstants 
+  {
+    private ShooterConstants() 
+    {
+      throw new IllegalStateException(UTILITY_CLASS);
+    }
+
+    public static final int FALCON_ONE_ID = 1;
+    public static final int FALCON_TWO_ID = 0;
   }
 }
