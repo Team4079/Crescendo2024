@@ -117,7 +117,7 @@ public class RobotContainer {
   private void configureBindings() {
     padA.onTrue(new InstantCommand(swerveSubsystem::addRotorPositionsforModules));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
-    padY.onTrue(new InstantCommand(swerveSubsystem::configAAcornMode));
+    padY.onTrue(new InstantCommand(swerveSubsystem::newPose));
     padX.whileTrue(new AutoAlign(swerveSubsystem, limelety, led));
   }
   
@@ -131,7 +131,9 @@ public class RobotContainer {
     // PathPlannerPath path = PathPlannerPath.fromPathFile("Test Path");
     // return AutoBuilder.followPath(path);
 
-    return new PathPlannerAuto("Test Auto");
+    swerveSubsystem.zeroHeading();
+    swerveSubsystem.newPose();
+    return new PathPlannerAuto("Straight Auto");
   }
 
   /**

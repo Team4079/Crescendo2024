@@ -48,11 +48,15 @@ public class SwerveSubsystem extends SubsystemBase {
   private Pigeon2 pidggy;
   public SwerveDriveOdometry swerveOdometry;
 
+  public SwerveDriveOdometry name;
+  public Pose2d name2;
+
   private double rot;
   private boolean vision;
   private final SwerveDriveKinematics sKinematics = Constants.SwerveConstants.kinematics;
   private double turnSpeed = 0;
   private Timer timer;
+  private int slow = 0;
 
   private Field2d field = new Field2d();
 
@@ -84,6 +88,9 @@ public class SwerveSubsystem extends SubsystemBase {
             SwerveConstants.CANCoderValue12)
     };
 
+    name = new SwerveDriveOdometry(sKinematics, gyroAngle, getModulePositions());
+    name2 = new Pose2d();
+
     swerveOdometry = new SwerveDriveOdometry(Constants.SwerveConstants.kinematics, Rotation2d.fromDegrees(getYaw()),
         getModulePositions());
 
@@ -101,7 +108,6 @@ public class SwerveSubsystem extends SubsystemBase {
     addRotorPositionsforModules();
     timer = new Timer();
 
-
     // forward + x
     // backward - x
     // left - y
@@ -110,14 +116,15 @@ public class SwerveSubsystem extends SubsystemBase {
 
     AutoBuilder.configureHolonomic(
         this::getPose, // Robot pose supplier
-        this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+        this::customPose, // Method to reset odometry (will be called if your auto has a starting pose)
         this::getAutoSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         this::chassisSpeedsDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            new PIDConstants(0.14, 0.0002, 0.005),
-            new PIDConstants(0. , 0.0, 0.0),
+            new PIDConstants(0.15, 0.0002, 0.0005),
+            new PIDConstants(0.15, 0.0, 0.0005),
             4.96824, // Max module speed, in m/s
-            SwerveConstants.robotSize / 2, // Drive base radius in meters. Distance from robot center to furthest module.
+            SwerveConstants.robotSize / 2, // Drive base radius in meters. Distance from robot center to furthest
+                                           // module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here
         ),
         () -> {
@@ -227,7 +234,7 @@ public class SwerveSubsystem extends SubsystemBase {
   // }
 
   public Pose2d getPose() {
-    return swerveOdometry.getPoseMeters();
+    return name.getPoseMeters();
   }
 
   public void printPose() {
@@ -235,12 +242,23 @@ public class SwerveSubsystem extends SubsystemBase {
     // System.out.println(swerveOdometry.getPoseMeters());
   }
 
+  public void newPose() {
+    name.resetPosition(Rotation2d.fromDegrees(pgetHeading()), getModulePositions(), new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
+  }
+
+  public void customPose(Pose2d poses) {
+    name.resetPosition(Rotation2d.fromDegrees(pgetHeading()), getModulePositions(), poses);
+  }
+
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     pidggy.getYaw().refresh();
+    Rotation2d gyroangle2 = Rotation2d.fromDegrees(pgetHeading());
+    name2 = name.update(gyroangle2, getModulePositions());
 
-    swerveOdometry.update(Rotation2d.fromDegrees(getYaw()), getModulePositions());
+    swerveOdometry.update(Rotation2d.fromDegrees(pgetHeading()), getModulePositions());
     printPose();
     if (vision) {
       // updatePosition();
@@ -251,6 +269,17 @@ public class SwerveSubsystem extends SubsystemBase {
     gyroAngle = getRotationPidggy();
     SmartDashboard.putNumber("Gyro Angle", gyroAngle.getDegrees());
     estimator.update(gyroAngle, getModulePositions());
+
+    if (slow == 50) {
+      System.out.println("heading: " + pgetHeading());
+      System.out.println("pose: " + getPose());
+      slow = 0;
+    }
+
+    else {
+      slow++;
+    }
+
   }
 
   public double getPitch() {
@@ -334,8 +363,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public ChassisSpeeds getAutoSpeeds() {
     return ChassisSpeeds.fromRobotRelativeSpeeds(0, 0, 0, Rotation2d.fromDegrees(0));
-    // return ChassisSpeeds.fromRobotRelativeSpeeds(turnSpeed, rot, delta, gyroAngle);
-  }  
+    // return ChassisSpeeds.fromRobotRelativeSpeeds(turnSpeed, rot, delta,
+    // gyroAngle);
+  }
 
   public void chassisSpeedsDrive(ChassisSpeeds chassisSpeeds) {
     SwerveModuleState[] states = SwerveConstants.kinematics.toSwerveModuleStates(chassisSpeeds);

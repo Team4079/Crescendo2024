@@ -27,6 +27,9 @@ public class PadDrive extends Command {
   private double verticalError;
   private double rotationalError;
 
+  private double[] arrayOfArray;
+  private double slow = 0;
+
   /** Creates a new SwerveJoystick. */
   public PadDrive(SwerveSubsystem swerveSubsystem,
       LogitechGamingPad pad,
@@ -116,19 +119,34 @@ public class PadDrive extends Command {
     // Vision LED
     if (limelety.isTarget()) {
       if (Math.abs(horizontalError) <= SwerveConstants.limelightDeadband) {
-        led.rainbow(60, 255, 255); // Set led to green
+        led.rainbow(SwerveConstants.greenLED[0], SwerveConstants.greenLED[1], SwerveConstants.greenLED[2]); // Set led to green
       } else {
-        led.rainbow(30, 255, 255); // Set led to orange
+        led.rainbow(SwerveConstants.orangeLED[0], SwerveConstants.orangeLED[1], SwerveConstants.orangeLED[2]); // Set led to orange
       }
       swerveSubsystem.addVision(limelety.getRobotPosition());
     } else {
       // Remove Red LED light when in competition.
-      led.rainbow(0, 255, 255); // Set led to red
+      led.rainbow(SwerveConstants.redLED[0], SwerveConstants.redLED[1], SwerveConstants.redLED[2]); // Set led to red
     }
 
+    // System.out.[r]
     // rotationalError = limelight.getRobotPose_TargetSpace2D().getRotation().getDegrees(); // Only runs when detects an AprilTag
     rotationalError = -limelety.getRobotPose_TargetSpace2D()[4];// limelight.getTs();
+    arrayOfArray = limelety.getRobotPose_TargetSpace2D();
+
     horizontalError = -limelety.getTx();
+
+    // if (slow == 50) {
+    //   for (int i = 0; i < arrayOfArray.length; i++) {
+    //     System.out.println(i + "th: " + arrayOfArray[i]);
+    //   }
+
+    //   System.out.println("-------------------------------");
+
+    //   slow = 0;
+    // } else {
+    //   slow++;
+    // }
   }
 
   // Called once the command ends or is interrupted.

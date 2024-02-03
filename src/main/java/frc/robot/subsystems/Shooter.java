@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants.ShooterConstants;
 
+@SuppressWarnings("unused")
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
   private TalonFX falconOne;
@@ -24,5 +25,11 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  
+  private void start() {
+
+  }
+
+  private void stop() {
+
+  }
 }

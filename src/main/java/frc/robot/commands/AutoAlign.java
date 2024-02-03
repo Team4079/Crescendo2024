@@ -63,7 +63,7 @@ public class AutoAlign extends Command {
 
     if (printSlow == 100)
     {
-      System.out.println(horizontalError);
+      // System.out.println(horizontalError);
 
       // Rotational Value = index of 3 (value 4)
       printSlow = 0;
@@ -96,8 +96,6 @@ public class AutoAlign extends Command {
       // Remove Red LED light when in competition.
       led.rainbow(SwerveConstants.redLED[0], SwerveConstants.redLED[1], SwerveConstants.redLED[2]); // Set led to red
     }
-
-    
   }
 
   // Called once the command ends or is interrupted.
