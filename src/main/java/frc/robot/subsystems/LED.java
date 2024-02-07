@@ -31,22 +31,6 @@ public class LED extends SubsystemBase {
     // }
   }
 
-  // public void setRainbowMove() {
-  //   if (rainbowOn) {
-  //     for (int i = 0; i < m_ledBuffer.getLength(); i++) {
-  //       hue = (rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
-  //       // Set the value\
-  //       m_ledBuffer.setHSV(i, hue, 255, 180);
-  //     }
-  //     // Increase by to make the rainbow "move"
-  //     rainbowFirstPixelHue += 4.5;
-  //     // Check bounds
-  //     rainbowFirstPixelHue %= 180;
-
-  //     m_led.setData(m_ledBuffer);
-  //   }
-  // }
-
   public void setColor(int r, int g, int b){
     for (int i = 0; i < m_ledBuffer.getLength(); i++){
       m_ledBuffer.setHSV(i, r, g, b);

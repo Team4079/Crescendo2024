@@ -5,7 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.Constants.IntakeConstants;
+import frc.robot.utils.Hell.IntakeConstants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;

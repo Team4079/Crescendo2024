@@ -82,10 +82,6 @@ public class Limelight extends SubsystemBase {
     return ty;
   }
 
-  // public double getTs() {
-  //   return ts;
-  // }
-
   public double[] getRobotPose_TargetSpace2D()
   {
     // System.out.println(m_limelightTable.getEntry("t6t_rs"));

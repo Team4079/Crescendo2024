@@ -22,10 +22,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
  * wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {
+public final class Hell {
   private static final String UTILITY_CLASS = "Utility class";
 
-  private Constants() {
+  private Hell() {
     throw new IllegalStateException(UTILITY_CLASS);
   }
 
@@ -79,7 +79,7 @@ public final class Constants {
         frontRightLocation,
         backLeftLocation,
         backRightLocation);
-    public static final Pose2d STARTING_POSE = new Pose2d(0, 0, new Rotation2d());
+    public static final Pose2d STARTING_POSE = new Pose2d(2, 7, new Rotation2d());
     // STARTING_POSE = new Pose2d(14, 3, new Rotation2d());
     public static final double STATE_SPEED_THRESHOLD = 0.05;
 

@@ -7,7 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.Constants.ShooterConstants;
+import frc.robot.utils.Hell.ShooterConstants;
 
 @SuppressWarnings("unused")
 public class Shooter extends SubsystemBase {

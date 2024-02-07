@@ -6,8 +6,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 // import frc.robot.utils.Constants;
-import frc.robot.utils.Constants.MotorConstants;
-import frc.robot.utils.Constants.SwerveConstants;
+import frc.robot.utils.Hell.MotorConstants;
+import frc.robot.utils.Hell.SwerveConstants;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -49,7 +49,7 @@ public class PadDrive extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("hey big boi ********************************************");
+    return;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -62,14 +62,10 @@ public class PadDrive extends Command {
     if (MotorConstants.SLOW_MODE) {
       y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED * MotorConstants.SLOW_SPEED;
       x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED * MotorConstants.SLOW_SPEED;
-    }
-
-    else if (MotorConstants.AACORN_MODE) {
+    } else if (MotorConstants.AACORN_MODE) {
       y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED * MotorConstants.AACORN_SPEED;
       x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED * MotorConstants.AACORN_SPEED;
-    }
-
-    else {
+    } else {
       y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED * 0.6;
       x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED * 0.6;
     }
@@ -147,6 +143,9 @@ public class PadDrive extends Command {
     // } else {
     //   slow++;
     // }
+    if (limelety.isTarget()) {
+      swerveSubsystem.updatePosition(limelety);
+    }
   }
 
   // Called once the command ends or is interrupted.

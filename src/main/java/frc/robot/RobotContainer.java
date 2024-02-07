@@ -12,9 +12,9 @@ import frc.robot.commands.PadDrive;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.utils.Constants;
+import frc.robot.utils.Hell;
 import frc.robot.utils.LogitechGamingPad;
-import frc.robot.utils.Constants.SwerveConstants;
+import frc.robot.utils.Hell.SwerveConstants;
 
 // import java.util.HashMap;
 // import java.util.function.Consumer;
@@ -133,7 +133,7 @@ public class RobotContainer {
 
     swerveSubsystem.zeroHeading();
     swerveSubsystem.newPose();
-    return new PathPlannerAuto("Straight Auto");
+    return new PathPlannerAuto("Shawn Auto");
   }
 
   /**

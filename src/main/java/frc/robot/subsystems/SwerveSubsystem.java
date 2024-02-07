@@ -23,6 +23,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj2.command.Command;
@@ -31,9 +32,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 // import frc.robot.Robot;
-import frc.robot.utils.Constants;
-import frc.robot.utils.Constants.MotorConstants;
-import frc.robot.utils.Constants.SwerveConstants;
+import frc.robot.utils.Hell;
+import frc.robot.utils.Hell.MotorConstants;
+import frc.robot.utils.Hell.SwerveConstants;
 
 @SuppressWarnings("unused") // Used in order to remove warnings
 public class SwerveSubsystem extends SubsystemBase {
@@ -43,25 +44,25 @@ public class SwerveSubsystem extends SubsystemBase {
   // private SwerveModule backRight;
   private SwerveModule[] modules;
   private SwerveDrivePoseEstimator estimator;
-  private double delta;
-  private Rotation2d gyroAngle = Rotation2d.fromDegrees(0);
+  private Rotation2d gyroAngle;
   private Pigeon2 pidggy;
-  public SwerveDriveOdometry swerveOdometry;
+  private final SwerveDriveKinematics sKinematics;
 
-  public SwerveDriveOdometry name;
-  public Pose2d name2;
+
+  public SwerveDriveOdometry swerveOdometry;
+  public Pose2d swerveOdomeryPose2d;
 
   private double rot;
-  private boolean vision;
-  private final SwerveDriveKinematics sKinematics = Constants.SwerveConstants.kinematics;
   private double turnSpeed = 0;
-  private Timer timer;
+
   private int slow = 0;
 
   private Field2d field = new Field2d();
 
   /** Creates a new DriveTrain. */
   public SwerveSubsystem() {
+    sKinematics = Hell.SwerveConstants.kinematics;
+    gyroAngle = Rotation2d.fromDegrees(0);
     pidggy = new Pigeon2(16);
     pidggy.reset();
 
@@ -88,17 +89,9 @@ public class SwerveSubsystem extends SubsystemBase {
             SwerveConstants.CANCoderValue12)
     };
 
-    name = new SwerveDriveOdometry(sKinematics, gyroAngle, getModulePositions());
-    name2 = new Pose2d();
+    swerveOdometry = new SwerveDriveOdometry(sKinematics, gyroAngle, getModulePositions());
+    swerveOdomeryPose2d = new Pose2d();
 
-    swerveOdometry = new SwerveDriveOdometry(Constants.SwerveConstants.kinematics, Rotation2d.fromDegrees(getYaw()),
-        getModulePositions());
-
-    // Creating my odometry object from the kinematics object and the initial wheel
-    // positions.
-    // Here, our starting pose is 5 meters along the long end of the field and in
-    // the
-    // center of the field along the short end, facing the opposing alliance wall.
     estimator = new SwerveDrivePoseEstimator(
         SwerveConstants.kinematics,
         getRotationPidggy(),
@@ -106,7 +99,6 @@ public class SwerveSubsystem extends SubsystemBase {
         SwerveConstants.STARTING_POSE);
 
     addRotorPositionsforModules();
-    timer = new Timer();
 
     // forward + x
     // backward - x
@@ -120,11 +112,10 @@ public class SwerveSubsystem extends SubsystemBase {
         this::getAutoSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         this::chassisSpeedsDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            new PIDConstants(0.15, 0.0002, 0.0005),
+            new PIDConstants(0.5, 0.000, 0.00),
             new PIDConstants(0.15, 0.0, 0.0005),
             4.96824, // Max module speed, in m/s
-            SwerveConstants.robotSize / 2, // Drive base radius in meters. Distance from robot center to furthest
-                                           // module.
+            SwerveConstants.robotSize / 2, // Drive base radius in meters. Distance from robot center to furthest // module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here
         ),
         () -> {
@@ -182,22 +173,15 @@ public class SwerveSubsystem extends SubsystemBase {
   public Rotation2d getRotationPidggy() {
     rot = -pidggy.getRotation2d().getDegrees();
     return Rotation2d.fromDegrees(rot);
-    // SmartDashboard.putNumber("Rotation2d", pidggy.getRotation2d().getDegrees());
-    // return pidggy.getRotation2d();
   }
 
   public void resetPose(Rotation2d gyroAngle, SwerveModulePosition[] modulePositions, Pose2d newPose) {
     estimator.resetPosition(gyroAngle, modulePositions, newPose);
-    // navX.getRotation2d();
   }
 
   public void zeroHeading() {
     pidggy.reset();
   }
-
-  // public void resetPitch(){
-  // pidggy.setYawPitchRoll(0,0,0);
-  // }
 
   public void resetDriveEncoders() {
     for (int i = 0; i < modules.length; i++) {
@@ -214,7 +198,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void configSlowMode() {
-    MotorConstants.SLOW_MODE = !Constants.MotorConstants.SLOW_MODE;
+    MotorConstants.SLOW_MODE = !Hell.MotorConstants.SLOW_MODE;
   }
 
   public boolean getSlowMode() {
@@ -222,32 +206,27 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void configAAcornMode() {
-    MotorConstants.AACORN_MODE = !Constants.MotorConstants.AACORN_MODE;
+    MotorConstants.AACORN_MODE = !Hell.MotorConstants.AACORN_MODE;
   }
 
   public boolean getAAcornMode() {
     return MotorConstants.AACORN_MODE;
   }
 
-  // public void updatePosition(){
-  // this.addVision(limelight.getRobotPosition());
-  // }
-
-  public Pose2d getPose() {
-    return name.getPoseMeters();
+  public void updatePosition(Limelight limelety){
+    this.addVision(limelety.getRobotPosition());
   }
 
-  public void printPose() {
-    // frickty you
-    // System.out.println(swerveOdometry.getPoseMeters());
+  public Pose2d getPose() {
+    return swerveOdometry.getPoseMeters();
   }
 
   public void newPose() {
-    name.resetPosition(Rotation2d.fromDegrees(pgetHeading()), getModulePositions(), new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
+    swerveOdometry.resetPosition(Rotation2d.fromDegrees(pgetHeading()), getModulePositions(), new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
   }
 
   public void customPose(Pose2d poses) {
-    name.resetPosition(Rotation2d.fromDegrees(pgetHeading()), getModulePositions(), poses);
+    swerveOdometry.resetPosition(Rotation2d.fromDegrees(pgetHeading()), getModulePositions(), poses);
   }
 
 
@@ -255,35 +234,14 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     pidggy.getYaw().refresh();
-    Rotation2d gyroangle2 = Rotation2d.fromDegrees(pgetHeading());
-    name2 = name.update(gyroangle2, getModulePositions());
-
-    swerveOdometry.update(Rotation2d.fromDegrees(pgetHeading()), getModulePositions());
-    printPose();
-    if (vision) {
-      // updatePosition();
-    }
+    Rotation2d headingGyroAnglething = Rotation2d.fromDegrees(pgetHeading());
+    swerveOdomeryPose2d = swerveOdometry.update(headingGyroAnglething, getModulePositions());
 
     field.setRobotPose(getPose());
 
     gyroAngle = getRotationPidggy();
     SmartDashboard.putNumber("Gyro Angle", gyroAngle.getDegrees());
     estimator.update(gyroAngle, getModulePositions());
-
-    if (slow == 50) {
-      System.out.println("heading: " + pgetHeading());
-      System.out.println("pose: " + getPose());
-      slow = 0;
-    }
-
-    else {
-      slow++;
-    }
-
-  }
-
-  public double getPitch() {
-    return pidggy.getPitch().getValue();
   }
 
   public void stopModules() {
@@ -311,18 +269,14 @@ public class SwerveSubsystem extends SubsystemBase {
     }
   }
 
-  public void updateEstimator() {
-    estimator.update(getRotationPidggy(), getModulePositions());
+  // public void updateEstimator() {
+  //   estimator.update(getRotationPidggy(), getModulePositions());
+  // }
 
-  }
+  // public void addVision() {
+  //   estimator.addVisionMeasurement(null, Timer.getFPGATimestamp());
+  // }
 
-  public void addVision() {
-    estimator.addVisionMeasurement(null, Timer.getFPGATimestamp());
-  }
-
-  public Pose2d getOdometry() {
-    return estimator.getEstimatedPosition();
-  }
 
   public void resetOdometry(Pose2d pose) {
     swerveOdometry.resetPosition(Rotation2d.fromDegrees(getYaw()), getModulePositions(), pose);
@@ -341,30 +295,16 @@ public class SwerveSubsystem extends SubsystemBase {
     }
   }
 
-  public double getRotorPositions(int moduleNum) {
-    return modules[moduleNum].steerMotor.getRotorPosition().getValue();
-  }
+  // public double getX() {
+  //   return estimator.getEstimatedPosition().getTranslation().getX();
+  // }
 
-  public double getCanCoderValues(int canID) {
-    double[] canCoderValues = new double[modules.length];
-    for (int i = 0; i < modules.length; i++) {
-      canCoderValues[i] = modules[i].getCanCoderValue();
-    }
-    return canCoderValues[canID - 9];
-  }
-
-  public double getX() {
-    return estimator.getEstimatedPosition().getTranslation().getX();
-  }
-
-  public double getY() {
-    return estimator.getEstimatedPosition().getTranslation().getY();
-  }
+  // public double getY() {
+  //   return estimator.getEstimatedPosition().getTranslation().getY();
+  // }
 
   public ChassisSpeeds getAutoSpeeds() {
     return ChassisSpeeds.fromRobotRelativeSpeeds(0, 0, 0, Rotation2d.fromDegrees(0));
-    // return ChassisSpeeds.fromRobotRelativeSpeeds(turnSpeed, rot, delta,
-    // gyroAngle);
   }
 
   public void chassisSpeedsDrive(ChassisSpeeds chassisSpeeds) {
