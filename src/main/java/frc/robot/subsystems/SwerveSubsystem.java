@@ -106,14 +106,15 @@ public class SwerveSubsystem extends SubsystemBase {
     // right + y
     // theta = we dont know lol
 
+
     AutoBuilder.configureHolonomic(
         this::getPose, // Robot pose supplier
         this::customPose, // Method to reset odometry (will be called if your auto has a starting pose)
         this::getAutoSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         this::chassisSpeedsDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            new PIDConstants(0.5, 0.000, 0.00),
-            new PIDConstants(0.15, 0.0, 0.0005),
+            new PIDConstants(0.15, 0.000, 0.00),
+            new PIDConstants(2.0, 0.0, 0.0),
             4.96824, // Max module speed, in m/s
             SwerveConstants.robotSize / 2, // Drive base radius in meters. Distance from robot center to furthest // module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -237,10 +238,10 @@ public class SwerveSubsystem extends SubsystemBase {
     Rotation2d headingGyroAnglething = Rotation2d.fromDegrees(pgetHeading());
     swerveOdomeryPose2d = swerveOdometry.update(headingGyroAnglething, getModulePositions());
 
-    field.setRobotPose(getPose());
+    // field.setRobotPose(getPose());
 
     gyroAngle = getRotationPidggy();
-    SmartDashboard.putNumber("Gyro Angle", gyroAngle.getDegrees());
+    // SmartDashboard.putNumber("Gyro Angle", gyroAngle.getDegrees());
     estimator.update(gyroAngle, getModulePositions());
   }
 
