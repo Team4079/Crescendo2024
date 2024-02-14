@@ -4,6 +4,11 @@
 
 package frc.robot.utils;
 
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -110,6 +115,21 @@ public final class Hell {
       public static final PID horizontalPID = new PID(0.05, 0.075, 0.03, 0);
       public static final PID verticalPID = new PID(0.25, 0.0085, 0.03);
       public static final PID rotationalPID = new PID(0.05, 0.003, 0.003, 0);
+
+      // path planner things
+
+      public static PIDController pathTranslationPID = new PIDController(0.15, 0.000, 0.00);
+      public static PIDController pathRotationPID = new PIDController(2.0, 0.0, 0.0);
+
+    
+
+      public static HolonomicPathFollowerConfig pathFollwer = 
+        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+        new PIDConstants(0.15, 0.000, 0.00), //translation
+        new PIDConstants(0, 0.0, 0.0), //rotation
+        4.96824, // Max module speed, in m/s
+        SwerveConstants.robotSize / 2, // Drive base radius in meters. Distance from robot center to furthest // module.
+        new ReplanningConfig()); // Default path replanning config. See the API for the options here
     }
 
     public static final double offBalanceAngleThreshold = 10;
