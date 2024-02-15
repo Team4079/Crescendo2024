@@ -35,7 +35,7 @@ public class AutoAlign extends Command {
   private PID rotationalPID;
   private double rotationalError;
 
-  private double printSlow = 0;
+  private double timeout = 0;
 
   public AutoAlign(SwerveSubsystem swerveSubsystem, Limelight limelight, LED led) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -61,17 +61,17 @@ public class AutoAlign extends Command {
     rotationalError = -limelight.getRobotPose_TargetSpace2D()[4];// limelight.getTs();
     horizontalError = -limelight.getTx();
 
-    if (printSlow == 100)
-    {
-      // System.out.println(horizontalError);
+    // if (printSlow == 100)
+    // {
+    //   // System.out.println(horizontalError);
 
-      // Rotational Value = index of 3 (value 4)
-      printSlow = 0;
-    }
-    else
-    {
-      printSlow += 1;
-    }
+    //   // Rotational Value = index of 3 (value 4)
+    //   printSlow = 0;
+    // }
+    // else
+    // {
+    //   printSlow += 1;
+    // }
     // verticalError = -limelight.getTy();
 
     if (Math.abs(horizontalError) >= SwerveConstants.limelightDeadband)
@@ -92,9 +92,11 @@ public class AutoAlign extends Command {
         led.rainbow(SwerveConstants.orangeLED[0], SwerveConstants.orangeLED[1], SwerveConstants.orangeLED[2]); // Set led to orange
       }
       swerveSubsystem.addVision(limelight.getRobotPosition());
+      timeout++;
     } else {
       // Remove Red LED light when in competition.
       led.rainbow(SwerveConstants.redLED[0], SwerveConstants.redLED[1], SwerveConstants.redLED[2]); // Set led to red
+      timeout = 0;
     }
   }
 
@@ -105,6 +107,11 @@ public class AutoAlign extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (horizontalError <= SwerveConstants.limelightDeadband && timeout == 25) {
+      timeout = 0;
+      return true;
+    }
+    
     return false;
   }
 }

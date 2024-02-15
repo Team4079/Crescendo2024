@@ -11,10 +11,13 @@ import frc.robot.commands.PadDrive;
 // import frc.robot.commands.TargetLED;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Robot;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.Hell;
 import frc.robot.utils.LogitechGamingPad;
 import frc.robot.utils.Hell.SwerveConstants;
+
+import com.pathplanner.lib.auto.NamedCommands;
 
 // import java.util.HashMap;
 // import java.util.function.Consumer;
@@ -85,6 +88,8 @@ public class RobotContainer {
     leftBumper = new JoystickButton(pad, 5);
 
     swerveSubsystem = new SwerveSubsystem();
+
+    NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem, limelety, led));
 
     // USE CONSTANT
     // if (Constants.SwerveConstants.useLimelightAutoAlign) {
