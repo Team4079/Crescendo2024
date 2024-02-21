@@ -7,6 +7,9 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+
 // import edu.wpi.first.math.controller.PIDController;
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
@@ -260,7 +263,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void addRotorPositionsforModules() {
     for (int i = 0; i < modules.length; i++) {
-      modules[i].setRotorPos();
+      modules[i].zeroRotorPosition();
     }
   }
 

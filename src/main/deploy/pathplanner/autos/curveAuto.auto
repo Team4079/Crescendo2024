@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.0,
-      "y": 2
+      "x": 3.0,
+      "y": 3.0
     },
-    "rotation": -5.0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -14,12 +14,11 @@
         {
           "type": "path",
           "data": {
-            "pathName": "curveTest"
+            "pathName": "Forward Path"
           }
         }
       ]
     }
   },
-  "folder": null,
-  "choreoAuto": false
+  "folder": null
 }

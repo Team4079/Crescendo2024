@@ -133,7 +133,7 @@ public class RobotContainer {
 
     swerveSubsystem.zeroHeading();
     swerveSubsystem.newPose();
-
+    swerveSubsystem.addRotorPositionsforModules();
     System.out.println(swerveSubsystem.getPose());
 
     // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
