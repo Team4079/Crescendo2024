@@ -110,29 +110,19 @@ public class SwerveSubsystem extends SubsystemBase {
     // theta = we dont know lol
 
 
+    SwerveConstants.BasePIDConstants.pathTranslationPID.enableContinuousInput(-Math.PI, Math.PI);
+
     AutoBuilder.configureHolonomic(
         this::getPose, // Robot pose supplier
         this::customPose, // Method to reset odometry (will be called if your auto has a starting pose)
         this::getAutoSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         this::chassisSpeedsDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            new PIDConstants(0.15, 0.000, 0.00),
-            new PIDConstants(2.0, 0.0, 0.0),
-            4.96824, // Max module speed, in m/s
-            SwerveConstants.robotSize / 2, // Drive base radius in meters. Distance from robot center to furthest // module.
-            new ReplanningConfig() // Default path replanning config. See the API for the options here
-        ),
-        () -> {
-          var alliance = DriverStation.getAlliance();
-          if (alliance.isPresent()) {
-            return alliance.get() == DriverStation.Alliance.Red;
-          }
-          return false;
-        },
+        SwerveConstants.BasePIDConstants.pathFollwer,
+        () -> false,
         this // Reference to this subsystem to set requirements
     );
 
-    PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
+    // PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
 
     SmartDashboard.putData("Field", field);
   }

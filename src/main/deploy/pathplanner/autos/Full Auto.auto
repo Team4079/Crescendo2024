@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 3.0,
-      "y": 3.0
+      "x": 1.5223008456488114,
+      "y": 5.541031627729691
     },
     "rotation": 0
   },
@@ -14,13 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Forward Path"
+            "pathName": "Full Path p1"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "autoAlign"
+            "pathName": "Full Path p2"
           }
         }
       ]
