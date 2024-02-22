@@ -48,7 +48,6 @@ public class SwerveSubsystem extends SubsystemBase {
   private Pigeon2 pidggy;
   private final SwerveDriveKinematics sKinematics;
 
-
   public SwerveDriveOdometry swerveOdometry;
   public Pose2d swerveOdomeryPose2d;
 
@@ -106,7 +105,6 @@ public class SwerveSubsystem extends SubsystemBase {
     // right + y
     // theta = we dont know lol
 
-
     SwerveConstants.BasePIDConstants.pathTranslationPID.enableContinuousInput(-Math.PI, Math.PI);
 
     AutoBuilder.configureHolonomic(
@@ -119,7 +117,8 @@ public class SwerveSubsystem extends SubsystemBase {
         this // Reference to this subsystem to set requirements
     );
 
-    // PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
+    // PathPlannerLogging.setLogActivePathCallback((poses) ->
+    // field.getObject("path").setPoses(poses));
 
     SmartDashboard.putData("Field", field);
   }
@@ -204,7 +203,7 @@ public class SwerveSubsystem extends SubsystemBase {
     return MotorConstants.AACORN_MODE;
   }
 
-  public void updatePosition(Limelight limelety){
+  public void updatePosition(Limelight limelety) {
     this.addVision(limelety.getRobotPosition());
   }
 
@@ -213,13 +212,13 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void newPose() {
-    swerveOdometry.resetPosition(Rotation2d.fromDegrees(pgetHeading()), getModulePositions(), new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
+    swerveOdometry.resetPosition(Rotation2d.fromDegrees(pgetHeading()), getModulePositions(),
+        new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
   }
 
   public void customPose(Pose2d poses) {
     swerveOdometry.resetPosition(Rotation2d.fromDegrees(pgetHeading()), getModulePositions(), poses);
   }
-
 
   @Override
   public void periodic() {
@@ -229,6 +228,14 @@ public class SwerveSubsystem extends SubsystemBase {
     swerveOdomeryPose2d = swerveOdometry.update(headingGyroAnglething, getModulePositions());
 
     // field.setRobotPose(getPose());
+
+    if (slow == 25) {
+      System.out.println(swerveOdometry.getPoseMeters());
+      slow -= slow; // nahhhhhhhhhhhhhhhh (also shawn sucks lol -jayden and erick)
+    } else {
+      
+      ++slow;
+    }
 
     gyroAngle = getRotationPidggy();
     // SmartDashboard.putNumber("Gyro Angle", gyroAngle.getDegrees());
@@ -261,13 +268,12 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   // public void updateEstimator() {
-  //   estimator.update(getRotationPidggy(), getModulePositions());
+  // estimator.update(getRotationPidggy(), getModulePositions());
   // }
 
   // public void addVision() {
-  //   estimator.addVisionMeasurement(null, Timer.getFPGATimestamp());
+  // estimator.addVisionMeasurement(null, Timer.getFPGATimestamp());
   // }
-
 
   public void resetOdometry(Pose2d pose) {
     swerveOdometry.resetPosition(Rotation2d.fromDegrees(getYaw()), getModulePositions(), pose);
@@ -287,11 +293,11 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   // public double getX() {
-  //   return estimator.getEstimatedPosition().getTranslation().getX();
+  // return estimator.getEstimatedPosition().getTranslation().getX();
   // }
 
   // public double getY() {
-  //   return estimator.getEstimatedPosition().getTranslation().getY();
+  // return estimator.getEstimatedPosition().getTranslation().getY();
   // }
 
   public ChassisSpeeds getAutoSpeeds() {

@@ -129,7 +129,7 @@ public final class Hell {
         new PIDConstants(0, 0.0, 0.0), //rotation
         4.96824, // Max module speed, in m/s
         SwerveConstants.robotSize / 2, // Drive base radius in meters. Distance from robot center to furthest // module.
-        new ReplanningConfig()); // Default path replanning config. See the API for the options here
+        new ReplanningConfig(false, false)); // Default path replanning config. See the API for the options here
     }
 
     public static final double offBalanceAngleThreshold = 10;
@@ -155,25 +155,6 @@ public final class Hell {
     public static final double INTAKE_PID_BOTTOM_D = 0.0;
   }
 
-  public static class PassthroughConstants {
-    private PassthroughConstants() {
-      throw new IllegalStateException(UTILITY_CLASS);
-    }
-
-    public static final boolean isInverted = false;
-
-    public static final int PASSTHROUGH_MOTOR_TOP_ID = 2;
-    public static final int PASSTHROUGH_MOTOR_BOTTOM_ID = 3;
-
-    public static final double PASSTHROUGH_PID_TOP_P = 0.0002;
-    public static final double PASSTHROUGH_PID_TOP_I = 0.0;
-    public static final double PASSTHROUGH_PID_TOP_D = 0.0;
-
-    public static final double PASSTHROUGH_PID_BOTTOM_P = 0.0002;
-    public static final double PASSTHROUGH_PID_BOTTOM_I = 0.0;
-    public static final double PASSTHROUGH_PID_BOTTOM_D = 0.0;
-  }
-
   public static class PivotConstants {
     private PivotConstants() {
       throw new IllegalStateException(UTILITY_CLASS);
@@ -181,16 +162,16 @@ public final class Hell {
 
     public static final boolean isInverted = false;
 
-    public static final int PIVOT_MOTOR_TOP_ID = 4;
-    public static final int PIVOT_MOTOR_BOTTOM_ID = 5;
+    public static final int PIVOT_MOTOR_LEFT_ID = 4;
+    public static final int PIVOT_MOTOR_RIGHT_ID = 5;
 
-    public static final double PIVOT_PID_TOP_P = 0.0002;
-    public static final double PIVOT_PID_TOP_I = 0.0;
-    public static final double PIVOT_PID_TOP_D = 0.0;
+    public static final double PIVOT_PID_LEFT_P = 0.0002;
+    public static final double PIVOT_PID_LEFT_I = 0.0;
+    public static final double PIVOT_PID_LEFT_D = 0.0;
 
-    public static final double PIVOT_PID_BOTTOM_P = 0.0002;
-    public static final double PIVOT_PID_BOTTOM_I = 0.0;
-    public static final double PIVOT_PID_BOTTOM_D = 0.0;
+    public static final double PIVOT_PID_RIGHT_P = 0.0002;
+    public static final double PIVOT_PID_RIGHT_I = 0.0;
+    public static final double PIVOT_PID_RIGHT_D = 0.0;
   }
 
   public static class ShooterConstants 
@@ -200,7 +181,9 @@ public final class Hell {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
-    public static final int FALCON_ONE_ID = 1;
-    public static final int FALCON_TWO_ID = 0;
+    public static final int FALCON_LEFT_ID = 1;
+    public static final int FALCON_RIGHT_ID = 0;
+    
+    public static final int KAREN_ONE_ID = 2;
   }
 }

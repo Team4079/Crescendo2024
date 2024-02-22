@@ -4,39 +4,31 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Hell.IntakeConstants;
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkPIDController;
-
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
 
-  private CANSparkMax intakeMotorTop;
-  private CANSparkMax intakeMotorBottom;
+  private TalonFX intakeKraken;
+  private TalonFXConfigurator intakeKrakenConfigurator;
+  private Slot0Configs slot0Config;
+  private DutyCycleOut m_request;
   
-  private SparkPIDController intakePIDTop;
-  private SparkPIDController intakePIDBottom;
-
   public Intake() {
-    this.intakeMotorTop = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_TOP_ID, CANSparkMax.MotorType.kBrushless);
-    this.intakeMotorBottom = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_BOTTOM_ID, CANSparkMax.MotorType.kBrushless);
+    this.intakeKraken = new TalonFX(IntakeConstants.INTAKE_MOTOR_TOP_ID);
 
-    this.intakePIDTop = intakeMotorTop.getPIDController();
-    this.intakePIDBottom = intakeMotorBottom.getPIDController();
+    intakeKrakenConfigurator = intakeKraken.getConfigurator();
 
-    this.intakePIDTop.setP(IntakeConstants.INTAKE_PID_TOP_P);
-    this.intakePIDTop.setI(IntakeConstants.INTAKE_PID_TOP_I);
-    this.intakePIDTop.setD(IntakeConstants.INTAKE_PID_TOP_D);
+    intakeKraken.getConfigurator().apply(new TalonFXConfiguration());
 
-    this.intakePIDBottom.setP(IntakeConstants.INTAKE_PID_BOTTOM_P);
-    this.intakePIDBottom.setI(IntakeConstants.INTAKE_PID_BOTTOM_I);
-    this.intakePIDBottom.setD(IntakeConstants.INTAKE_PID_BOTTOM_D);
-
-    intakeMotorTop.setInverted(IntakeConstants.isInverted);
-    intakeMotorBottom.setInverted(!IntakeConstants.isInverted);
+    m_request = new DutyCycleOut(0);
   }
 
   @Override
@@ -45,12 +37,10 @@ public class Intake extends SubsystemBase {
   }
 
   public void stopMotors() {
-    intakeMotorTop.stopMotor();
-    intakeMotorBottom.stopMotor();
+    intakeKraken.stopMotor();
   }
 
-  public void setVelocity(double top, double bottom) {
-    intakePIDTop.setReference(top, CANSparkMax.ControlType.kVelocity);
-    intakePIDBottom.setReference(bottom, CANSparkMax.ControlType.kVelocity);
+  public void setVelocity(double velocity) {
+    intakeKraken.setControl(m_request.withOutput(velocity));
   }
 }

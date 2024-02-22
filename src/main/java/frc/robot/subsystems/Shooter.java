@@ -12,12 +12,17 @@ import frc.robot.utils.Hell.ShooterConstants;
 @SuppressWarnings("unused")
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
-  private TalonFX falconOne;
-  private TalonFX falconTwo;
+  private TalonFX leftFalcon;
+  private TalonFX rightFalcon;
+
+  private TalonFX oneKaren;
 
   public Shooter() {
-    falconOne = new TalonFX(ShooterConstants.FALCON_ONE_ID);
-    falconTwo = new TalonFX(ShooterConstants.FALCON_TWO_ID);
+    leftFalcon = new TalonFX(ShooterConstants.FALCON_LEFT_ID);
+    rightFalcon = new TalonFX(ShooterConstants.FALCON_RIGHT_ID);
+
+    oneKaren = new TalonFX(ShooterConstants.KAREN_ONE_ID);
+    
   }
 
   @Override
@@ -25,8 +30,8 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  private void start() {
-
+  public void setVelocity(){
+    
   }
 
   private void stop() {
