@@ -14,12 +14,11 @@
         {
           "type": "path",
           "data": {
-            "pathName": "New Path"
+            "pathName": "curveTest"
           }
         }
       ]
     }
   },
-  "folder": null,
-  "choreoAuto": false
+  "folder": null
 }
