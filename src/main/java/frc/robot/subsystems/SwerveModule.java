@@ -13,13 +13,10 @@ import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 // import edu.wpi.first.math.kinematics.ChassisSpeeds;
 // import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -61,9 +58,6 @@ public class SwerveModule {
   private ClosedLoopRampsConfigs driveClosedRampsConfigs;
   private ClosedLoopRampsConfigs steerClosedRampsConfigs;
 
-  private PIDController steerPIDController;
-  private VoltageOut m_voltage;
-
   // static int printSlower = 0;
 
   /** Creates a new SwerveModule. */
@@ -88,7 +82,6 @@ public class SwerveModule {
 
     driveMotor.getConfigurator().apply(new TalonFXConfiguration());
     steerMotor.getConfigurator().apply(new TalonFXConfiguration());
-    this.steerPIDController = new PIDController(BasePIDConstants.STEER_PID.p, BasePIDConstants.STEER_PID.i, BasePIDConstants.STEER_PID.d);
 
     motorConfigs.NeutralMode = NeutralModeValue.Brake;
     driveConfigurator.apply(motorConfigs);
@@ -122,11 +115,6 @@ public class SwerveModule {
     driveMotor.getConfigurator().apply(driveCurrentLimitsConfigs);
     steerMotor.getConfigurator().apply(steerCurrentLimitsConfigs);
 
-    m_voltage = new VoltageOut(0);
-    steerPIDController.setPID(BasePIDConstants.STEER_PID.p, BasePIDConstants.STEER_PID.i, BasePIDConstants.STEER_PID.d);
-    steerPIDController.enableContinuousInput(-180, 180);
-
-    //TODO change these values to have their own PID
   }
 
   public SwerveModulePosition getPosition() {
@@ -146,18 +134,8 @@ public class SwerveModule {
     steerMotor.setControl(m_request.withOutput(speed));
   }
 
-  public void setSteerPosition(double newRotations, double oldRotations) {
-    steerMotor.setControl(m_voltage.withOutput(
-      MathUtil.clamp( 
-          (steerPIDController.calculate(
-                oldRotations,
-                newRotations 
-                ) 
-                 ), 
-            -1.0, 
-            1.0)
-    ));
-    // steerMotor.setControl(m_cycle.withPosition(rotations));
+  public void setSteerPosition(double rotations) {
+    steerMotor.setControl(m_cycle.withPosition(rotations));
   }
 
   public void resetEncoders() {
@@ -222,9 +200,9 @@ public class SwerveModule {
       SmartDashboard.putNumber("Set Rotations " + steerMotor.getDeviceID(), newRotations);
       SmartDashboard.putNumber("Actual Rotations " + steerMotor.getDeviceID(),
           steerMotor.getRotorPosition().getValue());
-      SmartDashboard.putNumber("Sourish Meth" + steerMotor.getDeviceID(),
+      SmartDashboard.putNumber("Jayden Sun" + steerMotor.getDeviceID(),
           newRotations - steerMotor.getRotorPosition().getValue());
-      setSteerPosition(newRotations, steerMotor.getRotorPosition().getValue());
+      setSteerPosition(newRotations);
 
     }
   }
@@ -234,7 +212,7 @@ public class SwerveModule {
     setSteerSpeed(0);
   }
 
-  public void zeroRotorPosition() {
+  public void setRotorPos() {
     initialCANCoderValue = canCoder.getAbsolutePosition().refresh().getValue() % 360;
     steerMotor.setPosition(
         -(initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * MotorConstants.STEER_MOTOR_GEAR_RATIO);

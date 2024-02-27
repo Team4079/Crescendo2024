@@ -10,12 +10,9 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Hell.PivotConstants;
@@ -110,6 +107,5 @@ public class Pivot extends SubsystemBase {
   public void setVelocity(double left, double right) {
     pivotMotorLeft.setControl(m_request.withVelocity(left));
     pivotMotorRight.setControl(m_request.withVelocity(right));
-
   }
 }
