@@ -4,39 +4,62 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Hell.IntakeConstants;
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkPIDController;
-
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
 
-  private CANSparkMax intakeMotorTop;
-  private CANSparkMax intakeMotorBottom;
+  private TalonFX intakeKaren;
+  private TalonFXConfigurator intakeKarenConfigurator;
+  private Slot0Configs karenConfig;
   
-  private SparkPIDController intakePIDTop;
-  private SparkPIDController intakePIDBottom;
+  private MotorOutputConfigs intakeConfigs;
 
+  private CurrentLimitsConfigs karenCurrentConfig;
+
+  private ClosedLoopRampsConfigs karenRampConfig;
+
+  private VelocityVoltage m_request;
+  
   public Intake() {
-    this.intakeMotorTop = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_TOP_ID, CANSparkMax.MotorType.kBrushless);
-    this.intakeMotorBottom = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_BOTTOM_ID, CANSparkMax.MotorType.kBrushless);
+    this.intakeKaren = new TalonFX(IntakeConstants.INTAKE_MOTOR_ID);
 
-    this.intakePIDTop = intakeMotorTop.getPIDController();
-    this.intakePIDBottom = intakeMotorBottom.getPIDController();
+    intakeKarenConfigurator = intakeKaren.getConfigurator();
 
-    this.intakePIDTop.setP(IntakeConstants.INTAKE_PID_TOP_P);
-    this.intakePIDTop.setI(IntakeConstants.INTAKE_PID_TOP_I);
-    this.intakePIDTop.setD(IntakeConstants.INTAKE_PID_TOP_D);
+    karenConfig = new Slot0Configs();
 
-    this.intakePIDBottom.setP(IntakeConstants.INTAKE_PID_BOTTOM_P);
-    this.intakePIDBottom.setI(IntakeConstants.INTAKE_PID_BOTTOM_I);
-    this.intakePIDBottom.setD(IntakeConstants.INTAKE_PID_BOTTOM_D);
+    intakeKaren.getConfigurator().apply(new TalonFXConfiguration());
 
-    intakeMotorTop.setInverted(IntakeConstants.isInverted);
-    intakeMotorBottom.setInverted(!IntakeConstants.isInverted);
+    intakeKarenConfigurator.apply(intakeConfigs);
+
+    karenConfig.kP = IntakeConstants.INTAKE_PID_P;
+    karenConfig.kI = IntakeConstants.INTAKE_PID_I;
+    karenConfig.kP = IntakeConstants.INTAKE_PID_D;
+
+    intakeKaren.getConfigurator().apply(karenConfig);
+
+    karenCurrentConfig = new CurrentLimitsConfigs();
+
+    karenRampConfig = new ClosedLoopRampsConfigs();
+
+    karenCurrentConfig.SupplyCurrentLimit = 100;
+    karenCurrentConfig.StatorCurrentLimit = 100;
+
+    intakeKaren.getConfigurator().apply(karenCurrentConfig);
+
+    karenRampConfig.DutyCycleClosedLoopRampPeriod = 0.5;
+
+    intakeKaren.getConfigurator().apply(karenRampConfig);
   }
 
   @Override
@@ -44,13 +67,16 @@ public class Intake extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+  // methods probably
   public void stopMotors() {
-    intakeMotorTop.stopMotor();
-    intakeMotorBottom.stopMotor();
+    intakeKaren.stopMotor();
   }
 
-  public void setVelocity(double top, double bottom) {
-    intakePIDTop.setReference(top, CANSparkMax.ControlType.kVelocity);
-    intakePIDBottom.setReference(bottom, CANSparkMax.ControlType.kVelocity);
+  public void setIntakeVelocity(double speed) {
+    intakeKaren.setControl(m_request.withVelocity(speed));
+  }
+
+  public void stopKaren() {
+    intakeKaren.stopMotor();
   }
 }

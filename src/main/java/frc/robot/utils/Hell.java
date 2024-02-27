@@ -73,19 +73,20 @@ public final class Hell {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
-    public static final double robotSize = 26; // Keep constant *ideally*
+    public static final double robotSize = 0.43105229381; // Keep constant *ideally*
 
-    public static final Translation2d frontLeftLocation = new Translation2d(0.263525, -0.263525);
-    public static final Translation2d frontRightLocation = new Translation2d(0.263525, 0.263525);
-    public static final Translation2d backLeftLocation = new Translation2d(-0.263525, -0.263525);
-    public static final Translation2d backRightLocation = new Translation2d(-0.263525, 0.263525);
+    public static final Translation2d frontLeftLocation = new Translation2d(0.3048, -0.3048); // (0.263525, -0.263525);
+    public static final Translation2d frontRightLocation = new Translation2d(0.3048, 0.3048); // (0.263525, 0.263525);
+    public static final Translation2d backLeftLocation = new Translation2d(-0.3048, -0.3048); // (-0.263525, -0.263525);
+    public static final Translation2d backRightLocation = new Translation2d(-0.3048, 0.3048); // (-0.263525, 0.263525);
     public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
         frontLeftLocation,
         frontRightLocation,
         backLeftLocation,
         backRightLocation);
+
+    // uselses
     public static final Pose2d STARTING_POSE = new Pose2d(2, 7, new Rotation2d());
-    // STARTING_POSE = new Pose2d(14, 3, new Rotation2d());
     public static final double STATE_SPEED_THRESHOLD = 0.05;
 
     public static final double CANCoderValue9 = 0.915283 + 0.5; // 0.9174805
@@ -128,8 +129,8 @@ public final class Hell {
         new PIDConstants(0.15, 0.000, 0.00), //translation
         new PIDConstants(0, 0.0, 0.0), //rotation
         4.96824, // Max module speed, in m/s
-        SwerveConstants.robotSize / 2, // Drive base radius in meters. Distance from robot center to furthest // module.
-        new ReplanningConfig()); // Default path replanning config. See the API for the options here
+        SwerveConstants.robotSize, // Drive base radius in meters. Distance from robot center to furthest // module.
+        new ReplanningConfig(false, false)); // Default path replanning config. See the API for the options here
     }
 
     public static final double offBalanceAngleThreshold = 10;
@@ -143,35 +144,11 @@ public final class Hell {
 
     public static final boolean isInverted = false;
 
-    public static final int INTAKE_MOTOR_TOP_ID = 0;
-    public static final int INTAKE_MOTOR_BOTTOM_ID = 1;
+    public static final int INTAKE_MOTOR_ID = 0;
 
-    public static final double INTAKE_PID_TOP_P = 0.0002;
-    public static final double INTAKE_PID_TOP_I = 0.0;
-    public static final double INTAKE_PID_TOP_D = 0.0;
-
-    public static final double INTAKE_PID_BOTTOM_P = 0.0002;
-    public static final double INTAKE_PID_BOTTOM_I = 0.0;
-    public static final double INTAKE_PID_BOTTOM_D = 0.0;
-  }
-
-  public static class PassthroughConstants {
-    private PassthroughConstants() {
-      throw new IllegalStateException(UTILITY_CLASS);
-    }
-
-    public static final boolean isInverted = false;
-
-    public static final int PASSTHROUGH_MOTOR_TOP_ID = 2;
-    public static final int PASSTHROUGH_MOTOR_BOTTOM_ID = 3;
-
-    public static final double PASSTHROUGH_PID_TOP_P = 0.0002;
-    public static final double PASSTHROUGH_PID_TOP_I = 0.0;
-    public static final double PASSTHROUGH_PID_TOP_D = 0.0;
-
-    public static final double PASSTHROUGH_PID_BOTTOM_P = 0.0002;
-    public static final double PASSTHROUGH_PID_BOTTOM_I = 0.0;
-    public static final double PASSTHROUGH_PID_BOTTOM_D = 0.0;
+    public static final double INTAKE_PID_P = 0.0002;
+    public static final double INTAKE_PID_I = 0.0;
+    public static final double INTAKE_PID_D = 0.0;
   }
 
   public static class PivotConstants {
@@ -181,16 +158,16 @@ public final class Hell {
 
     public static final boolean isInverted = false;
 
-    public static final int PIVOT_MOTOR_TOP_ID = 4;
-    public static final int PIVOT_MOTOR_BOTTOM_ID = 5;
+    public static final int PIVOT_MOTOR_LEFT_ID = 4;
+    public static final int PIVOT_MOTOR_RIGHT_ID = 5;
 
-    public static final double PIVOT_PID_TOP_P = 0.0002;
-    public static final double PIVOT_PID_TOP_I = 0.0;
-    public static final double PIVOT_PID_TOP_D = 0.0;
+    public static final double PIVOT_PID_LEFT_P = 0.0002;
+    public static final double PIVOT_PID_LEFT_I = 0.0;
+    public static final double PIVOT_PID_LEFT_D = 0.0;
 
-    public static final double PIVOT_PID_BOTTOM_P = 0.0002;
-    public static final double PIVOT_PID_BOTTOM_I = 0.0;
-    public static final double PIVOT_PID_BOTTOM_D = 0.0;
+    public static final double PIVOT_PID_RIGHT_P = 0.0002;
+    public static final double PIVOT_PID_RIGHT_I = 0.0;
+    public static final double PIVOT_PID_RIGHT_D = 0.0;
   }
 
   public static class ShooterConstants 
@@ -200,7 +177,21 @@ public final class Hell {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
-    public static final int FALCON_ONE_ID = 1;
-    public static final int FALCON_TWO_ID = 0;
+    public static final int FALCON_LEFT_ID = 1;
+    public static final int FALCON_RIGHT_ID = 0;
+    
+    public static final int KAREN_ID = 2;
+
+    public static final double SHOOTER_PID_LEFT_P = 0.0002;
+    public static final double SHOOTER_PID_LEFT_I = 0.0;
+    public static final double SHOOTER_PID_LEFT_D = 0.0;
+
+    public static final double SHOOTER_PID_RIGHT_P = 0.0002;
+    public static final double SHOOTER_PID_RIGHT_I = 0.0;
+    public static final double SHOOTER_PID_RIGHT_D = 0.0;
+
+    public static final double KAREN_P = 0.0002;
+    public static final double KAREN_I = 0.0;
+    public static final double KAREN_D = 0.0;
   }
 }
