@@ -8,6 +8,7 @@ package frc.robot;
 
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.PadDrive;
+import frc.robot.subsystems.Jevois;
 // import frc.robot.commands.TargetLED;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
@@ -60,6 +61,7 @@ public class RobotContainer {
   private final LogitechGamingPad pad;
   private final LED led;
   private final Limelight limelety;
+  private final Jevois jevois;
   
   private final JoystickButton padA;
   private final JoystickButton padB;
@@ -77,8 +79,7 @@ public class RobotContainer {
     pad = new LogitechGamingPad(0);
     led = new LED();
     limelety = new Limelight();
-    // limelight = new Limelight();
-   
+    jevois = new Jevois();   
     
     padA = new JoystickButton(pad, 1);
     padB = new JoystickButton(pad, 2);
