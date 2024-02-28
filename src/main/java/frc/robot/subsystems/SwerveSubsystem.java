@@ -32,9 +32,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 // import frc.robot.Robot;
-import frc.robot.utils.Hell;
-import frc.robot.utils.Hell.MotorConstants;
-import frc.robot.utils.Hell.SwerveConstants;
+import frc.robot.utils.Constants;
+import frc.robot.utils.Constants.MotorConstants;
+import frc.robot.utils.Constants.SwerveConstants;
 
 @SuppressWarnings("unused") // Used in order to remove warnings
 public class SwerveSubsystem extends SubsystemBase {
@@ -54,13 +54,11 @@ public class SwerveSubsystem extends SubsystemBase {
   private double rot;
   private double turnSpeed = 0;
 
-  private int slow = 0;
-
   private Field2d field = new Field2d();
 
   /** Creates a new DriveTrain. */
   public SwerveSubsystem() {
-    sKinematics = Hell.SwerveConstants.kinematics;
+    sKinematics = Constants.SwerveConstants.kinematics;
     gyroAngle = Rotation2d.fromDegrees(0);
     pidggy = new Pigeon2(16);
     pidggy.reset();
@@ -112,7 +110,7 @@ public class SwerveSubsystem extends SubsystemBase {
         this::customPose, // Method to reset odometry (will be called if your auto has a starting pose)
         this::getAutoSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         this::chassisSpeedsDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-        SwerveConstants.BasePIDConstants.pathFollwer,
+        SwerveConstants.BasePIDConstants.pathFollower,
         () -> false,
         this // Reference to this subsystem to set requirements
     );
@@ -187,8 +185,9 @@ public class SwerveSubsystem extends SubsystemBase {
     return (pidggy.getYaw().getValue() % 360);
   }
 
+  // Speed modifiers
   public void configSlowMode() {
-    MotorConstants.SLOW_MODE = !Hell.MotorConstants.SLOW_MODE;
+    MotorConstants.SLOW_MODE = !MotorConstants.SLOW_MODE;
   }
 
   public boolean getSlowMode() {
@@ -196,7 +195,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void configAAcornMode() {
-    MotorConstants.AACORN_MODE = !Hell.MotorConstants.AACORN_MODE;
+    MotorConstants.AACORN_MODE = !MotorConstants.AACORN_MODE;
   }
 
   public boolean getAAcornMode() {
@@ -207,6 +206,7 @@ public class SwerveSubsystem extends SubsystemBase {
     this.addVision(limelety.getRobotPosition());
   }
 
+  // Position methods - used for odometry
   public Pose2d getPose() {
     return swerveOdometry.getPoseMeters();
   }
@@ -227,25 +227,8 @@ public class SwerveSubsystem extends SubsystemBase {
     Rotation2d headingGyroAnglething = Rotation2d.fromDegrees(pgetHeading());
     swerveOdomeryPose2d = swerveOdometry.update(headingGyroAnglething, getModulePositions());
 
-    // field.setRobotPose(getPose());
-
-    if (slow == 25) {
-      System.out.println(swerveOdometry.getPoseMeters());
-      slow -= slow; // nahhhhhhhhhhhhhhhh (also shawn sucks lol -jayden and erick)
-    } else {
-      
-      ++slow;
-    }
-
     gyroAngle = getRotationPidggy();
-    // SmartDashboard.putNumber("Gyro Angle", gyroAngle.getDegrees());
     estimator.update(gyroAngle, getModulePositions());
-  }
-
-  public void stopModules() {
-    for (SwerveModule module : modules) {
-      module.stop();
-    }
   }
 
   public void test(int moduleNum, double driveSpeed, double rotationSpeed) {
@@ -261,18 +244,20 @@ public class SwerveSubsystem extends SubsystemBase {
     }
   }
 
-  public void stop() {
-    for (int i = 0; i < modules.length; i++) {
-      modules[i].stop();
-    }
-  }
-
   // public void updateEstimator() {
-  // estimator.update(getRotationPidggy(), getModulePositions());
+  //  estimator.update(getRotationPidggy(), getModulePositions());
   // }
 
   // public void addVision() {
-  // estimator.addVisionMeasurement(null, Timer.getFPGATimestamp());
+  //  estimator.addVisionMeasurement(null, Timer.getFPGATimestamp());
+  // }
+
+  // public double getX() {
+  //  return estimator.getEstimatedPosition().getTranslation().getX();
+  // }
+
+  // public double getY() {
+  //  return estimator.getEstimatedPosition().getTranslation().getY();
   // }
 
   public void resetOdometry(Pose2d pose) {
@@ -292,14 +277,6 @@ public class SwerveSubsystem extends SubsystemBase {
     }
   }
 
-  // public double getX() {
-  // return estimator.getEstimatedPosition().getTranslation().getX();
-  // }
-
-  // public double getY() {
-  // return estimator.getEstimatedPosition().getTranslation().getY();
-  // }
-
   public ChassisSpeeds getAutoSpeeds() {
     return ChassisSpeeds.fromRobotRelativeSpeeds(0, 0, 0, Rotation2d.fromDegrees(0));
   }
@@ -311,6 +288,18 @@ public class SwerveSubsystem extends SubsystemBase {
 
     for (int i = 0; i < modules.length; i++) {
       modules[i].setState(states[i]);
+    }
+  }
+
+  public void stopModules() {
+    for (SwerveModule module : modules) {
+      module.stop();
+    }
+  }
+
+  public void stop() {
+    for (int i = 0; i < modules.length; i++) {
+      modules[i].stop();
     }
   }
 }

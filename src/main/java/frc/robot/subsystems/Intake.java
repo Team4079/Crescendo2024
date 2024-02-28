@@ -14,7 +14,7 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.Hell.IntakeConstants;
+import frc.robot.utils.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
@@ -60,6 +60,8 @@ public class Intake extends SubsystemBase {
     karenRampConfig.DutyCycleClosedLoopRampPeriod = 0.5;
 
     intakeKaren.getConfigurator().apply(karenRampConfig);
+
+    m_request = new VelocityVoltage(0).withSlot(1);
   }
 
   @Override

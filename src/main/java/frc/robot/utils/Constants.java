@@ -27,10 +27,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
  * wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Hell {
+public final class Constants {
   private static final String UTILITY_CLASS = "Utility class";
 
-  private Hell() {
+  private Constants() {
     throw new IllegalStateException(UTILITY_CLASS);
   }
 
@@ -124,7 +124,7 @@ public final class Hell {
 
     
 
-      public static HolonomicPathFollowerConfig pathFollwer = 
+      public static HolonomicPathFollowerConfig pathFollower = 
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
         new PIDConstants(0.15, 0.000, 0.00), //translation
         new PIDConstants(0, 0.0, 0.0), //rotation

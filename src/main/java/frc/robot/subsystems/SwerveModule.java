@@ -23,11 +23,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.utils.Hell;
+import frc.robot.utils.Constants;
 // import frc.robot.utils.PID;
-import frc.robot.utils.Hell.MotorConstants;
-import frc.robot.utils.Hell.SwerveConstants;
-import frc.robot.utils.Hell.SwerveConstants.BasePIDConstants;
+import frc.robot.utils.Constants.MotorConstants;
+import frc.robot.utils.Constants.SwerveConstants;
+import frc.robot.utils.Constants.SwerveConstants.BasePIDConstants;
 
 @SuppressWarnings("unused") // Used in order to remove warnings
 public class SwerveModule {
@@ -57,8 +57,6 @@ public class SwerveModule {
 
   private ClosedLoopRampsConfigs driveClosedRampsConfigs;
   private ClosedLoopRampsConfigs steerClosedRampsConfigs;
-
-  // static int printSlower = 0;
 
   /** Creates a new SwerveModule. */
   public SwerveModule(int driveId, int steerId, int canCoderID, double CANCoderDriveStraightSteerSetPoint) {
@@ -104,10 +102,6 @@ public class SwerveModule {
     steerCurrentLimitsConfigs = new CurrentLimitsConfigs();
     driveClosedRampsConfigs = new ClosedLoopRampsConfigs();
     steerClosedRampsConfigs = new ClosedLoopRampsConfigs();
-
-    // currentLimitsConfigs.SupplyCurrentLimit = 40;
-    // currentLimitsConfigs.StatorCurrentLimit = 40;
-    // currentLimitsConfigs.Enable = true;
 
     driveClosedRampsConfigs.DutyCycleClosedLoopRampPeriod = 0.1;
     steerClosedRampsConfigs.DutyCycleClosedLoopRampPeriod = 0.05;
@@ -219,80 +213,20 @@ public class SwerveModule {
   }
 
   public static SwerveModuleState optimize(SwerveModuleState desiredState,
-  Rotation2d currentAngle) {
-  double targetAngle = placeInAppropriate0To360Scope(currentAngle.getDegrees(),
-  desiredState.angle.getDegrees());
-  double targetSpeed = desiredState.speedMetersPerSecond;
-  double delta = targetAngle - currentAngle.getDegrees();
-  if (Math.abs(delta) > 90){
-  targetSpeed = -targetSpeed;
-  targetAngle = delta > 90 ? (targetAngle -= 180) : (targetAngle += 180);
+      Rotation2d currentAngle) {
+    double targetAngle = placeInAppropriate0To360Scope(currentAngle.getDegrees(),
+        desiredState.angle.getDegrees());
+    double targetSpeed = desiredState.speedMetersPerSecond;
+    double delta = targetAngle - currentAngle.getDegrees();
+
+    if (Math.abs(delta) > 90) {
+      targetSpeed = -targetSpeed;
+      targetAngle = delta > 90 ? (targetAngle -= 180) : (targetAngle += 180);
+    }
+
+    return new SwerveModuleState(targetSpeed,
+        Rotation2d.fromDegrees(targetAngle));
   }
-  return new SwerveModuleState(targetSpeed,
-  Rotation2d.fromDegrees(targetAngle));
-  }
-
-  // private static double placeInAppropriate0To360Scope(double scopeReference,
-  // double newAngle) {
-  // double lowerBound;
-  // double upperBound;
-  // double lowerOffset = scopeReference % 360;
-  // if (lowerOffset >= 0) {
-  // lowerBound = scopeReference - lowerOffset;
-  // upperBound = scopeReference + (360 - lowerOffset);
-  // } else {
-  // upperBound = scopeReference - lowerOffset;
-  // lowerBound = scopeReference - (360 + lowerOffset);
-  // }
-  // while (newAngle < lowerBound) {
-  // newAngle += 360;
-  // }
-  // while (newAngle > upperBound) {
-  // newAngle -= 360;
-  // }
-  // if (newAngle - scopeReference > 180) {
-  // newAngle -= 360;
-  // } else if (newAngle - scopeReference < -180) {
-  // newAngle += 360;
-  // }
-  // return newAngle;
-  // }
-  // public static SwerveModuleState optimize(
-  // SwerveModuleState desiredState, Rotation2d currentAngle) {
-
-  // var currentDegrees = currentAngle.getDegrees();
-  // var desiredDegrees = desiredState.angle.getDegrees();
-
-  // while (currentDegrees - desiredDegrees > 180.0){
-  // desiredDegrees = desiredDegrees + 360;
-  // }
-
-  // while (currentDegrees - desiredDegrees < -180.0){
-  // desiredDegrees = desiredDegrees - 360;
-  // }
-
-  // var delta = desiredState.angle.minus(currentAngle);
-
-  // if (delta.getDegrees() > 90.0) {
-
-  // return new SwerveModuleState(
-
-  // -desiredState.speedMetersPerSecond,
-  // Rotation2d.fromDegrees(desiredDegrees - 180));
-
-  // }
-
-  // else if (delta.getDegrees() < - 90) {
-  // return new SwerveModuleState(
-
-  // -desiredState.speedMetersPerSecond,
-  // Rotation2d.fromDegrees(desiredDegrees + 180));
-
-  // } else {
-  // return new SwerveModuleState(desiredState.speedMetersPerSecond,
-  // Rotation2d.fromDegrees(desiredDegrees));
-  // }
-  // }
 
   public static SwerveModuleState optimize(SwerveModuleState desiredState, Rotation2d currentAngle, int deviceID) {
     double targetAngle = placeInAppropriate0To360Scope(
@@ -307,11 +241,6 @@ public class SwerveModule {
     SmartDashboard.putNumber(deviceID + " Motor", currentAngle.getDegrees() - targetAngle);
     return new SwerveModuleState(targetSpeed, Rotation2d.fromDegrees(targetAngle));
   }
-
-  // public static SwerveModuleState optimize(SwerveModuleState desiredState, Rotation2d currentAngle, int deviceID) {
-  //   SwerveModuleState swerveState = SwerveModuleState.optimize(desiredState, currentAngle);
-  //   return swerveState;
-  // }
 
   private static double placeInAppropriate0To360Scope(double scopeReference, double newAngle) {
     double lowerBound;
