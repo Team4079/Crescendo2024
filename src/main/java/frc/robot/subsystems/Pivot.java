@@ -43,7 +43,6 @@ public class Pivot extends SubsystemBase {
 
   private ClosedLoopRampsConfigs leftMotorRampConfig;
   private ClosedLoopRampsConfigs rightMotorRampConfig;
-  
 
   public Pivot() {
     pivotMotorLeft = new TalonFX(PivotConstants.PIVOT_MOTOR_LEFT_ID);
@@ -83,7 +82,7 @@ public class Pivot extends SubsystemBase {
 
     leftMotorCurrentConfig.SupplyCurrentLimit = 100;
     leftMotorCurrentConfig.StatorCurrentLimit = 100;
-    
+
     rightMotorCurrentConfig.SupplyCurrentLimit = 100;
     rightMotorCurrentConfig.StatorCurrentLimit = 100;
 
@@ -114,13 +113,11 @@ public class Pivot extends SubsystemBase {
     pivotMotorRight.setControl(pos_reqest.withPosition(right));
   }
 
-  public double getPivotPos()
-  {
+  public double getPivotPos() {
     return pivotMotorLeft.getPosition().getValue();
   }
 
-  public double shootPos(double distance)
-  {
+  public double shootPos(double distance) {
     // line function
     // do stuf
     return 0.0;

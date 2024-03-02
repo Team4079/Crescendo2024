@@ -49,6 +49,8 @@ public class Shooter extends SubsystemBase {
 
   private VelocityVoltage m_request;
 
+  private boolean toggleShooter;
+
   public Shooter() {
     leftFalcon = new TalonFX(ShooterConstants.FALCON_LEFT_ID);
     rightFalcon = new TalonFX(ShooterConstants.FALCON_RIGHT_ID);
@@ -80,7 +82,7 @@ public class Shooter extends SubsystemBase {
     rightShootConfigs.kP = ShooterConstants.SHOOTER_PID_RIGHT_P;
     rightShootConfigs.kI = ShooterConstants.SHOOTER_PID_RIGHT_I;
     rightShootConfigs.kD = ShooterConstants.SHOOTER_PID_RIGHT_D;
-  
+
     karenConfigs.kP = ShooterConstants.KAREN_P;
     karenConfigs.kI = ShooterConstants.KAREN_I;
     karenConfigs.kD = ShooterConstants.KAREN_D;
@@ -99,7 +101,7 @@ public class Shooter extends SubsystemBase {
 
     leftShootCurrentConfig.SupplyCurrentLimit = 100;
     leftShootCurrentConfig.StatorCurrentLimit = 100;
-    
+
     rightShootCurrentConfig.SupplyCurrentLimit = 100;
     rightShootCurrentConfig.StatorCurrentLimit = 100;
 
@@ -117,6 +119,8 @@ public class Shooter extends SubsystemBase {
     leftFalcon.getConfigurator().apply(leftShootRampConfig);
     rightFalcon.getConfigurator().apply(rightShootRampConfig);
     karen.getConfigurator().apply(karenRampConfig);
+
+    toggleShooter = false;
   }
 
   @Override
@@ -127,6 +131,15 @@ public class Shooter extends SubsystemBase {
   public void setShooterVelocity(double left, double right) {
     leftFalcon.setControl(m_request.withVelocity(left));
     rightFalcon.setControl(m_request.withVelocity(right));
+  }
+
+  public void toggleShooterVelocity() {
+    toggleShooter = !toggleShooter;
+    if (toggleShooter) {
+      setShooterVelocity(ShooterConstants.SHOOTER_SPEED, -ShooterConstants.SHOOTER_SPEED);
+    } else {
+      stopShooter();
+    }
   }
 
   public double getLeftShooterVelocity() {
@@ -144,7 +157,7 @@ public class Shooter extends SubsystemBase {
   public double getKarenVelocity() {
     return karen.getRotorVelocity().getValue();
   }
-  
+
   public void stopShooter() {
     leftFalcon.stopMotor();
     rightFalcon.stopMotor();

@@ -70,9 +70,6 @@ public class Intake extends SubsystemBase {
   }
 
   // methods probably
-  public void stopMotors() {
-    intakeKaren.stopMotor();
-  }
 
   public void setIntakeVelocity(double speed) {
     intakeKaren.setControl(m_request.withVelocity(speed));

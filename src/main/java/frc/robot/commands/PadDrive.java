@@ -5,11 +5,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.utils.Constants.IntakeConstants;
 // import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.MotorConstants;
+import frc.robot.utils.Constants.ShooterConstants;
 import frc.robot.utils.Constants.SwerveConstants;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
 
@@ -19,6 +24,7 @@ public class PadDrive extends Command {
   private final SwerveSubsystem swerveSubsystem;
   private final boolean isFieldOriented;
   private final LogitechGamingPad pad;
+  private final LogitechGamingPad opPad;
   private final Limelight limelety;
   private final LED led;
 
@@ -29,21 +35,33 @@ public class PadDrive extends Command {
 
   private double[] arrayOfArray;
   private double slow = 0;
+  private Shooter shootyboi;
+  private Pivot pivotyboi;
+  private Intake intakeyboi;
 
   /** Creates a new SwerveJoystick. */
   public PadDrive(SwerveSubsystem swerveSubsystem,
       LogitechGamingPad pad,
+      LogitechGamingPad opPad,
       boolean isFieldOriented,
       Limelight limelety,
-      LED led) {
+      LED led,
+      Pivot pivotyboi,
+      Shooter shootyboi,
+      Intake intakeyboi
+      ) {
     this.swerveSubsystem = swerveSubsystem;
     this.pad = pad;
     this.isFieldOriented = isFieldOriented;
     this.limelety = limelety;
     this.led = led;
+    this.opPad = opPad;
+    this.pivotyboi = pivotyboi;
+    this.shootyboi = shootyboi;
+    this.intakeyboi = intakeyboi;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(this.swerveSubsystem, this.limelety, this.led);
+    addRequirements(this.swerveSubsystem, this.limelety, this.led, this.pivotyboi, this.shootyboi, this.intakeyboi);
   }
 
   // Called when the command is initially scheduled.
@@ -146,7 +164,32 @@ public class PadDrive extends Command {
     if (limelety.isTarget()) {
       swerveSubsystem.updatePosition(limelety);
     }
-  }
+
+
+    if (opPad.getRightTriggerValue() > 0.3)
+    {
+      shootyboi.setKarenVelocity(ShooterConstants.KAREN_SPEED);
+    }
+
+    else {
+      shootyboi.stopKaren();
+    }
+
+    
+    if (opPad.getLeftTriggerValue() > 0.3)
+    {
+      intakeyboi.setIntakeVelocity(IntakeConstants.INTAKE_SPEED);
+    } 
+
+    else { 
+      intakeyboi.stopKaren();
+    }
+
+
+
+
+
+  } 
 
   // Called once the command ends or is interrupted.
   @Override

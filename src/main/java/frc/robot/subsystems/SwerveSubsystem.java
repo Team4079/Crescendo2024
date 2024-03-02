@@ -261,6 +261,11 @@ public class SwerveSubsystem extends SubsystemBase {
   //  return estimator.getEstimatedPosition().getTranslation().getY();
   // }
 
+  /**
+   * 
+   * @param pose
+   * @return void
+   */
   public void resetOdometry(Pose2d pose) {
     swerveOdometry.resetPosition(Rotation2d.fromDegrees(getYaw()), getModulePositions(), pose);
   }

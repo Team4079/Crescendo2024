@@ -52,7 +52,8 @@ public class Limelight extends SubsystemBase {
     tx = m_limelightTable.getEntry("tx").getDouble(0);
     ty = m_limelightTable.getEntry("ty").getDouble(0);
     ta = m_limelightTable.getEntry("ta").getDouble(0);
-    robotPoseTargetSpace = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_targetspace").getDoubleArray(new double[6]);
+    robotPoseTargetSpace = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_targetspace")
+        .getDoubleArray(new double[6]);
 
     if (DriverStation.getAlliance().equals(DriverStation.Alliance.Red)) {
       robotPose_FieldSpace = llresults.targetingResults.getBotPose2d_wpiRed();
@@ -63,7 +64,7 @@ public class Limelight extends SubsystemBase {
     // robotPoseTargetSpace = LimelightHelpers.getBotPose_TargetSpace("limelight");
     SmartDashboard.putNumber("April Tag X", LimelightHelpers.getTX("limelight"));
     field.setRobotPose(robotPose_FieldSpace);
-    SmartDashboard.putData("Field Vision", field);  
+    SmartDashboard.putData("Field Vision", field);
   }
 
   public double getTx() {
@@ -82,8 +83,7 @@ public class Limelight extends SubsystemBase {
     return ty;
   }
 
-  public double[] getRobotPose_TargetSpace2D()
-  {
+  public double[] getRobotPose_TargetSpace2D() {
     return robotPoseTargetSpace;
   }
 

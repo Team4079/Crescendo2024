@@ -150,6 +150,8 @@ public final class Constants {
 
     public static final int INTAKE_MOTOR_ID = 0;
 
+    public static final double INTAKE_SPEED = 4000; 
+
     public static final double INTAKE_PID_P = 0.0002;
     public static final double INTAKE_PID_I = 0.0;
     public static final double INTAKE_PID_D = 0.0;

@@ -9,6 +9,8 @@ package frc.robot;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.ShootingSequence;
 import frc.robot.commands.PadDrive;
+import frc.robot.commands.ShooterRampUp;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Jevois;
 // import frc.robot.commands.TargetLED;
 import frc.robot.subsystems.LED;
@@ -61,11 +63,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   private final SwerveSubsystem swerveSubsystem;
   private final LogitechGamingPad pad;
+  private final LogitechGamingPad opPad;
   private final LED led;
   private final Limelight limelety;
   private final Jevois jevois;
   private final Pivot pivotyboi;
   private final Shooter shootyboi;
+  private final Intake intakeyboi; 
   
   private final JoystickButton padA;
   private final JoystickButton padB;
@@ -74,6 +78,13 @@ public class RobotContainer {
   private final JoystickButton rightBumper;
   private final JoystickButton leftBumper;
 
+  private final JoystickButton opPadA;
+  private final JoystickButton opPadB;
+  private final JoystickButton opPadX;
+  private final JoystickButton opPadY;
+  private final JoystickButton opRightBumper;
+  private final JoystickButton opLeftBumper;
+
   // private final SendableChooser<Command> autoChooser;
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -81,11 +92,13 @@ public class RobotContainer {
   public RobotContainer() {
     
     pad = new LogitechGamingPad(0);
+    opPad = new LogitechGamingPad(1);
     led = new LED();
     limelety = new Limelight();
     jevois = new Jevois();
     pivotyboi = new Pivot();
     shootyboi = new Shooter();
+    intakeyboi = new Intake();
 
     padA = new JoystickButton(pad, 1);
     padB = new JoystickButton(pad, 2);
@@ -94,18 +107,22 @@ public class RobotContainer {
     rightBumper = new JoystickButton(pad, 6);
     leftBumper = new JoystickButton(pad, 5);
 
+    opPadA = new JoystickButton(opPad, 1);
+    opPadB = new JoystickButton(opPad, 2);
+    opPadX = new JoystickButton(opPad, 3);
+    opPadY = new JoystickButton(opPad, 4);
+    opRightBumper = new JoystickButton(opPad, 6);
+    opLeftBumper = new JoystickButton(opPad, 5);
+    
+
     swerveSubsystem = new SwerveSubsystem();
 
     NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem, limelety, led));
-    NamedCommands.registerCommand("FullShoot", new ShootingSequence(swerveSubsystem, limelety, led, pivotyboi, shootyboi));
-
-    // USE CONSTANT
-    // if (Constants.SwerveConstants.useLimelightAutoAlign) {
-    //   swerveSubsystem.setDefaultCommand(new AutoAlign(swerveSubsystem, limelety, led));
-    // } else {
-    swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveConstants.isFieldOriented, limelety, led));
-    // led.setDefaultCommand(new TargetLED(limelety, led, swerveSubsystem));
-    // }
+    NamedCommands.registerCommand("FullShoot",
+        new ShootingSequence(swerveSubsystem, limelety, led, pivotyboi, shootyboi));
+    
+    swerveSubsystem
+        .setDefaultCommand(new PadDrive(swerveSubsystem, pad, opPad, SwerveConstants.isFieldOriented, limelety, led, pivotyboi, shootyboi, intakeyboi));
 
     //Configure auto chooser
     configureBindings();
@@ -132,6 +149,8 @@ public class RobotContainer {
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
     padY.onTrue(new InstantCommand(swerveSubsystem::newPose));
     padX.whileTrue(new AutoAlign(swerveSubsystem, limelety, led));
+    opPadB.onTrue(new InstantCommand(shootyboi::toggleShooterVelocity));
+    
   }
   
   /**
