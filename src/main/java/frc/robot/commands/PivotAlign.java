@@ -42,18 +42,18 @@ public class PivotAlign extends Command {
     SmartDashboard.putNumber(getName(), 69);
 
     // change later
-    setPoint = pivotyboi.shootPos(llVaules[0]);
+    // setPoint = pivotyboi.shootPos(llVaules[2]);
 
-    pivotyboi.setPosition(setPoint, setPoint);
+    // pivotyboi.setPosition(setPoint, setPoint);
 
-    if (Math.abs(setPoint - pivotyboi.getPivotPos()) < deadband)
-    {
-      timeout++;
-    }
-    else
-    {
-      timeout = 0;
-    }
+    // if (Math.abs(setPoint - pivotyboi.getPivotPos()) < deadband)
+    // {
+    //   timeout++;
+    // }
+    // else
+    // {
+    //   timeout = 0;
+    // }
   }
 
   // Called once the command ends or is interrupted.

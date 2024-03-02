@@ -174,6 +174,8 @@ public final class Constants {
     public static final double PIVOT_PID_RIGHT_P = 0.0002;
     public static final double PIVOT_PID_RIGHT_I = 0.0;
     public static final double PIVOT_PID_RIGHT_D = 0.0;
+    
+    public static final double PIVOT_AMP_ANGLE = 0.0;
   }
 
   public static class ShooterConstants 

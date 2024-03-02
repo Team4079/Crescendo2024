@@ -21,7 +21,7 @@ public class ShootCommands extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setKrakenVelocity(ShooterConstants.KRAKEN_SPEED);
+    // shooter.setKrakenVelocity(ShooterConstants.KRAKEN_SPEED);
 
   }
 

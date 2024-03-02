@@ -1,5 +1,4 @@
 
-
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -11,7 +10,7 @@ import frc.robot.commands.ShootingSequence;
 import frc.robot.commands.PadDrive;
 import frc.robot.commands.ShooterRampUp;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Jevois;
+// import frc.robot.subsystems.Jevois;
 // import frc.robot.commands.TargetLED;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
@@ -66,11 +65,11 @@ public class RobotContainer {
   private final LogitechGamingPad opPad;
   private final LED led;
   private final Limelight limelety;
-  private final Jevois jevois;
+  // private final Jevois jevois;
   private final Pivot pivotyboi;
   private final Shooter shootyboi;
-  private final Intake intakeyboi; 
-  
+  private final Intake intakeyboi;
+
   private final JoystickButton padA;
   private final JoystickButton padB;
   private final JoystickButton padX;
@@ -90,12 +89,12 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    
+
     pad = new LogitechGamingPad(0);
     opPad = new LogitechGamingPad(1);
     led = new LED();
     limelety = new Limelight();
-    jevois = new Jevois();
+    // jevois = new Jevois();
     pivotyboi = new Pivot();
     shootyboi = new Shooter();
     intakeyboi = new Intake();
@@ -113,18 +112,28 @@ public class RobotContainer {
     opPadY = new JoystickButton(opPad, 4);
     opRightBumper = new JoystickButton(opPad, 6);
     opLeftBumper = new JoystickButton(opPad, 5);
-    
 
     swerveSubsystem = new SwerveSubsystem();
 
-    NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem, limelety, led));
-    NamedCommands.registerCommand("FullShoot",
-        new ShootingSequence(swerveSubsystem, limelety, led, pivotyboi, shootyboi));
-    
-    swerveSubsystem
-        .setDefaultCommand(new PadDrive(swerveSubsystem, pad, opPad, SwerveConstants.isFieldOriented, limelety, led, pivotyboi, shootyboi, intakeyboi));
+    // index from 0
+    // 0 is left-right distance from tag (left is +, right is -, accurate to +- 5cm
+    // per meter)
+    // 1
+    // 2 is forward-backward distance from tag (forward is +, backward is -,
+    // accurate to +- 5cm per meter)
+    // 3
+    // 4 is rotation (clockwise is -) (accurate to +-0.5 a degree)
+    // 5
 
-    //Configure auto chooser
+    NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem, limelety, led));
+    // NamedCommands.registerCommand("FullShoot",
+    // new ShootingSequence(swerveSubsystem, limelety, led, pivotyboi, shootyboi));
+
+    swerveSubsystem
+        .setDefaultCommand(new PadDrive(swerveSubsystem, pad, opPad, SwerveConstants.isFieldOriented, limelety, led,
+            pivotyboi, shootyboi, intakeyboi));
+
+    // Configure auto chooser
     configureBindings();
     // autoChooser = AutoBuilder.buildAutoChooser("New Auto");
     // SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -149,10 +158,10 @@ public class RobotContainer {
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
     padY.onTrue(new InstantCommand(swerveSubsystem::newPose));
     padX.whileTrue(new AutoAlign(swerveSubsystem, limelety, led));
-    opPadB.onTrue(new InstantCommand(shootyboi::toggleShooterVelocity));
-    
+    // opPadB.onTrue(new InstantCommand(shootyboi::toggleShooterVelocity));
+
   }
-  
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -173,8 +182,9 @@ public class RobotContainer {
   }
 
   /**
-    * Gets the test command
-    *
-    * @return the command to run in test initial
-  //   */
+   * Gets the test command
+   *
+   * @return the command to run in test initial
+   *         //
+   */
 }

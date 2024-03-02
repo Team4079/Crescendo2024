@@ -20,75 +20,75 @@ import frc.robot.utils.Constants.PivotConstants;
 public class Pivot extends SubsystemBase {
   /** Creates a new Intake. */
 
-  private TalonFX pivotMotorLeft;
-  private TalonFX pivotMotorRight;
+  // private TalonFX pivotMotorLeft;
+  // private TalonFX pivotMotorRight;
 
-  private TalonFXConfigurator pivotLeftConfigurator;
-  private TalonFXConfigurator pivotRightConfigurator;
+  // private TalonFXConfigurator pivotLeftConfigurator;
+  // private TalonFXConfigurator pivotRightConfigurator;
 
-  private Slot0Configs pivotLeftConfigs;
-  private Slot0Configs pivotRightConfigs;
+  // private Slot0Configs pivotLeftConfigs;
+  // private Slot0Configs pivotRightConfigs;
 
-  private PositionVoltage pos_reqest;
+  // private PositionVoltage pos_reqest;
 
-  private MotorOutputConfigs pivotConfigs;
+  // private MotorOutputConfigs pivotConfigs;
 
-  private CurrentLimitsConfigs leftMotorCurrentConfig;
-  private CurrentLimitsConfigs rightMotorCurrentConfig;
+  // private CurrentLimitsConfigs leftMotorCurrentConfig;
+  // private CurrentLimitsConfigs rightMotorCurrentConfig;
 
-  private ClosedLoopRampsConfigs leftMotorRampConfig;
-  private ClosedLoopRampsConfigs rightMotorRampConfig;
+  // private ClosedLoopRampsConfigs leftMotorRampConfig;
+  // private ClosedLoopRampsConfigs rightMotorRampConfig;
 
   public Pivot() {
-    pivotMotorLeft = new TalonFX(PivotConstants.PIVOT_MOTOR_LEFT_ID);
-    pivotMotorRight = new TalonFX(PivotConstants.PIVOT_MOTOR_RIGHT_ID);
+    // pivotMotorLeft = new TalonFX(PivotConstants.PIVOT_MOTOR_LEFT_ID);
+    // pivotMotorRight = new TalonFX(PivotConstants.PIVOT_MOTOR_RIGHT_ID);
 
-    pivotConfigs = new MotorOutputConfigs();
+    // pivotConfigs = new MotorOutputConfigs();
 
-    pivotLeftConfigurator = pivotMotorLeft.getConfigurator();
-    pivotRightConfigurator = pivotMotorRight.getConfigurator();
+    // pivotLeftConfigurator = pivotMotorLeft.getConfigurator();
+    // pivotRightConfigurator = pivotMotorRight.getConfigurator();
 
-    pivotLeftConfigs = new Slot0Configs();
-    pivotRightConfigs = new Slot0Configs();
+    // pivotLeftConfigs = new Slot0Configs();
+    // pivotRightConfigs = new Slot0Configs();
 
-    pivotMotorLeft.getConfigurator().apply(new TalonFXConfiguration());
-    pivotMotorRight.getConfigurator().apply(new TalonFXConfiguration());
+    // pivotMotorLeft.getConfigurator().apply(new TalonFXConfiguration());
+    // pivotMotorRight.getConfigurator().apply(new TalonFXConfiguration());
 
-    pivotConfigs.NeutralMode = NeutralModeValue.Brake;
-    pivotLeftConfigurator.apply(pivotConfigs);
-    pivotRightConfigurator.apply(pivotConfigs);
+    // pivotConfigs.NeutralMode = NeutralModeValue.Brake;
+    // pivotLeftConfigurator.apply(pivotConfigs);
+    // pivotRightConfigurator.apply(pivotConfigs);
 
-    pivotLeftConfigs.kP = PivotConstants.PIVOT_PID_LEFT_P;
-    pivotLeftConfigs.kI = PivotConstants.PIVOT_PID_LEFT_I;
-    pivotLeftConfigs.kD = PivotConstants.PIVOT_PID_LEFT_D;
+    // pivotLeftConfigs.kP = PivotConstants.PIVOT_PID_LEFT_P;
+    // pivotLeftConfigs.kI = PivotConstants.PIVOT_PID_LEFT_I;
+    // pivotLeftConfigs.kD = PivotConstants.PIVOT_PID_LEFT_D;
 
-    pivotRightConfigs.kP = PivotConstants.PIVOT_PID_RIGHT_P;
-    pivotRightConfigs.kI = PivotConstants.PIVOT_PID_RIGHT_I;
-    pivotRightConfigs.kD = PivotConstants.PIVOT_PID_RIGHT_D;
+    // pivotRightConfigs.kP = PivotConstants.PIVOT_PID_RIGHT_P;
+    // pivotRightConfigs.kI = PivotConstants.PIVOT_PID_RIGHT_I;
+    // pivotRightConfigs.kD = PivotConstants.PIVOT_PID_RIGHT_D;
 
-    pivotMotorLeft.getConfigurator().apply(pivotLeftConfigs);
-    pivotMotorRight.getConfigurator().apply(pivotRightConfigs);
+    // pivotMotorLeft.getConfigurator().apply(pivotLeftConfigs);
+    // pivotMotorRight.getConfigurator().apply(pivotRightConfigs);
 
-    leftMotorCurrentConfig = new CurrentLimitsConfigs();
-    rightMotorCurrentConfig = new CurrentLimitsConfigs();
+    // leftMotorCurrentConfig = new CurrentLimitsConfigs();
+    // rightMotorCurrentConfig = new CurrentLimitsConfigs();
 
-    leftMotorRampConfig = new ClosedLoopRampsConfigs();
-    rightMotorRampConfig = new ClosedLoopRampsConfigs();
+    // leftMotorRampConfig = new ClosedLoopRampsConfigs();
+    // rightMotorRampConfig = new ClosedLoopRampsConfigs();
 
-    leftMotorCurrentConfig.SupplyCurrentLimit = 100;
-    leftMotorCurrentConfig.StatorCurrentLimit = 100;
+    // leftMotorCurrentConfig.SupplyCurrentLimit = 100;
+    // leftMotorCurrentConfig.StatorCurrentLimit = 100;
 
-    rightMotorCurrentConfig.SupplyCurrentLimit = 100;
-    rightMotorCurrentConfig.StatorCurrentLimit = 100;
+    // rightMotorCurrentConfig.SupplyCurrentLimit = 100;
+    // rightMotorCurrentConfig.StatorCurrentLimit = 100;
 
-    pivotMotorLeft.getConfigurator().apply(leftMotorCurrentConfig);
-    pivotMotorRight.getConfigurator().apply(rightMotorCurrentConfig);
+    // pivotMotorLeft.getConfigurator().apply(leftMotorCurrentConfig);
+    // pivotMotorRight.getConfigurator().apply(rightMotorCurrentConfig);
 
-    leftMotorRampConfig.DutyCycleClosedLoopRampPeriod = 0.1;
-    rightMotorRampConfig.DutyCycleClosedLoopRampPeriod = 0.1;
+    // leftMotorRampConfig.DutyCycleClosedLoopRampPeriod = 0.1;
+    // rightMotorRampConfig.DutyCycleClosedLoopRampPeriod = 0.1;
 
-    pivotMotorLeft.getConfigurator().apply(leftMotorRampConfig);
-    pivotMotorRight.getConfigurator().apply(rightMotorRampConfig);
+    // pivotMotorLeft.getConfigurator().apply(leftMotorRampConfig);
+    // pivotMotorRight.getConfigurator().apply(rightMotorRampConfig);
   }
 
   @Override
@@ -96,23 +96,23 @@ public class Pivot extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void stopMotors() {
-    pivotMotorLeft.stopMotor();
-    pivotMotorRight.stopMotor();
-  }
+  // public void stopMotors() {
+  //   pivotMotorLeft.stopMotor();
+  //   pivotMotorRight.stopMotor();
+  // }
 
-  public void setPosition(double left, double right) {
-    pivotMotorLeft.setControl(pos_reqest.withPosition(left));
-    pivotMotorRight.setControl(pos_reqest.withPosition(right));
-  }
+  // public void setPosition(double left, double right) {
+  //   pivotMotorLeft.setControl(pos_reqest.withPosition(left));
+  //   pivotMotorRight.setControl(pos_reqest.withPosition(right));
+  // }
 
-  public double getPivotPos() {
-    return pivotMotorLeft.getPosition().getValue();
-  }
+  // public double getPivotPos() {
+  //   return pivotMotorLeft.getPosition().getValue();
+  // }
 
-  public double shootPos(double distance) {
-    // line function
-    // do stuf
-    return 0.0;
-  }
+  // public double shootPos(double distance) {
+  //   // line function
+  //   // do stuf
+  //   return 0.0;
+  // }
 }

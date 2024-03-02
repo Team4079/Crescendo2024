@@ -41,7 +41,6 @@ public class Limelight extends SubsystemBase {
     robotPoseTargetSpace = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_targetspace")
         .getDoubleArray(new double[6]);
 
-    SmartDashboard.putNumberArray("stuff", robotPoseTargetSpace);
     if (DriverStation.getAlliance().equals(DriverStation.Alliance.Red)) {
       robotPose_FieldSpace = llresults.targetingResults.getBotPose2d_wpiRed();
     } else {
@@ -52,6 +51,9 @@ public class Limelight extends SubsystemBase {
     SmartDashboard.putNumber("April Tag X", LimelightHelpers.getTX("limelight"));
     field.setRobotPose(robotPose_FieldSpace);
     SmartDashboard.putData("Field Vision", field);
+    for (int i = 0; i < robotPoseTargetSpace.length; i++) {
+      SmartDashboard.putNumber("robotPoseTargetSpace" + i, robotPoseTargetSpace[i]);
+    }
   }
 
   public double getTx() {
@@ -70,6 +72,15 @@ public class Limelight extends SubsystemBase {
     return ty;
   }
 
+  // index from 0
+  // 0 is left-right distance from tag (left is +, right is -, accurate to +- 5cm
+  // per meter)
+  // 1 is undocumented
+  // 2 is forward-backward distance from tag (forward is +, backward is -,
+  // accurate to +- 5cm per meter)
+  // 3 is undocumented
+  // 4 is rotation (clockwise is -) (accurate to +-0.5 a degree)
+  // 5 
   public double[] getRobotPose_TargetSpace2D() {
     return robotPoseTargetSpace;
   }
@@ -96,7 +107,7 @@ public class Limelight extends SubsystemBase {
 
   /**
    * Gets the latency of the limelight
-   * @return
+   * @return Latency in ms
    */
   public double getLatency() {
     return llresults.targetingResults.latency_capture;
