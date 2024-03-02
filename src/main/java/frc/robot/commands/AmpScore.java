@@ -12,18 +12,18 @@ import frc.robot.utils.Constants.ShooterConstants;
 
 public class AmpScore extends Command {
 
-  // private double deadband;
+  private double deadband;
 
-  // private Shooter shootyboi;
+  private Shooter shooter;
 
-  // private Pivot pivot;
+  private Pivot pivot;
 
   /** Creates a new Shoot. */
-  public AmpScore(Shooter shootyboi, Pivot pivot) {
-    // deadband = 5;
-    // this.shootyboi = shootyboi;
-    // this.pivot = pivot;
-    // addRequirements(shootyboi, pivot);
+  public AmpScore(Shooter shooter, Pivot pivot) {
+    deadband = 5;
+    this.shooter = shooter;
+    this.pivot = pivot;
+    addRequirements(shooter, pivot);
   }
 
   // Called when the command is initially scheduled.
@@ -35,13 +35,13 @@ public class AmpScore extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // pivot.setPosition(PivotConstants.PIVOT_AMP_ANGLE);
+    pivot.setPosition(PivotConstants.PIVOT_AMP_ANGLE, PivotConstants.PIVOT_AMP_ANGLE);
 
-    // if (Math.abs(pivot.getPosition() - PivotConstants.PIVOT_AMP_ANGLE < deadband)) {
-    //   pivot.stopMotors();
-    //   shootyboi.setKrakenVelocity(ShooterConstants.KRAKEN_SPEED);
-    //   shootyboi.setShooterVelocity(ShooterConstants.SHOOTER_SPEED, -ShooterConstants.SHOOTER_SPEED);
-    // }
+    if (Math.abs(pivot.getPivotPos() - PivotConstants.PIVOT_AMP_ANGLE) < deadband) {
+      pivot.stopMotors();
+      shooter.setKrakenVelocity(ShooterConstants.KRAKEN_SPEED);
+      shooter.setShooterVelocity(ShooterConstants.SHOOTER_SPEED, -ShooterConstants.SHOOTER_SPEED);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -53,10 +53,10 @@ public class AmpScore extends Command {
   @Override
   public boolean isFinished() {
 
-    // if (Math.abs(shootyboi.getLeftShooterVelocity() - ShooterConstants.SHOOTER_SPEED) < deadband)
-    // {
-    //   return true;
-    // }
+    if (Math.abs(shooter.getLeftShooterVelocity() - ShooterConstants.SHOOTER_SPEED) < deadband)
+    {
+      return true;
+    }
     return false;
   }
 }

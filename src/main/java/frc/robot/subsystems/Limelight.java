@@ -80,7 +80,7 @@ public class Limelight extends SubsystemBase {
   // accurate to +- 5cm per meter)
   // 3 is undocumented
   // 4 is rotation (clockwise is -) (accurate to +-0.5 a degree)
-  // 5 
+  // 5
   public double[] getRobotPose_TargetSpace2D() {
     return robotPoseTargetSpace;
   }
@@ -91,14 +91,16 @@ public class Limelight extends SubsystemBase {
 
   /**
    * Sets the pipeline of the limelight
+   * 
    * @param pipeline The pipeline to set the limelight
    */
   public void setPipeline(double pipeline) {
     m_limelightTable.getEntry("pipeline").setNumber(pipeline);
   }
-  
+
   /**
    * Sets the mode of the limelight (fiducial, retroflective)
+   * 
    * @param mode The mode to set the limelight
    */
   public void setAdvanced(double mode) {
@@ -107,6 +109,7 @@ public class Limelight extends SubsystemBase {
 
   /**
    * Gets the latency of the limelight
+   * 
    * @return Latency in ms
    */
   public double getLatency() {
@@ -115,6 +118,7 @@ public class Limelight extends SubsystemBase {
 
   /**
    * Returns the tag number of the april tag
+   * 
    * @return April Tag number
    */
   public double getTag() {
@@ -123,10 +127,11 @@ public class Limelight extends SubsystemBase {
 
   /**
    * Returns the robot position in the field
+   * 
    * @return Robot Position
    */
   public Pose2d getRobotPosition() {
     return robotPose_FieldSpace;
   }
-  
+
 }

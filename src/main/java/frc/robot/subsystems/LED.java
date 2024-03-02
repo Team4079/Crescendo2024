@@ -23,14 +23,15 @@ public class LED extends SubsystemBase {
 
   /**
    * Sets the color for each of the LEDs based on HSV values
+   * 
    * @param h (Hue) Integer values between 0 - 180
    * @param s (Saturation) Integer values between 0 - 255
    * @param v (Value) Integer values between 0 - 255
    * @return void
    */
-  public void rainbow(int h, int s, int v){
+  public void rainbow(int h, int s, int v) {
     // rainbowOn = true;
-    for (int i = 0; i < m_ledBuffer.getLength(); i++){
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
       m_ledBuffer.setHSV(i, h, s, v);
     }
     m_led.setData(m_ledBuffer);
