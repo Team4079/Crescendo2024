@@ -19,49 +19,49 @@ import frc.robot.utils.Constants.IntakeConstants;
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
 
-  // private TalonFX intakeKaren;
-  // private TalonFXConfigurator intakeKarenConfigurator;
-  // private Slot0Configs karenConfig;
+  private TalonFX intakeKaren;
+  private TalonFXConfigurator intakeKarenConfigurator;
+  private Slot0Configs karenConfig;
   
-  // private MotorOutputConfigs intakeConfigs;
+  private MotorOutputConfigs intakeConfigs;
 
-  // private CurrentLimitsConfigs karenCurrentConfig;
+  private CurrentLimitsConfigs karenCurrentConfig;
 
-  // private ClosedLoopRampsConfigs karenRampConfig;
+  private ClosedLoopRampsConfigs karenRampConfig;
 
-  // private VelocityVoltage m_request;
+  private VelocityVoltage m_request;
   
   public Intake() {
-    // this.intakeKaren = new TalonFX(IntakeConstants.INTAKE_MOTOR_ID);
+    this.intakeKaren = new TalonFX(IntakeConstants.INTAKE_MOTOR_ID);
 
-    // intakeKarenConfigurator = intakeKaren.getConfigurator();
+    intakeKarenConfigurator = intakeKaren.getConfigurator();
 
-    // karenConfig = new Slot0Configs();
+    karenConfig = new Slot0Configs();
 
-    // intakeKaren.getConfigurator().apply(new TalonFXConfiguration());
+    intakeKaren.getConfigurator().apply(new TalonFXConfiguration());
 
-    // intakeKarenConfigurator.apply(intakeConfigs);
+    intakeKarenConfigurator.apply(intakeConfigs);
 
-    // karenConfig.kP = IntakeConstants.INTAKE_PID_P;
-    // karenConfig.kI = IntakeConstants.INTAKE_PID_I;
-    // karenConfig.kP = IntakeConstants.INTAKE_PID_D;
+    karenConfig.kP = IntakeConstants.INTAKE_PID_P;
+    karenConfig.kI = IntakeConstants.INTAKE_PID_I;
+    karenConfig.kP = IntakeConstants.INTAKE_PID_D;
 
-    // intakeKaren.getConfigurator().apply(karenConfig);
+    intakeKaren.getConfigurator().apply(karenConfig);
 
-    // karenCurrentConfig = new CurrentLimitsConfigs();
+    karenCurrentConfig = new CurrentLimitsConfigs();
 
-    // karenRampConfig = new ClosedLoopRampsConfigs();
+    karenRampConfig = new ClosedLoopRampsConfigs();
 
-    // karenCurrentConfig.SupplyCurrentLimit = 100;
-    // karenCurrentConfig.StatorCurrentLimit = 100;
+    karenCurrentConfig.SupplyCurrentLimit = 100;
+    karenCurrentConfig.StatorCurrentLimit = 100;
 
-    // intakeKaren.getConfigurator().apply(karenCurrentConfig);
+    intakeKaren.getConfigurator().apply(karenCurrentConfig);
 
-    // karenRampConfig.DutyCycleClosedLoopRampPeriod = 0.01;
+    karenRampConfig.DutyCycleClosedLoopRampPeriod = 0.01;
 
-    // intakeKaren.getConfigurator().apply(karenRampConfig);
+    intakeKaren.getConfigurator().apply(karenRampConfig);
 
-    // m_request = new VelocityVoltage(0).withSlot(1);
+    m_request = new VelocityVoltage(0).withSlot(1);
   }
 
   @Override
@@ -69,13 +69,13 @@ public class Intake extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  // // methods probably
+  // methods probably
 
-  // public void setIntakeVelocity(double speed) {
-  //   intakeKaren.setControl(m_request.withVelocity(speed));
-  // }
+  public void setIntakeVelocity(double speed) {
+    intakeKaren.setControl(m_request.withVelocity(speed));
+  }
 
-  // public void stopKaren() {
-  //   intakeKaren.stopMotor();
-  // }
+  public void stopKaren() {
+    intakeKaren.stopMotor();
+  }
 }

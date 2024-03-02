@@ -158,6 +158,7 @@ public class RobotContainer {
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
     padY.onTrue(new InstantCommand(swerveSubsystem::newPose));
     padX.whileTrue(new AutoAlign(swerveSubsystem, limelety, led));
+    
     // opPadB.onTrue(new InstantCommand(shootyboi::toggleShooterVelocity));
 
   }
