@@ -78,39 +78,44 @@ public class Limelight extends SubsystemBase {
     return LimelightHelpers.getTX("limelight") != 0;
   }
 
-  public void setLEDMode(double mode) {
-    m_limelightTable.getEntry("ledMode").setNumber(mode);
-  }
-
+  /**
+   * Sets the pipeline of the limelight
+   * @param pipeline The pipeline to set the limelight
+   */
   public void setPipeline(double pipeline) {
     m_limelightTable.getEntry("pipeline").setNumber(pipeline);
   }
-
-  public void setCamMode(double mode) {
-    m_limelightTable.getEntry("camMode").setNumber(mode);
-  }
-
-  public void setSnapshot(double mode) {
-    m_limelightTable.getEntry("snapshot").setNumber(mode);
-  }
-
-  public void setStream(double mode) {
-    m_limelightTable.getEntry("stream").setNumber(mode);
-  }
-
+  
+  /**
+   * Sets the mode of the limelight (fiducial, retroflective)
+   * @param mode The mode to set the limelight
+   */
   public void setAdvanced(double mode) {
     m_limelightTable.getEntry("advanced_mode").setNumber(mode);
   }
 
+  /**
+   * Gets the latency of the limelight
+   * @return
+   */
   public double getLatency() {
     return llresults.targetingResults.latency_capture;
   }
 
+  /**
+   * Returns the tag number of the april tag
+   * @return April Tag number
+   */
   public double getTag() {
     return LimelightHelpers.getFiducialID("");
   }
 
+  /**
+   * Returns the robot position in the field
+   * @return Robot Position
+   */
   public Pose2d getRobotPosition() {
     return robotPose_FieldSpace;
   }
+  
 }
