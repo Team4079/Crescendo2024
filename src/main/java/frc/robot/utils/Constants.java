@@ -186,7 +186,7 @@ public final class Constants {
     public static final int FALCON_LEFT_ID = 1;
     public static final int FALCON_RIGHT_ID = 0;
     
-    public static final int KAREN_ID = 2;
+    public static final int KRAKEN_ID = 2;
 
     public static final double SHOOTER_PID_LEFT_P = 0.0002;
     public static final double SHOOTER_PID_LEFT_I = 0.0;
@@ -196,11 +196,11 @@ public final class Constants {
     public static final double SHOOTER_PID_RIGHT_I = 0.0;
     public static final double SHOOTER_PID_RIGHT_D = 0.0;
 
-    public static final double KAREN_P = 0.0002;
-    public static final double KAREN_I = 0.0;
-    public static final double KAREN_D = 0.0;
+    public static final double KRAKEN_P = 0.0002;
+    public static final double KRAKEN_I = 0.0;
+    public static final double KRAKEN_D = 0.0;
 
     public static final double SHOOTER_SPEED = 6942.0;
-    public static final double KAREN_SPEED = 6942.0;
+    public static final double KRAKEN_SPEED = 6942.0;
   }
 }

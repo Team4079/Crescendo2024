@@ -6,9 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.utils.Constants.IntakeConstants;
-// import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.MotorConstants;
-import frc.robot.utils.Constants.ShooterConstants;
 import frc.robot.utils.Constants.SwerveConstants;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LED;
@@ -126,12 +124,11 @@ public class PadDrive extends Command {
     // Vision LED
     if (limelety.isTarget()) {
       if (Math.abs(horizontalError) <= SwerveConstants.limelightDeadband) {
-        led.rainbow(SwerveConstants.greenLED[0], SwerveConstants.greenLED[1], SwerveConstants.greenLED[2]); // Set led
-                                                                                                            // to green
+        // Set LED to green (Based on detecting AprilTag)
+        led.rainbow(SwerveConstants.greenLED[0], SwerveConstants.greenLED[1], SwerveConstants.greenLED[2]);
       } else {
-        led.rainbow(SwerveConstants.orangeLED[0], SwerveConstants.orangeLED[1], SwerveConstants.orangeLED[2]); // Set
-                                                                                                               // led to
-                                                                                                               // orange
+        // Set LED to orange (Based on detecting AprilTag)
+        led.rainbow(SwerveConstants.orangeLED[0], SwerveConstants.orangeLED[1], SwerveConstants.orangeLED[2]);
       }
     } else {
       // Remove Red LED light when in competition.
@@ -141,11 +138,11 @@ public class PadDrive extends Command {
     horizontalError = -limelety.getTx();
 
     if (opPad.getRightTriggerValue() > 0.3) {
-      shootyboi.setKarenVelocity(ShooterConstants.KAREN_SPEED);
+      shootyboi.setKrakenVelocity(controller_deadband);
     }
 
     else {
-      shootyboi.stopKaren();
+      shootyboi.stopKraken();
     }
 
     if (opPad.getLeftTriggerValue() > 0.3) {

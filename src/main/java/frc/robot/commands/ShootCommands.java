@@ -10,18 +10,18 @@ import frc.robot.utils.Constants.ShooterConstants;
 
 public class ShootCommands extends Command {
 
-  private Shooter shootyboi;
+  private Shooter shooter;
 
   /** Creates a new Shoot. */
-  public ShootCommands(Shooter shootyboi) {
-    this.shootyboi = shootyboi;
-    addRequirements(shootyboi);
+  public ShootCommands(Shooter shooter) {
+    this.shooter = shooter;
+    addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shootyboi.setKarenVelocity(ShooterConstants.KAREN_SPEED);
+    shooter.setKrakenVelocity(ShooterConstants.KRAKEN_SPEED);
 
   }
 

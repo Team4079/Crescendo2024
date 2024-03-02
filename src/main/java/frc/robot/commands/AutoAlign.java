@@ -17,7 +17,7 @@ public class AutoAlign extends Command {
   private Limelight limelight;
   private SwerveSubsystem swerveSubsystem;
   private LED led;
-  
+
   // Horizontal PID and offset
   private double horizontalError;
 
@@ -25,7 +25,6 @@ public class AutoAlign extends Command {
   private PID rotationalPID;
 
   private double timeout = 0;
-  private double slow = 0;
 
   public AutoAlign(SwerveSubsystem swerveSubsystem, Limelight limelight, LED led) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -45,56 +44,20 @@ public class AutoAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // rotationalError = limelight.getRobotPose_TargetSpace2D().getRotation().getDegrees(); // Only runs when detects an AprilTag
-    
-
-    //important:
-    // [4] is rotation error 
-
-    System.out.println("adfkjalskjf;ljsad;lfkjsa;lkfja;lksdjfas");
-
-    if (slow == 50)
-    {
-      for (int i = 0; i < 5; i ++)
-      {
-        System.out.println(i + limelight.getRobotPose_TargetSpace2D()[i]);
-      }
-
-      slow = 0;
-    }
-
-    else
-    {
-      slow ++;
-    }
-    // SmartDashboard.putNumberArray("limelight vaules", limelight.getRobotPose_TargetSpace2D());
     horizontalError = -limelight.getTx();
 
-    // if (printSlow == 100)
-    // {
-    //   // System.out.println(horizontalError);
-
-    //   // Rotational Value = index of 3 (value 4)
-    //   printSlow = 0;
-    // }
-    // else
-    // {
-    //   printSlow += 1;
-    // }
-    // verticalError = -limelight.getTy();
-
-    if (Math.abs(horizontalError) >= SwerveConstants.limelightDeadband)
-    {
+    if (Math.abs(horizontalError) >= SwerveConstants.limelightDeadband) {
       swerveSubsystem.drive(0, 0, rotationalPID.calculate(horizontalError, 0), false);
     }
 
-    
     // Vision LED
     if (limelight.isTarget()) {
       if (Math.abs(horizontalError) <= SwerveConstants.limelightDeadband) {
-        led.rainbow(SwerveConstants.greenLED[0], SwerveConstants.greenLED[1], SwerveConstants.greenLED[2]); // Set led to green
+        // Set LED to green (Based on detecting AprilTag)
+        led.rainbow(SwerveConstants.greenLED[0], SwerveConstants.greenLED[1], SwerveConstants.greenLED[2]);
       } else {
-        led.rainbow(SwerveConstants.orangeLED[0], SwerveConstants.orangeLED[1], SwerveConstants.orangeLED[2]); // Set led to orange
+        // Set LED to orange (Based on detecting AprilTag)
+        led.rainbow(SwerveConstants.orangeLED[0], SwerveConstants.orangeLED[1], SwerveConstants.orangeLED[2]);
       }
       timeout++;
     } else {
@@ -113,11 +76,12 @@ public class AutoAlign extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // Checks if the april tag is within the deadband for at least half a second
     if (horizontalError <= SwerveConstants.limelightDeadband && timeout == 25) {
       timeout = 0;
       return true;
     }
-    
+
     return false;
   }
 }

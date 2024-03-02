@@ -21,25 +21,25 @@ public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
   private TalonFX leftFalcon;
   private TalonFX rightFalcon;
-  private TalonFX karen;
+  private TalonFX kraken;
 
   private TalonFXConfigurator leftShootConfigurator;
   private TalonFXConfigurator rightShootConfigurator;
-  private TalonFXConfigurator karenConfigurator;
+  private TalonFXConfigurator krakenConfigurator;
 
   private Slot0Configs leftShootConfigs;
   private Slot0Configs rightShootConfigs;
-  private Slot0Configs karenConfigs;
+  private Slot0Configs krakenConfigs;
 
   private MotorOutputConfigs shooterConfigs;
 
   private CurrentLimitsConfigs leftShootCurrentConfig;
   private CurrentLimitsConfigs rightShootCurrentConfig;
-  private CurrentLimitsConfigs karenCurrentConfig;
+  private CurrentLimitsConfigs krakenCurrentConfig;
 
   private ClosedLoopRampsConfigs leftShootRampConfig;
   private ClosedLoopRampsConfigs rightShootRampConfig;
-  private ClosedLoopRampsConfigs karenRampConfig;
+  private ClosedLoopRampsConfigs krakenRampConfig;
 
   private VelocityVoltage m_request;
 
@@ -48,26 +48,26 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     leftFalcon = new TalonFX(ShooterConstants.FALCON_LEFT_ID);
     rightFalcon = new TalonFX(ShooterConstants.FALCON_RIGHT_ID);
-    karen = new TalonFX(ShooterConstants.KAREN_ID);
+    kraken = new TalonFX(ShooterConstants.KRAKEN_ID);
 
     shooterConfigs = new MotorOutputConfigs();
 
     leftShootConfigurator = leftFalcon.getConfigurator();
     rightShootConfigurator = rightFalcon.getConfigurator();
-    karenConfigurator = karen.getConfigurator();
+    krakenConfigurator = kraken.getConfigurator();
 
     leftShootConfigs = new Slot0Configs();
     rightShootConfigs = new Slot0Configs();
-    karenConfigs = new Slot0Configs();
+    krakenConfigs = new Slot0Configs();
 
     leftFalcon.getConfigurator().apply(new TalonFXConfiguration());
     rightFalcon.getConfigurator().apply(new TalonFXConfiguration());
-    karen.getConfigurator().apply(new TalonFXConfiguration());
+    kraken.getConfigurator().apply(new TalonFXConfiguration());
 
     shooterConfigs.NeutralMode = NeutralModeValue.Brake;
     leftShootConfigurator.apply(shooterConfigs);
     rightShootConfigurator.apply(shooterConfigs);
-    karenConfigurator.apply(shooterConfigs);
+    krakenConfigurator.apply(shooterConfigs);
 
     leftShootConfigs.kP = ShooterConstants.SHOOTER_PID_LEFT_P;
     leftShootConfigs.kI = ShooterConstants.SHOOTER_PID_LEFT_I;
@@ -77,21 +77,21 @@ public class Shooter extends SubsystemBase {
     rightShootConfigs.kI = ShooterConstants.SHOOTER_PID_RIGHT_I;
     rightShootConfigs.kD = ShooterConstants.SHOOTER_PID_RIGHT_D;
 
-    karenConfigs.kP = ShooterConstants.KAREN_P;
-    karenConfigs.kI = ShooterConstants.KAREN_I;
-    karenConfigs.kD = ShooterConstants.KAREN_D;
+    krakenConfigs.kP = ShooterConstants.KRAKEN_P;
+    krakenConfigs.kI = ShooterConstants.KRAKEN_I;
+    krakenConfigs.kD = ShooterConstants.KRAKEN_D;
 
     leftFalcon.getConfigurator().apply(leftShootConfigs);
     rightFalcon.getConfigurator().apply(rightShootConfigs);
-    karen.getConfigurator().apply(karenConfigs);
+    kraken.getConfigurator().apply(krakenConfigs);
 
     leftShootCurrentConfig = new CurrentLimitsConfigs();
     rightShootCurrentConfig = new CurrentLimitsConfigs();
-    karenCurrentConfig = new CurrentLimitsConfigs();
+    krakenCurrentConfig = new CurrentLimitsConfigs();
 
     leftShootRampConfig = new ClosedLoopRampsConfigs();
     rightShootRampConfig = new ClosedLoopRampsConfigs();
-    karenRampConfig = new ClosedLoopRampsConfigs();
+    krakenRampConfig = new ClosedLoopRampsConfigs();
 
     leftShootCurrentConfig.SupplyCurrentLimit = 100;
     leftShootCurrentConfig.StatorCurrentLimit = 100;
@@ -99,20 +99,20 @@ public class Shooter extends SubsystemBase {
     rightShootCurrentConfig.SupplyCurrentLimit = 100;
     rightShootCurrentConfig.StatorCurrentLimit = 100;
 
-    karenCurrentConfig.SupplyCurrentLimit = 100;
-    karenCurrentConfig.StatorCurrentLimit = 100;
+    krakenCurrentConfig.SupplyCurrentLimit = 100;
+    krakenCurrentConfig.StatorCurrentLimit = 100;
 
     leftFalcon.getConfigurator().apply(leftShootCurrentConfig);
     rightFalcon.getConfigurator().apply(rightShootCurrentConfig);
-    karen.getConfigurator().apply(karenCurrentConfig);
+    kraken.getConfigurator().apply(krakenCurrentConfig);
 
     leftShootRampConfig.DutyCycleClosedLoopRampPeriod = 0.1;
     rightShootRampConfig.DutyCycleClosedLoopRampPeriod = 0.1;
-    karenRampConfig.DutyCycleClosedLoopRampPeriod = 0.1;
+    krakenRampConfig.DutyCycleClosedLoopRampPeriod = 0.1;
 
     leftFalcon.getConfigurator().apply(leftShootRampConfig);
     rightFalcon.getConfigurator().apply(rightShootRampConfig);
-    karen.getConfigurator().apply(karenRampConfig);
+    kraken.getConfigurator().apply(krakenRampConfig);
 
     toggleShooter = false;
   }
@@ -156,12 +156,12 @@ public class Shooter extends SubsystemBase {
     return leftFalcon.getRotorVelocity().getValue();
   }
 
-  public void setKarenVelocity(double speed) {
-    karen.setControl(m_request.withVelocity(speed));
+  public void setKrakenVelocity(double speed) {
+    kraken.setControl(m_request.withVelocity(speed));
   }
 
-  public double getKarenVelocity() {
-    return karen.getRotorVelocity().getValue();
+  public double getKrakenVelocity() {
+    return kraken.getRotorVelocity().getValue();
   }
 
   public void stopShooter() {
@@ -169,12 +169,12 @@ public class Shooter extends SubsystemBase {
     rightFalcon.stopMotor();
   }
 
-  public void stopKaren() {
-    karen.stopMotor();
+  public void stopKraken() {
+    kraken.stopMotor();
   }
 
   public void stopAllMotors() {
     stopShooter();
-    stopKaren();
+    stopKraken();
   }
 }

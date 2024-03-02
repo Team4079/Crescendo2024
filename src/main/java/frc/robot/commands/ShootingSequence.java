@@ -22,28 +22,25 @@ public class ShootingSequence extends SequentialCommandGroup {
   /** Creates a new TeleOpShoot. */
   private SwerveSubsystem subsystem;
   private Limelight limelety;
-  private LED ledprobablyworking;
-  private Pivot pivotyboi;
-  private Shooter shootyboi;
+  private LED led;
+  private Pivot pivot;
+  private Shooter shooter;
 
   public ShootingSequence(SwerveSubsystem subsystem, Limelight limelety, LED ledprobablyworking, Pivot pivotyboi, Shooter shootyboi) {
     subsystem = this.subsystem;
     limelety = this.limelety;
-    ledprobablyworking = this.ledprobablyworking;
-    pivotyboi = this.pivotyboi;
-    shootyboi = this.shootyboi;
 
     /**
      * Command to run shooting sequence mainly in auto
      */
     addCommands(
         new ParallelCommandGroup(
-          new AutoAlign(subsystem, limelety, ledprobablyworking),
-          new PivotAlign(pivotyboi, limelety),
-          new ShooterRampUp(shootyboi)
+          new AutoAlign(subsystem, limelety, led),
+          new PivotAlign(pivot, limelety),
+          new ShooterRampUp(shooter)
       ),
-      new ShootCommands(shootyboi).withTimeout(1),
-      new InstantCommand(shootyboi::stopAllMotors)
+      new ShootCommands(shooter).withTimeout(1),
+      new InstantCommand(shooter::stopAllMotors)
     );
   }
 }
