@@ -7,16 +7,18 @@
 package frc.robot;
 
 import frc.robot.commands.AutoAlign;
+import frc.robot.commands.ShootingSequence;
 import frc.robot.commands.PadDrive;
 import frc.robot.subsystems.Jevois;
 // import frc.robot.commands.TargetLED;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Robot;
+import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.utils.Constants;
+import frc.robot.utils.Hell;
 import frc.robot.utils.LogitechGamingPad;
-import frc.robot.utils.Constants.SwerveConstants;
+import frc.robot.utils.Hell.SwerveConstants;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -62,6 +64,8 @@ public class RobotContainer {
   private final LED led;
   private final Limelight limelety;
   private final Jevois jevois;
+  private final Pivot pivotyboi;
+  private final Shooter shootyboi;
   
   private final JoystickButton padA;
   private final JoystickButton padB;
@@ -79,8 +83,10 @@ public class RobotContainer {
     pad = new LogitechGamingPad(0);
     led = new LED();
     limelety = new Limelight();
-    jevois = new Jevois();   
-    
+    jevois = new Jevois();
+    pivotyboi = new Pivot();
+    shootyboi = new Shooter();
+
     padA = new JoystickButton(pad, 1);
     padB = new JoystickButton(pad, 2);
     padX = new JoystickButton(pad, 3);
@@ -91,6 +97,7 @@ public class RobotContainer {
     swerveSubsystem = new SwerveSubsystem();
 
     NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem, limelety, led));
+    NamedCommands.registerCommand("FullShoot", new ShootingSequence(swerveSubsystem, limelety, led, pivotyboi, shootyboi));
 
     // USE CONSTANT
     // if (Constants.SwerveConstants.useLimelightAutoAlign) {

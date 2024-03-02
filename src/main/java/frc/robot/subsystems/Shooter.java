@@ -19,8 +19,8 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.Constants.PivotConstants;
-import frc.robot.utils.Constants.ShooterConstants;
+import frc.robot.utils.Hell.PivotConstants;
+import frc.robot.utils.Hell.ShooterConstants;
 
 @SuppressWarnings("unused")
 public class Shooter extends SubsystemBase {
@@ -110,9 +110,9 @@ public class Shooter extends SubsystemBase {
     rightFalcon.getConfigurator().apply(rightShootCurrentConfig);
     karen.getConfigurator().apply(karenCurrentConfig);
 
-    leftShootRampConfig.DutyCycleClosedLoopRampPeriod = 0.5;
-    rightShootRampConfig.DutyCycleClosedLoopRampPeriod = 0.5;
-    karenRampConfig.DutyCycleClosedLoopRampPeriod = 0.5;
+    leftShootRampConfig.DutyCycleClosedLoopRampPeriod = 0.1;
+    rightShootRampConfig.DutyCycleClosedLoopRampPeriod = 0.1;
+    karenRampConfig.DutyCycleClosedLoopRampPeriod = 0.1;
 
     leftFalcon.getConfigurator().apply(leftShootRampConfig);
     rightFalcon.getConfigurator().apply(rightShootRampConfig);
@@ -129,10 +129,22 @@ public class Shooter extends SubsystemBase {
     rightFalcon.setControl(m_request.withVelocity(right));
   }
 
+  public double getLeftShooterVelocity() {
+    return leftFalcon.getRotorVelocity().getValue();
+  }
+
+  public double getRightShooterVelocity() {
+    return leftFalcon.getRotorVelocity().getValue();
+  }
+
   public void setKarenVelocity(double speed) {
     karen.setControl(m_request.withVelocity(speed));
   }
 
+  public double getKarenVelocity() {
+    return karen.getRotorVelocity().getValue();
+  }
+  
   public void stopShooter() {
     leftFalcon.stopMotor();
     rightFalcon.stopMotor();
@@ -140,5 +152,10 @@ public class Shooter extends SubsystemBase {
 
   public void stopKaren() {
     karen.stopMotor();
+  }
+
+  public void stopAllMotors() {
+    stopShooter();
+    stopKaren();
   }
 }

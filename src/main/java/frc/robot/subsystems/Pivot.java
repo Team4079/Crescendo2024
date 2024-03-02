@@ -4,18 +4,22 @@
 
 package frc.robot.subsystems;
 
+import javax.swing.text.Position;
+
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.Constants.PivotConstants;
+import frc.robot.utils.Hell.PivotConstants;
 
 public class Pivot extends SubsystemBase {
   /** Creates a new Intake. */
@@ -30,6 +34,7 @@ public class Pivot extends SubsystemBase {
   private Slot0Configs pivotRightConfigs;
 
   private VelocityVoltage m_request;
+  private PositionVoltage pos_reqest;
 
   private MotorOutputConfigs pivotConfigs;
 
@@ -85,8 +90,8 @@ public class Pivot extends SubsystemBase {
     pivotMotorLeft.getConfigurator().apply(leftMotorCurrentConfig);
     pivotMotorRight.getConfigurator().apply(rightMotorCurrentConfig);
 
-    leftMotorRampConfig.DutyCycleClosedLoopRampPeriod = 0.5;
-    rightMotorRampConfig.DutyCycleClosedLoopRampPeriod = 0.5;
+    leftMotorRampConfig.DutyCycleClosedLoopRampPeriod = 0.1;
+    rightMotorRampConfig.DutyCycleClosedLoopRampPeriod = 0.1;
 
     pivotMotorLeft.getConfigurator().apply(leftMotorRampConfig);
     pivotMotorRight.getConfigurator().apply(rightMotorRampConfig);
@@ -104,8 +109,20 @@ public class Pivot extends SubsystemBase {
     pivotMotorRight.stopMotor();
   }
 
-  public void setVelocity(double left, double right) {
-    pivotMotorLeft.setControl(m_request.withVelocity(left));
-    pivotMotorRight.setControl(m_request.withVelocity(right));
+  public void setPosition(double left, double right) {
+    pivotMotorLeft.setControl(pos_reqest.withPosition(left));
+    pivotMotorRight.setControl(pos_reqest.withPosition(right));
+  }
+
+  public double getPivotPos()
+  {
+    return pivotMotorLeft.getPosition().getValue();
+  }
+
+  public double shootPos(double distance)
+  {
+    // line function
+    // do stuf
+    return 0.0;
   }
 }

@@ -27,10 +27,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
  * wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {
+public final class Hell {
   private static final String UTILITY_CLASS = "Utility class";
 
-  private Constants() {
+  private Hell() {
     throw new IllegalStateException(UTILITY_CLASS);
   }
 
@@ -197,5 +197,8 @@ public final class Constants {
     public static final double KAREN_P = 0.0002;
     public static final double KAREN_I = 0.0;
     public static final double KAREN_D = 0.0;
+
+    public static final double SHOOTER_SPEED = 6942.0;
+    public static final double KAREN_SPEED = 6942.0;
   }
 }
