@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants.PivotConstants;
 
 public class Pivot extends SubsystemBase {
-  /** Creates a new Intake. */
+  /** Creates a new Pivot. */
 
   private TalonFX pivotMotorLeft;
   private TalonFX pivotMotorRight;
@@ -91,25 +91,43 @@ public class Pivot extends SubsystemBase {
     pivotMotorRight.getConfigurator().apply(rightMotorRampConfig);
   }
 
+  // This method will be called once per scheduler run
   @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+  public void periodic() {}
 
+  /**
+   * Stops the pivot motors
+   * @return void
+   */
   public void stopMotors() {
     pivotMotorLeft.stopMotor();
     pivotMotorRight.stopMotor();
   }
 
+  /**
+   * Set the position of the left and right pivot motors
+   * @param left Left motor position
+   * @param right Right motor position
+   * @return void
+   */
   public void setPosition(double left, double right) {
     pivotMotorLeft.setControl(pos_reqest.withPosition(left));
     pivotMotorRight.setControl(pos_reqest.withPosition(right));
   }
 
+  /**
+   * Get the position of the pivot motor
+   * @return double, the position of the pivot motor
+   */
   public double getPivotPos() {
     return pivotMotorLeft.getPosition().getValue();
   }
 
+  /**
+   * Run distance through a best fit line and return the value
+   * @param distance
+   * @return double, the position of the pivot motor
+   */
   public double shootPos(double distance) {
     // line function
     // do stuf

@@ -56,18 +56,37 @@ public class Limelight extends SubsystemBase {
     }
   }
 
+  /**
+   * Returns the x value of the april tag from the limelight
+   * 
+   * @return tx value
+   */
   public double getTx() {
     return tx;
   }
 
+  /**
+   * Returns the area value from the limelight
+   * 
+   * @return ta value
+   */
   public double getTa() {
     return ta;
   }
 
+  /**
+   * Returns the fullness value from the limelight
+   * 
+   * @return tv value
+   */
   public double getTv() {
     return tv;
   }
 
+  /**
+   * Returns the y value from the limelight
+   * @return ty value
+   */
   public double getTy() {
     return ty;
   }
@@ -81,6 +100,12 @@ public class Limelight extends SubsystemBase {
   // 3 is undocumented
   // 4 is rotation (clockwise is -) (accurate to +-0.5 a degree)
   // 5
+
+  /**
+   * Returns the robot pose in target space
+   * 
+   * @return Robot Pose in target space
+   */
   public double[] getRobotPose_TargetSpace2D() {
     return robotPoseTargetSpace;
   }

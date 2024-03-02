@@ -18,7 +18,6 @@ import frc.robot.utils.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
-
   private TalonFX intakeKaren;
   private TalonFXConfigurator intakeKarenConfigurator;
   private Slot0Configs karenConfig;

@@ -117,20 +117,26 @@ public class Shooter extends SubsystemBase {
     toggleShooter = false;
   }
 
+  // This method will be called once per scheduler run
   @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+  public void periodic() {}
 
+  /**
+   * Sets the velocity of the shooter motors
+   * @param left Left motor speed in RPM
+   * @param right Right motor speed in RPM
+   * @return void
+   */
   public void setShooterVelocity(double left, double right) {
     leftFalcon.setControl(m_request.withVelocity(left));
     rightFalcon.setControl(m_request.withVelocity(right));
   }
 
-  // /**
-  // * Operator command to toggle shooter using Left Trigger
-  // * @return void
-  // */
+  /**
+  * Operator command to toggle shooter using Left Trigger
+  * @param None
+  * @return void
+  */
   public void toggleShooterVelocity() {
     toggleShooter = !toggleShooter;
     if (toggleShooter) {
@@ -140,39 +146,66 @@ public class Shooter extends SubsystemBase {
     }
   }
 
-  // /**
-  // * Gets the RPM of the left falcon motor on the shooter
-  // * @return double, leftFalcon RPM
-  // */
+  /**
+  * Gets the RPM of the left falcon motor on the shooter
+  * @param None
+  * @return double, leftFalcon RPM
+  */
   public double getLeftShooterVelocity() {
     return leftFalcon.getRotorVelocity().getValue();
   }
 
-  // /**
-  // * Gets the RP of the right falcon motor on the shooter
-  // * @return double, rightFalcon RPM
-  // */
+  /**
+  * Gets the RP of the right falcon motor on the shooter
+  * @param None
+  * @return double, rightFalcon RPM
+  */
   public double getRightShooterVelocity() {
     return leftFalcon.getRotorVelocity().getValue();
   }
 
+  /**
+   * Sets the velocity of the kraken motor
+   * @param speed in RPM
+   * @return void
+   */
   public void setKrakenVelocity(double speed) {
     kraken.setControl(m_request.withVelocity(speed));
   }
 
+  /**
+   * Gets the velocity of the kraken motor
+   * @param None
+   * @return double, kraken RPM
+   */
   public double getKrakenVelocity() {
     return kraken.getRotorVelocity().getValue();
   }
 
+  /**
+   * Stops the shooter motors
+   * @param None
+   * @return void
+   */
   public void stopShooter() {
     leftFalcon.stopMotor();
     rightFalcon.stopMotor();
   }
 
+  /**
+   * Stops the kraken motor
+   * @param None
+   * @return void
+   */
   public void stopKraken() {
     kraken.stopMotor();
   }
 
+  /**
+   * Stops all motors
+   * @param None
+   * @return void
+   */
   public void stopAllMotors() {
     stopShooter();
     stopKraken();

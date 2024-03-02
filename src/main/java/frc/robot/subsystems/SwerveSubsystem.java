@@ -89,6 +89,15 @@ public class SwerveSubsystem extends SubsystemBase {
     );
   }
 
+  /**
+   * Drives the robot using the joystick input
+   * 
+   * @param forwardSpeed double Speed value in meters per second
+   * @param leftSpeed double Speed value in meters per second
+   * @param joyStickInput double joystick input value
+   * @param isFieldOriented boolean value to determine if the robot is field oriented
+   * @return void
+   */
   public void drive(double forwardSpeed, double leftSpeed, double joyStickInput, boolean isFieldOriented) {
     ChassisSpeeds speeds;
 
