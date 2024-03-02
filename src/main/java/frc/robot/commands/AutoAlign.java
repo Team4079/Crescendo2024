@@ -7,6 +7,7 @@ package frc.robot.commands;
 import com.pathplanner.lib.util.PIDConstants;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
@@ -36,6 +37,7 @@ public class AutoAlign extends Command {
   private double rotationalError;
 
   private double timeout = 0;
+  private double slow = 0;
 
   public AutoAlign(SwerveSubsystem swerveSubsystem, Limelight limelight, LED led) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -58,7 +60,28 @@ public class AutoAlign extends Command {
   @Override
   public void execute() {
     // rotationalError = limelight.getRobotPose_TargetSpace2D().getRotation().getDegrees(); // Only runs when detects an AprilTag
-    rotationalError = -limelight.getRobotPose_TargetSpace2D()[4];// limelight.getTs();
+    
+
+    //important:
+    // [4] is rotation error 
+
+    System.out.println("adfkjalskjf;ljsad;lfkjsa;lkfja;lksdjfas");
+
+    if (slow == 50)
+    {
+      for (int i = 0; i < 5; i ++)
+      {
+        System.out.println(i + limelight.getRobotPose_TargetSpace2D()[i]);
+      }
+
+      slow = 0;
+    }
+
+    else
+    {
+      slow ++;
+    }
+    // SmartDashboard.putNumberArray("limelight vaules", limelight.getRobotPose_TargetSpace2D());
     horizontalError = -limelight.getTx();
 
     // if (printSlow == 100)
@@ -77,10 +100,6 @@ public class AutoAlign extends Command {
     if (Math.abs(horizontalError) >= SwerveConstants.limelightDeadband)
     {
       swerveSubsystem.drive(0, 0, rotationalPID.calculate(horizontalError, 0), false);
-    }
-    else
-    {
-      swerveSubsystem.stopModules();
     }
 
     
@@ -102,7 +121,9 @@ public class AutoAlign extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    swerveSubsystem.stopModules();
+  }
 
   // Returns true when the command should end.
   @Override

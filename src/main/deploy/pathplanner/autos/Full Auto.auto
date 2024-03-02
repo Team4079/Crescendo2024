@@ -22,6 +22,12 @@
           "data": {
             "pathName": "Full Path p2"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autoAlign"
+          }
         }
       ]
     }

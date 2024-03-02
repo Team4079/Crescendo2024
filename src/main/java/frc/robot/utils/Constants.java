@@ -52,11 +52,11 @@ public final class Constants {
     public static final int BACK_LEFT_CAN_CODER_ID = 11;
     public static final int BACK_RIGHT_CAN_CODER_ID = 12;
 
-    public static final double MAX_SPEED = 4.96824;
+    public static final double MAX_SPEED = 5.76;
     public static final double MAX_ANGULAR_SPEED = (14 * Math.PI) / 3;
     public static final double ENCODER_COUNTS_PER_ROTATION = 1; // 2048 for v5, 1 for v6 (rotations)
     public static final double STEER_MOTOR_GEAR_RATIO = 150.0 / 7; // 24
-    public static final double DRIVE_MOTOR_GEAR_RATIO = 6.75;
+    public static final double DRIVE_MOTOR_GEAR_RATIO = 5.9;
     public static final double WHEEL_DIAMETER = 0.1;
     public static final double SPEED_CONSTANT = 0.6; // 0.4
     public static final double AACORN_SPEED = 0.95;
@@ -75,6 +75,10 @@ public final class Constants {
 
     public static final double robotSize = 0.43105229381; // Keep constant *ideally*
 
+    // bl - > fl
+    // fr - > fr
+    // fl - > br
+    // br
     public static final Translation2d frontLeftLocation = new Translation2d(0.3048, -0.3048); // (0.263525, -0.263525);
     public static final Translation2d frontRightLocation = new Translation2d(0.3048, 0.3048); // (0.263525, 0.263525);
     public static final Translation2d backLeftLocation = new Translation2d(-0.3048, -0.3048); // (-0.263525, -0.263525);

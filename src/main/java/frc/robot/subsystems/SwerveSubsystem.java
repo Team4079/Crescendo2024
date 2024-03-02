@@ -227,6 +227,7 @@ public class SwerveSubsystem extends SubsystemBase {
     Rotation2d headingGyroAnglething = Rotation2d.fromDegrees(pgetHeading());
     swerveOdomeryPose2d = swerveOdometry.update(headingGyroAnglething, getModulePositions());
 
+    SmartDashboard.putNumber("heading", pgetHeading());
     gyroAngle = getRotationPidggy();
     estimator.update(gyroAngle, getModulePositions());
   }

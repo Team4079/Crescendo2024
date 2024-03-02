@@ -31,7 +31,7 @@ public class Jevois extends SubsystemBase {
     camera = CameraServer.startAutomaticCapture(0);
     camera.setResolution(320, 240);
     camera.setFPS(30);
-    camera.setVideoMode();
+    // camera.setVideoMode();
     
     CvSink cvSink = CameraServer.getVideo();
     // CvSource outputStream = CameraServer.putVideo("Rectangle", 640, 480);
@@ -41,7 +41,7 @@ public class Jevois extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    System.out.println(camera.getInfo());
-    SmartDashboard.putBoolean("Jevois Connected", camera.isConnected());
+    // System.out.println(camera.getInfo());
+    // SmartDashboard.putBoolean("Jevois Connected", camera.isConnected());
   }
 }
