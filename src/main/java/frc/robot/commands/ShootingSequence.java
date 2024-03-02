@@ -7,7 +7,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
@@ -34,12 +33,14 @@ public class ShootingSequence extends SequentialCommandGroup {
     pivotyboi = this.pivotyboi;
     shootyboi = this.shootyboi;
 
+    /**
+     * Command to run shooting sequence mainly in auto
+     */
     addCommands(
         new ParallelCommandGroup(
           new AutoAlign(subsystem, limelety, ledprobablyworking),
           new PivotAlign(pivotyboi, limelety),
           new ShooterRampUp(shootyboi)
-
       ),
       new ShootCommands(shootyboi).withTimeout(1),
       new InstantCommand(shootyboi::stopAllMotors)

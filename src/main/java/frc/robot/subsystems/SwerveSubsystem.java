@@ -2,48 +2,27 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.PathPlannerLogging;
-import com.pathplanner.lib.util.ReplanningConfig;
 
 // import edu.wpi.first.math.controller.PIDController;
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-// import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import edu.wpi.first.wpilibj2.command.Command;
-// import edu.wpi.first.wpilibj2.command.InstantCommand;
-// import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-// import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-// import frc.robot.Robot;
 import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.MotorConstants;
 import frc.robot.utils.Constants.SwerveConstants;
 
-@SuppressWarnings("unused") // Used in order to remove warnings
 public class SwerveSubsystem extends SubsystemBase {
-  // private SwerveModule frontLeft;
-  // private SwerveModule frontRight;
-  // private SwerveModule backLeft;
-  // private SwerveModule backRight;
   private SwerveModule[] modules;
-  private SwerveDrivePoseEstimator estimator;
   private Rotation2d gyroAngle;
   private Pigeon2 pidggy;
   private final SwerveDriveKinematics sKinematics;
@@ -53,8 +32,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
   private double rot;
   private double turnSpeed = 0;
-
-  private Field2d field = new Field2d();
 
   /** Creates a new DriveTrain. */
   public SwerveSubsystem() {
@@ -89,22 +66,18 @@ public class SwerveSubsystem extends SubsystemBase {
     swerveOdometry = new SwerveDriveOdometry(sKinematics, gyroAngle, getModulePositions());
     swerveOdomeryPose2d = new Pose2d();
 
-    estimator = new SwerveDrivePoseEstimator(
-        SwerveConstants.kinematics,
-        getRotationPidggy(),
-        getModulePositions(),
-        SwerveConstants.STARTING_POSE);
-
     addRotorPositionsforModules();
 
-    // forward + x
-    // backward - x
-    // left - y
-    // right + y
-    // theta = we dont know lol
-
+    // Makes the rotation smooth (in a circle)
     SwerveConstants.BasePIDConstants.pathTranslationPID.enableContinuousInput(-Math.PI, Math.PI);
 
+    /**
+     * PathPlanner Direction Values
+     * Forward +x
+     * Backward -x
+     * Left -y
+     * Right +y
+     */
     AutoBuilder.configureHolonomic(
         this::getPose, // Robot pose supplier
         this::customPose, // Method to reset odometry (will be called if your auto has a starting pose)
@@ -114,11 +87,6 @@ public class SwerveSubsystem extends SubsystemBase {
         () -> false,
         this // Reference to this subsystem to set requirements
     );
-
-    // PathPlannerLogging.setLogActivePathCallback((poses) ->
-    // field.getObject("path").setPoses(poses));
-
-    SmartDashboard.putData("Field", field);
   }
 
   public void drive(double forwardSpeed, double leftSpeed, double joyStickInput, boolean isFieldOriented) {
@@ -126,6 +94,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     turnSpeed = joyStickInput * MotorConstants.TURN_CONSTANT;
 
+    // Runs robot/field-oriented based on the boolean value of isFieldOriented
     if (isFieldOriented) {
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
           forwardSpeed,
@@ -163,10 +132,6 @@ public class SwerveSubsystem extends SubsystemBase {
     return Rotation2d.fromDegrees(rot);
   }
 
-  public void resetPose(Rotation2d gyroAngle, SwerveModulePosition[] modulePositions, Pose2d newPose) {
-    estimator.resetPosition(gyroAngle, modulePositions, newPose);
-  }
-
   public void zeroHeading() {
     pidggy.reset();
   }
@@ -202,10 +167,6 @@ public class SwerveSubsystem extends SubsystemBase {
     return MotorConstants.AACORN_MODE;
   }
 
-  public void updatePosition(Limelight limelety) {
-    this.addVision(limelety.getRobotPosition());
-  }
-
   // Position methods - used for odometry
   public Pose2d getPose() {
     return swerveOdometry.getPoseMeters();
@@ -229,7 +190,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("heading", pgetHeading());
     gyroAngle = getRotationPidggy();
-    estimator.update(gyroAngle, getModulePositions());
   }
 
   public void test(int moduleNum, double driveSpeed, double rotationSpeed) {
@@ -245,22 +205,6 @@ public class SwerveSubsystem extends SubsystemBase {
     }
   }
 
-  // public void updateEstimator() {
-  //  estimator.update(getRotationPidggy(), getModulePositions());
-  // }
-
-  // public void addVision() {
-  //  estimator.addVisionMeasurement(null, Timer.getFPGATimestamp());
-  // }
-
-  // public double getX() {
-  //  return estimator.getEstimatedPosition().getTranslation().getX();
-  // }
-
-  // public double getY() {
-  //  return estimator.getEstimatedPosition().getTranslation().getY();
-  // }
-
   /**
    * 
    * @param pose
@@ -268,10 +212,6 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     swerveOdometry.resetPosition(Rotation2d.fromDegrees(getYaw()), getModulePositions(), pose);
-  }
-
-  public void addVision(Pose2d visionPose) {
-    estimator.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
   }
 
   public void outputModuleStates(SwerveModuleState[] states) {

@@ -12,24 +12,18 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-// import edu.wpi.first.math.kinematics.ChassisSpeeds;
-// import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.utils.Constants;
-// import frc.robot.utils.PID;
 import frc.robot.utils.Constants.MotorConstants;
 import frc.robot.utils.Constants.SwerveConstants;
 import frc.robot.utils.Constants.SwerveConstants.BasePIDConstants;
 
-@SuppressWarnings("unused") // Used in order to remove warnings
 public class SwerveModule {
   public TalonFX driveMotor;
   public TalonFX steerMotor;
@@ -45,10 +39,8 @@ public class SwerveModule {
 
   private DutyCycleOut m_request;
 
-  private PositionVoltage m_position;
   private PositionDutyCycle m_cycle;
   private double initialCANCoderValue;
-  private double initialPos;
 
   private final double CANCoderDriveStraightSteerSetPoint;
 
@@ -75,7 +67,6 @@ public class SwerveModule {
     steerslot0Configs = new Slot0Configs();
 
     m_request = new DutyCycleOut(0);
-    m_position = new PositionVoltage(0);
     m_cycle = new PositionDutyCycle(0);
 
     driveMotor.getConfigurator().apply(new TalonFXConfiguration());

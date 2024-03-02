@@ -4,20 +4,14 @@
 
 package frc.robot.commands;
 
-import com.pathplanner.lib.util.PIDConstants;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.SwerveConstants;
 import frc.robot.utils.Constants.SwerveConstants.BasePIDConstants;
 import frc.robot.utils.PID;
 
-@SuppressWarnings("unused")
 public class AutoAlign extends Command {
   /** Creates a new AutoAlign. */
   private Limelight limelight;
@@ -25,16 +19,10 @@ public class AutoAlign extends Command {
   private LED led;
   
   // Horizontal PID and offset
-  private PID horizontalPID;
   private double horizontalError;
-
-  // Vertical PID and offset
-  private PID verticalPID;
-  private double verticalError;
 
   // Rotation PID and offset
   private PID rotationalPID;
-  private double rotationalError;
 
   private double timeout = 0;
   private double slow = 0;
@@ -44,8 +32,6 @@ public class AutoAlign extends Command {
     this.swerveSubsystem = swerveSubsystem;
     this.limelight = limelight;
     this.led = led;
-    horizontalPID = BasePIDConstants.horizontalPID;
-    verticalPID = BasePIDConstants.verticalPID;
     rotationalPID = BasePIDConstants.rotationalPID;
     addRequirements(swerveSubsystem, limelight);
   }
@@ -110,7 +96,6 @@ public class AutoAlign extends Command {
       } else {
         led.rainbow(SwerveConstants.orangeLED[0], SwerveConstants.orangeLED[1], SwerveConstants.orangeLED[2]); // Set led to orange
       }
-      swerveSubsystem.addVision(limelight.getRobotPosition());
       timeout++;
     } else {
       // Remove Red LED light when in competition.

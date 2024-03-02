@@ -7,9 +7,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class LED extends SubsystemBase {
   AddressableLED m_led;
   AddressableLEDBuffer m_ledBuffer;
-  // private int rainbowFirstPixelHue = 0;
-  // private int hue = 0;
-  // private boolean rainbowOn = false;
 
   public LED() {
     m_led = new AddressableLED(5);
@@ -22,23 +19,15 @@ public class LED extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // if (rainbowOn){
-    //   setRainbowMove();
-    // }
-    // else{
-    //   setColor(0, 182, 174);
-    // }
   }
 
-  public void setColor(int r, int g, int b){
-    for (int i = 0; i < m_ledBuffer.getLength(); i++){
-      m_ledBuffer.setHSV(i, r, g, b);
-    }
-
-    m_led.setData(m_ledBuffer);
-  }
-
-  // HSV values
+  /**
+   * Sets the color for each of the LEDs based on HSV values
+   * @param h (Hue) Integer values between 0 - 180
+   * @param s (Saturation) Integer values between 0 - 255
+   * @param v (Value) Integer values between 0 - 255
+   * @return void
+   */
   public void rainbow(int h, int s, int v){
     // rainbowOn = true;
     for (int i = 0; i < m_ledBuffer.getLength(); i++){

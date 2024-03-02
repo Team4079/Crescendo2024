@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import javax.swing.text.Position;
-
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
@@ -13,11 +11,9 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants.PivotConstants;
 
@@ -33,7 +29,6 @@ public class Pivot extends SubsystemBase {
   private Slot0Configs pivotLeftConfigs;
   private Slot0Configs pivotRightConfigs;
 
-  private VelocityVoltage m_request;
   private PositionVoltage pos_reqest;
 
   private MotorOutputConfigs pivotConfigs;
@@ -94,8 +89,6 @@ public class Pivot extends SubsystemBase {
 
     pivotMotorLeft.getConfigurator().apply(leftMotorRampConfig);
     pivotMotorRight.getConfigurator().apply(rightMotorRampConfig);
-
-    m_request = new VelocityVoltage(0).withSlot(0);
   }
 
   @Override

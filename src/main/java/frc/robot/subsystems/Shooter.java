@@ -4,25 +4,19 @@
 
 package frc.robot.subsystems;
 
-import javax.swing.text.Position;
-
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.Constants.PivotConstants;
 import frc.robot.utils.Constants.ShooterConstants;
 
-@SuppressWarnings("unused")
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
   private TalonFX leftFalcon;
@@ -133,6 +127,10 @@ public class Shooter extends SubsystemBase {
     rightFalcon.setControl(m_request.withVelocity(right));
   }
 
+  /**
+   * Operator command to toggle shooter using Left Trigger
+   * @return void
+   */
   public void toggleShooterVelocity() {
     toggleShooter = !toggleShooter;
     if (toggleShooter) {
@@ -142,10 +140,18 @@ public class Shooter extends SubsystemBase {
     }
   }
 
+  /**
+   * Gets the RPM of the left falcon motor on the shooter
+   * @return double, leftFalcon RPM
+   */
   public double getLeftShooterVelocity() {
     return leftFalcon.getRotorVelocity().getValue();
   }
 
+  /**
+   * Gets the RP of the right falcon motor on the shooter
+   * @return double, rightFalcon RPM
+   */
   public double getRightShooterVelocity() {
     return leftFalcon.getRotorVelocity().getValue();
   }

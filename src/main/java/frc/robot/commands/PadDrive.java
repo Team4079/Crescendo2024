@@ -18,7 +18,6 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
 
-@SuppressWarnings("unused")
 public class PadDrive extends Command {
 
   private final SwerveSubsystem swerveSubsystem;
@@ -30,11 +29,6 @@ public class PadDrive extends Command {
 
   // 3 degrees of offsets
   private double horizontalError;
-  private double verticalError;
-  private double rotationalError;
-
-  private double[] arrayOfArray;
-  private double slow = 0;
   private Shooter shootyboi;
   private Pivot pivotyboi;
   private Intake intakeyboi;
@@ -48,8 +42,7 @@ public class PadDrive extends Command {
       LED led,
       Pivot pivotyboi,
       Shooter shootyboi,
-      Intake intakeyboi
-      ) {
+      Intake intakeyboi) {
     this.swerveSubsystem = swerveSubsystem;
     this.pad = pad;
     this.isFieldOriented = isFieldOriented;
@@ -133,41 +126,21 @@ public class PadDrive extends Command {
     // Vision LED
     if (limelety.isTarget()) {
       if (Math.abs(horizontalError) <= SwerveConstants.limelightDeadband) {
-        led.rainbow(SwerveConstants.greenLED[0], SwerveConstants.greenLED[1], SwerveConstants.greenLED[2]); // Set led to green
+        led.rainbow(SwerveConstants.greenLED[0], SwerveConstants.greenLED[1], SwerveConstants.greenLED[2]); // Set led
+                                                                                                            // to green
       } else {
-        led.rainbow(SwerveConstants.orangeLED[0], SwerveConstants.orangeLED[1], SwerveConstants.orangeLED[2]); // Set led to orange
+        led.rainbow(SwerveConstants.orangeLED[0], SwerveConstants.orangeLED[1], SwerveConstants.orangeLED[2]); // Set
+                                                                                                               // led to
+                                                                                                               // orange
       }
-      swerveSubsystem.addVision(limelety.getRobotPosition());
     } else {
       // Remove Red LED light when in competition.
       led.rainbow(SwerveConstants.redLED[0], SwerveConstants.redLED[1], SwerveConstants.redLED[2]); // Set led to red
     }
 
-    // System.out.[r]
-    // rotationalError = limelight.getRobotPose_TargetSpace2D().getRotation().getDegrees(); // Only runs when detects an AprilTag
-    rotationalError = -limelety.getRobotPose_TargetSpace2D()[4];// limelight.getTs();
-    arrayOfArray = limelety.getRobotPose_TargetSpace2D();
-
     horizontalError = -limelety.getTx();
 
-    // if (slow == 50) {
-    //   for (int i = 0; i < arrayOfArray.length; i++) {
-    //     System.out.println(i + "th: " + arrayOfArray[i]);
-    //   }
-
-    //   System.out.println("-------------------------------");
-
-    //   slow = 0;
-    // } else {
-    //   slow++;
-    // }
-    if (limelety.isTarget()) {
-      swerveSubsystem.updatePosition(limelety);
-    }
-
-
-    if (opPad.getRightTriggerValue() > 0.3)
-    {
+    if (opPad.getRightTriggerValue() > 0.3) {
       shootyboi.setKarenVelocity(ShooterConstants.KAREN_SPEED);
     }
 
@@ -175,21 +148,15 @@ public class PadDrive extends Command {
       shootyboi.stopKaren();
     }
 
-    
-    if (opPad.getLeftTriggerValue() > 0.3)
-    {
+    if (opPad.getLeftTriggerValue() > 0.3) {
       intakeyboi.setIntakeVelocity(IntakeConstants.INTAKE_SPEED);
-    } 
+    }
 
-    else { 
+    else {
       intakeyboi.stopKaren();
     }
 
-
-
-
-
-  } 
+  }
 
   // Called once the command ends or is interrupted.
   @Override

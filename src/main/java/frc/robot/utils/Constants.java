@@ -39,6 +39,7 @@ public final class Constants {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
+    // Motor CAN ID Values
     public static final int FRONT_LEFT_STEER_ID = 1;
     public static final int FRONT_LEFT_DRIVE_ID = 2;
     public static final int FRONT_RIGHT_STEER_ID = 3;
@@ -52,6 +53,7 @@ public final class Constants {
     public static final int BACK_LEFT_CAN_CODER_ID = 11;
     public static final int BACK_RIGHT_CAN_CODER_ID = 12;
 
+    // Motor Property Values
     public static final double MAX_SPEED = 5.76;
     public static final double MAX_ANGULAR_SPEED = (14 * Math.PI) / 3;
     public static final double ENCODER_COUNTS_PER_ROTATION = 1; // 2048 for v5, 1 for v6 (rotations)
@@ -62,8 +64,9 @@ public final class Constants {
     public static final double AACORN_SPEED = 0.95;
     public static final double SLOW_SPEED = 0.3;
     public static final double TURN_CONSTANT = 0.3; // 0.3
-
     public static double HEADING = 0.0;
+
+    // Motor Speed Manipulation Values
     public static boolean SLOW_MODE = false;
     public static boolean AACORN_MODE = true;
   }
@@ -75,10 +78,7 @@ public final class Constants {
 
     public static final double robotSize = 0.43105229381; // Keep constant *ideally*
 
-    // bl - > fl
-    // fr - > fr
-    // fl - > br
-    // br
+    // Motor Locations (Relative to the center in meters)
     public static final Translation2d frontLeftLocation = new Translation2d(0.3048, -0.3048); // (0.263525, -0.263525);
     public static final Translation2d frontRightLocation = new Translation2d(0.3048, 0.3048); // (0.263525, 0.263525);
     public static final Translation2d backLeftLocation = new Translation2d(-0.3048, -0.3048); // (-0.263525, -0.263525);

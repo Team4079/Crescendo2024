@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
-import frc.robot.subsystems.Shooter;
 
 public class PivotAlign extends Command {
 
@@ -16,11 +15,9 @@ public class PivotAlign extends Command {
   // Get distance when after we mount the limelight
   private Limelight limelety;
   private double[] llVaules;
-  private double distance;
   private double setPoint;
   private double deadband;
   private double timeout;
-  private double offset;
 
   /** Creates a new Shoot. */
   public PivotAlign(Pivot pivotyboi, Limelight limelety) {
