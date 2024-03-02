@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
-import frc.robot.utils.Hell;
-import frc.robot.utils.Hell.MotorConstants;
+import frc.robot.utils.Constants;
+import frc.robot.utils.Constants.MotorConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import java.util.List;
@@ -26,9 +26,9 @@ public class JaydenAuto extends SequentialCommandGroup {
     public JaydenAuto(SwerveSubsystem swerveSubsystem){
         TrajectoryConfig config =
             new TrajectoryConfig(
-                    Hell.MotorConstants.MAX_SPEED,
+                    Constants.MotorConstants.MAX_SPEED,
                     3)
-                .setKinematics(Hell.SwerveConstants.kinematics);
+                .setKinematics(Constants.SwerveConstants.kinematics);
 
         // An example trajectory to follow.  All units in meters.
         Trajectory exampleTrajectory =
@@ -50,7 +50,7 @@ public class JaydenAuto extends SequentialCommandGroup {
                 new SwerveControllerCommand(
                 exampleTrajectory,
                 swerveSubsystem::getPose,
-                Hell.SwerveConstants.kinematics,
+                Constants.SwerveConstants.kinematics,
                 new PIDController(0.1, 0, 0),
                 new PIDController(0.1, 0, 0),
                 thetaController,

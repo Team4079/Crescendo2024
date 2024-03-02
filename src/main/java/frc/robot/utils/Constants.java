@@ -27,10 +27,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
  * wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Hell {
+public final class Constants {
   private static final String UTILITY_CLASS = "Utility class";
 
-  private Hell() {
+  private Constants() {
     throw new IllegalStateException(UTILITY_CLASS);
   }
 

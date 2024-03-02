@@ -19,8 +19,8 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.Hell.PivotConstants;
-import frc.robot.utils.Hell.ShooterConstants;
+import frc.robot.utils.Constants.PivotConstants;
+import frc.robot.utils.Constants.ShooterConstants;
 
 @SuppressWarnings("unused")
 public class Shooter extends SubsystemBase {
