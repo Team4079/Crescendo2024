@@ -41,6 +41,7 @@ public class Limelight extends SubsystemBase {
     robotPoseTargetSpace = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_targetspace")
         .getDoubleArray(new double[6]);
 
+    SmartDashboard.putNumberArray("stuff", robotPoseTargetSpace);
     if (DriverStation.getAlliance().equals(DriverStation.Alliance.Red)) {
       robotPose_FieldSpace = llresults.targetingResults.getBotPose2d_wpiRed();
     } else {

@@ -148,7 +148,7 @@ public final class Constants {
 
     public static final boolean isInverted = false;
 
-    public static final int INTAKE_MOTOR_ID = 0;
+    public static final int INTAKE_MOTOR_ID = 106;
 
     public static final double INTAKE_SPEED = 4000; 
 
@@ -164,8 +164,8 @@ public final class Constants {
 
     public static final boolean isInverted = false;
 
-    public static final int PIVOT_MOTOR_LEFT_ID = 4;
-    public static final int PIVOT_MOTOR_RIGHT_ID = 5;
+    public static final int PIVOT_MOTOR_LEFT_ID = 101;
+    public static final int PIVOT_MOTOR_RIGHT_ID = 102;
 
     public static final double PIVOT_PID_LEFT_P = 0.0002;
     public static final double PIVOT_PID_LEFT_I = 0.0;
@@ -183,10 +183,10 @@ public final class Constants {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
-    public static final int FALCON_LEFT_ID = 1;
-    public static final int FALCON_RIGHT_ID = 0;
+    public static final int FALCON_LEFT_ID = 103;
+    public static final int FALCON_RIGHT_ID = 104;
     
-    public static final int KRAKEN_ID = 2;
+    public static final int KRAKEN_ID = 105;
 
     public static final double SHOOTER_PID_LEFT_P = 0.0002;
     public static final double SHOOTER_PID_LEFT_I = 0.0;
