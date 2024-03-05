@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import org.ejml.dense.row.mult.SubmatrixOps_FDRM;
+
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
@@ -14,6 +16,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants.PivotConstants;
 
@@ -99,7 +102,10 @@ public class Pivot extends SubsystemBase {
 
   // This method will be called once per scheduler run
   @Override
-  public void periodic() {}
+  public void periodic() {
+    SmartDashboard.putNumber("Pivot Left Position", pivotMotorLeft.getPosition().getValue());
+    SmartDashboard.putNumber("Pivot Right Position", pivotMotorRight.getPosition().getValue());
+  }
 
   /**
    * Stops the pivot motors

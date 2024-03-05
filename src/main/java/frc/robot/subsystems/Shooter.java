@@ -14,6 +14,7 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants.ShooterConstants;
 
@@ -119,7 +120,11 @@ public class Shooter extends SubsystemBase {
 
   // This method will be called once per scheduler run
   @Override
-  public void periodic() {}
+  public void periodic() {
+    SmartDashboard.putNumber("Left Shooter Velocity", leftFalcon.getRotorVelocity().getValue());
+    SmartDashboard.putNumber("Right Shooter Velocity", rightFalcon.getRotorVelocity().getValue());
+    SmartDashboard.putNumber("Kraken Velocity", kraken.getRotorVelocity().getValue());
+  }
 
   /**
    * Sets the velocity of the shooter motors
