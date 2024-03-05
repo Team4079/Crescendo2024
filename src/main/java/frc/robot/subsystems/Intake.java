@@ -68,12 +68,20 @@ public class Intake extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  // methods probably
-
+  /**
+   * Sets the intake motor to a specific speed
+   * @param speed The speed to set the intake motor to
+   * @return void
+   */
   public void setIntakeVelocity(double speed) {
     intakeKaren.setControl(m_request.withVelocity(speed));
   }
 
+  /**
+   * Stops the intake motor
+   * @param None
+   * @return void
+   */
   public void stopKraken() {
     intakeKaren.stopMotor();
   }

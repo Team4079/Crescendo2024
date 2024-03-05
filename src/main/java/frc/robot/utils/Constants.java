@@ -92,14 +92,19 @@ public final class Constants {
     public static final Pose2d STARTING_POSE = new Pose2d(2, 7, new Rotation2d());
     public static final double STATE_SPEED_THRESHOLD = 0.05;
 
+    // The values of the can coders when the wheels are straight according to Mr. Wright
     public static final double CANCoderValue9 = 0.915283 + 0.5; // 0.9174805
     public static final double CANCoderValue10 = 0.327881; // 0.328613 + 0.5 add 0.5
     public static final double CANCoderValue11 = 0.979736 - 0.5; // 0.539794 - 0.5
     public static final double CANCoderValue12 = 0.536133; // 0.984863
+
+    // THe deadband of the joystick to combat drift
     public static final double JOYSTICK_DEADBAND = 0.05;
+    
     public static final boolean usingVision = false;
     public static final boolean isFieldOriented = true;
 
+    // Whether the limelight auto aligns and its deadband
     public static final boolean useLimelightAutoAlign = true;
     public static final double limelightDeadband = 3.5;
 

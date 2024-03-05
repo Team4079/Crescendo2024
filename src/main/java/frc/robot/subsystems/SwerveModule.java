@@ -291,7 +291,7 @@ public class SwerveModule {
    * 
    * @param desiredState SwerveModuleState The desired state of the module.
    * @param currentAngle Rotation2d The current angle of the module.
-   * @param deviceID int The device ID of the module.
+   * @param deviceID     int The device ID of the module.
    * @return
    */
   public static SwerveModuleState optimize(SwerveModuleState desiredState, Rotation2d currentAngle, int deviceID) {
@@ -313,13 +313,14 @@ public class SwerveModule {
    * Updates angle to be within 0 to 360 degrees.
    * 
    * @param scopeReference double The reference angle to rotate the new angle to.
-   * @param newAngle double The new angle to rotate to the reference angle.
+   * @param newAngle       double The new angle to rotate to the reference angle.
    * @return double The new angle in the 0 to 360 scope.
    */
   private static double placeInAppropriate0To360Scope(double scopeReference, double newAngle) {
     double lowerBound;
     double upperBound;
     double lowerOffset = scopeReference % 360;
+
     if (lowerOffset >= 0) {
       lowerBound = scopeReference - lowerOffset;
       upperBound = scopeReference + (360 - lowerOffset);
@@ -343,6 +344,7 @@ public class SwerveModule {
 
   /**
    * Returns the CANCoder value.
+   * 
    * @return double The CANCoder value.
    */
   public double getCanCoderValue() {
@@ -351,6 +353,7 @@ public class SwerveModule {
 
   /**
    * Returns the current position of the steer motor.
+   * 
    * @return double The current position of the steer motor.
    */
   public double getRotationDegree() {
