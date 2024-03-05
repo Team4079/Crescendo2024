@@ -4,6 +4,12 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+/**
+ * The {@link LED} class includes all the methods to control the LEDs.
+ * 
+ *
+ * 
+ */
 public class LED extends SubsystemBase {
   AddressableLED m_led;
   AddressableLEDBuffer m_ledBuffer;

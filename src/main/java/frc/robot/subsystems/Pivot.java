@@ -17,6 +17,12 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants.PivotConstants;
 
+/**
+ * The {@link Pivot} class includes all the motors to pivot the shooter.
+ * 
+ *
+ * 
+ */
 public class Pivot extends SubsystemBase {
   /** Creates a new Pivot. */
 

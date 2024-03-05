@@ -153,10 +153,4 @@ public class RobotContainer {
     return new PathPlannerAuto("Full Auto");
   }
 
-  /**
-   * Gets the test command
-   *
-   * @return the command to run in test initial
-   *         //
-   */
 }

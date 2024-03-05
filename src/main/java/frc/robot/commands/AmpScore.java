@@ -35,8 +35,10 @@ public class AmpScore extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // Sets the pivot to the amp angle
     pivot.setPosition(PivotConstants.PIVOT_AMP_ANGLE, PivotConstants.PIVOT_AMP_ANGLE);
 
+    // If the pivot is within the deadband, stop the pivot and start the shooter
     if (Math.abs(pivot.getPivotPos() - PivotConstants.PIVOT_AMP_ANGLE) < deadband) {
       pivot.stopMotors();
       shooter.setKrakenVelocity(ShooterConstants.KRAKEN_SPEED);

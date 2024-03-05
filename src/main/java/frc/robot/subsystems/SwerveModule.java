@@ -24,6 +24,13 @@ import frc.robot.utils.Constants.MotorConstants;
 import frc.robot.utils.Constants.SwerveConstants;
 import frc.robot.utils.Constants.SwerveConstants.BasePIDConstants;
 
+/**
+ * The {@link SwerveModule} class includes all the motors to control the swerve
+ * drive.
+ * 
+ *
+ * 
+ */
 public class SwerveModule {
   /** Creates a new SwerveModule. */
   public TalonFX driveMotor;

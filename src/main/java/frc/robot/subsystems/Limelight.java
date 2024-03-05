@@ -13,6 +13,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.LimelightHelpers;
 
+/**
+ * The {@link Limelight} class includes all the methods to interact with the
+ * limelight. (Limelety)
+ * 
+ * <p> The limelight gets values based on the pipeline and mode set.
+ * 
+ */
 public class Limelight extends SubsystemBase {
   /** Creates a new Limelight. */
   private final NetworkTable m_limelightTable;

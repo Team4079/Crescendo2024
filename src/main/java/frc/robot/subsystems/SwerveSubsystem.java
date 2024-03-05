@@ -21,6 +21,12 @@ import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.MotorConstants;
 import frc.robot.utils.Constants.SwerveConstants;
 
+/**
+ * The {@link SwerveSubsystem} class includes all the motors to drive the robot.
+ * 
+ *
+ * 
+ */
 public class SwerveSubsystem extends SubsystemBase {
   private SwerveModule[] modules;
   private Rotation2d gyroAngle;

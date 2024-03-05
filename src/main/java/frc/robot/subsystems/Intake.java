@@ -16,6 +16,12 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants.IntakeConstants;
 
+/**
+ * The {@link Intake} class includes all the motors to intake notes.
+ * 
+ *
+ * 
+ */
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
   private TalonFX intakeKaren;
