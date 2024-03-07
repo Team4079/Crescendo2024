@@ -27,9 +27,9 @@ public class PadDrive extends Command {
 
   // 3 degrees of offsets
   private double horizontalError;
-  private Shooter shootyboi;
-  private Pivot pivotyboi;
-  private Intake intakeyboi;
+  private Shooter shooty;
+  private Pivot pivot;
+  private Intake intake;
 
   /** Creates a new SwerveJoystick. */
   public PadDrive(SwerveSubsystem swerveSubsystem,
@@ -38,21 +38,21 @@ public class PadDrive extends Command {
       boolean isFieldOriented,
       Limelight limelety,
       LED led,
-      Pivot pivotyboi,
-      Shooter shootyboi,
-      Intake intakeyboi) {
+      Pivot pivot,
+      Shooter shooty,
+      Intake intake) {
     this.swerveSubsystem = swerveSubsystem;
     this.pad = pad;
     this.isFieldOriented = isFieldOriented;
     this.limelety = limelety;
     this.led = led;
     this.opPad = opPad;
-    this.pivotyboi = pivotyboi;
-    this.shootyboi = shootyboi;
-    this.intakeyboi = intakeyboi;
+    this.pivot = pivot;
+    this.shooty = shooty;
+    this.intake = intake;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(this.swerveSubsystem, this.limelety, this.led, this.pivotyboi, this.shootyboi);
+    addRequirements(this.swerveSubsystem, this.limelety, this.led, this.pivot, this.shooty, this.intake);
   }
 
   // Called when the command is initially scheduled.
@@ -137,28 +137,26 @@ public class PadDrive extends Command {
 
     horizontalError = -limelety.getTx();
 
-    // if (opPad.getRightTriggerValue() > 0.3) {
-    // shootyboi.setKrakenVelocity(controller_deadband);
-    // }
-
-    // else {
-    // shootyboi.stopKraken();
-    // }
-
-    if (pad.getRightBumper()) {
-      intakeyboi.setIntakeVelocity(IntakeConstants.INTAKE_SPEED);
+    if (opPad.getRightTriggerValue() > 0.3) {
+    shooty.setKrakenVelocity(controller_deadband);
     }
 
     else {
-      intakeyboi.stopKaren();
+    shooty.stopKraken();
     }
 
+    if (opPad.getLeftTriggerValue() > 0.3) {
+      intake.setIntakeVelocity(IntakeConstants.INTAKE_SPEED);
+    }
+
+    else {
+      intake.stopKraken();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

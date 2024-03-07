@@ -13,7 +13,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-// import frc.robot.utils.PID;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -92,14 +91,19 @@ public final class Constants {
     // uselses
     public static final double STATE_SPEED_THRESHOLD = 0.05;
 
+    // The values of the can coders when the wheels are straight according to Mr. Wright
     public static final double CANCoderValue9 = 0.915283 + 0.5; // 0.9174805
     public static final double CANCoderValue10 = 0.327881; // 0.328613 + 0.5 add 0.5
     public static final double CANCoderValue11 = 0.979736 - 0.5; // 0.539794 - 0.5
     public static final double CANCoderValue12 = 0.536133; // 0.984863
+
+    // THe deadband of the joystick to combat drift
     public static final double JOYSTICK_DEADBAND = 0.05;
+    
     public static final boolean usingVision = false;
     public static final boolean isFieldOriented = true;
 
+    // Whether the limelight auto aligns and its deadband
     public static final boolean useLimelightAutoAlign = true;
     public static final double limelightDeadband = 3.5;
 
@@ -150,8 +154,7 @@ public final class Constants {
 
     public static final int INTAKE_MOTOR_ID = 17;
 
-    // public static final double INTAKE_SPEED = 0.656;
-    public static final double INTAKE_SPEED = 1000;
+    public static final double INTAKE_SPEED = 4000;
 
 
     public static final double INTAKE_PID_V = 0.1;

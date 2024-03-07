@@ -13,6 +13,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.LimelightHelpers;
 
+/**
+ * The {@link Limelight} class includes all the methods to interact with the
+ * limelight. (Limelety)
+ * 
+ * <p> The limelight gets values based on the pipeline and mode set.
+ * 
+ */
 public class Limelight extends SubsystemBase {
   /** Creates a new Limelight. */
   private final NetworkTable m_limelightTable;
@@ -56,18 +63,37 @@ public class Limelight extends SubsystemBase {
     }
   }
 
+  /**
+   * Returns the x value of the april tag from the limelight
+   * 
+   * @return tx value
+   */
   public double getTx() {
     return tx;
   }
 
+  /**
+   * Returns the area value from the limelight
+   * 
+   * @return ta value
+   */
   public double getTa() {
     return ta;
   }
 
+  /**
+   * Returns the fullness value from the limelight
+   * 
+   * @return tv value
+   */
   public double getTv() {
     return tv;
   }
 
+  /**
+   * Returns the y value from the limelight
+   * @return ty value
+   */
   public double getTy() {
     return ty;
   }
@@ -80,7 +106,13 @@ public class Limelight extends SubsystemBase {
   // accurate to +- 5cm per meter)
   // 3 is undocumented
   // 4 is rotation (clockwise is -) (accurate to +-0.5 a degree)
-  // 5 
+  // 5
+
+  /**
+   * Returns the robot pose in target space
+   * 
+   * @return Robot Pose in target space
+   */
   public double[] getRobotPose_TargetSpace2D() {
     return robotPoseTargetSpace;
   }
@@ -91,14 +123,16 @@ public class Limelight extends SubsystemBase {
 
   /**
    * Sets the pipeline of the limelight
+   * 
    * @param pipeline The pipeline to set the limelight
    */
   public void setPipeline(double pipeline) {
     m_limelightTable.getEntry("pipeline").setNumber(pipeline);
   }
-  
+
   /**
    * Sets the mode of the limelight (fiducial, retroflective)
+   * 
    * @param mode The mode to set the limelight
    */
   public void setAdvanced(double mode) {
@@ -107,6 +141,7 @@ public class Limelight extends SubsystemBase {
 
   /**
    * Gets the latency of the limelight
+   * 
    * @return Latency in ms
    */
   public double getLatency() {
@@ -115,6 +150,7 @@ public class Limelight extends SubsystemBase {
 
   /**
    * Returns the tag number of the april tag
+   * 
    * @return April Tag number
    */
   public double getTag() {
@@ -123,10 +159,11 @@ public class Limelight extends SubsystemBase {
 
   /**
    * Returns the robot position in the field
+   * 
    * @return Robot Position
    */
   public Pose2d getRobotPosition() {
     return robotPose_FieldSpace;
   }
-  
+
 }

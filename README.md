@@ -14,5 +14,8 @@ This is where we our robot code is stored.
 * [2024 Game Manual](https://firstfrc.blob.core.windows.net/frc2024/Manual/2024GameManual.pdf)
 ## Anything (Sort of) Important
 * Currently just a glorified swerve base
+![The Intake Sorta](https://github.com/OASTEM/Crescendo2024/assets/97996034/0d1d8973-de39-4b52-bf5f-171b2e0aaa16)
+![The Swerve Base Without Stuff](https://github.com/OASTEM/Crescendo2024/assets/97996034/8d969cc8-2e4c-42d6-9612-aa2de4ca53a1)
 
 ## Limelety
+![Limelety](https://github.com/OASTEM/Crescendo2024/assets/97996034/9b501e44-de16-4f72-b1f5-70dbe3a920a2)

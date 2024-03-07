@@ -1,27 +1,35 @@
-// // Copyright (c) FIRST and other WPILib contributors.
-// // Open Source Software; you can modify and/or share it under the terms of
-// // the WPILib BSD license file in the root directory of this project.
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 
-// package frc.robot.subsystems;
+package frc.robot.subsystems;
 
-// import edu.wpi.first.cameraserver.CameraServer;
-// import edu.wpi.first.cscore.UsbCamera;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-// public class Jevois extends SubsystemBase {
-//   /** Creates a new Jevois. */
-//   private UsbCamera camera;
+/**
+ * The {@link Jevois} class is the camera class which publishes the camera feed to the SmartDashboard.
+ * 
+ *
+ * <p>When a camera is detected, the SmartDashboard will display it as connected.
+ */
+public class Jevois extends SubsystemBase {
+    /** Creates a new Jevois. */
+    private UsbCamera camera;
 
-//   public Jevois() {
-//     camera = CameraServer.startAutomaticCapture(0);
-//     camera.setResolution(320, 240);
-//     camera.setFPS(30);
-//   }
+    public Jevois() {
+        // Start the camera
+        camera = CameraServer.startAutomaticCapture(0);
+        // Set the resolution and FPS
+        camera.setResolution(320, 240);
+        camera.setFPS(30);
+    }
 
-//   @Override
-//   public void periodic() {
-//     // This method will be called once per scheduler run
-//     SmartDashboard.putBoolean("Jevois Connected", camera.isConnected());
-//   }
-// }
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        SmartDashboard.putBoolean("Jevois Connected", camera.isConnected());
+    }
+}

@@ -11,49 +11,46 @@ import frc.robot.subsystems.Pivot;
 
 public class PivotAlign extends Command {
 
-  private Pivot pivotyboi;
+  private Pivot pivot;
   // Get distance when after we mount the limelight
   private Limelight limelety;
-  private double[] llVaules;
+  private double[] llValues;
   private double setPoint;
   private double deadband;
   private double timeout;
 
   /** Creates a new Shoot. */
-  public PivotAlign(Pivot pivotyboi, Limelight limelety) {
+  public PivotAlign(Pivot pivot, Limelight limelety) {
     this.limelety = limelety;
-    this.pivotyboi = pivotyboi;
+    this.pivot = pivot;
     deadband = 0.5;
     timeout = 0;
-    addRequirements(pivotyboi, limelety);
+    addRequirements(pivot, limelety);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    
-
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    llVaules = limelety.getRobotPose_TargetSpace2D();
+    llValues = limelety.getRobotPose_TargetSpace2D();
     SmartDashboard.putNumber(getName(), 69);
 
     // change later
-    // setPoint = pivotyboi.shootPos(llVaules[2]);
+    setPoint = pivot.shootPos(llValues[2]);
 
-    // pivotyboi.setPosition(setPoint, setPoint);
+    pivot.setPosition(setPoint, setPoint);
 
-    // if (Math.abs(setPoint - pivotyboi.getPivotPos()) < deadband)
-    // {
-    //   timeout++;
-    // }
-    // else
-    // {
-    //   timeout = 0;
-    // }
+    if (Math.abs(setPoint - pivot.getPivotPos()) < deadband)
+    {
+      timeout++;
+    }
+    else
+    {
+      timeout = 0;
+    }
   }
 
   // Called once the command ends or is interrupted.

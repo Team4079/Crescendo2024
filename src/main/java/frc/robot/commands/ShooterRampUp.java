@@ -12,19 +12,19 @@ public class ShooterRampUp extends Command {
 
   private double deadband;
 
-  private Shooter shootyboi;
+  private Shooter shooter;
 
   /** Creates a new Shoot. */
-  public ShooterRampUp(Shooter shootyboi) {
+  public ShooterRampUp(Shooter shooter) {
     deadband = 5;
-    this.shootyboi = shootyboi;
-    addRequirements(shootyboi);
+    this.shooter = shooter;
+    addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // shootyboi.setShooterVelocity(ShooterConstants.SHOOTER_SPEED, -ShooterConstants.SHOOTER_SPEED);
+    shooter.setShooterVelocity(ShooterConstants.SHOOTER_SPEED, -ShooterConstants.SHOOTER_SPEED);
 
   }
 
@@ -43,10 +43,10 @@ public class ShooterRampUp extends Command {
   @Override
   public boolean isFinished() {
 
-    // if (Math.abs(shootyboi.getLeftShooterVelocity() - ShooterConstants.SHOOTER_SPEED) < deadband)
-    // {
-    //   return true;
-    // }
+    if (Math.abs(shooter.getLeftShooterVelocity() - ShooterConstants.SHOOTER_SPEED) < deadband)
+    {
+      return true;
+    }
     return false;
   }
 }

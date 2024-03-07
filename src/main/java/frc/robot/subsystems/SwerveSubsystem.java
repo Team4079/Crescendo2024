@@ -22,6 +22,12 @@ import frc.robot.utils.Constants;
 import frc.robot.utils.Constants.MotorConstants;
 import frc.robot.utils.Constants.SwerveConstants;
 
+/**
+ * The {@link SwerveSubsystem} class includes all the motors to drive the robot.
+ * 
+ *
+ * 
+ */
 public class SwerveSubsystem extends SubsystemBase {
   private SwerveModule[] modules;
   private Rotation2d gyroAngle;
@@ -96,6 +102,15 @@ public class SwerveSubsystem extends SubsystemBase {
     );
   }
 
+  /**
+   * Drives the robot using the joystick input
+   * 
+   * @param forwardSpeed double Speed value in meters per second
+   * @param leftSpeed double Speed value in meters per second
+   * @param joyStickInput double joystick input value
+   * @param isFieldOriented boolean value to determine if the robot is field oriented
+   * @return void
+   */
   public void drive(double forwardSpeed, double leftSpeed, double joyStickInput, boolean isFieldOriented) {
     ChassisSpeeds speeds;
 

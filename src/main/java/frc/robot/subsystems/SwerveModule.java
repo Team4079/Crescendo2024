@@ -24,7 +24,15 @@ import frc.robot.utils.Constants.MotorConstants;
 import frc.robot.utils.Constants.SwerveConstants;
 import frc.robot.utils.Constants.SwerveConstants.BasePIDConstants;
 
+/**
+ * The {@link SwerveModule} class includes all the motors to control the swerve
+ * drive.
+ * 
+ *
+ * 
+ */
 public class SwerveModule {
+  /** Creates a new SwerveModule. */
   public TalonFX driveMotor;
   public TalonFX steerMotor;
   public CANcoder canCoder;
@@ -80,9 +88,9 @@ public class SwerveModule {
     driveslot0Configs.kI = BasePIDConstants.DRIVE_PID.i;
     driveslot0Configs.kD = BasePIDConstants.DRIVE_PID.d;
 
-    steerslot0Configs.kP = BasePIDConstants.STEER_PID.p; // original 0.06
+    steerslot0Configs.kP = BasePIDConstants.STEER_PID.p;
     steerslot0Configs.kI = BasePIDConstants.STEER_PID.i;
-    steerslot0Configs.kD = BasePIDConstants.STEER_PID.d; // Original 0.008
+    steerslot0Configs.kD = BasePIDConstants.STEER_PID.d;
 
     driveMotor.getConfigurator().apply(driveslot0Configs);
     steerMotor.getConfigurator().apply(steerslot0Configs);
@@ -102,6 +110,12 @@ public class SwerveModule {
 
   }
 
+  /**
+   * Returns the current position of the module.
+   * 
+   * @param None
+   * @return SwerveModulePosition The current position of the module.
+   */
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
         encoderToMeters(
@@ -111,32 +125,73 @@ public class SwerveModule {
                 MotorConstants.STEER_MOTOR_GEAR_RATIO)));
   }
 
+  /**
+   * Sets the speed of the drive motor.
+   * 
+   * @param speed The speed to set the drive motor to.
+   * @return void
+   */
   public void setDriveSpeed(double speed) {
     driveMotor.setControl(m_request.withOutput(speed));
   }
 
+  /**
+   * Sets the speed of the steer motor.
+   * 
+   * @param speed The speed in RPM to set the steer motor to.
+   * @return void
+   */
   public void setSteerSpeed(double speed) {
     steerMotor.setControl(m_request.withOutput(speed));
   }
 
-  public void setSteerPosition(double rotations) {
-    steerMotor.setControl(m_cycle.withPosition(rotations));
+  /**
+   * Sets the position of the steer motor.
+   * 
+   * @param rotations The rotations in degrees to set the steer motor to.
+   * @return void
+   */
+  public void setSteerPosition(double degrees) {
+    steerMotor.setControl(m_cycle.withPosition(degrees));
   }
 
+  /**
+   * Resets the drive motor encoder.
+   */
   public void resetEncoders() {
     driveMotor.setPosition(0);
   }
 
-  /** Converts encoder counts to degrees. */
+  /**
+   * Converts encoder counts to degrees.
+   * 
+   * @param encoderCount The encoder count to convert to degrees.
+   * @param gearRatio    The gear ratio of the motor.
+   * @return double The encoder count in degrees.
+   */
   public double encoderToAngle(double encoderCount, double gearRatio) {
     return encoderCount * 360 /
         MotorConstants.ENCODER_COUNTS_PER_ROTATION * gearRatio;
   }
 
-  public double rotationsToAngle(double rotations, double gearRatio) {
-    return rotations * 360 / gearRatio;
+  /**
+   * Converts rotations to degrees.
+   * 
+   * @param rotations The wheel rotations to convert to degrees.
+   * @param gearRatio The gear ratio of the motor.
+   * @return double The rotations in degrees.
+   */
+  public double rotationsToAngle(double wheelRotations, double gearRatio) {
+    return wheelRotations * 360 / gearRatio;
   }
 
+  /**
+   * Converts degrees to rotations.
+   * 
+   * @param angle     The angle to convert to rotations.
+   * @param gearRatio The gear ratio of the motor.
+   * @return double The angle in rotations.
+   */
   public double angleToRotations(double angle, double gearRatio) {
     return angle / 360 * gearRatio;
   }
@@ -147,16 +202,36 @@ public class SwerveModule {
         gearRatio;
   }
 
+  /**
+   * Converts encoder counts to meters.
+   * 
+   * @param encoderCount The encoder count to convert to meters.
+   * @param gearRatio    The gear ratio of the motor.
+   * @return double The encoder count in meters.
+   */
   public double encoderToMeters(double encoderCount, double gearRatio) {
     return encoderCount / (MotorConstants.ENCODER_COUNTS_PER_ROTATION *
         gearRatio) * MotorConstants.WHEEL_DIAMETER * Math.PI;
   }
 
+  /**
+   * Converts meters to encoder counts.
+   * 
+   * @param meters    double The meters to convert to encoder counts.
+   * @param gearRatio double The gear ratio of the motor.
+   * @return double The meters in encoder counts.
+   */
   public double metersToEncoder(double meters, double gearRatio) {
     return meters / (MotorConstants.WHEEL_DIAMETER * Math.PI) *
         MotorConstants.ENCODER_COUNTS_PER_ROTATION * gearRatio;
   }
 
+  /**
+   * Sets the state of the module.
+   * 
+   * @param state SwerveModuleState The state to set the module to.
+   * @return void
+   */
   public void setState(SwerveModuleState state) {
     state = optimize(state,
         Rotation2d.fromDegrees(
@@ -192,33 +267,40 @@ public class SwerveModule {
     }
   }
 
+  /**
+   * Stops the module.
+   * 
+   * @param None
+   * @return void
+   */
   public void stop() {
     setDriveSpeed(0);
     setSteerSpeed(0);
   }
 
+  /**
+   * Sets the position of the steer motor to the current CANCoder value.
+   * 
+   * @param None
+   * @return void
+   */
   public void setRotorPos() {
     initialCANCoderValue = canCoder.getAbsolutePosition().refresh().getValue() % 360;
     steerMotor.setPosition(
         -(initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * MotorConstants.STEER_MOTOR_GEAR_RATIO);
   }
 
-  public static SwerveModuleState optimize(SwerveModuleState desiredState,
-      Rotation2d currentAngle) {
-    double targetAngle = placeInAppropriate0To360Scope(currentAngle.getDegrees(),
-        desiredState.angle.getDegrees());
-    double targetSpeed = desiredState.speedMetersPerSecond;
-    double delta = targetAngle - currentAngle.getDegrees();
-
-    if (Math.abs(delta) > 90) {
-      targetSpeed = -targetSpeed;
-      targetAngle = delta > 90 ? (targetAngle -= 180) : (targetAngle += 180);
-    }
-
-    return new SwerveModuleState(targetSpeed,
-        Rotation2d.fromDegrees(targetAngle));
-  }
-
+  /**
+   * The function optimizes the desired rotation of the module.
+   * The module will rotate relative to:
+   * 1. Robot-relative: The front of the robot
+   * 2. Field-relative: Wherever we zeroed the gyro
+   * 
+   * @param desiredState SwerveModuleState The desired state of the module.
+   * @param currentAngle Rotation2d The current angle of the module.
+   * @param deviceID     int The device ID of the module.
+   * @return
+   */
   public static SwerveModuleState optimize(SwerveModuleState desiredState, Rotation2d currentAngle, int deviceID) {
     double targetAngle = placeInAppropriate0To360Scope(
         currentAngle.getDegrees(), desiredState.angle.getDegrees());
@@ -233,10 +315,19 @@ public class SwerveModule {
     return new SwerveModuleState(targetSpeed, Rotation2d.fromDegrees(targetAngle));
   }
 
+  /**
+   * Rotates the angle to the appropriate direction in the 0 to 360 scope.
+   * Updates angle to be within 0 to 360 degrees.
+   * 
+   * @param scopeReference double The reference angle to rotate the new angle to.
+   * @param newAngle       double The new angle to rotate to the reference angle.
+   * @return double The new angle in the 0 to 360 scope.
+   */
   private static double placeInAppropriate0To360Scope(double scopeReference, double newAngle) {
     double lowerBound;
     double upperBound;
     double lowerOffset = scopeReference % 360;
+
     if (lowerOffset >= 0) {
       lowerBound = scopeReference - lowerOffset;
       upperBound = scopeReference + (360 - lowerOffset);
@@ -258,10 +349,20 @@ public class SwerveModule {
     return newAngle;
   }
 
+  /**
+   * Returns the CANCoder value.
+   * 
+   * @return double The CANCoder value.
+   */
   public double getCanCoderValue() {
     return canCoder.getAbsolutePosition().getValue();
   }
 
+  /**
+   * Returns the current position of the steer motor.
+   * 
+   * @return double The current position of the steer motor.
+   */
   public double getRotationDegree() {
     return rotationsToAngle(steerMotor.getRotorPosition().getValue(), MotorConstants.STEER_MOTOR_GEAR_RATIO);
   }

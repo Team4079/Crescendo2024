@@ -11,9 +11,7 @@ import frc.robot.commands.ShootingSequence;
 import frc.robot.commands.PadDrive;
 import frc.robot.commands.ShooterRampUp;
 import frc.robot.subsystems.Intake;
-// import frc.robot.subsystems.Intake;
-// import frc.robot.subsystems.Jevois;
-// import frc.robot.commands.TargetLED;
+import frc.robot.subsystems.Jevois;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
@@ -25,30 +23,13 @@ import frc.robot.utils.Constants.SwerveConstants;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
-// import java.util.HashMap;
-// import java.util.function.Consumer;
-
-// import javax.management.InstanceAlreadyExistsException;
-// import javax.naming.OperationNotSupportedException;
-// import javax.net.ssl.SSLSocket;
-
-// import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-// import com.pathplanner.lib.path.PathPlannerPath;
 
-// import edu.wpi.first.math.kinematics.SwerveModuleState;
-
-//import frc.robot.subsystems.NavX;
-// import frc.robot.subsystems.SwerveSubsystem;
-// import frc.robot.utils.LogitechGamingPad;
-// import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-// import frc.robot.utils.Constants;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -67,7 +48,7 @@ public class RobotContainer {
   private final LogitechGamingPad opPad;
   private final LED led;
   private final Limelight limelety;
-  // private final Jevois jevois;
+  private final Jevois jevois;
   private final Pivot pivotyboi;
   private final Shooter shootyboi;
   private final Intake intakeyboi;
@@ -86,7 +67,6 @@ public class RobotContainer {
   private final JoystickButton opRightBumper;
   private final JoystickButton opLeftBumper;
 
-  // private final SendableChooser<Command> autoChooser;
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -96,7 +76,7 @@ public class RobotContainer {
     opPad = new LogitechGamingPad(1);
     led = new LED();
     limelety = new Limelight();
-    // jevois = new Jevois();
+    jevois = new Jevois();
     pivotyboi = new Pivot();
     shootyboi = new Shooter();
     intakeyboi = new Intake();
@@ -128,16 +108,11 @@ public class RobotContainer {
     // 5
 
     NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem, limelety, led));
-    // NamedCommands.registerCommand("FullShoot",
-    // new ShootingSequence(swerveSubsystem, limelety, led, pivotyboi, shootyboi));
-
     swerveSubsystem
         .setDefaultCommand(new PadDrive(swerveSubsystem, pad, opPad, SwerveConstants.isFieldOriented, limelety, led, pivotyboi, shootyboi, intakeyboi));
 
     // Configure auto chooser
     configureBindings();
-    // autoChooser = AutoBuilder.buildAutoChooser("New Auto");
-    // SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   /**
@@ -158,9 +133,8 @@ public class RobotContainer {
     padA.onTrue(new InstantCommand(swerveSubsystem::addRotorPositionsforModules));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
     padY.onTrue(new InstantCommand(swerveSubsystem::newPose));
-    padX.whileTrue(new TeleOpAlign(swerveSubsystem, limelety, led, pad));
-    
-    // opPadB.onTrue(new InstantCommand(shootyboi::toggleShooterVelocity));
+    padX.whileTrue(new AutoAlign(swerveSubsystem, limelety, led));
+    opPadB.onTrue(new InstantCommand(shootyboi::toggleShooterVelocity));
 
   }
 
@@ -170,10 +144,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-
-    // PathPlannerPath path = PathPlannerPath.fromPathFile("Test Path");
-    // return AutoBuilder.followPath(path);
-
     swerveSubsystem.zeroHeading();
     swerveSubsystem.newPose();
     swerveSubsystem.addRotorPositionsforModules();
@@ -183,10 +153,4 @@ public class RobotContainer {
     return new PathPlannerAuto("Full Auto");
   }
 
-  /**
-   * Gets the test command
-   *
-   * @return the command to run in test initial
-   *         //
-   */
 }
