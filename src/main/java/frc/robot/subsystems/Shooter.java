@@ -70,6 +70,7 @@ public class Shooter extends SubsystemBase {
     rightShootConfigurator.apply(shooterConfigs);
     krakenConfigurator.apply(shooterConfigs);
 
+    
     leftShootConfigs.kP = ShooterConstants.SHOOTER_PID_LEFT_P;
     leftShootConfigs.kI = ShooterConstants.SHOOTER_PID_LEFT_I;
     leftShootConfigs.kD = ShooterConstants.SHOOTER_PID_LEFT_D;

@@ -154,7 +154,7 @@ public final class Constants {
 
     public static final int INTAKE_MOTOR_ID = 17;
 
-    public static final double INTAKE_SPEED = 4000;
+    public static final double INTAKE_SPEED = 1000;
 
 
     public static final double INTAKE_PID_V = 0.1;
@@ -181,6 +181,7 @@ public final class Constants {
     public static final double PIVOT_PID_RIGHT_I = 0.0;
     public static final double PIVOT_PID_RIGHT_D = 0.0;
 
+    public static final double PIVOT_NEUTRAL_ANGLE = 0.0;
     public static final double PIVOT_AMP_ANGLE = 0.0;
   }
 
@@ -194,14 +195,17 @@ public final class Constants {
 
     public static final int KRAKEN_ID = 105;
 
+    public static final double SHOOTER_PID_LEFT_V = 0.1;
     public static final double SHOOTER_PID_LEFT_P = 0.0002;
     public static final double SHOOTER_PID_LEFT_I = 0.0;
     public static final double SHOOTER_PID_LEFT_D = 0.0;
 
+    public static final double SHOOTER_PID_RIGHT_V = 0.1;
     public static final double SHOOTER_PID_RIGHT_P = 0.0002;
     public static final double SHOOTER_PID_RIGHT_I = 0.0;
     public static final double SHOOTER_PID_RIGHT_D = 0.0;
 
+    public static final double KARKEN_V = 0.1;
     public static final double KRAKEN_P = 0.0002;
     public static final double KRAKEN_I = 0.0;
     public static final double KRAKEN_D = 0.0;

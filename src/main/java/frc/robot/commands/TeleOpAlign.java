@@ -93,7 +93,7 @@ public class TeleOpAlign extends Command {
       timeout = 0;
     }
 
-    swerveSubsystem.drive(x * MotorConstants.SPEED_CONSTANT, y * MotorConstants.SPEED_CONSTANT, rot, true);
+    swerveSubsystem.drive(x * MotorConstants.SPEED_CONSTANT, y * MotorConstants.SPEED_CONSTANT, rot, false);
   }
 
   // Called once the command ends or is interrupted.

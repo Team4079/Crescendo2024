@@ -13,6 +13,7 @@ import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.units.Velocity;
@@ -39,6 +40,7 @@ public class Intake extends SubsystemBase {
   private ClosedLoopRampsConfigs karenRampConfig;
 
   private VelocityVoltage m_request;
+  private VoltageOut m_out;
 
   public Intake() {
     this.intakeKaren = new TalonFX(IntakeConstants.INTAKE_MOTOR_ID);
@@ -53,6 +55,7 @@ public class Intake extends SubsystemBase {
 
     intakeKarenConfigurator.apply(intakeConfigs);
 
+    karenConfig.kV = IntakeConstants.INTAKE_PID_V;
     karenConfig.kP = IntakeConstants.INTAKE_PID_P;
     karenConfig.kI = IntakeConstants.INTAKE_PID_I;
     karenConfig.kP = IntakeConstants.INTAKE_PID_D;
@@ -72,7 +75,8 @@ public class Intake extends SubsystemBase {
 
     intakeKaren.getConfigurator().apply(karenRampConfig);
 
-    m_request = new VelocityVoltage(0).withSlot(1);
+    m_request = new VelocityVoltage(0);
+    m_out = new VoltageOut(0);
   }
 
   @Override
