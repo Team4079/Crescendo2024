@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 3.0,
-      "y": 3.0
+      "x": 1.4048307100172925,
+      "y": 5.54
     },
     "rotation": 0
   },
@@ -14,7 +14,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Forward Path"
+            "pathName": "Center Path Mid"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autoAlign"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Path Bot"
           }
         },
         {
@@ -26,6 +38,6 @@
       ]
     }
   },
-  "folder": "Misc Autos",
+  "folder": "Full Autos",
   "choreoAuto": false
 }

@@ -52,7 +52,7 @@ public class PadDrive extends Command {
     this.intakeyboi = intakeyboi;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(this.swerveSubsystem, this.limelety, this.led, this.pivotyboi, this.shootyboi, this.intakeyboi);
+    addRequirements(this.swerveSubsystem, this.limelety, this.led, this.pivotyboi, this.shootyboi);
   }
 
   // Called when the command is initially scheduled.
@@ -145,7 +145,7 @@ public class PadDrive extends Command {
     // shootyboi.stopKraken();
     // }
 
-    if (opPad.getLeftTriggerValue() > 0.3) {
+    if (pad.getRightBumper()) {
       intakeyboi.setIntakeVelocity(IntakeConstants.INTAKE_SPEED);
     }
 

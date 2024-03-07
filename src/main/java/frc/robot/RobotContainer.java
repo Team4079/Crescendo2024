@@ -6,10 +6,12 @@
 package frc.robot;
 
 import frc.robot.commands.AutoAlign;
+import frc.robot.commands.TeleOpAlign;
 import frc.robot.commands.ShootingSequence;
 import frc.robot.commands.PadDrive;
 import frc.robot.commands.ShooterRampUp;
 import frc.robot.subsystems.Intake;
+// import frc.robot.subsystems.Intake;
 // import frc.robot.subsystems.Jevois;
 // import frc.robot.commands.TargetLED;
 import frc.robot.subsystems.LED;
@@ -130,8 +132,7 @@ public class RobotContainer {
     // new ShootingSequence(swerveSubsystem, limelety, led, pivotyboi, shootyboi));
 
     swerveSubsystem
-        .setDefaultCommand(new PadDrive(swerveSubsystem, pad, opPad, SwerveConstants.isFieldOriented, limelety, led,
-            pivotyboi, shootyboi, intakeyboi));
+        .setDefaultCommand(new PadDrive(swerveSubsystem, pad, opPad, SwerveConstants.isFieldOriented, limelety, led, pivotyboi, shootyboi, intakeyboi));
 
     // Configure auto chooser
     configureBindings();
@@ -157,7 +158,7 @@ public class RobotContainer {
     padA.onTrue(new InstantCommand(swerveSubsystem::addRotorPositionsforModules));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
     padY.onTrue(new InstantCommand(swerveSubsystem::newPose));
-    padX.whileTrue(new AutoAlign(swerveSubsystem, limelety, led));
+    padX.whileTrue(new TeleOpAlign(swerveSubsystem, limelety, led, pad));
     
     // opPadB.onTrue(new InstantCommand(shootyboi::toggleShooterVelocity));
 

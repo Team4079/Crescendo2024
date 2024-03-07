@@ -10,72 +10,86 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
-  /** Creates a new Intake. */
+    /** Creates a new Intake. */
 
-  private TalonFX intakeKaren;
-  private TalonFXConfigurator intakeKarenConfigurator;
-  private Slot0Configs karenConfig;
-  
-  private MotorOutputConfigs intakeConfigs;
+    private TalonFX intakeKaren;
+    private TalonFXConfigurator intakeKarenConfigurator;
+    private Slot0Configs karenConfig;
 
-  private CurrentLimitsConfigs karenCurrentConfig;
+    private MotorOutputConfigs intakeConfigs;
 
-  private ClosedLoopRampsConfigs karenRampConfig;
+    private CurrentLimitsConfigs karenCurrentConfig;
 
-  private VelocityVoltage m_request;
-  
-  public Intake() {
-    this.intakeKaren = new TalonFX(IntakeConstants.INTAKE_MOTOR_ID);
+    private ClosedLoopRampsConfigs karenRampConfig;
 
-    intakeKarenConfigurator = intakeKaren.getConfigurator();
+    private DutyCycleOut m_request;
+    private VelocityVoltage v_request;
+    private VelocityDutyCycle v_cycle;
 
-    karenConfig = new Slot0Configs();
+    public Intake() {
+        this.intakeKaren = new TalonFX(IntakeConstants.INTAKE_MOTOR_ID);
 
-    intakeKaren.getConfigurator().apply(new TalonFXConfiguration());
+        intakeKarenConfigurator = intakeKaren.getConfigurator();
 
-    intakeKarenConfigurator.apply(intakeConfigs);
+        karenConfig = new Slot0Configs();
 
-    karenConfig.kP = IntakeConstants.INTAKE_PID_P;
-    karenConfig.kI = IntakeConstants.INTAKE_PID_I;
-    karenConfig.kP = IntakeConstants.INTAKE_PID_D;
+        intakeKaren.getConfigurator().apply(new TalonFXConfiguration());
 
-    intakeKaren.getConfigurator().apply(karenConfig);
+        intakeConfigs = new MotorOutputConfigs();
 
-    karenCurrentConfig = new CurrentLimitsConfigs();
+        intakeKarenConfigurator.apply(intakeConfigs);
 
-    karenRampConfig = new ClosedLoopRampsConfigs();
+        karenConfig.kV = IntakeConstants.INTAKE_PID_V;
+        karenConfig.kP = IntakeConstants.INTAKE_PID_P;
+        karenConfig.kI = IntakeConstants.INTAKE_PID_I;
+        karenConfig.kP = IntakeConstants.INTAKE_PID_D;
 
-    karenCurrentConfig.SupplyCurrentLimit = 100;
-    karenCurrentConfig.StatorCurrentLimit = 100;
+        intakeKaren.getConfigurator().apply(karenConfig);
 
-    intakeKaren.getConfigurator().apply(karenCurrentConfig);
+        karenCurrentConfig = new CurrentLimitsConfigs();
 
-    karenRampConfig.DutyCycleClosedLoopRampPeriod = 0.01;
+        karenRampConfig = new ClosedLoopRampsConfigs();
 
-    intakeKaren.getConfigurator().apply(karenRampConfig);
+        karenCurrentConfig.SupplyCurrentLimit = 100;
+        karenCurrentConfig.StatorCurrentLimit = 100;
 
-    m_request = new VelocityVoltage(0).withSlot(1);
-  }
+        intakeKaren.getConfigurator().apply(karenCurrentConfig);
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+        karenRampConfig.DutyCycleClosedLoopRampPeriod = 0.01;
 
-  // methods probably
+        intakeKaren.getConfigurator().apply(karenRampConfig);
 
-  public void setIntakeVelocity(double speed) {
-    intakeKaren.setControl(m_request.withVelocity(speed));
-  }
+        v_request = new VelocityVoltage(0);
+        m_request = new DutyCycleOut(0);
+        v_cycle = new VelocityDutyCycle(0);
 
-  public void stopKaren() {
-    intakeKaren.stopMotor();
-  }
+        v_request.Slot = 0;
+    }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+    }
+
+    // methods probably
+
+    public void setIntakeVelocity(double speed) {
+        System.out.println("a;kfj;lkasfdj;lkasfj;lafksj;lkafsj;lkfdsaj;lksfaj;lfdsa");
+        // intakeKaren.setControl(m_request.withOutput(speed));
+        intakeKaren.setControl(v_request.withVelocity(speed));
+    }
+
+    public void stopKaren() {
+        intakeKaren.stopMotor();
+    }
 }

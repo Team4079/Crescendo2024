@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.0,
-        "y": 0.0
+        "x": 0.8887064986466873,
+        "y": 2.0158058821455733
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.02177526078222769,
-        "y": 0.0
+        "x": 0.8984446913140575,
+        "y": 2.0158058821455733
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.0,
-        "y": 0.0
+        "x": 7.77,
+        "y": 0.749840835387484
       },
       "prevControl": {
-        "x": 0.6008680088655682,
-        "y": 0.27125470236641913
-      },
-      "nextControl": {
-        "x": 1.7164528753731296,
-        "y": -0.48690963336849524
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.0,
-        "y": -1.0
-      },
-      "prevControl": {
-        "x": 0.94,
-        "y": -1.0
+        "x": 7.756228115856803,
+        "y": 0.749840835387484
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,7 +33,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 1.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -59,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Bot Path Files",
   "previewStartingState": null,
   "useDefaultConstraints": false
 }

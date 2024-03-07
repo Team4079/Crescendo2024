@@ -8,12 +8,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.Constants.ShooterConstants;
 
-public class ShootCommands extends Command {
+public class PushRing extends Command {
 
   private Shooter shooter;
 
   /** Creates a new Shoot. */
-  public ShootCommands(Shooter shooter) {
+  public PushRing(Shooter shooter) {
     this.shooter = shooter;
     addRequirements(shooter);
   }

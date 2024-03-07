@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.0,
-        "y": 3.0
+        "x": 0.7523718013035084,
+        "y": 6.992022335176467
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.034861904386821,
-        "y": 3.0
+        "x": 0.7661436854501479,
+        "y": 6.992022335176467
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.0,
-        "y": 3.0
+        "x": 2.45,
+        "y": 7.0
       },
       "prevControl": {
-        "x": 2.9902618073326295,
-        "y": 3.0
+        "x": 2.4098484030345424,
+        "y": 7.0
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Misc",
+  "folder": "Top Path Files",
   "previewStartingState": null,
   "useDefaultConstraints": false
 }

@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.5223008456488114,
-      "y": 5.541031627729691
+      "x": 0.7523718013035084,
+      "y": 6.992022335176467
     },
     "rotation": 0
   },
@@ -14,24 +14,24 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Full Path p1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Full Path p2"
+            "pathName": "Top Path p1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "FullShoot"
+            "name": "autoAlign"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Path p2"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Full Autos",
   "choreoAuto": false
 }

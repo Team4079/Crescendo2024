@@ -8,15 +8,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.utils.Constants.MotorConstants;
 import frc.robot.utils.Constants.SwerveConstants;
 import frc.robot.utils.Constants.SwerveConstants.BasePIDConstants;
+import frc.robot.utils.LogitechGamingPad;
 import frc.robot.utils.PID;
 
-public class AutoAlign extends Command {
+public class TeleOpAlign extends Command {
   /** Creates a new AutoAlign. */
+  private final LogitechGamingPad pad;
   private Limelight limelight;
   private SwerveSubsystem swerveSubsystem;
   private LED led;
+  private double x;
+  private double y;
+  private double rot;
 
   // Horizontal PID and offset
   private double horizontalError;
@@ -26,8 +32,9 @@ public class AutoAlign extends Command {
 
   private double timeout = 0;
 
-  public AutoAlign(SwerveSubsystem swerveSubsystem, Limelight limelight, LED led) {
+  public TeleOpAlign(SwerveSubsystem swerveSubsystem, Limelight limelight, LED led, LogitechGamingPad pad) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.pad = pad;
     this.swerveSubsystem = swerveSubsystem;
     this.limelight = limelight;
     this.led = led;
@@ -38,20 +45,36 @@ public class AutoAlign extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
     horizontalError = -limelight.getTx();
 
+
     if (Math.abs(horizontalError) >= SwerveConstants.limelightDeadband) {
-      swerveSubsystem.drive(0, 0, rotationalPID.calculate(horizontalError, 0), false);
+      rot = rotationalPID.calculate(horizontalError, 0);
     }
 
-    else {
-      swerveSubsystem.stopModules();
+    if (MotorConstants.SLOW_MODE) {
+      y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED * MotorConstants.SLOW_SPEED;
+      x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED * MotorConstants.SLOW_SPEED;
+    } else if (MotorConstants.AACORN_MODE) {
+      y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED * MotorConstants.AACORN_SPEED;
+      x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED * MotorConstants.AACORN_SPEED;
+    } else {
+      y = pad.getLeftAnalogXAxis() * MotorConstants.MAX_SPEED * 0.6;
+      x = pad.getLeftAnalogYAxis() * -MotorConstants.MAX_SPEED * 0.6;
+    }
+
+    if (Math.abs(pad.getLeftAnalogXAxis()) < SwerveConstants.JOYSTICK_DEADBAND) {
+      y = 0;
+    }
+
+    if (Math.abs(pad.getLeftAnalogYAxis()) < SwerveConstants.JOYSTICK_DEADBAND) {
+      x = 0;
     }
 
     // Vision LED
@@ -69,6 +92,8 @@ public class AutoAlign extends Command {
       led.rainbow(SwerveConstants.redLED[0], SwerveConstants.redLED[1], SwerveConstants.redLED[2]); // Set led to red
       timeout = 0;
     }
+
+    swerveSubsystem.drive(x * MotorConstants.SPEED_CONSTANT, y * MotorConstants.SPEED_CONSTANT, rot, true);
   }
 
   // Called once the command ends or is interrupted.
@@ -80,12 +105,6 @@ public class AutoAlign extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // Checks if the april tag is within the deadband for at least half a second
-    if (horizontalError <= SwerveConstants.limelightDeadband && timeout == 25) {
-      timeout = 0;
-      return true;
-    }
-
     return false;
   }
 }

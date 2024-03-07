@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.0,
-      "y": 0.0
+      "x": 0.8887064986466873,
+      "y": 2.0158058821455733
     },
     "rotation": 0
   },
@@ -14,12 +14,18 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Straight Path"
+            "pathName": "cracked team path 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "cracked team path 2"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Full Autos",
   "choreoAuto": false
 }

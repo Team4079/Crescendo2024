@@ -90,7 +90,6 @@ public final class Constants {
         backRightLocation);
 
     // uselses
-    public static final Pose2d STARTING_POSE = new Pose2d(2, 7, new Rotation2d());
     public static final double STATE_SPEED_THRESHOLD = 0.05;
 
     public static final double CANCoderValue9 = 0.915283 + 0.5; // 0.9174805
@@ -103,19 +102,19 @@ public final class Constants {
 
     public static final boolean useLimelightAutoAlign = true;
     public static final double limelightDeadband = 3.5;
-    
+
     public static final double DEADBAND = 0.08;
 
-    public static final int[] greenLED = {60, 255, 255};
-    public static final int[] orangeLED = {30, 255, 255};
-    public static final int[] redLED = {0, 255, 255};
+    public static final int[] greenLED = { 60, 255, 255 };
+    public static final int[] orangeLED = { 30, 255, 255 };
+    public static final int[] redLED = { 0, 255, 255 };
 
     public static class BasePIDConstants {
       // public static final PID STEER_PID = new PID(0.14, 0.00002, 0.008, 0);
       public static final PID STEER_PID = new PID(0.15, 0.0, 0, 0); // 0.05 P, 0 D
       public static final PID DRIVE_PID = new PID(0.15, 0.0, 0, 0);
       // DON'T SET D PAST 0.03 - Erick or else the swerve moduls make funny nosie
-    
+
       // AutoAlign PID
       public static final PID horizontalPID = new PID(0.05, 0.075, 0.03, 0);
       public static final PID verticalPID = new PID(0.25, 0.0085, 0.03);
@@ -126,15 +125,16 @@ public final class Constants {
       public static PIDController pathTranslationPID = new PIDController(0.15, 0.000, 0.00);
       public static PIDController pathRotationPID = new PIDController(2.0, 0.0, 0.0);
 
-    
-
-      public static HolonomicPathFollowerConfig pathFollower = 
-        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-        new PIDConstants(0.15, 0.000, 0.00), //translation
-        new PIDConstants(0, 0.0, 0.0), //rotation
-        4.96824, // Max module speed, in m/s
-        SwerveConstants.robotSize, // Drive base radius in meters. Distance from robot center to furthest // module.
-        new ReplanningConfig(false, false)); // Default path replanning config. See the API for the options here
+      public static HolonomicPathFollowerConfig pathFollower = new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig,
+                                                                                                // this should likely
+                                                                                                // live in your
+                                                                                                // Constants class
+          new PIDConstants(0.15, 0.000, 0.00), // translation
+          new PIDConstants(0, 0.0, 0.0), // rotation
+          4.96824, // Max module speed, in m/s
+          SwerveConstants.robotSize, // Drive base radius in meters. Distance from robot center to furthest //
+                                     // module.
+          new ReplanningConfig(false, false)); // Default path replanning config. See the API for the options here
     }
 
     public static final double offBalanceAngleThreshold = 10;
@@ -148,10 +148,13 @@ public final class Constants {
 
     public static final boolean isInverted = false;
 
-    public static final int INTAKE_MOTOR_ID = 106;
+    public static final int INTAKE_MOTOR_ID = 17;
 
-    public static final double INTAKE_SPEED = 4000; 
+    // public static final double INTAKE_SPEED = 0.656;
+    public static final double INTAKE_SPEED = 1000;
 
+
+    public static final double INTAKE_PID_V = 0.1;
     public static final double INTAKE_PID_P = 0.0002;
     public static final double INTAKE_PID_I = 0.0;
     public static final double INTAKE_PID_D = 0.0;
@@ -174,20 +177,18 @@ public final class Constants {
     public static final double PIVOT_PID_RIGHT_P = 0.0002;
     public static final double PIVOT_PID_RIGHT_I = 0.0;
     public static final double PIVOT_PID_RIGHT_D = 0.0;
-    
+
     public static final double PIVOT_AMP_ANGLE = 0.0;
   }
 
-  public static class ShooterConstants 
-  {
-    private ShooterConstants() 
-    {
+  public static class ShooterConstants {
+    private ShooterConstants() {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
     public static final int FALCON_LEFT_ID = 103;
     public static final int FALCON_RIGHT_ID = 104;
-    
+
     public static final int KRAKEN_ID = 105;
 
     public static final double SHOOTER_PID_LEFT_P = 0.0002;
