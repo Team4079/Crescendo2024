@@ -49,6 +49,8 @@ public class Intake extends SubsystemBase {
 
     intakeKaren.getConfigurator().apply(new TalonFXConfiguration());
 
+    intakeConfigs = new MotorOutputConfigs();
+
     intakeKarenConfigurator.apply(intakeConfigs);
 
     karenConfig.kP = IntakeConstants.INTAKE_PID_P;

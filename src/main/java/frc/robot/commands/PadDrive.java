@@ -137,15 +137,15 @@ public class PadDrive extends Command {
 
     horizontalError = -limelety.getTx();
 
-    if (opPad.getRightTriggerValue() > 0.3) {
-    shooty.setKrakenVelocity(controller_deadband);
-    }
+    // if (pad.getRightTriggerValue() > 0.3) {
+    // shooty.setKrakenVelocity(controller_deadband);
+    // }
 
-    else {
-    shooty.stopKraken();
-    }
+    // else {
+    // shooty.stopKraken();
+    // }
 
-    if (opPad.getLeftTriggerValue() > 0.3) {
+    if (pad.getRightBumper()) {
       intake.setIntakeVelocity(IntakeConstants.INTAKE_SPEED);
     }
 
