@@ -35,7 +35,7 @@ public class ShootingSequence extends SequentialCommandGroup {
             new AutoAlign(subsystem, limelety, led),
             new PivotAlign(pivot, limelety),
             new ShooterRampUp(shooter)),
-        new ShootCommands(shooter).withTimeout(1)
+        new ShooterRampUp(shooter).withTimeout(1)
     // new InstantCommand(shooter::stopAllMotors)
     );
   }
