@@ -24,7 +24,7 @@ public class ShooterRampUp extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setShooterVelocity(ShooterConstants.SHOOTER_SPEED, -ShooterConstants.SHOOTER_SPEED);
+    // shooter.setShooterVelocity(ShooterConstants.SHOOTER_SPEED, -ShooterConstants.SHOOTER_SPEED);
 
   }
 
@@ -43,10 +43,10 @@ public class ShooterRampUp extends Command {
   @Override
   public boolean isFinished() {
 
-    if (Math.abs(shooter.getLeftShooterVelocity() - ShooterConstants.SHOOTER_SPEED) < deadband)
-    {
-      return true;
-    }
+    // if (Math.abs(shooter.getLeftShooterVelocity() - ShooterConstants.SHOOTER_SPEED) < deadband)
+    // {
+    //   return true;
+    // }
     return false;
   }
 }

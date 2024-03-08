@@ -161,6 +161,8 @@ public final class Constants {
     public static final double INTAKE_PID_P = 0.0002;
     public static final double INTAKE_PID_I = 0.0;
     public static final double INTAKE_PID_D = 0.0;
+
+    public static boolean HAS_PEICE = false;
   }
 
   public static class PivotConstants {
@@ -183,6 +185,10 @@ public final class Constants {
 
     public static final double PIVOT_NEUTRAL_ANGLE = 0.0;
     public static final double PIVOT_AMP_ANGLE = 0.0;
+
+    public static boolean IS_NEUTRAL = true;
+
+    public static final int ENCODER_ID = 0;
   }
 
   public static class ShooterConstants {
@@ -212,5 +218,7 @@ public final class Constants {
 
     public static final double SHOOTER_SPEED = 6942.0;
     public static final double KRAKEN_SPEED = 6942.0;
+
+    public static boolean IS_SHOOTING = false;
   }
 }

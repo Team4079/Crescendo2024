@@ -30,8 +30,6 @@ public class TeleOpAlign extends Command {
   // Rotation PID and offset
   private PID rotationalPID;
 
-  private double timeout = 0;
-
   public TeleOpAlign(SwerveSubsystem swerveSubsystem, Limelight limelight, LED led, LogitechGamingPad pad) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.pad = pad;
@@ -82,7 +80,6 @@ public class TeleOpAlign extends Command {
       if (Math.abs(horizontalError) <= SwerveConstants.limelightDeadband) {
         // Set LED to green (Based on detecting AprilTag)
         led.rainbow(SwerveConstants.greenLED[0], SwerveConstants.greenLED[1], SwerveConstants.greenLED[2]);
-        timeout++;
       } else {
         // Set LED to orange (Based on detecting AprilTag)
         led.rainbow(SwerveConstants.orangeLED[0], SwerveConstants.orangeLED[1], SwerveConstants.orangeLED[2]);
@@ -90,10 +87,9 @@ public class TeleOpAlign extends Command {
     } else {
       // Remove Red LED light when in competition.
       led.rainbow(SwerveConstants.redLED[0], SwerveConstants.redLED[1], SwerveConstants.redLED[2]); // Set led to red
-      timeout = 0;
     }
 
-    swerveSubsystem.drive(x * MotorConstants.SPEED_CONSTANT, y * MotorConstants.SPEED_CONSTANT, rot, false);
+    swerveSubsystem.drive(x * MotorConstants.SPEED_CONSTANT, y * MotorConstants.SPEED_CONSTANT, rot, true);
   }
 
   // Called once the command ends or is interrupted.
