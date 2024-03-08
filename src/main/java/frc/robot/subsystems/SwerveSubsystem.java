@@ -329,7 +329,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /**
    * Drives the robot using the chassis speeds in meters per second
-   * @param chassisSpeeds meters per second of the chassis speeds
+   * @param chassisSpeeds chassis speeds
    * @return None
    */
   public void chassisSpeedsDrive(ChassisSpeeds chassisSpeeds) {
@@ -342,12 +342,22 @@ public class SwerveSubsystem extends SubsystemBase {
     }
   }
 
+  /**
+   * Stops the modules
+   * @param void
+   * @return None
+   */
   public void stopModules() {
     for (SwerveModule module : modules) {
       module.stop();
     }
   }
 
+  /**
+   * Stops the robot
+   * @param void
+   * @return None
+   */
   public void stop() {
     for (int i = 0; i < modules.length; i++) {
       modules[i].stop();
