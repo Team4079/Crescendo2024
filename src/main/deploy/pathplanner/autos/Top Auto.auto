@@ -18,12 +18,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "autoAlign"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Top Path p2"

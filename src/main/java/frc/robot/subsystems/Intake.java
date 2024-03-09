@@ -11,6 +11,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 // import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -37,7 +38,7 @@ public class Intake extends SubsystemBase {
   private ClosedLoopRampsConfigs karenRampConfig;
 
   private VelocityVoltage m_request;
-  // private VoltageOut m_out;
+  private VoltageOut m_out;
 
   public Intake() {
     this.intakeKaren = new TalonFX(IntakeConstants.INTAKE_MOTOR_ID);

@@ -18,21 +18,9 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "autoAlign"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Center Path Bot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "autoAlign"
           }
         }
       ]

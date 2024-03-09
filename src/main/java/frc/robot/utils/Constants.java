@@ -91,7 +91,8 @@ public final class Constants {
     // uselses
     public static final double STATE_SPEED_THRESHOLD = 0.05;
 
-    // The values of the can coders when the wheels are straight according to Mr. Wright
+    // The values of the can coders when the wheels are straight according to Mr.
+    // Wright
     public static final double CANCoderValue9 = 0.915283 + 0.5; // 0.9174805
     public static final double CANCoderValue10 = 0.327881; // 0.328613 + 0.5 add 0.5
     public static final double CANCoderValue11 = 0.979736 - 0.5; // 0.539794 - 0.5
@@ -99,7 +100,7 @@ public final class Constants {
 
     // THe deadband of the joystick to combat drift
     public static final double JOYSTICK_DEADBAND = 0.05;
-    
+
     public static final boolean usingVision = false;
     public static final boolean isFieldOriented = true;
 
@@ -122,11 +123,11 @@ public final class Constants {
       // AutoAlign PID
       public static final PID horizontalPID = new PID(0.05, 0.075, 0.03, 0);
       public static final PID verticalPID = new PID(0.25, 0.0085, 0.03);
-      public static final PID rotationalPID = new PID(0.05, 0.003, 0.003, 0);
+      public static final PID rotationalPID = new PID(0.1, 0.001, 0.03, 0);
 
       // path planner things
 
-      public static PIDController pathTranslationPID = new PIDController(0.15, 0.000, 0.00);
+      public static PIDController pathTranslationPID = new PIDController(0.3, 0.000, 0.00);
       public static PIDController pathRotationPID = new PIDController(2.0, 0.0, 0.0);
 
       public static HolonomicPathFollowerConfig pathFollower = new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig,
@@ -155,7 +156,6 @@ public final class Constants {
     public static final int INTAKE_MOTOR_ID = 17;
 
     public static final double INTAKE_SPEED = 1000;
-
 
     public static final double INTAKE_PID_V = 0.1;
     public static final double INTAKE_PID_P = 0.0002;

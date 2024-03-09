@@ -8,11 +8,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.utils.Constants.IntakeConstants;
 import frc.robot.utils.Constants.MotorConstants;
 import frc.robot.utils.Constants.SwerveConstants;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Pivot;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
 
@@ -27,9 +24,6 @@ public class PadDrive extends Command {
 
   // 3 degrees of offsets
   private double horizontalError;
-  private Shooter shooty;
-  private Pivot pivot;
-  private Intake intake;
 
   /** Creates a new SwerveJoystick. */
   public PadDrive(SwerveSubsystem swerveSubsystem,
@@ -37,22 +31,16 @@ public class PadDrive extends Command {
       LogitechGamingPad opPad,
       boolean isFieldOriented,
       Limelight limelety,
-      LED led,
-      Pivot pivot,
-      Shooter shooty,
-      Intake intake) {
+      LED led) {
     this.swerveSubsystem = swerveSubsystem;
     this.pad = pad;
     this.isFieldOriented = isFieldOriented;
     this.limelety = limelety;
     this.led = led;
     this.opPad = opPad;
-    this.pivot = pivot;
-    this.shooty = shooty;
-    this.intake = intake;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(this.swerveSubsystem, this.limelety, this.led, this.pivot, this.shooty, this.intake);
+    addRequirements(this.swerveSubsystem, this.limelety, this.led);
   }
 
   // Called when the command is initially scheduled.
@@ -136,22 +124,6 @@ public class PadDrive extends Command {
     }
 
     horizontalError = -limelety.getTx();
-
-    // if (pad.getRightTriggerValue() > 0.3) {
-    // shooty.setKrakenVelocity(controller_deadband);
-    // }
-
-    // else {
-    // shooty.stopKraken();
-    // }
-
-    if (pad.getRightBumper()) {
-      intake.setIntakeVelocity(IntakeConstants.INTAKE_SPEED);
-    }
-
-    else {
-      intake.stopKraken();
-    }
   }
 
   // Called once the command ends or is interrupted.
