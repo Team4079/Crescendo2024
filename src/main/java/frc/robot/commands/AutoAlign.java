@@ -11,6 +11,7 @@ import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
 import frc.robot.utils.PID;
 
+/** The {@link AutoAlign} command is a command that aligns the robot to the target. */
 public class AutoAlign extends Command {
   /** Creates a new AutoAlign. */
   private SwerveSubsystem swerveSubsystem;
@@ -32,9 +33,7 @@ public class AutoAlign extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

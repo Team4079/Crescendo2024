@@ -24,14 +24,14 @@ public class SpinIntake extends Command {
     addRequirements(intake);
   }
 
-  // Called when the command is initially scheduled.
+  /** Called when the command is initially scheduled. */
   @Override
   public void initialize() {
     spin = false;
     spin = !opPad.getRawButtonPressed(3);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
+  /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() { 
     if (PivotGlobalValues.IS_NEUTRAL && ShooterGlobalValues.IS_SHOOTING && ShooterGlobalValues.HAS_PIECE && spin)
@@ -40,13 +40,13 @@ public class SpinIntake extends Command {
     }
   }
 
-  // Called once the command ends or is interrupted.
+  /** Called once the command ends or is interrupted. */
   @Override
   public void end(boolean interrupted) {
     intake.stopKraken();
   }
 
-  // Returns true when the command should end.
+  /** Returns true when the command should end. */
   @Override
   public boolean isFinished() {
     return false;

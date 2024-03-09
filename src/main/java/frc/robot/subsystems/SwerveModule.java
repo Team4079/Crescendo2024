@@ -25,11 +25,7 @@ import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
 
 /**
- * The {@link SwerveModule} class includes all the motors to control the swerve
- * drive.
- * 
- *
- * 
+ * The {@link SwerveModule} class includes all the motors to control the swerve drive.
  */
 public class SwerveModule {
   /** Creates a new SwerveModule. */
@@ -157,6 +153,9 @@ public class SwerveModule {
 
   /**
    * Resets the drive motor encoder.
+   * 
+   * @param void
+   * @return void
    */
   public void resetEncoders() {
     driveMotor.setPosition(0);
@@ -196,7 +195,13 @@ public class SwerveModule {
     return angle / 360 * gearRatio;
   }
 
-  /** Converts degrees to encoder counts. */
+  /**
+   * Converts degrees to encoder counts.
+   * 
+   * @param angle     The angle to convert to encoder counts.
+   * @param gearRatio The gear ratio of the motor.
+   * @return double The angle in encoder counts.
+   */
   public double angleToEncoder(double angle, double gearRatio) {
     return angle * MotorGlobalValues.ENCODER_COUNTS_PER_ROTATION / 360 /
         gearRatio;
@@ -263,7 +268,6 @@ public class SwerveModule {
       SmartDashboard.putNumber("Jayden Sun" + steerMotor.getDeviceID(),
           newRotations - steerMotor.getRotorPosition().getValue());
       setSteerPosition(newRotations);
-
     }
   }
 
@@ -299,7 +303,7 @@ public class SwerveModule {
    * @param desiredState SwerveModuleState The desired state of the module.
    * @param currentAngle Rotation2d The current angle of the module.
    * @param deviceID     int The device ID of the module.
-   * @return
+   * @return SwerveModuleState The optimized state of the module.
    */
   public static SwerveModuleState optimize(SwerveModuleState desiredState, Rotation2d currentAngle, int deviceID) {
     double targetAngle = placeInAppropriate0To360Scope(
@@ -352,6 +356,7 @@ public class SwerveModule {
   /**
    * Returns the CANCoder value.
    * 
+   * @param void
    * @return double The CANCoder value.
    */
   public double getCanCoderValue() {
@@ -361,6 +366,7 @@ public class SwerveModule {
   /**
    * Returns the current position of the steer motor.
    * 
+   * @param void
    * @return double The current position of the steer motor.
    */
   public double getRotationDegree() {

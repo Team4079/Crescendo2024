@@ -3,6 +3,10 @@ package frc.robot.utils;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 
+/**
+ * This class is a wrapper for the Logitech F310 gamepad. It is used to simplify
+ * the use of the gamepad in the robot code.
+ */
 public class LogitechGamingPad extends GenericHID {
 
   private Joystick gamepad;

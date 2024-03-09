@@ -81,6 +81,7 @@ public class Intake extends SubsystemBase {
 
   /**
    * Sets the intake motor to a specific speed
+   * 
    * @param speed The speed to set the intake motor to
    * @return void
    */
@@ -90,6 +91,7 @@ public class Intake extends SubsystemBase {
 
   /**
    * Stops the intake motor
+   * 
    * @param None
    * @return void
    */

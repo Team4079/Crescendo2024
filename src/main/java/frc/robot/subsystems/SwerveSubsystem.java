@@ -24,11 +24,9 @@ import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 
 /**
  * The {@link SwerveSubsystem} class includes all the motors to drive the robot.
- * 
- *
- * 
  */
 public class SwerveSubsystem extends SubsystemBase {
+  // Variables for the swerve drive train
   private SwerveModule[] modules;
   private Rotation2d gyroAngle;
   private Pigeon2 pidggy;

@@ -10,6 +10,7 @@ import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
 
+/** The {@link PadDrive} command is the command that drives the robot using a gamepad. */
 public class PadDrive extends Command {
 
   private final SwerveSubsystem swerveSubsystem;
@@ -33,9 +34,7 @@ public class PadDrive extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    return;
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -107,5 +106,4 @@ public class PadDrive extends Command {
   public boolean isFinished() {
     return false;
   }
-
 }

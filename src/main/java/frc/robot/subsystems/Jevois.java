@@ -11,9 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
  * The {@link Jevois} class is the camera class which publishes the camera feed to the SmartDashboard.
- * 
- *
- * <p>When a camera is detected, the SmartDashboard will display it as connected.
+ * When a camera is detected, the SmartDashboard will display it as connected.
  */
 public class Jevois extends SubsystemBase {
     /** Creates a new Jevois. */
@@ -29,7 +27,6 @@ public class Jevois extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // This method will be called once per scheduler run
         SmartDashboard.putBoolean("Jevois Connected", camera.isConnected());
     }
 }

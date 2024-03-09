@@ -53,10 +53,11 @@ public class PID {
         this.s = -1;
     }
 
-    double previous_error, integral = 0;
-    double setpoint;
-    double error;
+    private double previous_error, integral = 0;
+    private double error;
     private double output;
+
+    public double setpoint; // dunno why dis is public
 
     public double calculate(double actual, double setpoint) {
         error = setpoint - actual; // Error = Target - Actual
@@ -78,5 +79,4 @@ public class PID {
     public void resetI() {
         this.integral = 0;
     }
-
 }

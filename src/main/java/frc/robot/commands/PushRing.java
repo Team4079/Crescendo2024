@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
+/** The {@link PushRing} class is the command that pushes the ring into the shooter. */
 public class PushRing extends Command {
 
   // private Shooter shooter;

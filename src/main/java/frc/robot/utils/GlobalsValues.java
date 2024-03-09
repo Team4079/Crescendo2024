@@ -19,7 +19,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
  * should be declared
  * globally (i.e. public static). Do not put anything functional in this class.
  *
- * <p>
  * It is advised to statically import this class (or one of its inner classes)
  * wherever the
  * constants are needed, to reduce verbosity.
@@ -123,8 +122,7 @@ public final class GlobalsValues {
       public static final PID verticalPID = new PID(0.25, 0.0085, 0.03);
       public static final PID rotationalPID = new PID(0.1, 0.001, 0.03, 0);
 
-      // path planner things
-
+      // Path Planner Variables
       public static PIDController pathTranslationPID = new PIDController(0.3, 0.000, 0.00);
       public static PIDController pathRotationPID = new PIDController(2.0, 0.0, 0.0);
 
@@ -136,7 +134,7 @@ public final class GlobalsValues {
           new PIDConstants(0, 0.0, 0.0), // rotation
           4.96824, // Max module speed, in m/s
           SwerveGlobalValues.robotSize, // Drive base radius in meters. Distance from robot center to furthest //
-                                     // module.
+          // module.
           new ReplanningConfig(false, false)); // Default path replanning config. See the API for the options here
     }
 
@@ -149,12 +147,14 @@ public final class GlobalsValues {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
+    // Intake Motor Values
     public static final boolean isInverted = false;
 
     public static final int INTAKE_MOTOR_ID = 17;
 
     public static final double INTAKE_SPEED = 1000;
 
+    // Intake PID Values
     public static final double INTAKE_PID_V = 0.1;
     public static final double INTAKE_PID_P = 0.0002;
     public static final double INTAKE_PID_I = 0.0;
@@ -166,11 +166,14 @@ public final class GlobalsValues {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
+    // Pivot Motor Values
     public static final boolean isInverted = false;
 
+    // Pivot Motor CAN ID Values
     public static final int PIVOT_MOTOR_LEFT_ID = 101;
     public static final int PIVOT_MOTOR_RIGHT_ID = 102;
 
+    // Pivot PID Values
     public static final double PIVOT_PID_LEFT_P = 0.0002;
     public static final double PIVOT_PID_LEFT_I = 0.0;
     public static final double PIVOT_PID_LEFT_D = 0.0;
@@ -182,8 +185,10 @@ public final class GlobalsValues {
     public static final double PIVOT_NEUTRAL_ANGLE = 0.0;
     public static final double PIVOT_AMP_ANGLE = 0.0;
 
+    // Pivot Motor Speed Values
     public static boolean IS_NEUTRAL = true;
 
+    // Pivot Motor Encoder ID
     public static final int ENCODER_ID = 0;
   }
 
@@ -192,11 +197,13 @@ public final class GlobalsValues {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
+    // Shooter CAN ID Values
     public static final int FALCON_LEFT_ID = 103;
     public static final int FALCON_RIGHT_ID = 104;
 
     public static final int KRAKEN_ID = 105;
 
+    // Shooter PID Values
     public static final double SHOOTER_PID_LEFT_V = 0.1;
     public static final double SHOOTER_PID_LEFT_P = 0.0002;
     public static final double SHOOTER_PID_LEFT_I = 0.0;
@@ -212,9 +219,12 @@ public final class GlobalsValues {
     public static final double KRAKEN_I = 0.0;
     public static final double KRAKEN_D = 0.0;
 
+
+    // Shooter Motor Speed Values
     public static final double SHOOTER_SPEED = 6942.0;
     public static final double KRAKEN_SPEED = 6942.0;
 
+    // Shooter Misc Values
     public static boolean IS_SHOOTING = false;
     public static boolean HAS_PIECE = false;
 
@@ -226,11 +236,13 @@ public final class GlobalsValues {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
+    // Offset Values
     public static double tx = 0.0;
     public static double ty = 0.0;
     public static double ta = 0.0;
     public static double tv = 0.0;
 
+    // Limelight Misc Values
     public static double[] robotPoseTargetSpace = new double[6];
     public static double tagIDAvailable = 0.0;
 

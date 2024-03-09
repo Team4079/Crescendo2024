@@ -15,10 +15,8 @@ import frc.robot.utils.LimelightHelpers;
 
 /**
  * The {@link Limelight} class includes all the methods to interact with the
- * limelight. (Limelety)
- * 
- * <p> The limelight gets values based on the pipeline and mode set.
- * 
+ * limelight. (Limelety) The limelight is a camera that is used to track targets
+ * The limelight gets values based on the pipeline and mode set. 
  */
 public class Limelight extends SubsystemBase {
   /** Creates a new Limelight. */
@@ -68,6 +66,7 @@ public class Limelight extends SubsystemBase {
   /**
    * Returns the x value of the april tag from the limelight
    * 
+   * @param void
    * @return tx value
    */
   public double getTx() {
@@ -77,6 +76,7 @@ public class Limelight extends SubsystemBase {
   /**
    * Returns the area value from the limelight
    * 
+   * @param void
    * @return ta value
    */
   public double getTa() {
@@ -86,6 +86,7 @@ public class Limelight extends SubsystemBase {
   /**
    * Returns the fullness value from the limelight
    * 
+   * @param void
    * @return tv value
    */
   public double getTv() {
@@ -94,6 +95,8 @@ public class Limelight extends SubsystemBase {
 
   /**
    * Returns the y value from the limelight
+   * 
+   * @param void
    * @return ty value
    */
   public double getTy() {
@@ -108,17 +111,24 @@ public class Limelight extends SubsystemBase {
   // accurate to +- 5cm per meter)
   // 3 is undocumented
   // 4 is rotation (clockwise is -) (accurate to +-0.5 a degree)
-  // 5
+  // 5 is undocumented
 
   /**
    * Returns the robot pose in target space
    * 
+   * @param void
    * @return Robot Pose in target space
    */
   public double[] getRobotPose_TargetSpace2D() {
     return robotPoseTargetSpace;
   }
 
+  /**
+   * Returns the robot pose in field space
+   * 
+   * @param void
+   * @return Robot Pose in field space
+   */
   public boolean isTarget() {
     return LimelightHelpers.getTX("limelight") != 0;
   }
@@ -127,6 +137,7 @@ public class Limelight extends SubsystemBase {
    * Sets the pipeline of the limelight
    * 
    * @param pipeline The pipeline to set the limelight
+   * @return void
    */
   public void setPipeline(double pipeline) {
     m_limelightTable.getEntry("pipeline").setNumber(pipeline);
@@ -136,6 +147,7 @@ public class Limelight extends SubsystemBase {
    * Sets the mode of the limelight (fiducial, retroflective)
    * 
    * @param mode The mode to set the limelight
+   * @return void
    */
   public void setAdvanced(double mode) {
     m_limelightTable.getEntry("advanced_mode").setNumber(mode);
@@ -144,6 +156,7 @@ public class Limelight extends SubsystemBase {
   /**
    * Gets the latency of the limelight
    * 
+   * @param void
    * @return Latency in ms
    */
   public double getLatency() {
@@ -153,6 +166,7 @@ public class Limelight extends SubsystemBase {
   /**
    * Returns the tag number of the april tag
    * 
+   * @param void
    * @return April Tag number
    */
   public double getTag() {
@@ -162,10 +176,10 @@ public class Limelight extends SubsystemBase {
   /**
    * Returns the robot position in the field
    * 
+   * @param void
    * @return Robot Position
    */
   public Pose2d getRobotPosition() {
     return robotPose_FieldSpace;
   }
-
 }

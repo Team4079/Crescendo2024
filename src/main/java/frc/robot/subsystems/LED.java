@@ -6,9 +6,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
  * The {@link LED} class includes all the methods to control the LEDs.
- * 
- *
- * 
  */
 public class LED extends SubsystemBase {
   AddressableLED m_led;
@@ -23,9 +20,7 @@ public class LED extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+  public void periodic() {}
 
   /**
    * Sets the color for each of the LEDs based on HSV values

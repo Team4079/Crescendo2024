@@ -9,6 +9,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.PID;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
 
+/** The {@link ResetMotorHeading} command resets the heading of the swerve modules to 0. */
 public class ResetMotorHeading extends Command {
   /** Creates a new ResetMotorHeading. */
   private SwerveSubsystem swerveSubsystem;

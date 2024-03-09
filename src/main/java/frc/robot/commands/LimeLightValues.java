@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Limelight;
 import frc.robot.utils.GlobalsValues.LimelightGlobalValues;
 
+/** The {@link LimelightValues} class is a command that gets the values from the limelight. */
 public class LimelightValues extends Command {
   /** Creates a new LimelightGlobalValues. */
   Limelight limelety;

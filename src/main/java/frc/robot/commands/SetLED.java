@@ -9,7 +9,7 @@ import frc.robot.subsystems.LED;
 import frc.robot.utils.GlobalsValues.LimelightGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 
-
+/** The {@link SetLED} command sets the LED color based on the Limelight's vision target */
 public class SetLED extends Command {
   /** Creates a new SetLED. */
   private final LED led;

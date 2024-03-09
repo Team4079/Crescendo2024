@@ -20,13 +20,11 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 
 /**
  * The {@link Pivot} class includes all the motors to pivot the shooter.
- * 
- *
- * 
  */
 public class Pivot extends SubsystemBase {
   /** Creates a new Pivot. */
@@ -118,17 +116,22 @@ public class Pivot extends SubsystemBase {
 
     absPos = absoluteEncoder.getPosition();
     
-    
     SmartDashboard.putNumber("Absolute Encoder Position", getAbsoluteEncoder());
     SmartDashboard.putNumber("Pivot Left Position", pivotMotorLeft.getPosition().getValue());
     SmartDashboard.putNumber("Pivot Right Position", pivotMotorRight.getPosition().getValue());
 
     pivotMotorLeft.setPosition(absPos);
     pivotMotorRight.setPosition(absPos);
+
+    if (absPos == PivotGlobalValues.PIVOT_NEUTRAL_ANGLE) {
+      GlobalsValues.PivotGlobalValues.IS_NEUTRAL = true;
+    }
   }
 
   /**
    * Stops the pivot motors
+   * 
+   * @param void
    * @return void
    */
   public void stopMotors() {
@@ -138,6 +141,7 @@ public class Pivot extends SubsystemBase {
 
   /**
    * Set the position of the left and right pivot motors
+   * 
    * @param left Left motor position
    * @param right Right motor position
    * @return void
@@ -149,6 +153,8 @@ public class Pivot extends SubsystemBase {
 
   /**
    * Get the position of the pivot motor
+   * 
+   * @param void
    * @return double, the position of the pivot motor
    */
   public double getPivotPos() {
@@ -157,6 +163,7 @@ public class Pivot extends SubsystemBase {
 
   /**
    * Run distance through a best fit line and return the value
+   * 
    * @param distance
    * @return double, the position of the pivot motor
    */
@@ -166,11 +173,12 @@ public class Pivot extends SubsystemBase {
     return 0.0;
   }
 
+  /**
+   * Get the absolute encoder position
+   * @param void
+   * @return double, the absolute encoder position of the pivot motor
+   */
   public double getAbsoluteEncoder() {
     return absoluteEncoder.getPosition();
-  }
-
-
-
- 
+  } 
 }

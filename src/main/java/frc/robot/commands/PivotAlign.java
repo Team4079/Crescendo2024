@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Pivot;
 // import frc.robot.utils.GlobalsValues.LimelightValues;
 
+/** The {@link PivotAlign} class is a command that aligns the pivot to the target. */
 public class PivotAlign extends Command {
 
   // private Pivot pivot;
@@ -37,7 +38,7 @@ public class PivotAlign extends Command {
     // change later
   //   setPoint = pivot.shootPos(llValues[2]);
 
-  //   pivot.setMotorPosition(setPoint, setPoint);
+    // pivot.setMotorPosition(135, 135); // yessica noted
 
   //   if (Math.abs(setPoint - pivot.getPivotPos()) < deadband)
   //   {
@@ -51,20 +52,15 @@ public class PivotAlign extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
     // if (timeout == 10)
     // {
     //   return true;
     // }
-    
-
-    
     return false;
   }
 }

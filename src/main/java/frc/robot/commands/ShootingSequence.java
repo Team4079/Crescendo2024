@@ -10,8 +10,7 @@ import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
+// NOTE:  Consider using this command inline, rather than writing a subclass.  For more information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShootingSequence extends SequentialCommandGroup {
   /** Creates a new TeleOpShoot. */
@@ -22,9 +21,7 @@ public class ShootingSequence extends SequentialCommandGroup {
   public ShootingSequence(SwerveSubsystem subsystem, Pivot pivotyboi, Shooter shootyboi) {
     subsystem = this.subsystem;
 
-    /**
-     * Command to run shooting sequence mainly in auto
-     */
+    /** Command to run shooting sequence mainly in auto */
     addCommands(
         new ParallelCommandGroup(
             new AutoAlign(subsystem),
