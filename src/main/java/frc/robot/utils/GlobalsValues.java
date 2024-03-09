@@ -9,8 +9,6 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
@@ -26,15 +24,15 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
  * wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {
+public final class GlobalsValues {
   private static final String UTILITY_CLASS = "Utility class";
 
-  private Constants() {
+  private GlobalsValues() {
     throw new IllegalStateException(UTILITY_CLASS);
   }
 
-  public static class MotorConstants {
-    private MotorConstants() {
+  public static class MotorGlobalValues {
+    private MotorGlobalValues() {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
@@ -162,7 +160,7 @@ public final class Constants {
     public static final double INTAKE_PID_I = 0.0;
     public static final double INTAKE_PID_D = 0.0;
 
-    public static boolean HAS_PEICE = false;
+    public static boolean HAS_PIECE = false;
   }
 
   public static class PivotConstants {
@@ -220,5 +218,21 @@ public final class Constants {
     public static final double KRAKEN_SPEED = 6942.0;
 
     public static boolean IS_SHOOTING = false;
+  }
+
+  public static class LimelightValues {
+    private LimelightValues() {
+      throw new IllegalStateException(UTILITY_CLASS);
+    }
+
+    public static double tx = 0.0;
+    public static double ty = 0.0;
+    public static double ta = 0.0;
+    public static double tv = 0.0;
+
+    public static double[] robotPoseTargetSpace = new double[6];
+    public static double tagIDAvailable = 0.0;
+
+    public static boolean hasTarget = false;
   }
 }

@@ -7,13 +7,12 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 import frc.robot.utils.LogitechGamingPad;
-import frc.robot.utils.Constants.IntakeConstants;
-import frc.robot.utils.Constants.PivotConstants;
-import frc.robot.utils.Constants.ShooterConstants;
+import frc.robot.utils.GlobalsValues.IntakeConstants;
+import frc.robot.utils.GlobalsValues.PivotConstants;
+import frc.robot.utils.GlobalsValues.ShooterConstants;
 
 public class SpinIntake extends Command {
   /** Creates a new SpinIntake. */
-
   private Intake intake;
   private LogitechGamingPad opPad;
   private boolean spin;
@@ -35,7 +34,7 @@ public class SpinIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() { 
-    if (PivotConstants.IS_NEUTRAL && ShooterConstants.IS_SHOOTING && IntakeConstants.HAS_PEICE && spin)
+    if (PivotConstants.IS_NEUTRAL && ShooterConstants.IS_SHOOTING && IntakeConstants.HAS_PIECE && spin)
     {
       intake.setIntakeVelocity(IntakeConstants.INTAKE_SPEED);
     }

@@ -6,15 +6,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
-import frc.robot.utils.Constants.ShooterConstants;
 
 public class PushRing extends Command {
 
-  private Shooter shooter;
+  // private Shooter shooter;
 
   /** Creates a new Shoot. */
   public PushRing(Shooter shooter) {
-    this.shooter = shooter;
+    // this.shooter = shooter;
     addRequirements(shooter);
   }
 

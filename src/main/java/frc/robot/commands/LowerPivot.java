@@ -6,9 +6,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Pivot;
-import frc.robot.utils.Constants.IntakeConstants;
-import frc.robot.utils.Constants.PivotConstants;
-import frc.robot.utils.Constants.ShooterConstants;
+import frc.robot.utils.GlobalsValues.IntakeConstants;
+import frc.robot.utils.GlobalsValues.PivotConstants;
+import frc.robot.utils.GlobalsValues.ShooterConstants;
 
 public class LowerPivot extends Command {
   /** Creates a new LowerPivot. */
@@ -32,7 +32,7 @@ public class LowerPivot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (ShooterConstants.IS_SHOOTING = false && IntakeConstants.HAS_PEICE)
+    if (ShooterConstants.IS_SHOOTING == false && IntakeConstants.HAS_PIECE)
     {
       if (Math.abs(pivot.getPivotPos() - PivotConstants.PIVOT_NEUTRAL_ANGLE) > deadband) {
         pivot.setMotorPosition(PivotConstants.PIVOT_NEUTRAL_ANGLE, PivotConstants.PIVOT_NEUTRAL_ANGLE);

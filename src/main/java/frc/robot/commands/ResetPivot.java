@@ -4,27 +4,22 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Pivot;
-import frc.robot.utils.Constants.PivotConstants;
+// import frc.robot.subsystems.Pivot;
+// import frc.robot.utils.GlobalsValues.PivotConstants;
 
 public class ResetPivot extends Command {
 
   // private Pivot pivot;
   // // Get distance when after we mount the limelight
-  // private Limelight limelety;
-  // private double[] llValues;
   // private double setPoint;
   // private double deadband;
   // private double timeout;
 
   // /** Creates a new Shoot. */
-  // public ResetPivot(Pivot pivot, Limelight limelety) {
-  //   this.limelety = limelety;
+  // public ResetPivot(Pivot pivot) {
   //   this.pivot = pivot;
-  //   addRequirements(pivot, limelety);
+  //   addRequirements(pivot);
   // }
 
   // // Called when the command is initially scheduled.
@@ -34,7 +29,7 @@ public class ResetPivot extends Command {
   // // Called every time the scheduler runs while the command is scheduled.
   // @Override
   // public void execute() {
-  //   pivot.setPosition(PivotConstants.PIVOT_NEUTRAL_ANGLE, PivotConstants.PIVOT_NEUTRAL_ANGLE);
+  //   pivot.setMotorPosition(PivotConstants.PIVOT_NEUTRAL_ANGLE, PivotConstants.PIVOT_NEUTRAL_ANGLE);
   // }
 
   // // Called once the command ends or is interrupted.

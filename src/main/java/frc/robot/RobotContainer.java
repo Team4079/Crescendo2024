@@ -6,11 +6,13 @@
 package frc.robot;
 
 import frc.robot.commands.AutoAlign;
+import frc.robot.commands.LimeLightValues;
 import frc.robot.commands.LowerPivot;
 import frc.robot.commands.TeleOpAlign;
 import frc.robot.commands.ShootingSequence;
 import frc.robot.commands.SpinIntake;
 import frc.robot.commands.PadDrive;
+import frc.robot.commands.SetLED;
 import frc.robot.commands.ShooterRampUp;
 import frc.robot.subsystems.Intake;
 // import frc.robot.subsystems.Jevois;
@@ -19,9 +21,9 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.utils.Constants;
+import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.LogitechGamingPad;
-import frc.robot.utils.Constants.SwerveConstants;
+import frc.robot.utils.GlobalsValues.SwerveConstants;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -109,12 +111,14 @@ public class RobotContainer {
     // 4 is rotation (clockwise is -) (accurate to +-0.5 a degree)
     // 5
 
-    NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem, limelety, led));
+    NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem));
     swerveSubsystem
-        .setDefaultCommand(new PadDrive(swerveSubsystem, pad, opPad, SwerveConstants.isFieldOriented, limelety, led));
+        .setDefaultCommand(new PadDrive(swerveSubsystem, pad, opPad, SwerveConstants.isFieldOriented));
 
     intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, opPad));
     pivotyboi.setDefaultCommand(new LowerPivot(pivotyboi));
+    limelety.setDefaultCommand(new LimeLightValues(limelety));
+    led.setDefaultCommand(new SetLED(led));
 
     // Configure auto chooser
     configureBindings();
@@ -138,7 +142,7 @@ public class RobotContainer {
     padA.onTrue(new InstantCommand(swerveSubsystem::addRotorPositionsforModules));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
     padY.onTrue(new InstantCommand(swerveSubsystem::newPose));
-    padX.whileTrue(new TeleOpAlign(swerveSubsystem, limelety, led, pad));
+    padX.whileTrue(new TeleOpAlign(swerveSubsystem, pad));
     // opPadB.onTrue(new InstantCommand(shootyboi::toggleShooterVelocity));
 
   }

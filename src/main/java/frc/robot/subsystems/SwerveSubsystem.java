@@ -18,9 +18,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.Constants;
-import frc.robot.utils.Constants.MotorConstants;
-import frc.robot.utils.Constants.SwerveConstants;
+import frc.robot.utils.GlobalsValues;
+import frc.robot.utils.GlobalsValues.MotorGlobalValues;
+import frc.robot.utils.GlobalsValues.SwerveConstants;
 
 /**
  * The {@link SwerveSubsystem} class includes all the motors to drive the robot.
@@ -42,31 +42,31 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveTrain. */
   public SwerveSubsystem() {
-    sKinematics = Constants.SwerveConstants.kinematics;
+    sKinematics = GlobalsValues.SwerveConstants.kinematics;
     gyroAngle = Rotation2d.fromDegrees(0);
     pidggy = new Pigeon2(16);
     pidggy.reset();
 
     modules = new SwerveModule[] {
         new SwerveModule(
-            MotorConstants.FRONT_LEFT_DRIVE_ID,
-            MotorConstants.FRONT_LEFT_STEER_ID,
-            MotorConstants.FRONT_LEFT_CAN_CODER_ID,
+            MotorGlobalValues.FRONT_LEFT_DRIVE_ID,
+            MotorGlobalValues.FRONT_LEFT_STEER_ID,
+            MotorGlobalValues.FRONT_LEFT_CAN_CODER_ID,
             SwerveConstants.CANCoderValue9),
         new SwerveModule(
-            MotorConstants.FRONT_RIGHT_DRIVE_ID,
-            MotorConstants.FRONT_RIGHT_STEER_ID,
-            MotorConstants.FRONT_RIGHT_CAN_CODER_ID,
+            MotorGlobalValues.FRONT_RIGHT_DRIVE_ID,
+            MotorGlobalValues.FRONT_RIGHT_STEER_ID,
+            MotorGlobalValues.FRONT_RIGHT_CAN_CODER_ID,
             SwerveConstants.CANCoderValue10),
         new SwerveModule(
-            MotorConstants.BACK_LEFT_DRIVE_ID,
-            MotorConstants.BACK_LEFT_STEER_ID,
-            MotorConstants.BACK_LEFT_CAN_CODER_ID,
+            MotorGlobalValues.BACK_LEFT_DRIVE_ID,
+            MotorGlobalValues.BACK_LEFT_STEER_ID,
+            MotorGlobalValues.BACK_LEFT_CAN_CODER_ID,
             SwerveConstants.CANCoderValue11),
         new SwerveModule(
-            MotorConstants.BACK_RIGHT_DRIVE_ID,
-            MotorConstants.BACK_RIGHT_STEER_ID,
-            MotorConstants.BACK_RIGHT_CAN_CODER_ID,
+            MotorGlobalValues.BACK_RIGHT_DRIVE_ID,
+            MotorGlobalValues.BACK_RIGHT_STEER_ID,
+            MotorGlobalValues.BACK_RIGHT_CAN_CODER_ID,
             SwerveConstants.CANCoderValue12)
     };
 
@@ -114,7 +114,7 @@ public class SwerveSubsystem extends SubsystemBase {
   public void drive(double forwardSpeed, double leftSpeed, double joyStickInput, boolean isFieldOriented) {
     ChassisSpeeds speeds;
 
-    turnSpeed = joyStickInput * MotorConstants.TURN_CONSTANT;
+    turnSpeed = joyStickInput * MotorGlobalValues.TURN_CONSTANT;
 
     // Runs robot/field-oriented based on the boolean value of isFieldOriented
     if (isFieldOriented) {
@@ -132,7 +132,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     SwerveModuleState[] states = SwerveConstants.kinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        states, MotorConstants.MAX_SPEED);
+        states, MotorGlobalValues.MAX_SPEED);
 
     for (int i = 0; i < modules.length; i++) {
       modules[i].setState(states[i]);
@@ -209,7 +209,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @return None
    */
   public void configSlowMode() {
-    MotorConstants.SLOW_MODE = !MotorConstants.SLOW_MODE;
+    MotorGlobalValues.SLOW_MODE = !MotorGlobalValues.SLOW_MODE;
   }
 
   /**
@@ -218,7 +218,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @return boolean value of the slow mode
    */
   public boolean getSlowMode() {
-    return MotorConstants.SLOW_MODE;
+    return MotorGlobalValues.SLOW_MODE;
   }
 
   /**
@@ -227,7 +227,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @return None
    */
   public void configAAcornMode() {
-    MotorConstants.AACORN_MODE = !MotorConstants.AACORN_MODE;
+    MotorGlobalValues.AACORN_MODE = !MotorGlobalValues.AACORN_MODE;
   }
 
   /**
@@ -236,7 +236,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @return boolean value of the acorn mode
    */
   public boolean getAAcornMode() {
-    return MotorConstants.AACORN_MODE;
+    return MotorGlobalValues.AACORN_MODE;
   }
 
   // Position methods - used for odometry
@@ -311,7 +311,7 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public void outputModuleStates(SwerveModuleState[] states) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        states, MotorConstants.MAX_SPEED);
+        states, MotorGlobalValues.MAX_SPEED);
 
     for (int i = 0; i < modules.length; i++) {
       modules[i].setState(states[i]);
@@ -335,7 +335,7 @@ public class SwerveSubsystem extends SubsystemBase {
   public void chassisSpeedsDrive(ChassisSpeeds chassisSpeeds) {
     SwerveModuleState[] states = SwerveConstants.kinematics.toSwerveModuleStates(chassisSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        states, MotorConstants.MAX_SPEED);
+        states, MotorGlobalValues.MAX_SPEED);
 
     for (int i = 0; i < modules.length; i++) {
       modules[i].setState(states[i]);

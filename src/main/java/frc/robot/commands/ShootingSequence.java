@@ -6,8 +6,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.LED;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -18,22 +16,19 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class ShootingSequence extends SequentialCommandGroup {
   /** Creates a new TeleOpShoot. */
   private SwerveSubsystem subsystem;
-  private Limelight limelety;
-  private LED led;
   private Pivot pivot;
   private Shooter shooter;
 
-  public ShootingSequence(SwerveSubsystem subsystem, Limelight limelety, LED ledprobablyworking, Pivot pivotyboi, Shooter shootyboi) {
+  public ShootingSequence(SwerveSubsystem subsystem, Pivot pivotyboi, Shooter shootyboi) {
     subsystem = this.subsystem;
-    limelety = this.limelety;
 
     /**
      * Command to run shooting sequence mainly in auto
      */
     addCommands(
         new ParallelCommandGroup(
-            new AutoAlign(subsystem, limelety, led),
-            new PivotAlign(pivot, limelety),
+            new AutoAlign(subsystem),
+            new PivotAlign(pivot),
             new ShooterRampUp(shooter)),
         new ShooterRampUp(shooter).withTimeout(1)
     // new InstantCommand(shooter::stopAllMotors)

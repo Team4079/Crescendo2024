@@ -20,9 +20,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.utils.Constants.MotorConstants;
-import frc.robot.utils.Constants.SwerveConstants;
-import frc.robot.utils.Constants.SwerveConstants.BasePIDConstants;
+import frc.robot.utils.GlobalsValues.MotorGlobalValues;
+import frc.robot.utils.GlobalsValues.SwerveConstants;
+import frc.robot.utils.GlobalsValues.SwerveConstants.BasePIDConstants;
 
 /**
  * The {@link SwerveModule} class includes all the motors to control the swerve
@@ -119,10 +119,10 @@ public class SwerveModule {
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
         encoderToMeters(
-            driveMotor.getRotorPosition().getValue(), MotorConstants.DRIVE_MOTOR_GEAR_RATIO),
+            driveMotor.getRotorPosition().getValue(), MotorGlobalValues.DRIVE_MOTOR_GEAR_RATIO),
         Rotation2d.fromDegrees(
             encoderToAngle(steerMotor.getRotorPosition().getValue(),
-                MotorConstants.STEER_MOTOR_GEAR_RATIO)));
+                MotorGlobalValues.STEER_MOTOR_GEAR_RATIO)));
   }
 
   /**
@@ -171,7 +171,7 @@ public class SwerveModule {
    */
   public double encoderToAngle(double encoderCount, double gearRatio) {
     return encoderCount * 360 /
-        MotorConstants.ENCODER_COUNTS_PER_ROTATION * gearRatio;
+        MotorGlobalValues.ENCODER_COUNTS_PER_ROTATION * gearRatio;
   }
 
   /**
@@ -198,7 +198,7 @@ public class SwerveModule {
 
   /** Converts degrees to encoder counts. */
   public double angleToEncoder(double angle, double gearRatio) {
-    return angle * MotorConstants.ENCODER_COUNTS_PER_ROTATION / 360 /
+    return angle * MotorGlobalValues.ENCODER_COUNTS_PER_ROTATION / 360 /
         gearRatio;
   }
 
@@ -210,8 +210,8 @@ public class SwerveModule {
    * @return double The encoder count in meters.
    */
   public double encoderToMeters(double encoderCount, double gearRatio) {
-    return encoderCount / (MotorConstants.ENCODER_COUNTS_PER_ROTATION *
-        gearRatio) * MotorConstants.WHEEL_DIAMETER * Math.PI;
+    return encoderCount / (MotorGlobalValues.ENCODER_COUNTS_PER_ROTATION *
+        gearRatio) * MotorGlobalValues.WHEEL_DIAMETER * Math.PI;
   }
 
   /**
@@ -222,8 +222,8 @@ public class SwerveModule {
    * @return double The meters in encoder counts.
    */
   public double metersToEncoder(double meters, double gearRatio) {
-    return meters / (MotorConstants.WHEEL_DIAMETER * Math.PI) *
-        MotorConstants.ENCODER_COUNTS_PER_ROTATION * gearRatio;
+    return meters / (MotorGlobalValues.WHEEL_DIAMETER * Math.PI) *
+        MotorGlobalValues.ENCODER_COUNTS_PER_ROTATION * gearRatio;
   }
 
   /**
@@ -235,14 +235,14 @@ public class SwerveModule {
   public void setState(SwerveModuleState state) {
     state = optimize(state,
         Rotation2d.fromDegrees(
-            rotationsToAngle(steerMotor.getRotorPosition().getValue(), MotorConstants.STEER_MOTOR_GEAR_RATIO)),
+            rotationsToAngle(steerMotor.getRotorPosition().getValue(), MotorGlobalValues.STEER_MOTOR_GEAR_RATIO)),
         steerMotor.getDeviceID());
 
     double currentRotations = (steerMotor.getRotorPosition().getValue());
     Rotation2d currentAngle = Rotation2d
-        .fromDegrees(rotationsToAngle(currentRotations, MotorConstants.STEER_MOTOR_GEAR_RATIO));
+        .fromDegrees(rotationsToAngle(currentRotations, MotorGlobalValues.STEER_MOTOR_GEAR_RATIO));
 
-    setDriveSpeed(state.speedMetersPerSecond / MotorConstants.MAX_SPEED);
+    setDriveSpeed(state.speedMetersPerSecond / MotorGlobalValues.MAX_SPEED);
 
     if (Math.abs(state.speedMetersPerSecond) > SwerveConstants.STATE_SPEED_THRESHOLD) {
       double newRotations;
@@ -256,7 +256,7 @@ public class SwerveModule {
         change += 180;
       }
 
-      newRotations = currentRotations + angleToRotations(change, MotorConstants.STEER_MOTOR_GEAR_RATIO);
+      newRotations = currentRotations + angleToRotations(change, MotorGlobalValues.STEER_MOTOR_GEAR_RATIO);
       SmartDashboard.putNumber("Set Rotations " + steerMotor.getDeviceID(), newRotations);
       SmartDashboard.putNumber("Actual Rotations " + steerMotor.getDeviceID(),
           steerMotor.getRotorPosition().getValue());
@@ -287,7 +287,7 @@ public class SwerveModule {
   public void setRotorPos() {
     initialCANCoderValue = canCoder.getAbsolutePosition().refresh().getValue() % 360;
     steerMotor.setPosition(
-        -(initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * MotorConstants.STEER_MOTOR_GEAR_RATIO);
+        -(initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * MotorGlobalValues.STEER_MOTOR_GEAR_RATIO);
   }
 
   /**
@@ -364,6 +364,6 @@ public class SwerveModule {
    * @return double The current position of the steer motor.
    */
   public double getRotationDegree() {
-    return rotationsToAngle(steerMotor.getRotorPosition().getValue(), MotorConstants.STEER_MOTOR_GEAR_RATIO);
+    return rotationsToAngle(steerMotor.getRotorPosition().getValue(), MotorGlobalValues.STEER_MOTOR_GEAR_RATIO);
   }
 }

@@ -5,24 +5,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.utils.PID;
-import frc.robot.utils.GlobalsValues.SwerveConstants.BasePIDConstants;
+import frc.robot.subsystems.Limelight;
+import frc.robot.utils.GlobalsValues.LimelightValues;
 
-public class ResetMotorHeading extends Command {
-  /** Creates a new ResetMotorHeading. */
-  private SwerveSubsystem swerveSubsystem;
-  private double deadband;
-  private double error;
-  private PID pid;
-  
-  public ResetMotorHeading(SwerveSubsystem swerveSubsystem) {
-    this.swerveSubsystem = swerveSubsystem;
-    pid = BasePIDConstants.rotationalPID;
-    deadband = 5;
+public class LimeLightValues extends Command {
+  /** Creates a new LimeLightValues. */
+  Limelight limelety;
 
+  public LimeLightValues(Limelight limelight) {
+    this.limelety = limelight;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(this.swerveSubsystem);
+    addRequirements(this.limelety);
   }
 
   // Called when the command is initially scheduled.
@@ -32,13 +25,14 @@ public class ResetMotorHeading extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    error = swerveSubsystem.pgetHeading();
+    LimelightValues.tx = limelety.getTx();
+    LimelightValues.ty = limelety.getTy();
+    LimelightValues.ta = limelety.getTa();
+    LimelightValues.tv = limelety.getTv();
 
-    if (Math.abs(error) > deadband) {
-      swerveSubsystem.drive(0, 0, pid.calculate(error, 0), false);
-    } else {
-      swerveSubsystem.stopModules();
-    }
+    LimelightValues.robotPoseTargetSpace = limelety.getRobotPose_TargetSpace2D();
+    LimelightValues.tagIDAvailable = limelety.getTag();
+    LimelightValues.hasTarget = limelety.isTarget();
   }
 
   // Called once the command ends or is interrupted.
