@@ -6,10 +6,10 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.utils.GlobalsValues.LimelightValues;
+import frc.robot.utils.GlobalsValues.LimelightGlobalValues;
 import frc.robot.utils.GlobalsValues.MotorGlobalValues;
-import frc.robot.utils.GlobalsValues.SwerveConstants;
-import frc.robot.utils.GlobalsValues.SwerveConstants.BasePIDConstants;
+import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
+import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
 import frc.robot.utils.LogitechGamingPad;
 import frc.robot.utils.PID;
 
@@ -31,7 +31,7 @@ public class TeleOpAlign extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     this.pad = pad;
     this.swerveSubsystem = swerveSubsystem;
-    rotationalPID = BasePIDConstants.rotationalPID;
+    rotationalPID = BasePIDGlobal.rotationalPID;
     addRequirements(swerveSubsystem);
   }
 
@@ -43,9 +43,9 @@ public class TeleOpAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    horizontalError = -LimelightValues.tx;
+    horizontalError = -LimelightGlobalValues.tx;
 
-    if (Math.abs(horizontalError) >= SwerveConstants.limelightDeadband) {
+    if (Math.abs(horizontalError) >= SwerveGlobalValues.limelightDeadband) {
       rot = rotationalPID.calculate(horizontalError, 0);
     }
 
@@ -60,11 +60,11 @@ public class TeleOpAlign extends Command {
       x = pad.getLeftAnalogYAxis() * -MotorGlobalValues.MAX_SPEED * 0.6;
     }
 
-    if (Math.abs(pad.getLeftAnalogXAxis()) < SwerveConstants.JOYSTICK_DEADBAND) {
+    if (Math.abs(pad.getLeftAnalogXAxis()) < SwerveGlobalValues.JOYSTICK_DEADBAND) {
       y = 0;
     }
 
-    if (Math.abs(pad.getLeftAnalogYAxis()) < SwerveConstants.JOYSTICK_DEADBAND) {
+    if (Math.abs(pad.getLeftAnalogYAxis()) < SwerveGlobalValues.JOYSTICK_DEADBAND) {
       x = 0;
     }
 

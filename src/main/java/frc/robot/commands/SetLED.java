@@ -6,8 +6,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LED;
-import frc.robot.utils.GlobalsValues.LimelightValues;
-import frc.robot.utils.GlobalsValues.SwerveConstants;
+import frc.robot.utils.GlobalsValues.LimelightGlobalValues;
+import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 
 
 public class SetLED extends Command {
@@ -29,17 +29,17 @@ public class SetLED extends Command {
   @Override
   public void execute() {
         // Vision LED
-    if (LimelightValues.hasTarget) {
-      if (Math.abs(-LimelightValues.tx) <= SwerveConstants.limelightDeadband) {
+    if (LimelightGlobalValues.hasTarget) {
+      if (Math.abs(-LimelightGlobalValues.tx) <= SwerveGlobalValues.limelightDeadband) {
         // Set LED to green (Based on detecting AprilTag)
-        led.rainbow(SwerveConstants.greenLED[0], SwerveConstants.greenLED[1], SwerveConstants.greenLED[2]);
+        led.rainbow(SwerveGlobalValues.greenLED[0], SwerveGlobalValues.greenLED[1], SwerveGlobalValues.greenLED[2]);
       } else {
         // Set LED to orange (Based on detecting AprilTag)
-        led.rainbow(SwerveConstants.orangeLED[0], SwerveConstants.orangeLED[1], SwerveConstants.orangeLED[2]);
+        led.rainbow(SwerveGlobalValues.orangeLED[0], SwerveGlobalValues.orangeLED[1], SwerveGlobalValues.orangeLED[2]);
       }
     } else {
       // Remove Red LED light when in competition.
-      led.rainbow(SwerveConstants.redLED[0], SwerveConstants.redLED[1], SwerveConstants.redLED[2]); // Set led to red
+      led.rainbow(SwerveGlobalValues.redLED[0], SwerveGlobalValues.redLED[1], SwerveGlobalValues.redLED[2]); // Set led to red
     }
   }
 

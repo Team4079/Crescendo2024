@@ -16,7 +16,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.GlobalsValues.IntakeConstants;
+import frc.robot.utils.GlobalsValues.IntakeGlobalValues;
 
 /**
  * The {@link Intake} class includes all the motors to intake notes.
@@ -37,7 +37,7 @@ public class Intake extends SubsystemBase {
   // private VoltageOut m_out;
 
   public Intake() {
-    this.intakeKaren = new TalonFX(IntakeConstants.INTAKE_MOTOR_ID);
+    this.intakeKaren = new TalonFX(IntakeGlobalValues.INTAKE_MOTOR_ID);
 
     intakeKarenConfigurator = intakeKaren.getConfigurator();
 
@@ -49,10 +49,10 @@ public class Intake extends SubsystemBase {
 
     intakeKarenConfigurator.apply(intakeConfigs);
 
-    karenConfig.kV = IntakeConstants.INTAKE_PID_V;
-    karenConfig.kP = IntakeConstants.INTAKE_PID_P;
-    karenConfig.kI = IntakeConstants.INTAKE_PID_I;
-    karenConfig.kP = IntakeConstants.INTAKE_PID_D;
+    karenConfig.kV = IntakeGlobalValues.INTAKE_PID_V;
+    karenConfig.kP = IntakeGlobalValues.INTAKE_PID_P;
+    karenConfig.kI = IntakeGlobalValues.INTAKE_PID_I;
+    karenConfig.kP = IntakeGlobalValues.INTAKE_PID_D;
 
     intakeKaren.getConfigurator().apply(karenConfig);
 

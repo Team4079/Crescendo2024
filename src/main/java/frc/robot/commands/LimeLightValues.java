@@ -6,13 +6,13 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Limelight;
-import frc.robot.utils.GlobalsValues.LimelightValues;
+import frc.robot.utils.GlobalsValues.LimelightGlobalValues;
 
-public class LimeLightValues extends Command {
-  /** Creates a new LimeLightValues. */
+public class LimelightValues extends Command {
+  /** Creates a new LimelightGlobalValues. */
   Limelight limelety;
 
-  public LimeLightValues(Limelight limelight) {
+  public LimelightValues(Limelight limelight) {
     this.limelety = limelight;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(this.limelety);
@@ -25,14 +25,14 @@ public class LimeLightValues extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    LimelightValues.tx = limelety.getTx();
-    LimelightValues.ty = limelety.getTy();
-    LimelightValues.ta = limelety.getTa();
-    LimelightValues.tv = limelety.getTv();
+    LimelightGlobalValues.tx = limelety.getTx();
+    LimelightGlobalValues.ty = limelety.getTy();
+    LimelightGlobalValues.ta = limelety.getTa();
+    LimelightGlobalValues.tv = limelety.getTv();
 
-    LimelightValues.robotPoseTargetSpace = limelety.getRobotPose_TargetSpace2D();
-    LimelightValues.tagIDAvailable = limelety.getTag();
-    LimelightValues.hasTarget = limelety.isTarget();
+    LimelightGlobalValues.robotPoseTargetSpace = limelety.getRobotPose_TargetSpace2D();
+    LimelightGlobalValues.tagIDAvailable = limelety.getTag();
+    LimelightGlobalValues.hasTarget = limelety.isTarget();
   }
 
   // Called once the command ends or is interrupted.

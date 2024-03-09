@@ -20,7 +20,7 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.GlobalsValues.PivotConstants;
+import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 
 /**
  * The {@link Pivot} class includes all the motors to pivot the shooter.
@@ -56,8 +56,8 @@ public class Pivot extends SubsystemBase {
   private double absPos;
 
   public Pivot() {
-    pivotMotorLeft = new TalonFX(PivotConstants.PIVOT_MOTOR_LEFT_ID);
-    pivotMotorRight = new TalonFX(PivotConstants.PIVOT_MOTOR_RIGHT_ID);
+    pivotMotorLeft = new TalonFX(PivotGlobalValues.PIVOT_MOTOR_LEFT_ID);
+    pivotMotorRight = new TalonFX(PivotGlobalValues.PIVOT_MOTOR_RIGHT_ID);
 
     pivotConfigs = new MotorOutputConfigs();
 
@@ -74,13 +74,13 @@ public class Pivot extends SubsystemBase {
     pivotLeftConfigurator.apply(pivotConfigs);
     pivotRightConfigurator.apply(pivotConfigs);
 
-    pivotLeftConfigs.kP = PivotConstants.PIVOT_PID_LEFT_P;
-    pivotLeftConfigs.kI = PivotConstants.PIVOT_PID_LEFT_I;
-    pivotLeftConfigs.kD = PivotConstants.PIVOT_PID_LEFT_D;
+    pivotLeftConfigs.kP = PivotGlobalValues.PIVOT_PID_LEFT_P;
+    pivotLeftConfigs.kI = PivotGlobalValues.PIVOT_PID_LEFT_I;
+    pivotLeftConfigs.kD = PivotGlobalValues.PIVOT_PID_LEFT_D;
 
-    pivotRightConfigs.kP = PivotConstants.PIVOT_PID_RIGHT_P;
-    pivotRightConfigs.kI = PivotConstants.PIVOT_PID_RIGHT_I;
-    pivotRightConfigs.kD = PivotConstants.PIVOT_PID_RIGHT_D;
+    pivotRightConfigs.kP = PivotGlobalValues.PIVOT_PID_RIGHT_P;
+    pivotRightConfigs.kI = PivotGlobalValues.PIVOT_PID_RIGHT_I;
+    pivotRightConfigs.kD = PivotGlobalValues.PIVOT_PID_RIGHT_D;
 
     pivotMotorLeft.getConfigurator().apply(pivotLeftConfigs);
     pivotMotorRight.getConfigurator().apply(pivotRightConfigs);
@@ -106,7 +106,7 @@ public class Pivot extends SubsystemBase {
     pivotMotorLeft.getConfigurator().apply(leftMotorRampConfig);
     pivotMotorRight.getConfigurator().apply(rightMotorRampConfig);
 
-    encoderController = new CANSparkMax(PivotConstants.ENCODER_ID, MotorType.kBrushless);
+    encoderController = new CANSparkMax(PivotGlobalValues.ENCODER_ID, MotorType.kBrushless);
     absoluteEncoder = encoderController.getAbsoluteEncoder(Type.kDutyCycle);
 
     absoluteEncoder.setPositionConversionFactor(2048);

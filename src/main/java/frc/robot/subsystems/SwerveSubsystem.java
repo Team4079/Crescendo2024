@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.MotorGlobalValues;
-import frc.robot.utils.GlobalsValues.SwerveConstants;
+import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 
 /**
  * The {@link SwerveSubsystem} class includes all the motors to drive the robot.
@@ -42,7 +42,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveTrain. */
   public SwerveSubsystem() {
-    sKinematics = GlobalsValues.SwerveConstants.kinematics;
+    sKinematics = GlobalsValues.SwerveGlobalValues.kinematics;
     gyroAngle = Rotation2d.fromDegrees(0);
     pidggy = new Pigeon2(16);
     pidggy.reset();
@@ -52,22 +52,22 @@ public class SwerveSubsystem extends SubsystemBase {
             MotorGlobalValues.FRONT_LEFT_DRIVE_ID,
             MotorGlobalValues.FRONT_LEFT_STEER_ID,
             MotorGlobalValues.FRONT_LEFT_CAN_CODER_ID,
-            SwerveConstants.CANCoderValue9),
+            SwerveGlobalValues.CANCoderValue9),
         new SwerveModule(
             MotorGlobalValues.FRONT_RIGHT_DRIVE_ID,
             MotorGlobalValues.FRONT_RIGHT_STEER_ID,
             MotorGlobalValues.FRONT_RIGHT_CAN_CODER_ID,
-            SwerveConstants.CANCoderValue10),
+            SwerveGlobalValues.CANCoderValue10),
         new SwerveModule(
             MotorGlobalValues.BACK_LEFT_DRIVE_ID,
             MotorGlobalValues.BACK_LEFT_STEER_ID,
             MotorGlobalValues.BACK_LEFT_CAN_CODER_ID,
-            SwerveConstants.CANCoderValue11),
+            SwerveGlobalValues.CANCoderValue11),
         new SwerveModule(
             MotorGlobalValues.BACK_RIGHT_DRIVE_ID,
             MotorGlobalValues.BACK_RIGHT_STEER_ID,
             MotorGlobalValues.BACK_RIGHT_CAN_CODER_ID,
-            SwerveConstants.CANCoderValue12)
+            SwerveGlobalValues.CANCoderValue12)
     };
 
     swerveOdometry = new SwerveDriveOdometry(sKinematics, gyroAngle, getModulePositions());
@@ -76,7 +76,7 @@ public class SwerveSubsystem extends SubsystemBase {
     addRotorPositionsforModules();
 
     // Makes the rotation smooth (in a circle)
-    SwerveConstants.BasePIDConstants.pathTranslationPID.enableContinuousInput(-Math.PI, Math.PI);
+    SwerveGlobalValues.BasePIDGlobal.pathTranslationPID.enableContinuousInput(-Math.PI, Math.PI);
 
     /**
      * PathPlanner Direction Values
@@ -90,7 +90,7 @@ public class SwerveSubsystem extends SubsystemBase {
         this::customPose, // Method to reset odometry (will be called if your auto has a starting pose)
         this::getAutoSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         this::chassisSpeedsDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-        SwerveConstants.BasePIDConstants.pathFollower,
+        SwerveGlobalValues.BasePIDGlobal.pathFollower,
         () -> {
           var alliance = DriverStation.getAlliance();
           if (alliance.isPresent()) {
@@ -130,7 +130,7 @@ public class SwerveSubsystem extends SubsystemBase {
           joyStickInput);
     }
 
-    SwerveModuleState[] states = SwerveConstants.kinematics.toSwerveModuleStates(speeds);
+    SwerveModuleState[] states = SwerveGlobalValues.kinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         states, MotorGlobalValues.MAX_SPEED);
 
@@ -333,7 +333,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @return None
    */
   public void chassisSpeedsDrive(ChassisSpeeds chassisSpeeds) {
-    SwerveModuleState[] states = SwerveConstants.kinematics.toSwerveModuleStates(chassisSpeeds);
+    SwerveModuleState[] states = SwerveGlobalValues.kinematics.toSwerveModuleStates(chassisSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         states, MotorGlobalValues.MAX_SPEED);
 

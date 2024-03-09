@@ -6,7 +6,7 @@
 package frc.robot;
 
 import frc.robot.commands.AutoAlign;
-import frc.robot.commands.LimeLightValues;
+import frc.robot.commands.LimelightValues;
 import frc.robot.commands.LowerPivot;
 import frc.robot.commands.TeleOpAlign;
 import frc.robot.commands.ShootingSequence;
@@ -23,7 +23,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.LogitechGamingPad;
-import frc.robot.utils.GlobalsValues.SwerveConstants;
+import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -113,11 +113,11 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem));
     swerveSubsystem
-        .setDefaultCommand(new PadDrive(swerveSubsystem, pad, opPad, SwerveConstants.isFieldOriented));
+        .setDefaultCommand(new PadDrive(swerveSubsystem, pad, opPad, SwerveGlobalValues.isFieldOriented));
 
     intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, opPad));
     pivotyboi.setDefaultCommand(new LowerPivot(pivotyboi));
-    limelety.setDefaultCommand(new LimeLightValues(limelety));
+    limelety.setDefaultCommand(new LimelightValues(limelety));
     led.setDefaultCommand(new SetLED(led));
 
     // Configure auto chooser

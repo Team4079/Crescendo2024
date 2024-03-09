@@ -7,7 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.PID;
-import frc.robot.utils.GlobalsValues.SwerveConstants.BasePIDConstants;
+import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
 
 public class ResetMotorHeading extends Command {
   /** Creates a new ResetMotorHeading. */
@@ -18,7 +18,7 @@ public class ResetMotorHeading extends Command {
   
   public ResetMotorHeading(SwerveSubsystem swerveSubsystem) {
     this.swerveSubsystem = swerveSubsystem;
-    pid = BasePIDConstants.rotationalPID;
+    pid = BasePIDGlobal.rotationalPID;
     deadband = 5;
 
     // Use addRequirements() here to declare subsystem dependencies.

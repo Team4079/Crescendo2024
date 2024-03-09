@@ -68,8 +68,8 @@ public final class GlobalsValues {
     public static boolean AACORN_MODE = true;
   }
 
-  public static class SwerveConstants {
-    private SwerveConstants() {
+  public static class SwerveGlobalValues {
+    private SwerveGlobalValues() {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
@@ -112,7 +112,7 @@ public final class GlobalsValues {
     public static final int[] orangeLED = { 30, 255, 255 };
     public static final int[] redLED = { 0, 255, 255 };
 
-    public static class BasePIDConstants {
+    public static class BasePIDGlobal {
       // public static final PID STEER_PID = new PID(0.14, 0.00002, 0.008, 0);
       public static final PID STEER_PID = new PID(0.15, 0.0, 0, 0); // 0.05 P, 0 D
       public static final PID DRIVE_PID = new PID(0.15, 0.0, 0, 0);
@@ -135,7 +135,7 @@ public final class GlobalsValues {
           new PIDConstants(0.15, 0.000, 0.00), // translation
           new PIDConstants(0, 0.0, 0.0), // rotation
           4.96824, // Max module speed, in m/s
-          SwerveConstants.robotSize, // Drive base radius in meters. Distance from robot center to furthest //
+          SwerveGlobalValues.robotSize, // Drive base radius in meters. Distance from robot center to furthest //
                                      // module.
           new ReplanningConfig(false, false)); // Default path replanning config. See the API for the options here
     }
@@ -144,8 +144,8 @@ public final class GlobalsValues {
     public static final double onBalanceAngleThreshold = 5;
   }
 
-  public static class IntakeConstants {
-    private IntakeConstants() {
+  public static class IntakeGlobalValues {
+    private IntakeGlobalValues() {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
@@ -159,12 +159,10 @@ public final class GlobalsValues {
     public static final double INTAKE_PID_P = 0.0002;
     public static final double INTAKE_PID_I = 0.0;
     public static final double INTAKE_PID_D = 0.0;
-
-    public static boolean HAS_PIECE = false;
   }
 
-  public static class PivotConstants {
-    private PivotConstants() {
+  public static class PivotGlobalValues {
+    private PivotGlobalValues() {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
@@ -189,8 +187,8 @@ public final class GlobalsValues {
     public static final int ENCODER_ID = 0;
   }
 
-  public static class ShooterConstants {
-    private ShooterConstants() {
+  public static class ShooterGlobalValues {
+    private ShooterGlobalValues() {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
@@ -218,10 +216,13 @@ public final class GlobalsValues {
     public static final double KRAKEN_SPEED = 6942.0;
 
     public static boolean IS_SHOOTING = false;
+    public static boolean HAS_PIECE = false;
+
+    public static final int RING_SENSOR_ID = 6;
   }
 
-  public static class LimelightValues {
-    private LimelightValues() {
+  public static class LimelightGlobalValues {
+    private LimelightGlobalValues() {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 

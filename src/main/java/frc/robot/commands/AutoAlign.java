@@ -6,9 +6,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.utils.GlobalsValues.LimelightValues;
-import frc.robot.utils.GlobalsValues.SwerveConstants;
-import frc.robot.utils.GlobalsValues.SwerveConstants.BasePIDConstants;
+import frc.robot.utils.GlobalsValues.LimelightGlobalValues;
+import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
+import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
 import frc.robot.utils.PID;
 
 public class AutoAlign extends Command {
@@ -26,7 +26,7 @@ public class AutoAlign extends Command {
   public AutoAlign(SwerveSubsystem swerveSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.swerveSubsystem = swerveSubsystem;
-    rotationalPID = BasePIDConstants.rotationalPID;
+    rotationalPID = BasePIDGlobal.rotationalPID;
     addRequirements(swerveSubsystem);
   }
 
@@ -39,9 +39,9 @@ public class AutoAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    horizontalError = -LimelightValues.tx;
+    horizontalError = -LimelightGlobalValues.tx;
     
-    if (Math.abs(horizontalError) >= SwerveConstants.limelightDeadband) {
+    if (Math.abs(horizontalError) >= SwerveGlobalValues.limelightDeadband) {
       swerveSubsystem.drive(0, 0, rotationalPID.calculate(horizontalError, 0), false);
     } else {
       swerveSubsystem.stopModules();
@@ -58,7 +58,7 @@ public class AutoAlign extends Command {
   @Override
   public boolean isFinished() {
     // Checks if the april tag is within the deadband for at least half a second
-    if (horizontalError <= SwerveConstants.limelightDeadband && timeout == 25) {
+    if (horizontalError <= SwerveGlobalValues.limelightDeadband && timeout == 25) {
       timeout = 0;
       return true;
     }

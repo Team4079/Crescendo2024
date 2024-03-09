@@ -21,8 +21,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.GlobalsValues.MotorGlobalValues;
-import frc.robot.utils.GlobalsValues.SwerveConstants;
-import frc.robot.utils.GlobalsValues.SwerveConstants.BasePIDConstants;
+import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
+import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
 
 /**
  * The {@link SwerveModule} class includes all the motors to control the swerve
@@ -84,13 +84,13 @@ public class SwerveModule {
     driveConfigurator.apply(motorConfigs);
     steerConfigurator.apply(motorConfigs);
 
-    driveslot0Configs.kP = BasePIDConstants.DRIVE_PID.p;
-    driveslot0Configs.kI = BasePIDConstants.DRIVE_PID.i;
-    driveslot0Configs.kD = BasePIDConstants.DRIVE_PID.d;
+    driveslot0Configs.kP = BasePIDGlobal.DRIVE_PID.p;
+    driveslot0Configs.kI = BasePIDGlobal.DRIVE_PID.i;
+    driveslot0Configs.kD = BasePIDGlobal.DRIVE_PID.d;
 
-    steerslot0Configs.kP = BasePIDConstants.STEER_PID.p;
-    steerslot0Configs.kI = BasePIDConstants.STEER_PID.i;
-    steerslot0Configs.kD = BasePIDConstants.STEER_PID.d;
+    steerslot0Configs.kP = BasePIDGlobal.STEER_PID.p;
+    steerslot0Configs.kI = BasePIDGlobal.STEER_PID.i;
+    steerslot0Configs.kD = BasePIDGlobal.STEER_PID.d;
 
     driveMotor.getConfigurator().apply(driveslot0Configs);
     steerMotor.getConfigurator().apply(steerslot0Configs);
@@ -244,7 +244,7 @@ public class SwerveModule {
 
     setDriveSpeed(state.speedMetersPerSecond / MotorGlobalValues.MAX_SPEED);
 
-    if (Math.abs(state.speedMetersPerSecond) > SwerveConstants.STATE_SPEED_THRESHOLD) {
+    if (Math.abs(state.speedMetersPerSecond) > SwerveGlobalValues.STATE_SPEED_THRESHOLD) {
       double newRotations;
       Rotation2d delta = state.angle.minus(currentAngle);
 
