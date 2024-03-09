@@ -10,21 +10,16 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+// import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.Constants.IntakeConstants;
+import frc.robot.utils.GlobalsValues.IntakeGlobalValues;
 
 /**
  * The {@link Intake} class includes all the motors to intake notes.
- * 
- *
- * 
  */
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
@@ -39,9 +34,10 @@ public class Intake extends SubsystemBase {
   private ClosedLoopRampsConfigs karenRampConfig;
 
   private VelocityVoltage m_request;
+  // private VoltageOut m_out;
 
   public Intake() {
-    this.intakeKaren = new TalonFX(IntakeConstants.INTAKE_MOTOR_ID);
+    this.intakeKaren = new TalonFX(IntakeGlobalValues.INTAKE_MOTOR_ID);
 
     intakeKarenConfigurator = intakeKaren.getConfigurator();
 
@@ -49,11 +45,14 @@ public class Intake extends SubsystemBase {
 
     intakeKaren.getConfigurator().apply(new TalonFXConfiguration());
 
+    intakeConfigs = new MotorOutputConfigs();
+
     intakeKarenConfigurator.apply(intakeConfigs);
 
-    karenConfig.kP = IntakeConstants.INTAKE_PID_P;
-    karenConfig.kI = IntakeConstants.INTAKE_PID_I;
-    karenConfig.kP = IntakeConstants.INTAKE_PID_D;
+    karenConfig.kV = IntakeGlobalValues.INTAKE_PID_V;
+    karenConfig.kP = IntakeGlobalValues.INTAKE_PID_P;
+    karenConfig.kI = IntakeGlobalValues.INTAKE_PID_I;
+    karenConfig.kP = IntakeGlobalValues.INTAKE_PID_D;
 
     intakeKaren.getConfigurator().apply(karenConfig);
 
@@ -70,7 +69,8 @@ public class Intake extends SubsystemBase {
 
     intakeKaren.getConfigurator().apply(karenRampConfig);
 
-    m_request = new VelocityVoltage(0).withSlot(1);
+    m_request = new VelocityVoltage(0);
+    // m_out = new VoltageOut(0);
   }
 
   @Override

@@ -18,9 +18,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.Constants;
-import frc.robot.utils.Constants.MotorConstants;
-import frc.robot.utils.Constants.SwerveConstants;
+import frc.robot.utils.GlobalsValues;
+import frc.robot.utils.GlobalsValues.MotorGlobalValues;
+import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 
 /**
  * The {@link SwerveSubsystem} class includes all the motors to drive the robot.
@@ -42,32 +42,32 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveTrain. */
   public SwerveSubsystem() {
-    sKinematics = Constants.SwerveConstants.kinematics;
+    sKinematics = GlobalsValues.SwerveGlobalValues.kinematics;
     gyroAngle = Rotation2d.fromDegrees(0);
     pidggy = new Pigeon2(16);
     pidggy.reset();
 
     modules = new SwerveModule[] {
         new SwerveModule(
-            MotorConstants.FRONT_LEFT_DRIVE_ID,
-            MotorConstants.FRONT_LEFT_STEER_ID,
-            MotorConstants.FRONT_LEFT_CAN_CODER_ID,
-            SwerveConstants.CANCoderValue9),
+            MotorGlobalValues.FRONT_LEFT_DRIVE_ID,
+            MotorGlobalValues.FRONT_LEFT_STEER_ID,
+            MotorGlobalValues.FRONT_LEFT_CAN_CODER_ID,
+            SwerveGlobalValues.CANCoderValue9),
         new SwerveModule(
-            MotorConstants.FRONT_RIGHT_DRIVE_ID,
-            MotorConstants.FRONT_RIGHT_STEER_ID,
-            MotorConstants.FRONT_RIGHT_CAN_CODER_ID,
-            SwerveConstants.CANCoderValue10),
+            MotorGlobalValues.FRONT_RIGHT_DRIVE_ID,
+            MotorGlobalValues.FRONT_RIGHT_STEER_ID,
+            MotorGlobalValues.FRONT_RIGHT_CAN_CODER_ID,
+            SwerveGlobalValues.CANCoderValue10),
         new SwerveModule(
-            MotorConstants.BACK_LEFT_DRIVE_ID,
-            MotorConstants.BACK_LEFT_STEER_ID,
-            MotorConstants.BACK_LEFT_CAN_CODER_ID,
-            SwerveConstants.CANCoderValue11),
+            MotorGlobalValues.BACK_LEFT_DRIVE_ID,
+            MotorGlobalValues.BACK_LEFT_STEER_ID,
+            MotorGlobalValues.BACK_LEFT_CAN_CODER_ID,
+            SwerveGlobalValues.CANCoderValue11),
         new SwerveModule(
-            MotorConstants.BACK_RIGHT_DRIVE_ID,
-            MotorConstants.BACK_RIGHT_STEER_ID,
-            MotorConstants.BACK_RIGHT_CAN_CODER_ID,
-            SwerveConstants.CANCoderValue12)
+            MotorGlobalValues.BACK_RIGHT_DRIVE_ID,
+            MotorGlobalValues.BACK_RIGHT_STEER_ID,
+            MotorGlobalValues.BACK_RIGHT_CAN_CODER_ID,
+            SwerveGlobalValues.CANCoderValue12)
     };
 
     swerveOdometry = new SwerveDriveOdometry(sKinematics, gyroAngle, getModulePositions());
@@ -76,7 +76,7 @@ public class SwerveSubsystem extends SubsystemBase {
     addRotorPositionsforModules();
 
     // Makes the rotation smooth (in a circle)
-    SwerveConstants.BasePIDConstants.pathTranslationPID.enableContinuousInput(-Math.PI, Math.PI);
+    SwerveGlobalValues.BasePIDGlobal.pathTranslationPID.enableContinuousInput(-Math.PI, Math.PI);
 
     /**
      * PathPlanner Direction Values
@@ -90,7 +90,7 @@ public class SwerveSubsystem extends SubsystemBase {
         this::customPose, // Method to reset odometry (will be called if your auto has a starting pose)
         this::getAutoSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         this::chassisSpeedsDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-        SwerveConstants.BasePIDConstants.pathFollower,
+        SwerveGlobalValues.BasePIDGlobal.pathFollower,
         () -> {
           var alliance = DriverStation.getAlliance();
           if (alliance.isPresent()) {
@@ -114,7 +114,7 @@ public class SwerveSubsystem extends SubsystemBase {
   public void drive(double forwardSpeed, double leftSpeed, double joyStickInput, boolean isFieldOriented) {
     ChassisSpeeds speeds;
 
-    turnSpeed = joyStickInput * MotorConstants.TURN_CONSTANT;
+    turnSpeed = joyStickInput * MotorGlobalValues.TURN_CONSTANT;
 
     // Runs robot/field-oriented based on the boolean value of isFieldOriented
     if (isFieldOriented) {
@@ -130,9 +130,9 @@ public class SwerveSubsystem extends SubsystemBase {
           joyStickInput);
     }
 
-    SwerveModuleState[] states = SwerveConstants.kinematics.toSwerveModuleStates(speeds);
+    SwerveModuleState[] states = SwerveGlobalValues.kinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        states, MotorConstants.MAX_SPEED);
+        states, MotorGlobalValues.MAX_SPEED);
 
     for (int i = 0; i < modules.length; i++) {
       modules[i].setState(states[i]);
@@ -141,6 +141,11 @@ public class SwerveSubsystem extends SubsystemBase {
     }
   }
 
+  /**
+   * Gets the position of the modules in the swerve drive train
+   * @param void
+   * @return SwerveModulePosition[] array of the position of the modules
+   */
   public SwerveModulePosition[] getModulePositions() {
     SwerveModulePosition[] positions = new SwerveModulePosition[modules.length];
     for (int i = 0; i < modules.length; i++) {
@@ -149,60 +154,125 @@ public class SwerveSubsystem extends SubsystemBase {
     return positions;
   }
 
+  /**
+   * Gets the rotation of the pigeon
+   * @param void
+   * @return Rotation2d rotation of the pigeon in degrees
+   */
   public Rotation2d getRotationPidggy() {
     rot = -pidggy.getRotation2d().getDegrees();
     return Rotation2d.fromDegrees(rot);
   }
 
+  /**
+   * Resets the pigeon to zero
+   * @param void
+   * @return None
+   */
   public void zeroHeading() {
     pidggy.reset();
   }
 
+  /**
+   * Resets the drive encoders
+   * @param void
+   * @return None
+   */
   public void resetDriveEncoders() {
     for (int i = 0; i < modules.length; i++) {
       modules[i].resetEncoders();
     }
   }
 
+  /**
+   * Gets the yaw of the pigeon in double degrees
+   * @param void
+   * @return double yaw of the pigeon in degrees
+   */
   public double getYaw() {
     return pidggy.getYaw().getValue();
   }
 
+  /**
+   * Gets the heading of the pigeon in double degrees
+   * @param void
+   * @return double heading of the pigeon in degrees
+   */
   public double pgetHeading() {
     return (pidggy.getYaw().getValue() % 360);
   }
 
   // Speed modifiers
+  /**
+   * Configures the slow mode of the robot
+   * @param void
+   * @return None
+   */
   public void configSlowMode() {
-    MotorConstants.SLOW_MODE = !MotorConstants.SLOW_MODE;
+    MotorGlobalValues.SLOW_MODE = !MotorGlobalValues.SLOW_MODE;
   }
 
+  /**
+   * Gets the slow mode of the robot in boolean value
+   * @param void
+   * @return boolean value of the slow mode
+   */
   public boolean getSlowMode() {
-    return MotorConstants.SLOW_MODE;
+    return MotorGlobalValues.SLOW_MODE;
   }
 
+  /**
+   * Configures the acorn mode of the robot
+   * @param void
+   * @return None
+   */
   public void configAAcornMode() {
-    MotorConstants.AACORN_MODE = !MotorConstants.AACORN_MODE;
+    MotorGlobalValues.AACORN_MODE = !MotorGlobalValues.AACORN_MODE;
   }
 
+  /**
+   * Gets the acorn mode of the robot in boolean value
+   * @param void
+   * @return boolean value of the acorn mode
+   */
   public boolean getAAcornMode() {
-    return MotorConstants.AACORN_MODE;
+    return MotorGlobalValues.AACORN_MODE;
   }
 
   // Position methods - used for odometry
+  /**
+   * Gets the pose of the robot in Pose2d
+   * @param void
+   * @return Pose2d pose of the robot
+   */
   public Pose2d getPose() {
     return swerveOdometry.getPoseMeters();
   }
 
+  /**
+   * Resets the heading of the robot to 0
+   * @param void
+   * @return None
+   */
   public void newPose() {
     swerveOdometry.resetPosition(Rotation2d.fromDegrees(pgetHeading()), getModulePositions(),
         new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
   }
 
+  /**
+   * Resets the pose of the robot to a custom pose
+   * @param poses Pose2d pose of the robot
+   * @return None
+   */
   public void customPose(Pose2d poses) {
     swerveOdometry.resetPosition(Rotation2d.fromDegrees(pgetHeading()), getModulePositions(), poses);
   }
 
+  /**
+   * Updates odometry and gets heading of the pigeon
+   * @param void
+   * @return None
+   */
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -214,13 +284,11 @@ public class SwerveSubsystem extends SubsystemBase {
     gyroAngle = getRotationPidggy();
   }
 
-  public void test(int moduleNum, double driveSpeed, double rotationSpeed) {
-    SwerveModule module = modules[moduleNum];
-
-    module.setDriveSpeed(driveSpeed);
-    module.setSteerSpeed(rotationSpeed);
-  }
-
+  /**
+   * Adds rotor positions for the modules
+   * @param void
+   * @return None
+   */
   public void addRotorPositionsforModules() {
     for (int i = 0; i < modules.length; i++) {
       modules[i].setRotorPos();
@@ -228,43 +296,68 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   /**
-   * 
-   * @param pose
-   * @return void
+   * Resets odometry to a custom pose
+   * @param pose Pose2d
+   * @return None
    */
   public void resetOdometry(Pose2d pose) {
     swerveOdometry.resetPosition(Rotation2d.fromDegrees(getYaw()), getModulePositions(), pose);
   }
 
+  /**
+   * Passes in the module states to the modules (speed and rotation)
+   * @param states SwerveModuleState[] array of the module states
+   * @return None
+   */
   public void outputModuleStates(SwerveModuleState[] states) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        states, MotorConstants.MAX_SPEED);
+        states, MotorGlobalValues.MAX_SPEED);
 
     for (int i = 0; i < modules.length; i++) {
       modules[i].setState(states[i]);
     }
   }
 
+  /**
+   * Gets the auto speeds of the robot in meters per second
+   * @param void
+   * @return ChassisSpeeds auto speeds of the robot
+   */
   public ChassisSpeeds getAutoSpeeds() {
     return ChassisSpeeds.fromRobotRelativeSpeeds(0, 0, 0, Rotation2d.fromDegrees(0));
   }
 
+  /**
+   * Drives the robot using the chassis speeds in meters per second
+   * @param chassisSpeeds chassis speeds
+   * @return None
+   */
   public void chassisSpeedsDrive(ChassisSpeeds chassisSpeeds) {
-    SwerveModuleState[] states = SwerveConstants.kinematics.toSwerveModuleStates(chassisSpeeds);
+    SwerveModuleState[] states = SwerveGlobalValues.kinematics.toSwerveModuleStates(chassisSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        states, MotorConstants.MAX_SPEED);
+        states, MotorGlobalValues.MAX_SPEED);
 
     for (int i = 0; i < modules.length; i++) {
       modules[i].setState(states[i]);
     }
   }
 
+  /**
+   * Stops the modules
+   * @param void
+   * @return None
+   */
   public void stopModules() {
     for (SwerveModule module : modules) {
       module.stop();
     }
   }
 
+  /**
+   * Stops the robot
+   * @param void
+   * @return None
+   */
   public void stop() {
     for (int i = 0; i < modules.length; i++) {
       modules[i].stop();

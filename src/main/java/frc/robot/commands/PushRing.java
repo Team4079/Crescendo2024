@@ -6,22 +6,21 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
-import frc.robot.utils.Constants.ShooterConstants;
 
 public class PushRing extends Command {
 
-  private Shooter shooter;
+  // private Shooter shooter;
 
   /** Creates a new Shoot. */
   public PushRing(Shooter shooter) {
-    this.shooter = shooter;
+    // this.shooter = shooter;
     addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setKrakenVelocity(ShooterConstants.KRAKEN_SPEED);
+    // shooter.setKrakenVelocity(ShooterConstants.KRAKEN_SPEED);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import org.ejml.dense.row.mult.SubmatrixOps_FDRM;
-
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
@@ -15,10 +13,14 @@ import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkAbsoluteEncoder;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.Constants.PivotConstants;
+import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 
 /**
  * The {@link Pivot} class includes all the motors to pivot the shooter.
@@ -48,9 +50,14 @@ public class Pivot extends SubsystemBase {
   private ClosedLoopRampsConfigs leftMotorRampConfig;
   private ClosedLoopRampsConfigs rightMotorRampConfig;
 
+  private SparkAbsoluteEncoder absoluteEncoder;
+  private CANSparkMax encoderController;
+
+  private double absPos;
+
   public Pivot() {
-    pivotMotorLeft = new TalonFX(PivotConstants.PIVOT_MOTOR_LEFT_ID);
-    pivotMotorRight = new TalonFX(PivotConstants.PIVOT_MOTOR_RIGHT_ID);
+    pivotMotorLeft = new TalonFX(PivotGlobalValues.PIVOT_MOTOR_LEFT_ID);
+    pivotMotorRight = new TalonFX(PivotGlobalValues.PIVOT_MOTOR_RIGHT_ID);
 
     pivotConfigs = new MotorOutputConfigs();
 
@@ -67,13 +74,13 @@ public class Pivot extends SubsystemBase {
     pivotLeftConfigurator.apply(pivotConfigs);
     pivotRightConfigurator.apply(pivotConfigs);
 
-    pivotLeftConfigs.kP = PivotConstants.PIVOT_PID_LEFT_P;
-    pivotLeftConfigs.kI = PivotConstants.PIVOT_PID_LEFT_I;
-    pivotLeftConfigs.kD = PivotConstants.PIVOT_PID_LEFT_D;
+    pivotLeftConfigs.kP = PivotGlobalValues.PIVOT_PID_LEFT_P;
+    pivotLeftConfigs.kI = PivotGlobalValues.PIVOT_PID_LEFT_I;
+    pivotLeftConfigs.kD = PivotGlobalValues.PIVOT_PID_LEFT_D;
 
-    pivotRightConfigs.kP = PivotConstants.PIVOT_PID_RIGHT_P;
-    pivotRightConfigs.kI = PivotConstants.PIVOT_PID_RIGHT_I;
-    pivotRightConfigs.kD = PivotConstants.PIVOT_PID_RIGHT_D;
+    pivotRightConfigs.kP = PivotGlobalValues.PIVOT_PID_RIGHT_P;
+    pivotRightConfigs.kI = PivotGlobalValues.PIVOT_PID_RIGHT_I;
+    pivotRightConfigs.kD = PivotGlobalValues.PIVOT_PID_RIGHT_D;
 
     pivotMotorLeft.getConfigurator().apply(pivotLeftConfigs);
     pivotMotorRight.getConfigurator().apply(pivotRightConfigs);
@@ -98,13 +105,26 @@ public class Pivot extends SubsystemBase {
 
     pivotMotorLeft.getConfigurator().apply(leftMotorRampConfig);
     pivotMotorRight.getConfigurator().apply(rightMotorRampConfig);
+
+    encoderController = new CANSparkMax(PivotGlobalValues.ENCODER_ID, MotorType.kBrushless);
+    absoluteEncoder = encoderController.getAbsoluteEncoder(Type.kDutyCycle);
+
+    absoluteEncoder.setPositionConversionFactor(2048);
   }
 
   // This method will be called once per scheduler run
   @Override
   public void periodic() {
+
+    absPos = absoluteEncoder.getPosition();
+    
+    
+    SmartDashboard.putNumber("Absolute Encoder Position", getAbsoluteEncoder());
     SmartDashboard.putNumber("Pivot Left Position", pivotMotorLeft.getPosition().getValue());
     SmartDashboard.putNumber("Pivot Right Position", pivotMotorRight.getPosition().getValue());
+
+    pivotMotorLeft.setPosition(absPos);
+    pivotMotorRight.setPosition(absPos);
   }
 
   /**
@@ -122,7 +142,7 @@ public class Pivot extends SubsystemBase {
    * @param right Right motor position
    * @return void
    */
-  public void setPosition(double left, double right) {
+  public void setMotorPosition(double left, double right) {
     pivotMotorLeft.setControl(pos_reqest.withPosition(left));
     pivotMotorRight.setControl(pos_reqest.withPosition(right));
   }
@@ -145,4 +165,12 @@ public class Pivot extends SubsystemBase {
     // do stuf
     return 0.0;
   }
+
+  public double getAbsoluteEncoder() {
+    return absoluteEncoder.getPosition();
+  }
+
+
+
+ 
 }

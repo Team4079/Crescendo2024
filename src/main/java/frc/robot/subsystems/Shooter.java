@@ -14,9 +14,10 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.Constants.ShooterConstants;
+import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
@@ -46,10 +47,14 @@ public class Shooter extends SubsystemBase {
 
   private boolean toggleShooter;
 
+  private DigitalInput ringSensor;
+
   public Shooter() {
-    leftFalcon = new TalonFX(ShooterConstants.FALCON_LEFT_ID);
-    rightFalcon = new TalonFX(ShooterConstants.FALCON_RIGHT_ID);
-    kraken = new TalonFX(ShooterConstants.KRAKEN_ID);
+    leftFalcon = new TalonFX(ShooterGlobalValues.FALCON_LEFT_ID);
+    rightFalcon = new TalonFX(ShooterGlobalValues.FALCON_RIGHT_ID);
+    kraken = new TalonFX(ShooterGlobalValues.KRAKEN_ID);
+
+    ringSensor = new DigitalInput(ShooterGlobalValues.RING_SENSOR_ID);
 
     shooterConfigs = new MotorOutputConfigs();
 
@@ -70,17 +75,18 @@ public class Shooter extends SubsystemBase {
     rightShootConfigurator.apply(shooterConfigs);
     krakenConfigurator.apply(shooterConfigs);
 
-    leftShootConfigs.kP = ShooterConstants.SHOOTER_PID_LEFT_P;
-    leftShootConfigs.kI = ShooterConstants.SHOOTER_PID_LEFT_I;
-    leftShootConfigs.kD = ShooterConstants.SHOOTER_PID_LEFT_D;
+    
+    leftShootConfigs.kP = ShooterGlobalValues.SHOOTER_PID_LEFT_P;
+    leftShootConfigs.kI = ShooterGlobalValues.SHOOTER_PID_LEFT_I;
+    leftShootConfigs.kD = ShooterGlobalValues.SHOOTER_PID_LEFT_D;
 
-    rightShootConfigs.kP = ShooterConstants.SHOOTER_PID_RIGHT_P;
-    rightShootConfigs.kI = ShooterConstants.SHOOTER_PID_RIGHT_I;
-    rightShootConfigs.kD = ShooterConstants.SHOOTER_PID_RIGHT_D;
+    rightShootConfigs.kP = ShooterGlobalValues.SHOOTER_PID_RIGHT_P;
+    rightShootConfigs.kI = ShooterGlobalValues.SHOOTER_PID_RIGHT_I;
+    rightShootConfigs.kD = ShooterGlobalValues.SHOOTER_PID_RIGHT_D;
 
-    krakenConfigs.kP = ShooterConstants.KRAKEN_P;
-    krakenConfigs.kI = ShooterConstants.KRAKEN_I;
-    krakenConfigs.kD = ShooterConstants.KRAKEN_D;
+    krakenConfigs.kP = ShooterGlobalValues.KRAKEN_P;
+    krakenConfigs.kI = ShooterGlobalValues.KRAKEN_I;
+    krakenConfigs.kD = ShooterGlobalValues.KRAKEN_D;
 
     leftFalcon.getConfigurator().apply(leftShootConfigs);
     rightFalcon.getConfigurator().apply(rightShootConfigs);
@@ -124,6 +130,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Left Shooter Velocity", leftFalcon.getRotorVelocity().getValue());
     SmartDashboard.putNumber("Right Shooter Velocity", rightFalcon.getRotorVelocity().getValue());
     SmartDashboard.putNumber("Kraken Velocity", kraken.getRotorVelocity().getValue());
+    ShooterGlobalValues.HAS_PIECE = getRingSensor();
   }
 
   /**
@@ -145,7 +152,7 @@ public class Shooter extends SubsystemBase {
   public void toggleShooterVelocity() {
     toggleShooter = !toggleShooter;
     if (toggleShooter) {
-      setShooterVelocity(ShooterConstants.SHOOTER_SPEED, -ShooterConstants.SHOOTER_SPEED);
+      setShooterVelocity(ShooterGlobalValues.SHOOTER_SPEED, -ShooterGlobalValues.SHOOTER_SPEED);
     } else {
       stopShooter();
     }
@@ -214,5 +221,14 @@ public class Shooter extends SubsystemBase {
   public void stopAllMotors() {
     stopShooter();
     stopKraken();
+  }
+
+  /**
+   * Gets the value of the ring sensor
+   * @param None
+   * @return boolean, ring sensor value
+   */
+  public boolean getRingSensor() {
+    return ringSensor.get();
   }
 }

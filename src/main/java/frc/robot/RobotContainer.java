@@ -6,20 +6,24 @@
 package frc.robot;
 
 import frc.robot.commands.AutoAlign;
+import frc.robot.commands.LimelightValues;
+import frc.robot.commands.LowerPivot;
 import frc.robot.commands.TeleOpAlign;
 import frc.robot.commands.ShootingSequence;
+import frc.robot.commands.SpinIntake;
 import frc.robot.commands.PadDrive;
+import frc.robot.commands.SetLED;
 import frc.robot.commands.ShooterRampUp;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Jevois;
+// import frc.robot.subsystems.Jevois;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.utils.Constants;
+import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.LogitechGamingPad;
-import frc.robot.utils.Constants.SwerveConstants;
+import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -48,7 +52,7 @@ public class RobotContainer {
   private final LogitechGamingPad opPad;
   private final LED led;
   private final Limelight limelety;
-  private final Jevois jevois;
+  // private final Jevois jevois;
   private final Pivot pivotyboi;
   private final Shooter shootyboi;
   private final Intake intakeyboi;
@@ -76,7 +80,7 @@ public class RobotContainer {
     opPad = new LogitechGamingPad(1);
     led = new LED();
     limelety = new Limelight();
-    jevois = new Jevois();
+    // jevois = new Jevois();
     pivotyboi = new Pivot();
     shootyboi = new Shooter();
     intakeyboi = new Intake();
@@ -107,9 +111,14 @@ public class RobotContainer {
     // 4 is rotation (clockwise is -) (accurate to +-0.5 a degree)
     // 5
 
-    NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem, limelety, led));
+    NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem));
     swerveSubsystem
-        .setDefaultCommand(new PadDrive(swerveSubsystem, pad, opPad, SwerveConstants.isFieldOriented, limelety, led, pivotyboi, shootyboi, intakeyboi));
+        .setDefaultCommand(new PadDrive(swerveSubsystem, pad, opPad, SwerveGlobalValues.isFieldOriented));
+
+    intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, opPad));
+    pivotyboi.setDefaultCommand(new LowerPivot(pivotyboi));
+    limelety.setDefaultCommand(new LimelightValues(limelety));
+    led.setDefaultCommand(new SetLED(led));
 
     // Configure auto chooser
     configureBindings();
@@ -133,8 +142,8 @@ public class RobotContainer {
     padA.onTrue(new InstantCommand(swerveSubsystem::addRotorPositionsforModules));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
     padY.onTrue(new InstantCommand(swerveSubsystem::newPose));
-    padX.whileTrue(new AutoAlign(swerveSubsystem, limelety, led));
-    opPadB.onTrue(new InstantCommand(shootyboi::toggleShooterVelocity));
+    padX.whileTrue(new TeleOpAlign(swerveSubsystem, pad));
+    // opPadB.onTrue(new InstantCommand(shootyboi::toggleShooterVelocity));
 
   }
 
@@ -150,7 +159,7 @@ public class RobotContainer {
     System.out.println(swerveSubsystem.getPose());
 
     // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
-    return new PathPlannerAuto("Full Auto");
+    return new PathPlannerAuto("Center Auto");
   }
 
 }

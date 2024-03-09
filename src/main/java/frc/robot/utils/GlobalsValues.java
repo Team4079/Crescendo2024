@@ -9,8 +9,6 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
@@ -26,15 +24,15 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
  * wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {
+public final class GlobalsValues {
   private static final String UTILITY_CLASS = "Utility class";
 
-  private Constants() {
+  private GlobalsValues() {
     throw new IllegalStateException(UTILITY_CLASS);
   }
 
-  public static class MotorConstants {
-    private MotorConstants() {
+  public static class MotorGlobalValues {
+    private MotorGlobalValues() {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
@@ -70,8 +68,8 @@ public final class Constants {
     public static boolean AACORN_MODE = true;
   }
 
-  public static class SwerveConstants {
-    private SwerveConstants() {
+  public static class SwerveGlobalValues {
+    private SwerveGlobalValues() {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
@@ -91,7 +89,8 @@ public final class Constants {
     // uselses
     public static final double STATE_SPEED_THRESHOLD = 0.05;
 
-    // The values of the can coders when the wheels are straight according to Mr. Wright
+    // The values of the can coders when the wheels are straight according to Mr.
+    // Wright
     public static final double CANCoderValue9 = 0.915283 + 0.5; // 0.9174805
     public static final double CANCoderValue10 = 0.327881; // 0.328613 + 0.5 add 0.5
     public static final double CANCoderValue11 = 0.979736 - 0.5; // 0.539794 - 0.5
@@ -99,7 +98,7 @@ public final class Constants {
 
     // THe deadband of the joystick to combat drift
     public static final double JOYSTICK_DEADBAND = 0.05;
-    
+
     public static final boolean usingVision = false;
     public static final boolean isFieldOriented = true;
 
@@ -113,7 +112,7 @@ public final class Constants {
     public static final int[] orangeLED = { 30, 255, 255 };
     public static final int[] redLED = { 0, 255, 255 };
 
-    public static class BasePIDConstants {
+    public static class BasePIDGlobal {
       // public static final PID STEER_PID = new PID(0.14, 0.00002, 0.008, 0);
       public static final PID STEER_PID = new PID(0.15, 0.0, 0, 0); // 0.05 P, 0 D
       public static final PID DRIVE_PID = new PID(0.15, 0.0, 0, 0);
@@ -122,11 +121,11 @@ public final class Constants {
       // AutoAlign PID
       public static final PID horizontalPID = new PID(0.05, 0.075, 0.03, 0);
       public static final PID verticalPID = new PID(0.25, 0.0085, 0.03);
-      public static final PID rotationalPID = new PID(0.05, 0.003, 0.003, 0);
+      public static final PID rotationalPID = new PID(0.1, 0.001, 0.03, 0);
 
       // path planner things
 
-      public static PIDController pathTranslationPID = new PIDController(0.15, 0.000, 0.00);
+      public static PIDController pathTranslationPID = new PIDController(0.3, 0.000, 0.00);
       public static PIDController pathRotationPID = new PIDController(2.0, 0.0, 0.0);
 
       public static HolonomicPathFollowerConfig pathFollower = new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig,
@@ -136,7 +135,7 @@ public final class Constants {
           new PIDConstants(0.15, 0.000, 0.00), // translation
           new PIDConstants(0, 0.0, 0.0), // rotation
           4.96824, // Max module speed, in m/s
-          SwerveConstants.robotSize, // Drive base radius in meters. Distance from robot center to furthest //
+          SwerveGlobalValues.robotSize, // Drive base radius in meters. Distance from robot center to furthest //
                                      // module.
           new ReplanningConfig(false, false)); // Default path replanning config. See the API for the options here
     }
@@ -145,8 +144,8 @@ public final class Constants {
     public static final double onBalanceAngleThreshold = 5;
   }
 
-  public static class IntakeConstants {
-    private IntakeConstants() {
+  public static class IntakeGlobalValues {
+    private IntakeGlobalValues() {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
@@ -154,8 +153,7 @@ public final class Constants {
 
     public static final int INTAKE_MOTOR_ID = 17;
 
-    public static final double INTAKE_SPEED = 4000;
-
+    public static final double INTAKE_SPEED = 1000;
 
     public static final double INTAKE_PID_V = 0.1;
     public static final double INTAKE_PID_P = 0.0002;
@@ -163,8 +161,8 @@ public final class Constants {
     public static final double INTAKE_PID_D = 0.0;
   }
 
-  public static class PivotConstants {
-    private PivotConstants() {
+  public static class PivotGlobalValues {
+    private PivotGlobalValues() {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
@@ -181,11 +179,16 @@ public final class Constants {
     public static final double PIVOT_PID_RIGHT_I = 0.0;
     public static final double PIVOT_PID_RIGHT_D = 0.0;
 
+    public static final double PIVOT_NEUTRAL_ANGLE = 0.0;
     public static final double PIVOT_AMP_ANGLE = 0.0;
+
+    public static boolean IS_NEUTRAL = true;
+
+    public static final int ENCODER_ID = 0;
   }
 
-  public static class ShooterConstants {
-    private ShooterConstants() {
+  public static class ShooterGlobalValues {
+    private ShooterGlobalValues() {
       throw new IllegalStateException(UTILITY_CLASS);
     }
 
@@ -194,19 +197,43 @@ public final class Constants {
 
     public static final int KRAKEN_ID = 105;
 
+    public static final double SHOOTER_PID_LEFT_V = 0.1;
     public static final double SHOOTER_PID_LEFT_P = 0.0002;
     public static final double SHOOTER_PID_LEFT_I = 0.0;
     public static final double SHOOTER_PID_LEFT_D = 0.0;
 
+    public static final double SHOOTER_PID_RIGHT_V = 0.1;
     public static final double SHOOTER_PID_RIGHT_P = 0.0002;
     public static final double SHOOTER_PID_RIGHT_I = 0.0;
     public static final double SHOOTER_PID_RIGHT_D = 0.0;
 
+    public static final double KARKEN_V = 0.1;
     public static final double KRAKEN_P = 0.0002;
     public static final double KRAKEN_I = 0.0;
     public static final double KRAKEN_D = 0.0;
 
     public static final double SHOOTER_SPEED = 6942.0;
     public static final double KRAKEN_SPEED = 6942.0;
+
+    public static boolean IS_SHOOTING = false;
+    public static boolean HAS_PIECE = false;
+
+    public static final int RING_SENSOR_ID = 6;
+  }
+
+  public static class LimelightGlobalValues {
+    private LimelightGlobalValues() {
+      throw new IllegalStateException(UTILITY_CLASS);
+    }
+
+    public static double tx = 0.0;
+    public static double ty = 0.0;
+    public static double ta = 0.0;
+    public static double tv = 0.0;
+
+    public static double[] robotPoseTargetSpace = new double[6];
+    public static double tagIDAvailable = 0.0;
+
+    public static boolean hasTarget = false;
   }
 }

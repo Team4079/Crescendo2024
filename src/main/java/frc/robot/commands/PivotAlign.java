@@ -4,28 +4,25 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
+// import frc.robot.utils.GlobalsValues.LimelightValues;
 
 public class PivotAlign extends Command {
 
-  private Pivot pivot;
-  // Get distance when after we mount the limelight
-  private Limelight limelety;
-  private double[] llValues;
-  private double setPoint;
-  private double deadband;
-  private double timeout;
+  // private Pivot pivot;
+  // // Get distance when after we mount the limelight
+  // private double[] llValues;
+  // private double setPoint;
+  // private double deadband;
+  // private double timeout;
 
   /** Creates a new Shoot. */
-  public PivotAlign(Pivot pivot, Limelight limelety) {
-    this.limelety = limelety;
-    this.pivot = pivot;
-    deadband = 0.5;
-    timeout = 0;
-    addRequirements(pivot, limelety);
+  public PivotAlign(Pivot pivot) {
+    // this.pivot = pivot;
+    // deadband = 0.5;
+    // timeout = 0;
+    // addRequirements(pivot);
   }
 
   // Called when the command is initially scheduled.
@@ -35,22 +32,21 @@ public class PivotAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    llValues = limelety.getRobotPose_TargetSpace2D();
-    SmartDashboard.putNumber(getName(), 69);
+    // llValues = LimelightValues.robotPoseTargetSpace;
 
     // change later
-    setPoint = pivot.shootPos(llValues[2]);
+  //   setPoint = pivot.shootPos(llValues[2]);
 
-    pivot.setPosition(setPoint, setPoint);
+  //   pivot.setMotorPosition(setPoint, setPoint);
 
-    if (Math.abs(setPoint - pivot.getPivotPos()) < deadband)
-    {
-      timeout++;
-    }
-    else
-    {
-      timeout = 0;
-    }
+  //   if (Math.abs(setPoint - pivot.getPivotPos()) < deadband)
+  //   {
+  //     timeout++;
+  //   }
+  //   else
+  //   {
+  //     timeout = 0;
+  //   }
   }
 
   // Called once the command ends or is interrupted.
@@ -62,10 +58,10 @@ public class PivotAlign extends Command {
   @Override
   public boolean isFinished() {
 
-    if (timeout == 10)
-    {
-      return true;
-    }
+    // if (timeout == 10)
+    // {
+    //   return true;
+    // }
     
 
     
