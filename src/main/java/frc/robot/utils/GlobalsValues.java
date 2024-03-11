@@ -152,7 +152,7 @@ public final class GlobalsValues {
 
     public static final int INTAKE_MOTOR_ID = 17;
 
-    public static final double INTAKE_SPEED = 1000;
+    public static final double INTAKE_SPEED = 50;
 
     // Intake PID Values
     public static final double INTAKE_PID_V = 0.1;
@@ -219,13 +219,11 @@ public final class GlobalsValues {
     public static final double KRAKEN_I = 0.0;
     public static final double KRAKEN_D = 0.0;
 
-
     // Shooter Motor Speed Values
     public static final double SHOOTER_SPEED = 6942.0;
     public static final double KRAKEN_SPEED = 6942.0;
 
     // Shooter Misc Values
-    public static boolean IS_SHOOTING = false;
     public static boolean HAS_PIECE = false;
 
     public static final int RING_SENSOR_ID = 6;

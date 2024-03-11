@@ -88,6 +88,38 @@ public class LogitechGamingPad extends GenericHID {
     return gamepad.getRawButton(START_BUTTON);
   }
 
+  public boolean getXReleased() {
+    return gamepad.getRawButtonReleased(X_BUTTON);
+  }
+
+  public boolean getYReleased() {
+    return gamepad.getRawButtonReleased(Y_BUTTON);
+  }
+
+  public boolean getBReleased() {
+    return gamepad.getRawButtonReleased(B_BUTTON);
+  }
+
+  public boolean getAReleased() {
+    return gamepad.getRawButtonReleased(A_BUTTON);
+  }
+
+  public boolean getBackButtonReleased() {
+    return gamepad.getRawButtonReleased(BACK_BUTTON);
+  }
+
+  public boolean getStartButtonReleased() {
+    return gamepad.getRawButtonReleased(START_BUTTON);
+  }
+
+  public boolean getLeftBumperReleased() {
+    return gamepad.getRawButtonReleased(LEFT_BUMPER);
+  }
+
+  public boolean getRightBumperReleased() {
+    return gamepad.getRawButtonReleased(RIGHT_BUMPER);
+  }
+
   public boolean checkDPad(int index) {
     if (0 <= index && index <= 7)
       return (index * 45) == gamepad.getPOV();
