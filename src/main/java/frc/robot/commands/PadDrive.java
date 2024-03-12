@@ -16,17 +16,14 @@ public class PadDrive extends Command {
   private final SwerveSubsystem swerveSubsystem;
   private final boolean isFieldOriented;
   private final LogitechGamingPad pad;
-  // private final LogitechGamingPad opPad;
 
   /** Creates a new SwerveJoystick. */
   public PadDrive(SwerveSubsystem swerveSubsystem,
       LogitechGamingPad pad,
-      LogitechGamingPad opPad,
       boolean isFieldOriented) {
     this.swerveSubsystem = swerveSubsystem;
     this.pad = pad;
     this.isFieldOriented = isFieldOriented;
-    // this.opPad = opPad;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(this.swerveSubsystem);

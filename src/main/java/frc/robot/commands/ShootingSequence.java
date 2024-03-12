@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Pivot;
@@ -27,8 +28,8 @@ public class ShootingSequence extends SequentialCommandGroup {
             new AutoAlign(subsystem),
             new PivotAlign(pivot),
             new ShooterRampUp(shooter)),
-        new ShooterRampUp(shooter).withTimeout(1)
-    // new InstantCommand(shooter::stopAllMotors)
+        new ShooterRampUp(shooter).withTimeout(1),
+    new InstantCommand(shooter::stopAllMotors)
     );
   }
 }

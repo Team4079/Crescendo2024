@@ -11,8 +11,11 @@ import frc.robot.commands.LowerPivot;
 import frc.robot.commands.TeleOpAlign;
 import frc.robot.commands.ShootingSequence;
 import frc.robot.commands.SpinIntake;
+import frc.robot.commands.StartIntake;
+import frc.robot.commands.StopIntake;
 import frc.robot.commands.PadDrive;
 import frc.robot.commands.SetLED;
+import frc.robot.commands.ShooterRampDown;
 import frc.robot.commands.ShooterRampUp;
 import frc.robot.subsystems.Intake;
 // import frc.robot.subsystems.Jevois;
@@ -112,8 +115,10 @@ public class RobotContainer {
     // 5
 
     NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem));
+    NamedCommands.registerCommand("startIntake", new StartIntake(intakeyboi));
+    NamedCommands.registerCommand("stopIntake", new StopIntake(intakeyboi));
     swerveSubsystem
-        .setDefaultCommand(new PadDrive(swerveSubsystem, pad, opPad, SwerveGlobalValues.isFieldOriented));
+        .setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveGlobalValues.isFieldOriented));
 
     intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, opPad));
     // pivotyboi.setDefaultCommand(new LowerPivot(pivotyboi));
@@ -143,7 +148,9 @@ public class RobotContainer {
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
     padY.onTrue(new InstantCommand(swerveSubsystem::newPose));
     padX.whileTrue(new TeleOpAlign(swerveSubsystem, pad));
-    // opPadB.onTrue(new InstantCommand(shootyboi::toggleShooterVelocity));
+    opPadA.onTrue(new ShooterRampUp(shootyboi));
+    opPadB.onTrue(new ShooterRampDown(shootyboi));
+    opPadX.onTrue(new InstantCommand(shootyboi::toggleShooterVelocity));
   }
 
   /**

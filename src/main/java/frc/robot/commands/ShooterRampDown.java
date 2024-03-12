@@ -4,22 +4,15 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Shooter;
-// import frc.robot.utils.GlobalsValues.ShooterConstants;
-// import frc.robot.utils.GlobalsValues;
-// import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
-import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
-public class ShooterRampUp extends Command {
-
-  private double deadband;
+public class ShooterRampDown extends InstantCommand {
 
   private Shooter shooter;
 
   /** Creates a new Shoot. */
-  public ShooterRampUp(Shooter shooter) {
-    deadband = 5;
+  public ShooterRampDown(Shooter shooter) {
     this.shooter = shooter;
     addRequirements(shooter);
   }
@@ -27,7 +20,7 @@ public class ShooterRampUp extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setShooterVelocity(ShooterGlobalValues.SHOOTER_SPEED, -ShooterGlobalValues.SHOOTER_SPEED);
+    shooter.stopShooter();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -44,10 +37,6 @@ public class ShooterRampUp extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(shooter.getLeftShooterVelocity() - ShooterGlobalValues.SHOOTER_SPEED) < deadband)
-    {
-      return true;
-    }
     return false;
   }
 }

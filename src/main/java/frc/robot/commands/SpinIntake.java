@@ -49,7 +49,7 @@ public class SpinIntake extends Command {
   public void end(boolean interrupted) {
     intake.stopKraken();
   }
-
+  
   /** Returns true when the command should end. */
   @Override
   public boolean isFinished() {

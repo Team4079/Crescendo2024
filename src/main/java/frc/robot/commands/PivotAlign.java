@@ -6,24 +6,24 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Pivot;
-// import frc.robot.utils.GlobalsValues.LimelightValues;
+import frc.robot.utils.GlobalsValues.LimelightGlobalValues;
 
 /** The {@link PivotAlign} class is a command that aligns the pivot to the target. */
 public class PivotAlign extends Command {
 
-  // private Pivot pivot;
+  private Pivot pivot;
   // // Get distance when after we mount the limelight
-  // private double[] llValues;
-  // private double setPoint;
-  // private double deadband;
-  // private double timeout;
+  private double[] llValues;
+  private double setPoint;
+  private double deadband;
+  private double timeout;
 
   /** Creates a new Shoot. */
   public PivotAlign(Pivot pivot) {
-    // this.pivot = pivot;
-    // deadband = 0.5;
-    // timeout = 0;
-    // addRequirements(pivot);
+    this.pivot = pivot;
+    deadband = 0.5;
+    timeout = 0;
+    addRequirements(pivot);
   }
 
   // Called when the command is initially scheduled.
@@ -33,21 +33,20 @@ public class PivotAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // llValues = LimelightValues.robotPoseTargetSpace;
+    llValues = LimelightGlobalValues.robotPoseTargetSpace;
 
-    // change later
-  //   setPoint = pivot.shootPos(llValues[2]);
+    setPoint = pivot.shootPos(llValues[2]);
 
-    // pivot.setMotorPosition(135, 135); // yessica noted
+    pivot.setMotorPosition(pivot.shootPos(setPoint), pivot.shootPos(setPoint)); // yessica noted
 
-  //   if (Math.abs(setPoint - pivot.getPivotPos()) < deadband)
-  //   {
-  //     timeout++;
-  //   }
-  //   else
-  //   {
-  //     timeout = 0;
-  //   }
+    if (Math.abs(setPoint - pivot.getPivotPos()) < deadband)
+    {
+      timeout++;
+    }
+    else
+    {
+      timeout = 0;
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -57,10 +56,10 @@ public class PivotAlign extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // if (timeout == 10)
-    // {
-    //   return true;
-    // }
+    if (timeout == 10)
+    {
+      return true;
+    }
     return false;
   }
 }
