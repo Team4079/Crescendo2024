@@ -21,15 +21,13 @@ import frc.robot.utils.LimelightHelpers;
 public class Limelight extends SubsystemBase {
   /** Creates a new Limelight. */
   private final NetworkTable m_limelightTable;
-  LimelightHelpers.LimelightResults llresults;
-  double tv, tx, ty, ta, ts = 0.0;
+  private LimelightHelpers.LimelightResults llresults;
+  private double tv, tx, ty, ta = 0.0;
   private Pose2d robotPose_FieldSpace;
 
   private double[] robotPoseTargetSpace;
 
   private Field2d field = new Field2d();
-
-  
 
   public Limelight() {
     m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight");

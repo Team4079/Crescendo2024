@@ -11,7 +11,7 @@ import frc.robot.utils.GlobalsValues.LimelightGlobalValues;
 /** The {@link LimelightValues} class is a command that gets the values from the limelight. */
 public class LimelightValues extends Command {
   /** Creates a new LimelightGlobalValues. */
-  Limelight limelety;
+  private Limelight limelety;
 
   public LimelightValues(Limelight limelight) {
     this.limelety = limelight;

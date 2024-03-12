@@ -11,7 +11,7 @@ import frc.robot.subsystems.Intake;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class StopIntake extends InstantCommand {
-  Intake intake; 
+  private Intake intake; 
 
   public StopIntake(Intake intake) {
     this.intake = intake;

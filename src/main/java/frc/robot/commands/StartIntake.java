@@ -12,7 +12,7 @@ import frc.robot.utils.GlobalsValues.IntakeGlobalValues;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class StartIntake extends InstantCommand {
-  Intake intake; 
+  private Intake intake; 
 
   public StartIntake(Intake intake) {
     this.intake = intake;
