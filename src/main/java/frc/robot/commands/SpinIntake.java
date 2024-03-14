@@ -4,42 +4,54 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import frc.robot.utils.LogitechGamingPad;
 import frc.robot.utils.GlobalsValues.IntakeGlobalValues;
 // import frc.robot.utils.GlobalsValues.PivotGlobalValues;
+import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
 public class SpinIntake extends Command {
   /** Creates a new SpinIntake. */
   private Intake intake;
+  private Shooter shooter;
   private LogitechGamingPad opPad;
-  private boolean shouldSpin;
+  private Timer timer;
 
-  public SpinIntake(Intake intake, LogitechGamingPad opPad) {
+  public SpinIntake(Intake intake, Shooter shooter, LogitechGamingPad opPad) {
     this.intake = intake;
+    this.shooter = shooter;
     this.opPad = opPad;
-
+    timer = new Timer();
     addRequirements(intake);
   }
 
   /** Called when the command is initially scheduled. */
   @Override
   public void initialize() {
-    shouldSpin = true;
   }
 
   /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
-    if (opPad.getXReleased()) {
-      shouldSpin = !shouldSpin;
-    }
-
-    if (shouldSpin) { //  && !ShooterGlobalValues.HAS_PIECE
+    if (!ShooterGlobalValues.HAS_PIECE) {
       intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
+      shooter.setKrakenVelocity(ShooterGlobalValues.PASSTHROUGH_RPS);
+      timer.reset();
     } else {
-      intake.stopKraken();
+      if (!opPad.getBReleased()) {
+        timer.start();
+        while (timer.get() < 0.075) {
+          shooter.setShooterVelocity(6, 6);
+          shooter.setKrakenVelocity(20);
+        }
+        
+        shooter.stopKraken();
+        intake.stopKraken();
+        timer.stop();
+      }
     }
   }
 
@@ -48,7 +60,7 @@ public class SpinIntake extends Command {
   public void end(boolean interrupted) {
     intake.stopKraken();
   }
-  
+
   /** Returns true when the command should end. */
   @Override
   public boolean isFinished() {

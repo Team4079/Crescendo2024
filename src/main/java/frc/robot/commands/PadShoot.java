@@ -28,8 +28,10 @@ public class PadShoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (opPad.getRightTriggerValue() > ShooterGlobalValues.SHOOTING_DEADBAND) {
-      shooter.setKrakenVelocity(ShooterGlobalValues.THROUGH_SPEED);
+    if (opPad.getBReleased()) {
+      shooter.setShooterVelocity(ShooterGlobalValues.PASSTHROUGH_RPS, ShooterGlobalValues.PASSTHROUGH_RPS);
+    } else {
+      shooter.stopShooter();
     }
   }
 

@@ -57,7 +57,7 @@ public class Shooter extends SubsystemBase {
     rightFalcon = new TalonFX(ShooterGlobalValues.FALCON_RIGHT_ID);
     passthroughKraken = new TalonFX(ShooterGlobalValues.KRAKEN_ID);
 
-    ringSensor = new DigitalInput(ShooterGlobalValues.RING_SENSOR_ID);
+    ringSensor = new DigitalInput(ShooterGlobalValues.RING_SENSOR_PORT);
     
     shooterConfigs = new MotorOutputConfigs();
 
@@ -137,9 +137,9 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Left Shooter Velocity", leftFalcon.getRotorVelocity().getValue());
     SmartDashboard.putNumber("Right Shooter Velocity", rightFalcon.getRotorVelocity().getValue());
     SmartDashboard.putNumber("Kraken Velocity", passthroughKraken.getRotorVelocity().getValue());
-    // ShooterGlobalValues.HAS_PIECE = getRingSensor();
+    ShooterGlobalValues.HAS_PIECE = getRingSensor();
 
-    setKrakenVelocity(-25);
+    // setKrakenVelocity(-25);
     // setShooterVelocity(-70, -70);
   }
 
@@ -245,9 +245,10 @@ public class Shooter extends SubsystemBase {
    * Gets the value of the ring sensor
    * 
    * @param void
-   * @return boolean, ring sensor value
+   * @return boolean, ring sensor value, default false
    */
   public boolean getRingSensor() {
-    return ringSensor.get();
+    SmartDashboard.putBoolean("sensor boolean", !ringSensor.get());
+    return !ringSensor.get();
   }
 }

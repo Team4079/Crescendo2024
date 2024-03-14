@@ -17,6 +17,7 @@ import frc.robot.commands.PadDrive;
 import frc.robot.commands.PadPivot;
 import frc.robot.commands.PadShoot;
 import frc.robot.commands.SetLED;
+import frc.robot.commands.ShootRing;
 import frc.robot.commands.ShooterRampDown;
 import frc.robot.commands.ShooterRampUp;
 import frc.robot.subsystems.Intake;
@@ -80,7 +81,6 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-
     pad = new LogitechGamingPad(0);
     opPad = new LogitechGamingPad(1);
     led = new LED();
@@ -119,13 +119,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem));
     NamedCommands.registerCommand("startIntake", new StartIntake(intakeyboi));
     NamedCommands.registerCommand("stopIntake", new StopIntake(intakeyboi));
-    swerveSubsystem
-        .setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveGlobalValues.isFieldOriented));
-
-    intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, opPad));
+    swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveGlobalValues.isFieldOriented));
+    led.setDefaultCommand(new SetLED(led));
+    intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, opPad));
     pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, opPad));
     limelety.setDefaultCommand(new LimelightValues(limelety));
-    led.setDefaultCommand(new SetLED(led));
     shootyboi.setDefaultCommand(new PadShoot(shootyboi, opPad));
 
     // Configure auto chooser
@@ -152,7 +150,7 @@ public class RobotContainer {
     padY.onTrue(new InstantCommand(swerveSubsystem::newPose));
     padX.whileTrue(new TeleOpAlign(swerveSubsystem, pad));
 
-    opPadB.onTrue(new ShooterRampUp(shootyboi));
+    opPadB.whileTrue(new ShootRing(shootyboi));
     opPadA.onTrue(new ShooterRampDown(shootyboi));
     // Shoot command for Ria
     opPadY.onTrue(new InstantCommand(shootyboi::toggleShooterVelocity));
@@ -160,6 +158,7 @@ public class RobotContainer {
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
+   * 
    * @param void
    * @return the command to run in autonomous
    */
@@ -170,7 +169,7 @@ public class RobotContainer {
     System.out.println(swerveSubsystem.getPose());
 
     // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
-    return new PathPlannerAuto("Center Auto");
+    return new PathPlannerAuto(SwerveGlobalValues.autoNamePath);
   }
 
 }

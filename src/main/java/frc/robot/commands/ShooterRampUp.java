@@ -28,7 +28,7 @@ public class ShooterRampUp extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setShooterVelocity(ShooterGlobalValues.SHOOTER_SPEED, -ShooterGlobalValues.SHOOTER_SPEED);
+    shooter.setShooterVelocity(-ShooterGlobalValues.SHOOTER_SPEED, -ShooterGlobalValues.SHOOTER_SPEED);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

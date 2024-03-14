@@ -13,9 +13,6 @@ public class ResetPivot extends Command {
 
   private Pivot pivot;
   // Get distance when after we mount the limelight
-  private double setPoint;
-  private double deadband;
-  private double timeout;
 
   /** Creates a new Shoot. */
   public ResetPivot(Pivot pivot) {

@@ -2,25 +2,43 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 
 /**
  * The {@link LED} class includes all the methods to control the LEDs.
  */
 public class LED extends SubsystemBase {
-  private AddressableLED m_led;
-  private AddressableLEDBuffer m_ledBuffer;
+  // private AddressableLED alignmentIndication1;
+  private AddressableLED alignmentIndication2;
+
+  // private AddressableLEDBuffer ledBuffer1;
+  private AddressableLEDBuffer ledBuffer2;
 
   public LED() {
-    m_led = new AddressableLED(5);
-    m_ledBuffer = new AddressableLEDBuffer(60);
-    m_led.setLength(m_ledBuffer.getLength());
-    m_led.setData(m_ledBuffer);
-    m_led.start();
+    // alignmentIndication1 = new AddressableLED(6); // 6 and 7
+    alignmentIndication2 = new AddressableLED(6);
+
+    // ledBuffer1 = new AddressableLEDBuffer(21);
+    ledBuffer2 = new AddressableLEDBuffer(21);
+
+    // alignmentIndication1.setLength(ledBuffer1.getLength());
+    alignmentIndication2.setLength(ledBuffer2.getLength());
+
+    // alignmentIndication1.setData(ledBuffer1);
+    alignmentIndication2.setData(ledBuffer2);
+
+    // alignmentIndication1.start();
+    alignmentIndication2.start();
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    if (RobotState.isDisabled()) {
+      rainbow(SwerveGlobalValues.hightideLED[0], SwerveGlobalValues.hightideLED[1], SwerveGlobalValues.hightideLED[2]);
+    }
+  }
 
   /**
    * Sets the color for each of the LEDs based on HSV values
@@ -32,9 +50,11 @@ public class LED extends SubsystemBase {
    */
   public void rainbow(int h, int s, int v) {
     // rainbowOn = true;
-    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
-      m_ledBuffer.setHSV(i, h, s, v);
+    for (int i = 0; i < ledBuffer2.getLength(); i++) {
+      // ledBuffer1.setHSV(i, h, s, v);
+      ledBuffer2.setRGB(i, h, s, v);
     }
-    m_led.setData(m_ledBuffer);
+    // alignmentIndication1.setData(ledBuffer1);
+    alignmentIndication2.setData(ledBuffer2);
   }
 }

@@ -107,9 +107,10 @@ public final class GlobalsValues {
 
     public static final double DEADBAND = 0.08;
 
+    // HSV Values for LED
     public static final int[] greenLED = { 60, 255, 255 };
     public static final int[] orangeLED = { 30, 255, 255 };
-    public static final int[] redLED = { 0, 255, 255 };
+    public static final int[] hightideLED = { 0, 200, 100 };
 
     public static class BasePIDGlobal {
       // public static final PID STEER_PID = new PID(0.14, 0.00002, 0.008, 0);
@@ -140,6 +141,9 @@ public final class GlobalsValues {
 
     public static final double offBalanceAngleThreshold = 10;
     public static final double onBalanceAngleThreshold = 5;
+
+    // Auto Path Name
+    public static final String autoNamePath = "Center Auto";
   }
 
   public static class IntakeGlobalValues {
@@ -192,8 +196,6 @@ public final class GlobalsValues {
     // Pivot Motor Speed Values
     public static boolean IS_NEUTRAL = true;
 
-    // 
-
     // Pivot Motor Encoder ID
     public static final int ENCODER_ID = 8;
   }
@@ -210,33 +212,35 @@ public final class GlobalsValues {
     public static final int KRAKEN_ID = 20;
 
     // Shooter PID Values
-    public static final double SHOOTER_PID_LEFT_V = 0.1;
     public static final double SHOOTER_PID_LEFT_P = 0.0002;
     public static final double SHOOTER_PID_LEFT_I = 0.0;
     public static final double SHOOTER_PID_LEFT_D = 0.0;
+    public static final double SHOOTER_PID_LEFT_V = 0.1;
 
-    public static final double SHOOTER_PID_RIGHT_V = 0.1;
     public static final double SHOOTER_PID_RIGHT_P = 0.0002;
     public static final double SHOOTER_PID_RIGHT_I = 0.0;
     public static final double SHOOTER_PID_RIGHT_D = 0.0;
+    public static final double SHOOTER_PID_RIGHT_V = 0.1;
 
-    public static final double KRAKEN_V = 0.1;
     public static final double KRAKEN_P = 0.0002;
     public static final double KRAKEN_I = 0.0;
     public static final double KRAKEN_D = 0.0;
+    public static final double KRAKEN_V = 0.1;
 
     // Shooter Motor Speed Values
-    public static final double SHOOTER_SPEED = 6942.0;
-    public static final double KRAKEN_SPEED = 6942.0;
+    public static final double SHOOTER_SPEED = 50.0;
+    public static final double KRAKEN_SPEED = 15.0;
+
+    // Shooter Motor Speeds
+    public static final double SHOOTER_RPS = -40.0; // Positive is shooting, negative is intake
+    public static final double PASSTHROUGH_RPS = -30.0; // Positive is shooting, negative is intake
 
     // Shooter Misc Values
     public static boolean HAS_PIECE = false;
     public static double SHOOTING_DEADBAND = 0.3;
     public static double RPM_THRESHOLD = 50;
 
-    public static double THROUGH_SPEED = 0.3;
-
-    public static final int RING_SENSOR_ID = 6;
+    public static final int RING_SENSOR_PORT = 8;
   }
 
   public static class LimelightGlobalValues {
