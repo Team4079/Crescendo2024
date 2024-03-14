@@ -128,7 +128,8 @@ public class Pivot extends SubsystemBase {
   // This method will be called once per scheduler run
   @Override
   public void periodic() {
-
+    // 0.545533063638327 High limit before 2048 mulitplier
+    // 0.201015130025378 Low limit before 2048 multiplier
     // absPos = absoluteEncoder.getPosition();
 
     SmartDashboard.putNumber("Absolute Encoder Position", getAbsoluteEncoder());
