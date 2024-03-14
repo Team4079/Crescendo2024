@@ -14,7 +14,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShootingSequence extends SequentialCommandGroup {
-  /** Creates a new TeleOpShoot. */
+  /** Creates a new AutoSequence. */
   private SwerveSubsystem subsystem;
   private Pivot pivot;
   private Shooter shooter;
@@ -29,6 +29,7 @@ public class ShootingSequence extends SequentialCommandGroup {
             new PivotAlign(pivot),
             new ShooterRampUp(shooter)),
         new ShooterRampUp(shooter).withTimeout(1),
+        new PushRing(shootyboi),
     new InstantCommand(shooter::stopAllMotors)
     );
   }

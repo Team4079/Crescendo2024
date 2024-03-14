@@ -14,6 +14,8 @@ import frc.robot.commands.SpinIntake;
 import frc.robot.commands.StartIntake;
 import frc.robot.commands.StopIntake;
 import frc.robot.commands.PadDrive;
+import frc.robot.commands.PadPivot;
+import frc.robot.commands.PadShoot;
 import frc.robot.commands.SetLED;
 import frc.robot.commands.ShooterRampDown;
 import frc.robot.commands.ShooterRampUp;
@@ -121,9 +123,10 @@ public class RobotContainer {
         .setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveGlobalValues.isFieldOriented));
 
     intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, opPad));
-    // pivotyboi.setDefaultCommand(new LowerPivot(pivotyboi));
+    pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, opPad));
     limelety.setDefaultCommand(new LimelightValues(limelety));
     led.setDefaultCommand(new SetLED(led));
+    shootyboi.setDefaultCommand(new PadShoot(shootyboi, opPad));
 
     // Configure auto chooser
     configureBindings();
@@ -148,9 +151,11 @@ public class RobotContainer {
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
     padY.onTrue(new InstantCommand(swerveSubsystem::newPose));
     padX.whileTrue(new TeleOpAlign(swerveSubsystem, pad));
-    opPadA.onTrue(new ShooterRampUp(shootyboi));
-    opPadB.onTrue(new ShooterRampDown(shootyboi));
-    opPadX.onTrue(new InstantCommand(shootyboi::toggleShooterVelocity));
+
+    opPadB.onTrue(new ShooterRampUp(shootyboi));
+    opPadA.onTrue(new ShooterRampDown(shootyboi));
+    // Shoot command for Ria
+    opPadY.onTrue(new InstantCommand(shootyboi::toggleShooterVelocity));
   }
 
   /**

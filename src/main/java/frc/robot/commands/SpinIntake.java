@@ -9,7 +9,6 @@ import frc.robot.subsystems.Intake;
 import frc.robot.utils.LogitechGamingPad;
 import frc.robot.utils.GlobalsValues.IntakeGlobalValues;
 // import frc.robot.utils.GlobalsValues.PivotGlobalValues;
-import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
 public class SpinIntake extends Command {
   /** Creates a new SpinIntake. */
@@ -37,7 +36,7 @@ public class SpinIntake extends Command {
       shouldSpin = !shouldSpin;
     }
 
-    if (shouldSpin && !ShooterGlobalValues.HAS_PIECE) {
+    if (shouldSpin) { //  && !ShooterGlobalValues.HAS_PIECE
       intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
     } else {
       intake.stopKraken();

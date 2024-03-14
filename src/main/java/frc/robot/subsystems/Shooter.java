@@ -26,25 +26,25 @@ public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
   private TalonFX leftFalcon;
   private TalonFX rightFalcon;
-  private TalonFX kraken;
+  private TalonFX passthroughKraken;
 
   private TalonFXConfigurator leftShootConfigurator;
   private TalonFXConfigurator rightShootConfigurator;
-  private TalonFXConfigurator krakenConfigurator;
+  private TalonFXConfigurator passthroughKrakenConfigurator;
 
   private Slot0Configs leftShootConfigs;
   private Slot0Configs rightShootConfigs;
-  private Slot0Configs krakenConfigs;
+  private Slot0Configs passthroughKrakenConfigs;
 
   private MotorOutputConfigs shooterConfigs;
 
   private CurrentLimitsConfigs leftShootCurrentConfig;
   private CurrentLimitsConfigs rightShootCurrentConfig;
-  private CurrentLimitsConfigs krakenCurrentConfig;
+  private CurrentLimitsConfigs passthroughKrakenCurrentConfig;
 
   private ClosedLoopRampsConfigs leftShootRampConfig;
   private ClosedLoopRampsConfigs rightShootRampConfig;
-  private ClosedLoopRampsConfigs krakenRampConfig;
+  private ClosedLoopRampsConfigs passthroughKrakenRampConfig;
 
   private VelocityVoltage m_request;
 
@@ -55,52 +55,55 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     leftFalcon = new TalonFX(ShooterGlobalValues.FALCON_LEFT_ID);
     rightFalcon = new TalonFX(ShooterGlobalValues.FALCON_RIGHT_ID);
-    kraken = new TalonFX(ShooterGlobalValues.KRAKEN_ID);
+    passthroughKraken = new TalonFX(ShooterGlobalValues.KRAKEN_ID);
 
     ringSensor = new DigitalInput(ShooterGlobalValues.RING_SENSOR_ID);
-
+    
     shooterConfigs = new MotorOutputConfigs();
 
     leftShootConfigurator = leftFalcon.getConfigurator();
     rightShootConfigurator = rightFalcon.getConfigurator();
-    krakenConfigurator = kraken.getConfigurator();
+    passthroughKrakenConfigurator = passthroughKraken.getConfigurator();
 
     leftShootConfigs = new Slot0Configs();
     rightShootConfigs = new Slot0Configs();
-    krakenConfigs = new Slot0Configs();
+    passthroughKrakenConfigs = new Slot0Configs();
 
     leftFalcon.getConfigurator().apply(new TalonFXConfiguration());
     rightFalcon.getConfigurator().apply(new TalonFXConfiguration());
-    kraken.getConfigurator().apply(new TalonFXConfiguration());
+    passthroughKraken.getConfigurator().apply(new TalonFXConfiguration());
 
     shooterConfigs.NeutralMode = NeutralModeValue.Brake;
     leftShootConfigurator.apply(shooterConfigs);
     rightShootConfigurator.apply(shooterConfigs);
-    krakenConfigurator.apply(shooterConfigs);
+    passthroughKrakenConfigurator.apply(shooterConfigs);
 
     leftShootConfigs.kP = ShooterGlobalValues.SHOOTER_PID_LEFT_P;
     leftShootConfigs.kI = ShooterGlobalValues.SHOOTER_PID_LEFT_I;
     leftShootConfigs.kD = ShooterGlobalValues.SHOOTER_PID_LEFT_D;
+    leftShootConfigs.kV = ShooterGlobalValues.SHOOTER_PID_LEFT_V;
 
     rightShootConfigs.kP = ShooterGlobalValues.SHOOTER_PID_RIGHT_P;
     rightShootConfigs.kI = ShooterGlobalValues.SHOOTER_PID_RIGHT_I;
     rightShootConfigs.kD = ShooterGlobalValues.SHOOTER_PID_RIGHT_D;
+    rightShootConfigs.kV = ShooterGlobalValues.SHOOTER_PID_RIGHT_V;
 
-    krakenConfigs.kP = ShooterGlobalValues.KRAKEN_P;
-    krakenConfigs.kI = ShooterGlobalValues.KRAKEN_I;
-    krakenConfigs.kD = ShooterGlobalValues.KRAKEN_D;
+    passthroughKrakenConfigs.kP = ShooterGlobalValues.KRAKEN_P;
+    passthroughKrakenConfigs.kI = ShooterGlobalValues.KRAKEN_I;
+    passthroughKrakenConfigs.kD = ShooterGlobalValues.KRAKEN_D;
+    passthroughKrakenConfigs.kV = ShooterGlobalValues.KRAKEN_V;
 
     leftFalcon.getConfigurator().apply(leftShootConfigs);
     rightFalcon.getConfigurator().apply(rightShootConfigs);
-    kraken.getConfigurator().apply(krakenConfigs);
+    passthroughKraken.getConfigurator().apply(passthroughKrakenConfigs);
 
     leftShootCurrentConfig = new CurrentLimitsConfigs();
     rightShootCurrentConfig = new CurrentLimitsConfigs();
-    krakenCurrentConfig = new CurrentLimitsConfigs();
+    passthroughKrakenCurrentConfig = new CurrentLimitsConfigs();
 
     leftShootRampConfig = new ClosedLoopRampsConfigs();
     rightShootRampConfig = new ClosedLoopRampsConfigs();
-    krakenRampConfig = new ClosedLoopRampsConfigs();
+    passthroughKrakenRampConfig = new ClosedLoopRampsConfigs();
 
     leftShootCurrentConfig.SupplyCurrentLimit = 100;
     leftShootCurrentConfig.StatorCurrentLimit = 100;
@@ -108,22 +111,24 @@ public class Shooter extends SubsystemBase {
     rightShootCurrentConfig.SupplyCurrentLimit = 100;
     rightShootCurrentConfig.StatorCurrentLimit = 100;
 
-    krakenCurrentConfig.SupplyCurrentLimit = 100;
-    krakenCurrentConfig.StatorCurrentLimit = 100;
+    passthroughKrakenCurrentConfig.SupplyCurrentLimit = 100;
+    passthroughKrakenCurrentConfig.StatorCurrentLimit = 100;
 
     leftFalcon.getConfigurator().apply(leftShootCurrentConfig);
     rightFalcon.getConfigurator().apply(rightShootCurrentConfig);
-    kraken.getConfigurator().apply(krakenCurrentConfig);
+    passthroughKraken.getConfigurator().apply(passthroughKrakenCurrentConfig);
 
     leftShootRampConfig.DutyCycleClosedLoopRampPeriod = 0.1;
     rightShootRampConfig.DutyCycleClosedLoopRampPeriod = 0.1;
-    krakenRampConfig.DutyCycleClosedLoopRampPeriod = 0.1;
+    passthroughKrakenRampConfig.DutyCycleClosedLoopRampPeriod = 0.1;
 
     leftFalcon.getConfigurator().apply(leftShootRampConfig);
     rightFalcon.getConfigurator().apply(rightShootRampConfig);
-    kraken.getConfigurator().apply(krakenRampConfig);
+    passthroughKraken.getConfigurator().apply(passthroughKrakenRampConfig);
 
     toggleShooter = false;
+
+    m_request = new VelocityVoltage(0);
   }
 
   // This method will be called once per scheduler run
@@ -131,15 +136,18 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Left Shooter Velocity", leftFalcon.getRotorVelocity().getValue());
     SmartDashboard.putNumber("Right Shooter Velocity", rightFalcon.getRotorVelocity().getValue());
-    SmartDashboard.putNumber("Kraken Velocity", kraken.getRotorVelocity().getValue());
-    ShooterGlobalValues.HAS_PIECE = getRingSensor();
+    SmartDashboard.putNumber("Kraken Velocity", passthroughKraken.getRotorVelocity().getValue());
+    // ShooterGlobalValues.HAS_PIECE = getRingSensor();
+
+    setKrakenVelocity(-25);
+    // setShooterVelocity(-70, -70);
   }
 
   /**
    * Sets the velocity of the shooter motors
    * 
-   * @param left Left motor speed in RPM
-   * @param right Right motor speed in RPM
+   * @param left Left motor speed in RPS
+   * @param right Right motor speed in RPS
    * @return void
    */
   public void setShooterVelocity(double left, double right) {
@@ -149,7 +157,6 @@ public class Shooter extends SubsystemBase {
 
   /**
   * Operator command to toggle shooter using Left Trigger
-
   * @param void
   * @return void
   */
@@ -176,7 +183,7 @@ public class Shooter extends SubsystemBase {
   * Gets the RP of the right falcon motor on the shooter
 
   * @param void
-  * @return double, rightFalcon RPM
+  * @return double, rightFalcon RPS
   */
   public double getRightShooterVelocity() {
     return leftFalcon.getRotorVelocity().getValue();
@@ -189,7 +196,7 @@ public class Shooter extends SubsystemBase {
    * @return void
    */
   public void setKrakenVelocity(double speed) {
-    kraken.setControl(m_request.withVelocity(speed));
+    passthroughKraken.setControl(m_request.withVelocity(speed));
   }
 
   /**
@@ -199,7 +206,7 @@ public class Shooter extends SubsystemBase {
    * @return double, kraken RPM
    */
   public double getKrakenVelocity() {
-    return kraken.getRotorVelocity().getValue();
+    return passthroughKraken.getRotorVelocity().getValue();
   }
 
   /**
@@ -220,7 +227,7 @@ public class Shooter extends SubsystemBase {
    * @return void
    */
   public void stopKraken() {
-    kraken.stopMotor();
+    passthroughKraken.stopMotor();
   }
 
   /**

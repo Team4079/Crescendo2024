@@ -5,19 +5,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Pivot;
 import frc.robot.utils.LogitechGamingPad;
-import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
-/** The {@link PushRing} class is the command that pushes the ring into the shooter. */
-public class PushRing extends Command {
-
-  private Shooter shooter;
-
-  /** Creates a new Shoot. */
-  public PushRing(Shooter shooter) {
-    this.shooter = shooter;
-    addRequirements(shooter);
+public class PadPivot extends Command {
+  private Pivot pivot;
+  private LogitechGamingPad opPad;
+  /** Creates a new PadPivot. */
+  public PadPivot(Pivot pivot, LogitechGamingPad opPad) {
+    addRequirements(pivot);
+    this.pivot = pivot;
+    this.opPad = opPad;
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -27,14 +26,12 @@ public class PushRing extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setKrakenVelocity(ShooterGlobalValues.THROUGH_SPEED);
+    pivot.movePivot(opPad.getLeftAnalogYAxis());
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    shooter.stopKraken();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

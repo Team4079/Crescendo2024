@@ -170,17 +170,21 @@ public final class GlobalsValues {
     public static final boolean isInverted = false;
 
     // Pivot Motor CAN ID Values
-    public static final int PIVOT_MOTOR_LEFT_ID = 101;
-    public static final int PIVOT_MOTOR_RIGHT_ID = 102;
+    public static final int PIVOT_MOTOR_LEFT_ID = 14;
+    public static final int PIVOT_MOTOR_RIGHT_ID = 15;
 
     // Pivot PID Values
     public static final double PIVOT_PID_LEFT_P = 0.0002;
     public static final double PIVOT_PID_LEFT_I = 0.0;
     public static final double PIVOT_PID_LEFT_D = 0.0;
+    public static final double PIVOT_PID_LEFT_V = 0.1;
+    public static final double PIVOT_PID_LEFT_F = 0.1;
 
     public static final double PIVOT_PID_RIGHT_P = 0.0002;
     public static final double PIVOT_PID_RIGHT_I = 0.0;
     public static final double PIVOT_PID_RIGHT_D = 0.0;
+    public static final double PIVOT_PID_RIGHT_V = 0.1;
+    public static final double PIVOT_PID_RIGHT_F = 0.1;
 
     public static final double PIVOT_NEUTRAL_ANGLE = 0.0;
     public static final double PIVOT_AMP_ANGLE = 0.0;
@@ -188,8 +192,10 @@ public final class GlobalsValues {
     // Pivot Motor Speed Values
     public static boolean IS_NEUTRAL = true;
 
+    // 
+
     // Pivot Motor Encoder ID
-    public static final int ENCODER_ID = 0;
+    public static final int ENCODER_ID = 8;
   }
 
   public static class ShooterGlobalValues {
@@ -198,10 +204,10 @@ public final class GlobalsValues {
     }
 
     // Shooter CAN ID Values
-    public static final int FALCON_LEFT_ID = 103;
-    public static final int FALCON_RIGHT_ID = 104;
+    public static final int FALCON_LEFT_ID = 18;
+    public static final int FALCON_RIGHT_ID = 13;
 
-    public static final int KRAKEN_ID = 105;
+    public static final int KRAKEN_ID = 20;
 
     // Shooter PID Values
     public static final double SHOOTER_PID_LEFT_V = 0.1;
@@ -214,7 +220,7 @@ public final class GlobalsValues {
     public static final double SHOOTER_PID_RIGHT_I = 0.0;
     public static final double SHOOTER_PID_RIGHT_D = 0.0;
 
-    public static final double KARKEN_V = 0.1;
+    public static final double KRAKEN_V = 0.1;
     public static final double KRAKEN_P = 0.0002;
     public static final double KRAKEN_I = 0.0;
     public static final double KRAKEN_D = 0.0;
@@ -225,6 +231,10 @@ public final class GlobalsValues {
 
     // Shooter Misc Values
     public static boolean HAS_PIECE = false;
+    public static double SHOOTING_DEADBAND = 0.3;
+    public static double RPM_THRESHOLD = 50;
+
+    public static double THROUGH_SPEED = 0.3;
 
     public static final int RING_SENSOR_ID = 6;
   }

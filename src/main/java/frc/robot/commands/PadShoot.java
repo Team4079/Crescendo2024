@@ -9,14 +9,15 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.utils.LogitechGamingPad;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
-/** The {@link PushRing} class is the command that pushes the ring into the shooter. */
-public class PushRing extends Command {
-
+public class PadShoot extends Command {
+  /** Creates a new PadShoot. */
   private Shooter shooter;
+  private LogitechGamingPad opPad;
 
-  /** Creates a new Shoot. */
-  public PushRing(Shooter shooter) {
+  public PadShoot(Shooter shooter, LogitechGamingPad opPad) {
+    // Use addRequirements() here to declare subsystem dependencies.
     this.shooter = shooter;
+    this.opPad = opPad;
     addRequirements(shooter);
   }
 
@@ -27,7 +28,9 @@ public class PushRing extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setKrakenVelocity(ShooterGlobalValues.THROUGH_SPEED);
+    if (opPad.getRightTriggerValue() > ShooterGlobalValues.SHOOTING_DEADBAND) {
+      shooter.setKrakenVelocity(ShooterGlobalValues.THROUGH_SPEED);
+    }
   }
 
   // Called once the command ends or is interrupted.
