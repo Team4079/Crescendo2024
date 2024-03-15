@@ -8,12 +8,14 @@ import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.CANSparkBase.SoftLimitDirection;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -34,6 +36,9 @@ public class Pivot extends SubsystemBase {
   private TalonFXConfigurator pivotLeftConfigurator;
   private TalonFXConfigurator pivotRightConfigurator;
 
+  private TalonFXConfiguration pivotLeftConfiguration;
+  private TalonFXConfiguration pivotRightConfiguration;
+
   private Slot0Configs pivotLeftConfigs;
   private Slot0Configs pivotRightConfigs;
 
@@ -48,6 +53,11 @@ public class Pivot extends SubsystemBase {
   private ClosedLoopRampsConfigs leftMotorRampConfig;
   private ClosedLoopRampsConfigs rightMotorRampConfig;
 
+  private SoftwareLimitSwitchConfigs leftSoftLimitConfig;
+  private SoftwareLimitSwitchConfigs rightSoftLimitConfig;
+
+  private boolean limit;
+
   // private SparkAbsoluteEncoder absoluteEncoder;
   DutyCycleEncoder actualAbsEnc;
 
@@ -58,6 +68,8 @@ public class Pivot extends SubsystemBase {
   private double absPos;
 
   public Pivot() {
+    limit = false;
+
     pivotMotorLeft = new TalonFX(PivotGlobalValues.PIVOT_MOTOR_LEFT_ID);
     pivotMotorRight = new TalonFX(PivotGlobalValues.PIVOT_MOTOR_RIGHT_ID);
 
@@ -68,6 +80,9 @@ public class Pivot extends SubsystemBase {
 
     pivotLeftConfigs = new Slot0Configs();
     pivotRightConfigs = new Slot0Configs();
+
+    pivotLeftConfiguration = new TalonFXConfiguration();
+    pivotRightConfiguration = new TalonFXConfiguration();
 
     pivotMotorLeft.getConfigurator().apply(new TalonFXConfiguration());
     pivotMotorRight.getConfigurator().apply(new TalonFXConfiguration());
@@ -97,6 +112,9 @@ public class Pivot extends SubsystemBase {
     leftMotorRampConfig = new ClosedLoopRampsConfigs();
     rightMotorRampConfig = new ClosedLoopRampsConfigs();
 
+    leftSoftLimitConfig = new SoftwareLimitSwitchConfigs();
+    rightSoftLimitConfig = new SoftwareLimitSwitchConfigs();
+
     leftMotorCurrentConfig.SupplyCurrentLimit = 100;
     leftMotorCurrentConfig.StatorCurrentLimit = 100;
 
@@ -112,15 +130,36 @@ public class Pivot extends SubsystemBase {
     pivotMotorLeft.getConfigurator().apply(leftMotorRampConfig);
     pivotMotorRight.getConfigurator().apply(rightMotorRampConfig);
 
-    // encoderController = new CANSparkMax(PivotGlobalValues.ENCODER_ID, CANSparkLowLevel.MotorType.kBrushless);
-    // absoluteEncoder = encoderController.getAbsoluteEncoder(Type.kDutyCycle);
+    // on
+    leftSoftLimitConfig.ForwardSoftLimitEnable = false;
+    leftSoftLimitConfig.ReverseSoftLimitEnable = false;
+    leftSoftLimitConfig.ForwardSoftLimitThreshold = 1100;
+    leftSoftLimitConfig.ReverseSoftLimitThreshold = 415;
 
-    // absoluteEncoder.setPositionConversionFactor(2048);
+    rightSoftLimitConfig.ForwardSoftLimitEnable = false;
+    rightSoftLimitConfig.ReverseSoftLimitEnable = false;
+    rightSoftLimitConfig.ForwardSoftLimitThreshold = 1100;
+    rightSoftLimitConfig.ReverseSoftLimitThreshold = 415;
+
+    // off
+    // leftSoftLimitConfig.ForwardSoftLimitEnable = false;
+    // leftSoftLimitConfig.ReverseSoftLimitEnable = false;
+
+    // rightSoftLimitConfig.ForwardSoftLimitEnable = false;
+    // rightSoftLimitConfig.ReverseSoftLimitEnable = false;
+
+    // pivotLeftConfiguration.SoftwareLimitSwitch = leftSoftLimitConfig;
+    // pivotRightConfiguration.SoftwareLimitSwitch = rightSoftLimitConfig;
+
+    pivotMotorLeft.getConfigurator().apply(leftSoftLimitConfig);
+    pivotMotorRight.getConfigurator().apply(rightSoftLimitConfig);
 
     absoluteEncoder = new DigitalInput(9);
     // encoder = new AbsoluteEncoder(8);
 
     actualAbsEnc = new DutyCycleEncoder(absoluteEncoder);
+    zeroAbsoluteEncoder();
+    actualAbsEnc.setDutyCycleRange(0, 1);
 
     vel_voltage = new VelocityVoltage(0);
   }
@@ -128,16 +167,21 @@ public class Pivot extends SubsystemBase {
   // This method will be called once per scheduler run
   @Override
   public void periodic() {
-    // 0.545533063638327 High limit before 2048 mulitplier
-    // 0.201015130025378 Low limit before 2048 multiplier
+    // 0.545533063638327 High limit before 2048 mulitplier = 1,117.251714331294
+    // 0.201015130025378 Low limit before 2048 multiplier = 411.6789862919741
     // absPos = absoluteEncoder.getPosition();
 
     SmartDashboard.putNumber("Absolute Encoder Position", getAbsoluteEncoder());
     SmartDashboard.putNumber("Pivot Left Position", pivotMotorLeft.getPosition().getValue());
     SmartDashboard.putNumber("Pivot Right Position", pivotMotorRight.getPosition().getValue());
+    SmartDashboard.putBoolean("limit", limit);
 
-    pivotMotorLeft.setPosition(absPos);
-    pivotMotorRight.setPosition(absPos);
+    pivotMotorLeft.setPosition(getAbsoluteEncoder());
+    pivotMotorRight.setPosition(getAbsoluteEncoder());
+
+    System.out.println("SENSOR: " + actualAbsEnc.getAbsolutePosition());
+    System.out.println("Left: " + pivotMotorLeft.getPosition().getValue());
+    System.out.println("Right: " + pivotMotorRight.getPosition().getValue());
 
     if (absPos == PivotGlobalValues.PIVOT_NEUTRAL_ANGLE) {
       GlobalsValues.PivotGlobalValues.IS_NEUTRAL = true;
@@ -197,7 +241,7 @@ public class Pivot extends SubsystemBase {
    */
   public double getAbsoluteEncoder() {
     // return 0;
-    return actualAbsEnc.getAbsolutePosition();
+    return actualAbsEnc.getAbsolutePosition() * 2048;
   }
 
   /**
@@ -207,7 +251,8 @@ public class Pivot extends SubsystemBase {
    * @return void
    */
   public void zeroAbsoluteEncoder() {
-    
+    actualAbsEnc.reset();
+
   }
 
   public void movePivot(double velocity) {
@@ -218,4 +263,33 @@ public class Pivot extends SubsystemBase {
       stopMotors();
     }
   }
+
+  // public void CalibratePivot() {
+  //   limit = !limit;
+  //   if (limit) {
+  //     leftSoftLimitConfig.ForwardSoftLimitEnable = true;
+  //     leftSoftLimitConfig.ReverseSoftLimitEnable = true;
+  //     leftSoftLimitConfig.ForwardSoftLimitThreshold = 1100;
+  //     leftSoftLimitConfig.ReverseSoftLimitThreshold = 415;
+
+  //     rightSoftLimitConfig.ForwardSoftLimitEnable = true;
+  //     rightSoftLimitConfig.ReverseSoftLimitEnable = true;
+  //     rightSoftLimitConfig.ForwardSoftLimitThreshold = 1100;
+  //     rightSoftLimitConfig.ReverseSoftLimitThreshold = 415;
+  //   }
+
+  //   else {
+  //     leftSoftLimitConfig.ForwardSoftLimitEnable = false;
+  //     leftSoftLimitConfig.ReverseSoftLimitEnable = false;
+
+  //     rightSoftLimitConfig.ForwardSoftLimitEnable = false;
+  //     rightSoftLimitConfig.ReverseSoftLimitEnable = false;
+  //   }
+
+  //   // pivotLeftConfiguration.SoftwareLimitSwitch = leftSoftLimitConfig;
+  //   // pivotRightConfiguration.SoftwareLimitSwitch = rightSoftLimitConfig;
+
+  //   pivotMotorLeft.getConfigurator().apply(leftSoftLimitConfig);
+  //   pivotMotorRight.getConfigurator().apply(rightSoftLimitConfig);
+  // }
 }

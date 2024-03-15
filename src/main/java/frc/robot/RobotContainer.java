@@ -147,10 +147,11 @@ public class RobotContainer {
   private void configureBindings() {
     padA.onTrue(new InstantCommand(swerveSubsystem::addRotorPositionsforModules));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
-    padY.onTrue(new InstantCommand(swerveSubsystem::newPose));
+    // padY.onTrue(new InstantCommand(pivotyboi::CalibratePivot));
     padX.whileTrue(new TeleOpAlign(swerveSubsystem, pad));
 
-    opPadB.whileTrue(new ShootRing(shootyboi));
+    // opPadB.whileTrue(new ShootRing(shootyboi));
+    opPadB.onTrue(new InstantCommand(pivotyboi::zeroAbsoluteEncoder));
     opPadA.onTrue(new ShooterRampDown(shootyboi));
     // Shoot command for Ria
     opPadY.onTrue(new InstantCommand(shootyboi::toggleShooterVelocity));

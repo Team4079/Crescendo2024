@@ -11,6 +11,7 @@ import frc.robot.utils.LogitechGamingPad;
 public class PadPivot extends Command {
   private Pivot pivot;
   private LogitechGamingPad opPad;
+
   /** Creates a new PadPivot. */
   public PadPivot(Pivot pivot, LogitechGamingPad opPad) {
     addRequirements(pivot);
@@ -21,17 +22,33 @@ public class PadPivot extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    pivot.movePivot(opPad.getLeftAnalogYAxis());
+    if (pivot.getAbsoluteEncoder() < 415) {
+      if (opPad.getLeftAnalogYAxis() < 0) {
+        pivot.movePivot(opPad.getLeftAnalogYAxis());
+      } else {
+        pivot.movePivot(0);
+      }
+    } else if (pivot.getAbsoluteEncoder() > 1100) {
+      if (opPad.getLeftAnalogYAxis() > 0) {
+        pivot.movePivot(opPad.getLeftAnalogYAxis());
+      } else {
+        pivot.movePivot(0);
+      }
+    } else {
+      pivot.movePivot(opPad.getLeftAnalogYAxis());
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

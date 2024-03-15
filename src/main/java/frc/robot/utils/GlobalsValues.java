@@ -197,7 +197,7 @@ public final class GlobalsValues {
     public static boolean IS_NEUTRAL = true;
 
     // Pivot Motor Encoder ID
-    public static final int ENCODER_ID = 8;
+    public static final int ENCODER_ID = 9;
   }
 
   public static class ShooterGlobalValues {

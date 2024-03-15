@@ -18,7 +18,7 @@ public class LED extends SubsystemBase {
 
   public LED() {
     // alignmentIndication1 = new AddressableLED(6); // 6 and 7
-    alignmentIndication2 = new AddressableLED(6);
+    alignmentIndication2 = new AddressableLED(7);
 
     // ledBuffer1 = new AddressableLEDBuffer(21);
     ledBuffer2 = new AddressableLEDBuffer(21);

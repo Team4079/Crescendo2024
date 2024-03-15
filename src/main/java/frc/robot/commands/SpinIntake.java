@@ -19,6 +19,7 @@ public class SpinIntake extends Command {
   private Shooter shooter;
   private LogitechGamingPad opPad;
   private Timer timer;
+  private boolean shouldSpin;
 
   public SpinIntake(Intake intake, Shooter shooter, LogitechGamingPad opPad) {
     this.intake = intake;
@@ -31,29 +32,36 @@ public class SpinIntake extends Command {
   /** Called when the command is initially scheduled. */
   @Override
   public void initialize() {
+    shouldSpin = false;
   }
 
   /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
-    if (!ShooterGlobalValues.HAS_PIECE) {
+
+    if (opPad.getXReleased())
+    {
+      shouldSpin = !shouldSpin;
+    }
+    if (!ShooterGlobalValues.HAS_PIECE && shouldSpin) {
       intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
       shooter.setKrakenVelocity(ShooterGlobalValues.PASSTHROUGH_RPS);
       timer.reset();
     } else {
       if (!opPad.getBReleased()) {
         timer.start();
-        while (timer.get() < 0.075) {
+        while (timer.get() < 0.1) {
           shooter.setShooterVelocity(6, 6);
           shooter.setKrakenVelocity(20);
         }
-        
+
         shooter.stopKraken();
         intake.stopKraken();
         timer.stop();
       }
     }
   }
+  
 
   /** Called once the command ends or is interrupted. */
   @Override
