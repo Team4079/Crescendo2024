@@ -39,7 +39,7 @@ public class PivotAlign extends Command {
 
     pivot.setMotorPosition(pivot.shootPos(setPoint), pivot.shootPos(setPoint)); // yessica noted
 
-    if (Math.abs(setPoint - pivot.getPivotPos()) < deadband)
+    if (Math.abs(setPoint - pivot.getAbsoluteEncoder()) < deadband)
     {
       timeout++;
     }

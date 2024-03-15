@@ -8,15 +8,17 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.LimelightHelpers;
+import frc.robot.utils.GlobalsValues.LimelightGlobalValues;
 
 /**
  * The {@link Limelight} class includes all the methods to interact with the
  * limelight. (Limelety) The limelight is a camera that is used to track targets
- * The limelight gets values based on the pipeline and mode set. 
+ * The limelight gets values based on the pipeline and mode set.
  */
 public class Limelight extends SubsystemBase {
   /** Creates a new Limelight. */
@@ -24,6 +26,7 @@ public class Limelight extends SubsystemBase {
   private LimelightHelpers.LimelightResults llresults;
   private double tv, tx, ty, ta = 0.0;
   private Pose2d robotPose_FieldSpace;
+  private Timer timer;
 
   private double[] robotPoseTargetSpace;
 
@@ -34,10 +37,12 @@ public class Limelight extends SubsystemBase {
     // HttpCamera limelightCamera = new HttpCamera("limelight",
     // "http://limelight.local:5801/stream.mjpg");
     llresults = LimelightHelpers.getLatestResults("limelight");
+    timer = new Timer();
   }
 
   @Override
   public void periodic() {
+    unflash();
     // This method will be called once per scheduler run
     tv = m_limelightTable.getEntry("tv").getDouble(0);
     tx = m_limelightTable.getEntry("tx").getDouble(0);
@@ -57,8 +62,10 @@ public class Limelight extends SubsystemBase {
     field.setRobotPose(robotPose_FieldSpace);
     SmartDashboard.putData("Field Vision", field);
     for (int i = 0; i < robotPoseTargetSpace.length; i++) {
-      SmartDashboard.putNumber("robotPoseTargetSpace" + i, robotPoseTargetSpace[i]);
+      SmartDashboard.putNumber("robotPoseTargetSpace" + i,
+          robotPoseTargetSpace[i]);
     }
+    getDistance();
   }
 
   /**
@@ -179,5 +186,32 @@ public class Limelight extends SubsystemBase {
    */
   public Pose2d getRobotPosition() {
     return robotPose_FieldSpace;
+  }
+
+  public void flash() {
+    LimelightHelpers.setLEDMode_ForceBlink("limelight");
+  }
+
+  public void unflash() {
+    LimelightHelpers.setLEDMode_ForceOff("limelight");
+  }
+
+  /**
+   * index from 0
+   * 0 is left-right distance from tag (left is +, right is -, accurate to +- 5cm
+   * per meter)
+   * 1 is undocumented
+   * 2 is forward-backward distance from tag (forward is +, backward is -,
+   * accurate to +- 5cm per meter)
+   * 3 is undocumented
+   * 4 is rotation (clockwise is -) (accurate to +-0.5 a degree)
+   * 5 is undocumented
+   * 
+   * @returns
+   *
+   */
+  public double getDistance() {
+    SmartDashboard.putNumber("Distance", Math.abs(robotPoseTargetSpace[2]));
+    return Math.abs(LimelightGlobalValues.robotPoseTargetSpace[2]);
   }
 }

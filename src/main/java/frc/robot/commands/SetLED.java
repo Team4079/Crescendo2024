@@ -22,7 +22,7 @@ public class SetLED extends Command {
     this.led = led;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(this.led);
+    addRequirements(led);
   }
 
   // Called when the command is initially scheduled.

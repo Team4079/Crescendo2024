@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+import frc.robot.commands.AmpScore;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.LimelightValues;
 import frc.robot.commands.LowerPivot;
@@ -16,7 +17,9 @@ import frc.robot.commands.StopIntake;
 import frc.robot.commands.PadDrive;
 import frc.robot.commands.PadPivot;
 import frc.robot.commands.PadShoot;
+import frc.robot.commands.PushRing;
 import frc.robot.commands.SetLED;
+import frc.robot.commands.SetPivot;
 import frc.robot.commands.ShootRing;
 import frc.robot.commands.ShooterRampDown;
 import frc.robot.commands.ShooterRampUp;
@@ -29,12 +32,14 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.LogitechGamingPad;
+import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -77,6 +82,8 @@ public class RobotContainer {
   private final JoystickButton opRightBumper;
   private final JoystickButton opLeftBumper;
 
+  SendableChooser<String> m_chooser = new SendableChooser<>();
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -117,16 +124,22 @@ public class RobotContainer {
     // 5
 
     NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem));
-    NamedCommands.registerCommand("startIntake", new StartIntake(intakeyboi));
+    NamedCommands.registerCommand("startIntake", new StartIntake(intakeyboi, shootyboi));
     NamedCommands.registerCommand("stopIntake", new StopIntake(intakeyboi));
+    NamedCommands.registerCommand("pushRing", new PushRing(shootyboi));
+    NamedCommands.registerCommand("shootSquence", new ShootingSequence(pivotyboi, shootyboi));
+    NamedCommands.registerCommand("setPivot", new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
     swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveGlobalValues.isFieldOriented));
-    led.setDefaultCommand(new SetLED(led));
-    intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, opPad));
+    // led.setDefaultCommand(new SetLED(led));
+    intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, opPad, limelety));
     pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, opPad));
     limelety.setDefaultCommand(new LimelightValues(limelety));
     shootyboi.setDefaultCommand(new PadShoot(shootyboi, opPad));
 
     // Configure auto chooser
+    m_chooser.setDefaultOption("Center Auto", "Center Auto");
+    m_chooser.addOption("Center Auto", "center Auto");
+
     configureBindings();
   }
 
@@ -150,11 +163,12 @@ public class RobotContainer {
     // padY.onTrue(new InstantCommand(pivotyboi::CalibratePivot));
     padX.whileTrue(new TeleOpAlign(swerveSubsystem, pad));
 
-    // opPadB.whileTrue(new ShootRing(shootyboi));
-    opPadB.onTrue(new InstantCommand(pivotyboi::zeroAbsoluteEncoder));
+    // opPadB.whileTrue(new ShootRing(shootyboi, pivotyboi));
+    opPadB.whileTrue(new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
     opPadA.onTrue(new ShooterRampDown(shootyboi));
-    // Shoot command for Ria
+    // X: intake i think toggles intake
     opPadY.onTrue(new InstantCommand(shootyboi::toggleShooterVelocity));
+    opRightBumper.whileTrue(new AmpScore(shootyboi, pivotyboi));
   }
 
   /**
@@ -167,10 +181,10 @@ public class RobotContainer {
     swerveSubsystem.zeroHeading();
     swerveSubsystem.newPose();
     swerveSubsystem.addRotorPositionsforModules();
-    System.out.println(swerveSubsystem.getPose());
+    // System.out.println(swerveSubsystem.getPose());
 
     // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
-    return new PathPlannerAuto(SwerveGlobalValues.autoNamePath);
+    // return new PathPlannerAuto(m_chooser.getSelected());
+    return new PathPlannerAuto("center auto");
   }
-
 }

@@ -4,8 +4,11 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
+import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -13,15 +16,23 @@ import frc.robot.subsystems.Shooter;
 public class ShootRing extends SequentialCommandGroup {
   /** Creates a new ShootRing. */
   private Shooter shooter;
+  private Pivot pivot;
 
-  public ShootRing(Shooter shooter) {
+  public ShootRing(Shooter shooter, Pivot pivot) {
     this.shooter = shooter;
+    this.pivot = pivot;
+    addRequirements(shooter, pivot);
+
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ShooterRampUp(shooter).withTimeout(0.3),
+        new ParallelCommandGroup(
+            // new SetPivot(pivot, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(0.5),
+            new ShooterRampUp(shooter).withTimeout(0.5)
+      ),
       new PushRing(shooter).withTimeout(0.3),
-      new StopShooter(shooter)
+      new StopShooter(shooter),
+      new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.3)
     );
   }
 }

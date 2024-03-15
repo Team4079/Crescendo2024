@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.LogitechGamingPad;
 import frc.robot.utils.GlobalsValues.IntakeGlobalValues;
@@ -17,15 +18,19 @@ public class SpinIntake extends Command {
   /** Creates a new SpinIntake. */
   private Intake intake;
   private Shooter shooter;
+  private Limelight limelight;
   private LogitechGamingPad opPad;
   private Timer timer;
+  private Timer limelightTimer;
   private boolean shouldSpin;
 
-  public SpinIntake(Intake intake, Shooter shooter, LogitechGamingPad opPad) {
+  public SpinIntake(Intake intake, Shooter shooter, LogitechGamingPad opPad, Limelight limelight) {
     this.intake = intake;
     this.shooter = shooter;
     this.opPad = opPad;
+    this.limelight = limelight;
     timer = new Timer();
+    limelightTimer = new Timer();
     addRequirements(intake);
   }
 
@@ -39,20 +44,32 @@ public class SpinIntake extends Command {
   @Override
   public void execute() {
 
-    if (opPad.getXReleased())
-    {
+    if (opPad.getXReleased()) {
       shouldSpin = !shouldSpin;
     }
+
     if (!ShooterGlobalValues.HAS_PIECE && shouldSpin) {
       intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
       shooter.setKrakenVelocity(ShooterGlobalValues.PASSTHROUGH_RPS);
       timer.reset();
+      limelightTimer.reset();
     } else {
-      if (!opPad.getBReleased()) {
+      if (!opPad.getBReleased() && !opPad.getRightBumperReleased()) {
         timer.start();
-        while (timer.get() < 0.1) {
-          shooter.setShooterVelocity(6, 6);
-          shooter.setKrakenVelocity(20);
+        limelightTimer.start();
+        while (timer.get() < 0.3) {
+          // shooter.setShooterVelocity(6, 6);
+          shooter.setKrakenVelocity(ShooterGlobalValues.PASSTHROUGH_RPS);
+        }
+
+        while (timer.get() < 0.39) {
+        shooter.setKrakenVelocity(20);
+        }
+
+        if (limelightTimer.get() < 3) {
+          limelight.flash();
+        } else {
+          limelight.unflash();
         }
 
         shooter.stopKraken();
@@ -61,7 +78,6 @@ public class SpinIntake extends Command {
       }
     }
   }
-  
 
   /** Called once the command ends or is interrupted. */
   @Override

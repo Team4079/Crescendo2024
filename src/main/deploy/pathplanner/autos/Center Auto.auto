@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4048307100172925,
-      "y": 5.54
+      "x": 0.8887064986466873,
+      "y": 2.0158058821455733
     },
     "rotation": 0
   },
@@ -20,31 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center Path Mid"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Center Path Top"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopIntake"
+            "pathName": "cracked team path 1"
           }
         }
       ]

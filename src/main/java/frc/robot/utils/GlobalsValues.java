@@ -110,7 +110,7 @@ public final class GlobalsValues {
     // HSV Values for LED
     public static final int[] greenLED = { 60, 255, 255 };
     public static final int[] orangeLED = { 30, 255, 255 };
-    public static final int[] hightideLED = { 0, 200, 100 };
+    public static final int[] hightideLED = { 5, 200, 100 };
 
     public static class BasePIDGlobal {
       // public static final PID STEER_PID = new PID(0.14, 0.00002, 0.008, 0);
@@ -178,20 +178,22 @@ public final class GlobalsValues {
     public static final int PIVOT_MOTOR_RIGHT_ID = 15;
 
     // Pivot PID Values
-    public static final double PIVOT_PID_LEFT_P = 0.0002;
+    public static final double PIVOT_PID_LEFT_P = 0.02;
     public static final double PIVOT_PID_LEFT_I = 0.0;
     public static final double PIVOT_PID_LEFT_D = 0.0;
     public static final double PIVOT_PID_LEFT_V = 0.1;
     public static final double PIVOT_PID_LEFT_F = 0.1;
 
-    public static final double PIVOT_PID_RIGHT_P = 0.0002;
+    public static final double PIVOT_PID_RIGHT_P = 0.02;
     public static final double PIVOT_PID_RIGHT_I = 0.0;
     public static final double PIVOT_PID_RIGHT_D = 0.0;
     public static final double PIVOT_PID_RIGHT_V = 0.1;
+
     public static final double PIVOT_PID_RIGHT_F = 0.1;
 
     public static final double PIVOT_NEUTRAL_ANGLE = 0.0;
-    public static final double PIVOT_AMP_ANGLE = 0.0;
+    public static final double PIVOT_AMP_ANGLE = 182754 / 198;
+    public static final double PIVOT_SUBWOOFER_ANGLE = 106326 / 198;
 
     // Pivot Motor Speed Values
     public static boolean IS_NEUTRAL = true;
@@ -255,6 +257,7 @@ public final class GlobalsValues {
     public static double tv = 0.0;
 
     // Limelight Misc Values
+    // Limelihgt is 30 degrees
     public static double[] robotPoseTargetSpace = new double[6];
     public static double tagIDAvailable = 0.0;
 

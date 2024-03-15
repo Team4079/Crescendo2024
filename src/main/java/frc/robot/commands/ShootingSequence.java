@@ -9,28 +9,34 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.utils.GlobalsValues;
+import frc.robot.utils.GlobalsValues.PivotGlobalValues;
+
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShootingSequence extends SequentialCommandGroup {
   /** Creates a new AutoSequence. */
-  private SwerveSubsystem subsystem;
+
   private Pivot pivot;
   private Shooter shooter;
 
-  public ShootingSequence(SwerveSubsystem subsystem, Pivot pivotyboi, Shooter shootyboi) {
-    subsystem = this.subsystem;
+  public ShootingSequence(Pivot pivotyboi, Shooter shootyboi) {
+    this.pivot = pivotyboi;
+    this.shooter = shootyboi;
+
+    addRequirements(pivotyboi, shootyboi);
 
     /** Command to run shooting sequence mainly in auto */
+
+    //Why is this not parallel command group for first two?
     addCommands(
-        new ParallelCommandGroup(
-            new AutoAlign(subsystem),
-            new PivotAlign(pivot),
-            new ShooterRampUp(shooter)),
-        new ShooterRampUp(shooter).withTimeout(1),
-        new PushRing(shootyboi),
-    new InstantCommand(shooter::stopAllMotors)
+      new ParallelCommandGroup(
+        new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(1.5),
+        new ShooterRampUp(shooter).withTimeout(0.75)
+      ),
+      new PushRing(shootyboi).withTimeout(0.5),
+      new InstantCommand(shooter::stopAllMotors)
     );
   }
 }

@@ -88,7 +88,7 @@ public class PadDrive extends Command {
     if (MotorGlobalValues.AACORN_MODE) {
       swerveSubsystem.drive(x * MotorGlobalValues.AACORN_SPEED, y * MotorGlobalValues.AACORN_SPEED, turn, isFieldOriented);
     } else {
-      System.out.println(x + " " + y);
+      // System.out.println(x + " " + y);
       swerveSubsystem.drive(x * MotorGlobalValues.SPEED_CONSTANT, y * MotorGlobalValues.SPEED_CONSTANT,
           turn, isFieldOriented);
     }

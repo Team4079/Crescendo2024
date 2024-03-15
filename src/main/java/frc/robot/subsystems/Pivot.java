@@ -11,6 +11,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -41,6 +42,8 @@ public class Pivot extends SubsystemBase {
 
   private Slot0Configs pivotLeftConfigs;
   private Slot0Configs pivotRightConfigs;
+
+  private PositionDutyCycle positionDutyCycle;
 
   private PositionVoltage pos_reqest;
   private VelocityVoltage vel_voltage;
@@ -162,6 +165,12 @@ public class Pivot extends SubsystemBase {
     actualAbsEnc.setDutyCycleRange(0, 1);
 
     vel_voltage = new VelocityVoltage(0);
+    pos_reqest = new PositionVoltage(0);
+    positionDutyCycle = new PositionDutyCycle(0);
+
+    pivotMotorLeft.setPosition(getAbsoluteEncoder());
+    pivotMotorRight.setPosition(getAbsoluteEncoder());
+    
   }
 
   // This method will be called once per scheduler run
@@ -178,10 +187,6 @@ public class Pivot extends SubsystemBase {
 
     pivotMotorLeft.setPosition(getAbsoluteEncoder());
     pivotMotorRight.setPosition(getAbsoluteEncoder());
-
-    System.out.println("SENSOR: " + actualAbsEnc.getAbsolutePosition());
-    System.out.println("Left: " + pivotMotorLeft.getPosition().getValue());
-    System.out.println("Right: " + pivotMotorRight.getPosition().getValue());
 
     if (absPos == PivotGlobalValues.PIVOT_NEUTRAL_ANGLE) {
       GlobalsValues.PivotGlobalValues.IS_NEUTRAL = true;
@@ -217,8 +222,12 @@ public class Pivot extends SubsystemBase {
    * @param void
    * @return double, the position of the pivot motor
    */
-  public double getPivotPos() {
+  public double getPivotLeftPos() {
     return pivotMotorLeft.getPosition().getValue();
+  }
+
+  public double getPivotRightPos() {
+    return pivotMotorRight.getPosition().getValue();
   }
 
   /**
@@ -257,39 +266,47 @@ public class Pivot extends SubsystemBase {
 
   public void movePivot(double velocity) {
     if (Math.abs(velocity) >= deadband) {
-      pivotMotorLeft.setControl(vel_voltage.withVelocity(velocity * 500));
-      pivotMotorRight.setControl(vel_voltage.withVelocity(velocity * 500));
+      pivotMotorLeft.setControl(vel_voltage.withVelocity(velocity * 500 * 0.75));
+      pivotMotorRight.setControl(vel_voltage.withVelocity(velocity * 500 * 0.75));
+
+      SmartDashboard.putNumber("PivotLeft Velo Error", pivotMotorLeft.get() - velocity);
+      SmartDashboard.putNumber("PivotRight Velo Error", pivotMotorLeft.get() - velocity);
     } else {
       stopMotors();
     }
   }
 
+  public void setPivot(double pos) {
+    pivotMotorLeft.setControl(positionDutyCycle.withPosition(pos));
+    pivotMotorRight.setControl(positionDutyCycle.withPosition(pos));
+  }
+
   // public void CalibratePivot() {
-  //   limit = !limit;
-  //   if (limit) {
-  //     leftSoftLimitConfig.ForwardSoftLimitEnable = true;
-  //     leftSoftLimitConfig.ReverseSoftLimitEnable = true;
-  //     leftSoftLimitConfig.ForwardSoftLimitThreshold = 1100;
-  //     leftSoftLimitConfig.ReverseSoftLimitThreshold = 415;
+  // limit = !limit;
+  // if (limit) {
+  // leftSoftLimitConfig.ForwardSoftLimitEnable = true;
+  // leftSoftLimitConfig.ReverseSoftLimitEnable = true;
+  // leftSoftLimitConfig.ForwardSoftLimitThreshold = 1100;
+  // leftSoftLimitConfig.ReverseSoftLimitThreshold = 415;
 
-  //     rightSoftLimitConfig.ForwardSoftLimitEnable = true;
-  //     rightSoftLimitConfig.ReverseSoftLimitEnable = true;
-  //     rightSoftLimitConfig.ForwardSoftLimitThreshold = 1100;
-  //     rightSoftLimitConfig.ReverseSoftLimitThreshold = 415;
-  //   }
+  // rightSoftLimitConfig.ForwardSoftLimitEnable = true;
+  // rightSoftLimitConfig.ReverseSoftLimitEnable = true;
+  // rightSoftLimitConfig.ForwardSoftLimitThreshold = 1100;
+  // rightSoftLimitConfig.ReverseSoftLimitThreshold = 415;
+  // }
 
-  //   else {
-  //     leftSoftLimitConfig.ForwardSoftLimitEnable = false;
-  //     leftSoftLimitConfig.ReverseSoftLimitEnable = false;
+  // else {
+  // leftSoftLimitConfig.ForwardSoftLimitEnable = false;
+  // leftSoftLimitConfig.ReverseSoftLimitEnable = false;
 
-  //     rightSoftLimitConfig.ForwardSoftLimitEnable = false;
-  //     rightSoftLimitConfig.ReverseSoftLimitEnable = false;
-  //   }
+  // rightSoftLimitConfig.ForwardSoftLimitEnable = false;
+  // rightSoftLimitConfig.ReverseSoftLimitEnable = false;
+  // }
 
-  //   // pivotLeftConfiguration.SoftwareLimitSwitch = leftSoftLimitConfig;
-  //   // pivotRightConfiguration.SoftwareLimitSwitch = rightSoftLimitConfig;
+  // // pivotLeftConfiguration.SoftwareLimitSwitch = leftSoftLimitConfig;
+  // // pivotRightConfiguration.SoftwareLimitSwitch = rightSoftLimitConfig;
 
-  //   pivotMotorLeft.getConfigurator().apply(leftSoftLimitConfig);
-  //   pivotMotorRight.getConfigurator().apply(rightSoftLimitConfig);
+  // pivotMotorLeft.getConfigurator().apply(leftSoftLimitConfig);
+  // pivotMotorRight.getConfigurator().apply(rightSoftLimitConfig);
   // }
 }
