@@ -18,6 +18,7 @@ import frc.robot.commands.PadDrive;
 import frc.robot.commands.PadPivot;
 import frc.robot.commands.PadShoot;
 import frc.robot.commands.PushRing;
+import frc.robot.commands.ReverseIntake;
 import frc.robot.commands.SetLED;
 import frc.robot.commands.SetPivot;
 import frc.robot.commands.ShootRing;
@@ -158,16 +159,16 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    padA.onTrue(new InstantCommand(swerveSubsystem::addRotorPositionsforModules));
+    padA.onTrue(new InstantCommand(pivotyboi::resetEncoders));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
     // padY.onTrue(new InstantCommand(pivotyboi::CalibratePivot));
     padX.whileTrue(new TeleOpAlign(swerveSubsystem, pad));
 
-    // opPadB.whileTrue(new ShootRing(shootyboi, pivotyboi));
-    opPadB.whileTrue(new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
+    opPadB.whileTrue(new ShootRing(shootyboi, pivotyboi));
+    // opPadB.whileTrue(new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
     opPadA.onTrue(new ShooterRampDown(shootyboi));
     // X: intake i think toggles intake
-    opPadY.onTrue(new InstantCommand(shootyboi::toggleShooterVelocity));
+    opPadY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
     opRightBumper.whileTrue(new AmpScore(shootyboi, pivotyboi));
   }
 
@@ -185,6 +186,6 @@ public class RobotContainer {
 
     // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
     // return new PathPlannerAuto(m_chooser.getSelected());
-    return new PathPlannerAuto("center auto");
+    return new PathPlannerAuto("Center Auto");
   }
 }

@@ -11,6 +11,7 @@ import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
+import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more information, see:
@@ -33,9 +34,10 @@ public class ShootingSequence extends SequentialCommandGroup {
     addCommands(
       new ParallelCommandGroup(
         new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(1.5),
-        new ShooterRampUp(shooter).withTimeout(0.75)
-      ),
+        new ShooterRampUp(shooter, ShooterGlobalValues.SHOOTER_SPEED).withTimeout(0.75)
+      ), 
       new PushRing(shootyboi).withTimeout(0.5),
+      new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(1.5),
       new InstantCommand(shooter::stopAllMotors)
     );
   }

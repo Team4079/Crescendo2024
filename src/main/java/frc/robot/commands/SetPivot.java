@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Pivot;
@@ -14,34 +15,52 @@ public class SetPivot extends Command {
 
   private Pivot pivot;
   private double pos;
+  private PIDController pidController;
+  private double velocity;
   // Get distance when after we mount the limelight
 
   /** Creates a new Shoot. */
   public SetPivot(Pivot pivot, double pos) {
     this.pivot = pivot;
     this.pos = pos;
+    pidController = new PIDController(0.0017, 0, 0.000005);
     addRequirements(pivot);
   }
 
   // // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+   
+    // pidController.setTolerance(50);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    pivot.setMotorPosition(pos, pos);
-    SmartDashboard.putNumber("PivotLeft Pos Error", pos - pivot.getPivotLeftPos());
-    SmartDashboard.putNumber("PivotRight Pos Error", pos - pivot.getPivotRightPos());
+    velocity = pidController.calculate(pivot.getAbsoluteEncoder(), pos);
+    SmartDashboard.putNumber("Error Pivot", -pivot.getAbsoluteEncoder() + pos);
+    SmartDashboard.putNumber("Setpoint", pos);
+
+    if (Math.abs(-pivot.getAbsoluteEncoder() + pos) < 10)
+    {
+       pivot.stopMotors();
+    }
+
+    else{
+      pivot.movePivot(-velocity);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    pivot.stopMotors();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    
     return false;
   }
 }

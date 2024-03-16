@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
+import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -27,8 +28,8 @@ public class ShootRing extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new ParallelCommandGroup(
-            // new SetPivot(pivot, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(0.5),
-            new ShooterRampUp(shooter).withTimeout(0.5)
+            new SetPivot(pivot, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(1),
+            new ShooterRampUp(shooter, ShooterGlobalValues.SHOOTER_SPEED).withTimeout(1)
       ),
       new PushRing(shooter).withTimeout(0.3),
       new StopShooter(shooter),

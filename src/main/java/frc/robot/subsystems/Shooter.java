@@ -134,8 +134,10 @@ public class Shooter extends SubsystemBase {
   // This method will be called once per scheduler run
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Left Shooter Velocity", leftFalcon.getRotorVelocity().getValue());
+    SmartDashboard.putNumber("Left Shooter", leftFalcon.getRotorVelocity().getValue());
     SmartDashboard.putNumber("Right Shooter Velocity", rightFalcon.getRotorVelocity().getValue());
+    SmartDashboard.putNumber("Left Shooter Error", leftFalcon.getVelocity().getValue() - 50);
+    SmartDashboard.putNumber("Right Shooter Error", rightFalcon.getVelocity().getValue() - 50);
     SmartDashboard.putNumber("Kraken Velocity", passthroughKraken.getRotorVelocity().getValue());
     ShooterGlobalValues.HAS_PIECE = getRingSensor();
 

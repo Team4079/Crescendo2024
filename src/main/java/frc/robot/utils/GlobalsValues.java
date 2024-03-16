@@ -163,6 +163,9 @@ public final class GlobalsValues {
     public static final double INTAKE_PID_P = 0.0002;
     public static final double INTAKE_PID_I = 0.0;
     public static final double INTAKE_PID_D = 0.0;
+
+    // Reverse Intake Values
+    public static final double REVERSE_INTAKE_SPEED = 15.0;
   }
 
   public static class PivotGlobalValues {
@@ -191,9 +194,10 @@ public final class GlobalsValues {
 
     public static final double PIVOT_PID_RIGHT_F = 0.1;
 
-    public static final double PIVOT_NEUTRAL_ANGLE = 0.0;
-    public static final double PIVOT_AMP_ANGLE = 182754 / 198;
-    public static final double PIVOT_SUBWOOFER_ANGLE = 106326 / 198;
+    public static final double PIVOT_NEUTRAL_ANGLE = 425;
+    public static final double PIVOT_AMP_ANGLE = 923;
+    public static final double 
+    PIVOT_SUBWOOFER_ANGLE = 106326 / 198;
 
     // Pivot Motor Speed Values
     public static boolean IS_NEUTRAL = true;
@@ -217,12 +221,12 @@ public final class GlobalsValues {
     public static final double SHOOTER_PID_LEFT_P = 0.0002;
     public static final double SHOOTER_PID_LEFT_I = 0.0;
     public static final double SHOOTER_PID_LEFT_D = 0.0;
-    public static final double SHOOTER_PID_LEFT_V = 0.1;
+    public static final double SHOOTER_PID_LEFT_V = 0.3;
 
     public static final double SHOOTER_PID_RIGHT_P = 0.0002;
     public static final double SHOOTER_PID_RIGHT_I = 0.0;
     public static final double SHOOTER_PID_RIGHT_D = 0.0;
-    public static final double SHOOTER_PID_RIGHT_V = 0.1;
+    public static final double SHOOTER_PID_RIGHT_V = 0.3;
 
     public static final double KRAKEN_P = 0.0002;
     public static final double KRAKEN_I = 0.0;
@@ -230,7 +234,7 @@ public final class GlobalsValues {
     public static final double KRAKEN_V = 0.1;
 
     // Shooter Motor Speed Values
-    public static final double SHOOTER_SPEED = 50.0;
+    public static final double SHOOTER_SPEED = 40.0;
     public static final double KRAKEN_SPEED = 15.0;
 
     // Shooter Motor Speeds

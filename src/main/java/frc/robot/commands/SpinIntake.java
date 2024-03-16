@@ -63,7 +63,7 @@ public class SpinIntake extends Command {
         }
 
         while (timer.get() < 0.39) {
-        shooter.setKrakenVelocity(20);
+          shooter.setKrakenVelocity(20);
         }
 
         if (limelightTimer.get() < 3) {

@@ -14,18 +14,49 @@
         {
           "type": "named",
           "data": {
-            "name": "startIntake"
+            "name": "shootSquence"
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "cracked team path 1"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "startIntake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Center Path Mid 1"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Center Path Mid 2"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootSquence"
           }
         }
       ]
     }
   },
-  "folder": "Full Autos",
-  "choreoAuto": false
+  "folder": "Full Autos"
 }

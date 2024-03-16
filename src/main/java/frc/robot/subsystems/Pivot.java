@@ -183,10 +183,10 @@ public class Pivot extends SubsystemBase {
     SmartDashboard.putNumber("Absolute Encoder Position", getAbsoluteEncoder());
     SmartDashboard.putNumber("Pivot Left Position", pivotMotorLeft.getPosition().getValue());
     SmartDashboard.putNumber("Pivot Right Position", pivotMotorRight.getPosition().getValue());
-    SmartDashboard.putBoolean("limit", limit);
+    // SmartDashboard.putBoolean("limit", limit);
 
-    pivotMotorLeft.setPosition(getAbsoluteEncoder());
-    pivotMotorRight.setPosition(getAbsoluteEncoder());
+    // pivotMotorLeft.setPosition(getAbsoluteEncoder());
+    // pivotMotorRight.setPosition(getAbsoluteEncoder());
 
     if (absPos == PivotGlobalValues.PIVOT_NEUTRAL_ANGLE) {
       GlobalsValues.PivotGlobalValues.IS_NEUTRAL = true;
@@ -242,6 +242,14 @@ public class Pivot extends SubsystemBase {
     return 0.0;
   }
 
+  public void resetEncoders()
+  {
+    pivotMotorLeft.setPosition(0);
+    pivotMotorRight.setPosition(0);
+  }
+  
+  
+
   /**
    * Get the absolute encoder position
    * 
@@ -277,8 +285,8 @@ public class Pivot extends SubsystemBase {
   }
 
   public void setPivot(double pos) {
-    pivotMotorLeft.setControl(positionDutyCycle.withPosition(pos));
-    pivotMotorRight.setControl(positionDutyCycle.withPosition(pos));
+    pivotMotorLeft.setControl(vel_voltage.withVelocity(pos));
+    pivotMotorRight.setControl(vel_voltage.withVelocity(pos));
   }
 
   // public void CalibratePivot() {

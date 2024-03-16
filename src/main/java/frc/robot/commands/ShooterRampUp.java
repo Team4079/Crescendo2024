@@ -18,24 +18,27 @@ public class ShooterRampUp extends Command {
 
   private Shooter shooter;
 
+  private double rps;
+
   /** Creates a new Shoot. */
-  public ShooterRampUp(Shooter shooter) {
+  public ShooterRampUp(Shooter shooter, double rps) {
     deadband = 5;
     this.shooter = shooter;
+    this.rps = rps;
     addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setShooterVelocity(-ShooterGlobalValues.SHOOTER_SPEED, -ShooterGlobalValues.SHOOTER_SPEED);
+    shooter.setShooterVelocity(-rps, -rps);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     SmartDashboard.putBoolean("Shooter Within Limit",
-        Math.abs(shooter.getKrakenVelocity() - ShooterGlobalValues.SHOOTER_SPEED) < ShooterGlobalValues.RPM_THRESHOLD);
+        Math.abs(shooter.getKrakenVelocity() - rps) < ShooterGlobalValues.RPM_THRESHOLD);
   }
 
   // Called once the command ends or is interrupted.
