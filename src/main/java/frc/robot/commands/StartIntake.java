@@ -52,12 +52,14 @@ public class StartIntake extends Command {
         // shooter.setShooterVelocity(6, 6);
         shooter.setKrakenVelocity(ShooterGlobalValues.PASSTHROUGH_RPS);
       }
-
-      while (timer.get() < 0.45) {
+      shooter.stopKraken();
+      while (timer.get() < 0.5) {
         shooter.setKrakenVelocity(20);
       }
 
+      shooter.stopKraken();
       isDone = true;
+      intake.stopKraken();
     }
 
   }
