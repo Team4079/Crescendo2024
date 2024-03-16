@@ -197,7 +197,7 @@ public final class GlobalsValues {
     public static final double PIVOT_NEUTRAL_ANGLE = 425;
     public static final double PIVOT_AMP_ANGLE = 950;
     public static final double PIVOT_SUBWOOFER_ANGLE = 550;
-    public static final double PIVOT_FENDER_ANGLE = 0;
+    public static final double PIVOT_FENDER_ANGLE = 671;
 
     // Pivot Motor Speed Values
     public static boolean IS_NEUTRAL = true;

@@ -22,6 +22,7 @@ import frc.robot.commands.ReverseIntake;
 import frc.robot.commands.SetLED;
 import frc.robot.commands.SetPivot;
 import frc.robot.commands.ShootRing;
+import frc.robot.commands.ShooterFender;
 import frc.robot.commands.ShooterRampDown;
 import frc.robot.commands.ShooterRampUp;
 import frc.robot.subsystems.Intake;
@@ -168,7 +169,7 @@ public class RobotContainer {
     opPadB.whileTrue(new ShootRing(shootyboi, pivotyboi));
     // opPadB.whileTrue(new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
     opPadA.onTrue(new ShooterRampDown(shootyboi));
-    opLeftBumper.whileTrue(new InstantCommand());
+    opLeftBumper.whileTrue(new ShooterFender(shootyboi, pivotyboi));
     // X: intake i think toggles intake
     opPadY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
     opRightBumper.whileTrue(new AmpScore(shootyboi, pivotyboi));
@@ -188,6 +189,6 @@ public class RobotContainer {
 
     // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
     // return new PathPlannerAuto(m_chooser.getSelected());
-    return new PathPlannerAuto("wright auto");
+    return new PathPlannerAuto("Center Auto");
   }
 }
