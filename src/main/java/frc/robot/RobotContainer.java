@@ -188,6 +188,6 @@ public class RobotContainer {
 
     // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
     // return new PathPlannerAuto(m_chooser.getSelected());
-    return new PathPlannerAuto("Center Auto");
+    return new PathPlannerAuto("wright auto");
   }
 }

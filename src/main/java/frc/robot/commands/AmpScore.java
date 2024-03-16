@@ -26,13 +26,11 @@ public class AmpScore extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ParallelCommandGroup(
-        new SetPivot(pivot, PivotGlobalValues.PIVOT_AMP_ANGLE).withTimeout(1.5),
-        new ShooterRampUp(shooter, 10).withTimeout(1)
-      ),
-      new PushRing(shooter).withTimeout(0.3),
-      new StopShooter(shooter).withTimeout(0.1),
-      new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.3)
-    );
+        new ParallelCommandGroup(
+            new SetPivot(pivot, PivotGlobalValues.PIVOT_AMP_ANGLE).withTimeout(1.5),
+            new ShooterRampUp(shooter, 10).withTimeout(1)),
+        new PushRing(shooter).withTimeout(0.3),
+        new StopShooter(shooter).withTimeout(0.1),
+        new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.5));
   }
 }
