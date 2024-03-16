@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
-import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
@@ -33,12 +32,12 @@ public class ShootingSequence extends SequentialCommandGroup {
     //Why is this not parallel command group for first two?
     addCommands(
       new ParallelCommandGroup(
-        new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(1.5),
-        new ShooterRampUp(shooter, ShooterGlobalValues.SHOOTER_SPEED).withTimeout(0.75)
+        new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(1.2)
+        // new ShooterRampUp(shooter, ShooterGlobalValues.SHOOTER_SPEED).withTimeout(1.2)
       ), 
-      new PushRing(shootyboi).withTimeout(0.5),
-      new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(1.5),
-      new InstantCommand(shooter::stopAllMotors)
+      // new PushRing(shootyboi).withTimeout(0.3),
+      new InstantCommand(shooter::stopAllMotors),
+      new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(1.5)
     );
   }
 }

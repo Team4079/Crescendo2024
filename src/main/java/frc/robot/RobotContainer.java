@@ -7,7 +7,7 @@ package frc.robot;
 
 import frc.robot.commands.AmpScore;
 import frc.robot.commands.AutoAlign;
-import frc.robot.commands.LimelightValues;
+// import frc.robot.commands.LimelightValues;
 import frc.robot.commands.LowerPivot;
 import frc.robot.commands.TeleOpAlign;
 import frc.robot.commands.ShootingSequence;
@@ -63,7 +63,7 @@ public class RobotContainer {
   private final LogitechGamingPad pad;
   private final LogitechGamingPad opPad;
   private final LED led;
-  private final Limelight limelety;
+  // private final Limelight limelety;
   // private final Jevois jevois;
   private final Pivot pivotyboi;
   private final Shooter shootyboi;
@@ -92,7 +92,7 @@ public class RobotContainer {
     pad = new LogitechGamingPad(0);
     opPad = new LogitechGamingPad(1);
     led = new LED();
-    limelety = new Limelight();
+    // limelety = new Limelight();
     // jevois = new Jevois();
     pivotyboi = new Pivot();
     shootyboi = new Shooter();
@@ -124,7 +124,7 @@ public class RobotContainer {
     // 4 is rotation (clockwise is -) (accurate to +-0.5 a degree)
     // 5
 
-    NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem));
+    // NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem));
     NamedCommands.registerCommand("startIntake", new StartIntake(intakeyboi, shootyboi));
     NamedCommands.registerCommand("stopIntake", new StopIntake(intakeyboi));
     NamedCommands.registerCommand("pushRing", new PushRing(shootyboi));
@@ -132,9 +132,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("setPivot", new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
     swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveGlobalValues.isFieldOriented));
     // led.setDefaultCommand(new SetLED(led));
-    intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, opPad, limelety));
+    // intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, opPad, limelety));
+    intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, opPad));
     pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, opPad));
-    limelety.setDefaultCommand(new LimelightValues(limelety));
+    // limelety.setDefaultCommand(new LimelightValues(limelety));
     shootyboi.setDefaultCommand(new PadShoot(shootyboi, opPad));
 
     // Configure auto chooser
@@ -162,15 +163,16 @@ public class RobotContainer {
     padA.onTrue(new InstantCommand(pivotyboi::resetEncoders));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
     // padY.onTrue(new InstantCommand(pivotyboi::CalibratePivot));
-    padX.whileTrue(new TeleOpAlign(swerveSubsystem, pad));
+    // padX.whileTrue(new TeleOpAlign(swerveSubsystem, pad));
 
     opPadB.whileTrue(new ShootRing(shootyboi, pivotyboi));
     // opPadB.whileTrue(new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
     opPadA.onTrue(new ShooterRampDown(shootyboi));
+    opLeftBumper.whileTrue(new InstantCommand());
     // X: intake i think toggles intake
     opPadY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
     opRightBumper.whileTrue(new AmpScore(shootyboi, pivotyboi));
-  }
+  } 
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

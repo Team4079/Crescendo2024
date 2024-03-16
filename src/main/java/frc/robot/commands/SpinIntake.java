@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
@@ -18,19 +19,21 @@ public class SpinIntake extends Command {
   /** Creates a new SpinIntake. */
   private Intake intake;
   private Shooter shooter;
-  private Limelight limelight;
+  // private Limelight limelight;
   private LogitechGamingPad opPad;
   private Timer timer;
-  private Timer limelightTimer;
+  // private Timer limelightTimer;
   private boolean shouldSpin;
+  private boolean d;
 
-  public SpinIntake(Intake intake, Shooter shooter, LogitechGamingPad opPad, Limelight limelight) {
+  // lIMELIGHT IN THE CONSTRUCOT
+  public SpinIntake(Intake intake, Shooter shooter, LogitechGamingPad opPad) {
     this.intake = intake;
     this.shooter = shooter;
     this.opPad = opPad;
-    this.limelight = limelight;
+    // this.limelight = limelight;
     timer = new Timer();
-    limelightTimer = new Timer();
+    // limelightTimer = new Timer();
     addRequirements(intake);
   }
 
@@ -38,12 +41,13 @@ public class SpinIntake extends Command {
   @Override
   public void initialize() {
     shouldSpin = false;
+    d = false;
   }
 
   /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
-
+    SmartDashboard.putBoolean("intake", d);
     if (opPad.getXReleased()) {
       shouldSpin = !shouldSpin;
     }
@@ -51,26 +55,28 @@ public class SpinIntake extends Command {
     if (!ShooterGlobalValues.HAS_PIECE && shouldSpin) {
       intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
       shooter.setKrakenVelocity(ShooterGlobalValues.PASSTHROUGH_RPS);
+      d = true;
       timer.reset();
-      limelightTimer.reset();
+      // limelightTimer.reset();
     } else {
       if (!opPad.getBReleased() && !opPad.getRightBumperReleased()) {
+        d = false;
         timer.start();
-        limelightTimer.start();
+        // limelightTimer.start();
         while (timer.get() < 0.3) {
           // shooter.setShooterVelocity(6, 6);
           shooter.setKrakenVelocity(ShooterGlobalValues.PASSTHROUGH_RPS);
         }
 
-        while (timer.get() < 0.39) {
+        while (timer.get() < 0.45) {
           shooter.setKrakenVelocity(20);
         }
 
-        if (limelightTimer.get() < 3) {
-          limelight.flash();
-        } else {
-          limelight.unflash();
-        }
+        // if (limelightTimer.get() < 3) {
+          // limelight.flash();
+        // } else {
+          // limelight.unflash();
+        // }
 
         shooter.stopKraken();
         intake.stopKraken();

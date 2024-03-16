@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8887064986466873,
-      "y": 2.0158058821455733
+      "x": 1.3756161320151827,
+      "y": 5.55076982040085
     },
     "rotation": 0
   },
@@ -22,12 +22,6 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "startIntake"
-                }
-              },
-              {
                 "type": "sequential",
                 "data": {
                   "commands": [
@@ -45,6 +39,12 @@
                     }
                   ]
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "startIntake"
+                }
               }
             ]
           }
@@ -58,5 +58,6 @@
       ]
     }
   },
-  "folder": "Full Autos"
+  "folder": "Full Autos",
+  "choreoAuto": false
 }

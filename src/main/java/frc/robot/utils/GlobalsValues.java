@@ -102,7 +102,7 @@ public final class GlobalsValues {
     public static final boolean isFieldOriented = true;
 
     // Whether the limelight auto aligns and its deadband
-    public static final boolean useLimelightAutoAlign = true;
+    public static final boolean useLimelightAutoAlign = false;
     public static final double limelightDeadband = 3.5;
 
     public static final double DEADBAND = 0.08;
@@ -195,9 +195,9 @@ public final class GlobalsValues {
     public static final double PIVOT_PID_RIGHT_F = 0.1;
 
     public static final double PIVOT_NEUTRAL_ANGLE = 425;
-    public static final double PIVOT_AMP_ANGLE = 923;
-    public static final double 
-    PIVOT_SUBWOOFER_ANGLE = 106326 / 198;
+    public static final double PIVOT_AMP_ANGLE = 950;
+    public static final double PIVOT_SUBWOOFER_ANGLE = 550;
+    public static final double PIVOT_FENDER_ANGLE = 0;
 
     // Pivot Motor Speed Values
     public static boolean IS_NEUTRAL = true;

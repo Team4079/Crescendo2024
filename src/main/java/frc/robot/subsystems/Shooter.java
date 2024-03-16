@@ -141,6 +141,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Kraken Velocity", passthroughKraken.getRotorVelocity().getValue());
     ShooterGlobalValues.HAS_PIECE = getRingSensor();
 
+    SmartDashboard.putBoolean("has peice", ShooterGlobalValues.HAS_PIECE);
     // setKrakenVelocity(-25);
     // setShooterVelocity(-70, -70);
   }

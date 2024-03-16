@@ -27,7 +27,7 @@ public class PushRing extends Command {
   public void initialize() {
     timer.start();
     while (timer.get() < 1) {
-      shooter.setKrakenVelocity(-40);
+      shooter.setKrakenVelocity(-30);
     }
     timer.stop();
   }

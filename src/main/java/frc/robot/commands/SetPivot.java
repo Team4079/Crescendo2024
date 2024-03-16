@@ -8,7 +8,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Pivot;
-import frc.robot.utils.GlobalsValues.PivotGlobalValues;;
 
 /** The {@link ResetPivot} class is a command that resets the pivot to its neutral position. */
 public class SetPivot extends Command {
