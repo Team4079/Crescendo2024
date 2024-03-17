@@ -16,12 +16,6 @@
           "data": {
             "name": "shootSquence"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "drived"
-          }
         }
       ]
     }

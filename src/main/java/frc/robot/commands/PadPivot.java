@@ -6,7 +6,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Pivot;
+import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.LogitechGamingPad;
+import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 
 public class PadPivot extends Command {
   private Pivot pivot;
@@ -28,13 +30,13 @@ public class PadPivot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (pivot.getAbsoluteEncoder() < 415) {
+    if (pivot.getAbsoluteEncoder() < PivotGlobalValues.PIVOT_MIN_ANGLE) {
       if (opPad.getLeftAnalogYAxis() < 0) {
         pivot.movePivot(opPad.getLeftAnalogYAxis());
       } else {
         pivot.movePivot(0);
       }
-    } else if (pivot.getAbsoluteEncoder() > 1100) {
+    } else if (pivot.getAbsoluteEncoder() > PivotGlobalValues.PIVOT_MAX_ANGLE) {
       if (opPad.getLeftAnalogYAxis() > 0) {
         pivot.movePivot(opPad.getLeftAnalogYAxis());
       } else {
@@ -44,6 +46,7 @@ public class PadPivot extends Command {
       pivot.movePivot(opPad.getLeftAnalogYAxis());
     }
   }
+
 
   // Called once the command ends or is interrupted.
   @Override

@@ -9,6 +9,7 @@ import frc.robot.commands.AmpScore;
 import frc.robot.commands.AutoAlign;
 // import frc.robot.commands.LimelightValues;
 import frc.robot.commands.LowerPivot;
+import frc.robot.commands.ManualShoot;
 import frc.robot.commands.TeleOpAlign;
 import frc.robot.commands.ShootingSequence;
 import frc.robot.commands.SpinIntake;
@@ -133,7 +134,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("setPivot", new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
     swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveGlobalValues.isFieldOriented));
     // led.setDefaultCommand(new SetLED(led));
-    // intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, opPad, limelety));
+    // intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, opPad,
+    // limelety));
     intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, opPad));
     pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, opPad));
     // limelety.setDefaultCommand(new LimelightValues(limelety));
@@ -167,13 +169,14 @@ public class RobotContainer {
     // padX.whileTrue(new TeleOpAlign(swerveSubsystem, pad));
 
     opPadB.whileTrue(new ShootRing(shootyboi, pivotyboi));
-    // opPadB.whileTrue(new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
-    opPadA.onTrue(new ShooterRampDown(shootyboi));
+    // opPadB.whileTrue(new SetPivot(pivotyboi,
+    // PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
+    opPadA.whileTrue(new ManualShoot(shootyboi));
     opLeftBumper.whileTrue(new ShooterFender(shootyboi, pivotyboi));
     // X: intake i think toggles intake
     opPadY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
     opRightBumper.whileTrue(new AmpScore(shootyboi, pivotyboi));
-  } 
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

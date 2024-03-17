@@ -161,7 +161,7 @@ public class Pivot extends SubsystemBase {
     // encoder = new AbsoluteEncoder(8);
 
     actualAbsEnc = new DutyCycleEncoder(absoluteEncoder);
-    zeroAbsoluteEncoder();
+    // zeroAbsoluteEncoder();
     actualAbsEnc.setDutyCycleRange(0, 1);
 
     vel_voltage = new VelocityVoltage(0);
@@ -170,7 +170,6 @@ public class Pivot extends SubsystemBase {
 
     pivotMotorLeft.setPosition(getAbsoluteEncoder());
     pivotMotorRight.setPosition(getAbsoluteEncoder());
-    
   }
 
   // This method will be called once per scheduler run
@@ -242,13 +241,10 @@ public class Pivot extends SubsystemBase {
     return 0.0;
   }
 
-  public void resetEncoders()
-  {
+  public void resetEncoders() {
     pivotMotorLeft.setPosition(0);
     pivotMotorRight.setPosition(0);
   }
-  
-  
 
   /**
    * Get the absolute encoder position
@@ -257,7 +253,6 @@ public class Pivot extends SubsystemBase {
    * @return double, the absolute encoder position of the pivot motor
    */
   public double getAbsoluteEncoder() {
-    // return 0;
     return actualAbsEnc.getAbsolutePosition() * 2048;
   }
 
@@ -269,7 +264,6 @@ public class Pivot extends SubsystemBase {
    */
   public void zeroAbsoluteEncoder() {
     actualAbsEnc.reset();
-
   }
 
   public void movePivot(double velocity) {
