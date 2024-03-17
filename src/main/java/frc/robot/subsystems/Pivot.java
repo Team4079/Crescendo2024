@@ -283,6 +283,14 @@ public class Pivot extends SubsystemBase {
     pivotMotorRight.setControl(vel_voltage.withVelocity(pos));
   }
 
+  public void toggleLimit() {
+    PivotGlobalValues.is_SOFTLIMIT = !PivotGlobalValues.is_SOFTLIMIT;
+  }
+
+  public void recalibrateEncoders() {
+    PivotGlobalValues.offset = PivotGlobalValues.PIVOT_NEUTRAL_ANGLE - getAbsoluteEncoder();
+  }
+
   // public void CalibratePivot() {
   // limit = !limit;
   // if (limit) {

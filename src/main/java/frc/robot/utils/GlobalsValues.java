@@ -11,6 +11,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import frc.robot.subsystems.Pivot;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -194,18 +195,22 @@ public final class GlobalsValues {
 
     public static final double PIVOT_PID_RIGHT_F = 0.1;
 
-    public static final double PIVOT_NEUTRAL_ANGLE = 300; //All +75
-    public static final double PIVOT_AMP_ANGLE = 825;
-    public static final double PIVOT_SUBWOOFER_ANGLE = 425;
-    public static final double PIVOT_FENDER_ANGLE = 546;
-    public static final double PIVOT_MAX_ANGLE = 976;
-    public static final double PIVOT_MIN_ANGLE = 310;
+    public static final double PIVOT_NEUTRAL_ANGLE = 300 - PivotGlobalValues.offset; //All +75
+    public static final double PIVOT_AMP_ANGLE = 825 - PivotGlobalValues.offset;
+    public static final double PIVOT_SUBWOOFER_ANGLE = 425 - PivotGlobalValues.offset;
+    public static final double PIVOT_FENDER_ANGLE = 546 - PivotGlobalValues.offset;
+    public static final double PIVOT_MAX_ANGLE = 976 - PivotGlobalValues.offset;
+    public static final double PIVOT_MIN_ANGLE = 310 - PivotGlobalValues.offset;
 
     // Pivot Motor Speed Values
     public static boolean IS_NEUTRAL = true;
 
     // Pivot Motor Encoder ID
     public static final int ENCODER_ID = 9;
+
+    // Pivot Softlimit Values
+    public static boolean is_SOFTLIMIT = true;
+    public static double offset = 0.0;
   }
 
   public static class ShooterGlobalValues {

@@ -30,19 +30,23 @@ public class PadPivot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (pivot.getAbsoluteEncoder() < PivotGlobalValues.PIVOT_MIN_ANGLE) {
-      if (opPad.getLeftAnalogYAxis() < 0) {
-        pivot.movePivot(opPad.getLeftAnalogYAxis());
+    if (PivotGlobalValues.is_SOFTLIMIT)
+      if (pivot.getAbsoluteEncoder() < PivotGlobalValues.PIVOT_MIN_ANGLE) {
+        if (opPad.getLeftAnalogYAxis() < 0) {
+          pivot.movePivot(opPad.getLeftAnalogYAxis());
+        } else {
+          pivot.movePivot(0);
+        }
+      } else if (pivot.getAbsoluteEncoder() > PivotGlobalValues.PIVOT_MAX_ANGLE) {
+        if (opPad.getLeftAnalogYAxis() > 0) {
+          pivot.movePivot(opPad.getLeftAnalogYAxis());
+        } else {
+          pivot.movePivot(0);
+        }
       } else {
-        pivot.movePivot(0);
-      }
-    } else if (pivot.getAbsoluteEncoder() > PivotGlobalValues.PIVOT_MAX_ANGLE) {
-      if (opPad.getLeftAnalogYAxis() > 0) {
         pivot.movePivot(opPad.getLeftAnalogYAxis());
-      } else {
-        pivot.movePivot(0);
       }
-    } else {
+    else {
       pivot.movePivot(opPad.getLeftAnalogYAxis());
     }
   }

@@ -176,6 +176,9 @@ public class RobotContainer {
     // X: intake i think toggles intake
     opPadY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
     opRightBumper.whileTrue(new AmpScore(shootyboi, pivotyboi));
+
+    // New instnat command pivot::toggleSoftLimit for Ria
+    // New command to change offset for Ria
   }
 
   /**
