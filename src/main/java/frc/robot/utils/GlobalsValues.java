@@ -61,6 +61,7 @@ public final class GlobalsValues {
     public static final double AACORN_SPEED = 0.95;
     public static final double SLOW_SPEED = 0.3;
     public static final double TURN_CONSTANT = 0.3; // 0.3
+    public static final double MetersPerRevolution = WHEEL_DIAMETER * Math.PI;  
     public static double HEADING = 0.0;
 
     // Motor Speed Manipulation Values
@@ -96,6 +97,10 @@ public final class GlobalsValues {
     public static final double CANCoderValue11 = 0.979736 - 0.5; // 0.539794 - 0.5
     public static final double CANCoderValue12 = 0.536133; // 0.984863
 
+    // Whether the motors are inverted
+    public static final boolean DRIVE_MOTOR_INVERETED = false;
+    public static final boolean STEER_MOTOR_INVERTED = false;
+
     // THe deadband of the joystick to combat drift
     public static final double JOYSTICK_DEADBAND = 0.05;
 
@@ -106,7 +111,7 @@ public final class GlobalsValues {
     public static final boolean useLimelightAutoAlign = false;
     public static final double limelightDeadband = 3.5;
 
-    public static final double DEADBAND = 0.08;
+    public static final double MOTOR_DEADBAND = 0.05;
 
     // HSV Values for LED
     public static final int[] greenLED = { 60, 255, 255 };
@@ -132,8 +137,8 @@ public final class GlobalsValues {
                                                                                                 // this should likely
                                                                                                 // live in your
                                                                                                 // Constants class
-          new PIDConstants(0.15, 0.000, 0.00), // translation
-          new PIDConstants(0, 0.0, 0.0), // rotation
+          new PIDConstants(5, 0.000, 0.00), // translation
+          new PIDConstants(3, 0.0, 0.0), // rotation
           4.96824, // Max module speed, in m/s
           SwerveGlobalValues.robotSize, // Drive base radius in meters. Distance from robot center to furthest //
           // module.
