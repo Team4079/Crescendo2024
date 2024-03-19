@@ -11,6 +11,7 @@ import frc.robot.commands.AutoAlign;
 import frc.robot.commands.LowerPivot;
 import frc.robot.commands.ManualShoot;
 import frc.robot.commands.TeleOpAlign;
+import frc.robot.commands.WaitShoot;
 import frc.robot.commands.ShootingSequence;
 import frc.robot.commands.SpinIntake;
 import frc.robot.commands.StartIntake;
@@ -176,7 +177,7 @@ public class RobotContainer {
     // X: intake i think toggles intake
     opPadY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
     opRightBumper.whileTrue(new AmpScore(shootyboi, pivotyboi));
-
+    opLeftBumper.onTrue(new InstantCommand(pivotyboi::toggleLimit));
     // New instnat command pivot::toggleSoftLimit for Ria
     // New command to change offset for Ria
   }
@@ -195,6 +196,7 @@ public class RobotContainer {
 
     // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
     // return new PathPlannerAuto(m_chooser.getSelected());
-    return new PathPlannerAuto("Center Auto");
+    return new WaitShoot(shootyboi, pivotyboi);
+    // return new PathPlannerAuto("Test Auto");
   }
 }

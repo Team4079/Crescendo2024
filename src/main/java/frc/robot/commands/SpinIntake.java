@@ -52,6 +52,7 @@ public class SpinIntake extends Command {
       shouldSpin = !shouldSpin;
     }
 
+
     if (!ShooterGlobalValues.HAS_PIECE && shouldSpin) {
       intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
       shooter.setKrakenVelocity(ShooterGlobalValues.PASSTHROUGH_RPS);
@@ -73,9 +74,9 @@ public class SpinIntake extends Command {
         }
 
         // if (limelightTimer.get() < 3) {
-          // limelight.flash();
+        // limelight.flash();
         // } else {
-          // limelight.unflash();
+        // limelight.unflash();
         // }
 
         shooter.stopKraken();

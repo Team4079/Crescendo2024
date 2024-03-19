@@ -12,7 +12,6 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
-
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShootingSequence extends SequentialCommandGroup {
@@ -29,16 +28,14 @@ public class ShootingSequence extends SequentialCommandGroup {
 
     /** Command to run shooting sequence mainly in auto */
 
-    //Why is this not parallel command group for first two?
-    
+    // Why is this not parallel command group for first two?
+
     addCommands(
-      new ParallelCommandGroup(
-        new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(1.2),
-        new ShooterRampUp(shooter, ShooterGlobalValues.SHOOTER_SPEED).withTimeout(1.2)
-      ), 
-      new PushRing(shootyboi).withTimeout(0.3),
-      new InstantCommand(shooter::stopAllMotors),
-      new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(1.5)
-    );
+        new ParallelCommandGroup(
+            new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(0.1),
+            new ShooterRampUp(shooter, ShooterGlobalValues.SHOOTER_SPEED).withTimeout(0.1)),
+        new PushRing(shootyboi),
+        new InstantCommand(shooter::stopAllMotors),
+        new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE));
   }
 }

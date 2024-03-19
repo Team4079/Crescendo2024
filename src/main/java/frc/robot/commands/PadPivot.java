@@ -30,7 +30,7 @@ public class PadPivot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (PivotGlobalValues.is_SOFTLIMIT)
+    if (PivotGlobalValues.is_SOFTLIMIT) {
       if (pivot.getAbsoluteEncoder() < PivotGlobalValues.PIVOT_MIN_ANGLE) {
         if (opPad.getLeftAnalogYAxis() < 0) {
           pivot.movePivot(opPad.getLeftAnalogYAxis());
@@ -46,6 +46,7 @@ public class PadPivot extends Command {
       } else {
         pivot.movePivot(opPad.getLeftAnalogYAxis());
       }
+    } 
     else {
       pivot.movePivot(opPad.getLeftAnalogYAxis());
     }

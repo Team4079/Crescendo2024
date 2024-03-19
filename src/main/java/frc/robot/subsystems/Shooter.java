@@ -15,6 +15,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Tracer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
@@ -52,13 +53,15 @@ public class Shooter extends SubsystemBase {
 
   private DigitalInput ringSensor;
 
+  private boolean leftFalconIsStopped, rightFalconIsStopped, passthroughKrakenIsStopped;
+
   public Shooter() {
     leftFalcon = new TalonFX(ShooterGlobalValues.FALCON_LEFT_ID);
     rightFalcon = new TalonFX(ShooterGlobalValues.FALCON_RIGHT_ID);
     passthroughKraken = new TalonFX(ShooterGlobalValues.KRAKEN_ID);
 
     ringSensor = new DigitalInput(ShooterGlobalValues.RING_SENSOR_PORT);
-    
+
     shooterConfigs = new MotorOutputConfigs();
 
     leftShootConfigurator = leftFalcon.getConfigurator();
@@ -106,13 +109,16 @@ public class Shooter extends SubsystemBase {
     passthroughKrakenRampConfig = new ClosedLoopRampsConfigs();
 
     leftShootCurrentConfig.SupplyCurrentLimit = 100;
-    leftShootCurrentConfig.StatorCurrentLimit = 100;
+    leftShootCurrentConfig.StatorCurrentLimit = 80;
+    leftShootCurrentConfig.StatorCurrentLimitEnable = true;
 
     rightShootCurrentConfig.SupplyCurrentLimit = 100;
-    rightShootCurrentConfig.StatorCurrentLimit = 100;
+    rightShootCurrentConfig.StatorCurrentLimit = 80;
+    rightShootCurrentConfig.StatorCurrentLimitEnable = true;
 
     passthroughKrakenCurrentConfig.SupplyCurrentLimit = 100;
-    passthroughKrakenCurrentConfig.StatorCurrentLimit = 100;
+    passthroughKrakenCurrentConfig.StatorCurrentLimit = 80;
+    passthroughKrakenCurrentConfig.StatorCurrentLimitEnable = true;
 
     leftFalcon.getConfigurator().apply(leftShootCurrentConfig);
     rightFalcon.getConfigurator().apply(rightShootCurrentConfig);
@@ -149,20 +155,23 @@ public class Shooter extends SubsystemBase {
   /**
    * Sets the velocity of the shooter motors
    * 
-   * @param left Left motor speed in RPS
+   * @param left  Left motor speed in RPS
    * @param right Right motor speed in RPS
    * @return void
    */
   public void setShooterVelocity(double left, double right) {
     leftFalcon.setControl(m_request.withVelocity(left));
     rightFalcon.setControl(m_request.withVelocity(right));
+    leftFalconIsStopped = false;
+    rightFalconIsStopped = false;
   }
 
   /**
-  * Operator command to toggle shooter using Left Trigger
-  * @param void
-  * @return void
-  */
+   * Operator command to toggle shooter using Left Trigger
+   * 
+   * @param void
+   * @return void
+   */
   public void toggleShooterVelocity() {
     toggleShooter = !toggleShooter;
     if (toggleShooter) {
@@ -173,21 +182,21 @@ public class Shooter extends SubsystemBase {
   }
 
   /**
-  * Gets the RPM of the left falcon motor on the shooter
-
-  * @param void
-  * @return double, leftFalcon RPM
-  */
+   * Gets the RPM of the left falcon motor on the shooter
+   * 
+   * @param void
+   * @return double, leftFalcon RPM
+   */
   public double getLeftShooterVelocity() {
     return leftFalcon.getRotorVelocity().getValue();
   }
 
   /**
-  * Gets the RP of the right falcon motor on the shooter
-
-  * @param void
-  * @return double, rightFalcon RPS
-  */
+   * Gets the RP of the right falcon motor on the shooter
+   * 
+   * @param void
+   * @return double, rightFalcon RPS
+   */
   public double getRightShooterVelocity() {
     return leftFalcon.getRotorVelocity().getValue();
   }
@@ -200,6 +209,7 @@ public class Shooter extends SubsystemBase {
    */
   public void setKrakenVelocity(double speed) {
     passthroughKraken.setControl(m_request.withVelocity(speed));
+    passthroughKrakenIsStopped = false;
   }
 
   /**
@@ -219,8 +229,12 @@ public class Shooter extends SubsystemBase {
    * @return void
    */
   public void stopShooter() {
-    leftFalcon.stopMotor();
-    rightFalcon.stopMotor();
+    if (!leftFalconIsStopped || !rightFalconIsStopped) {
+      leftFalcon.stopMotor();
+      rightFalcon.stopMotor();
+      leftFalconIsStopped = true;
+      rightFalconIsStopped = true;
+    }
   }
 
   /**
@@ -230,7 +244,10 @@ public class Shooter extends SubsystemBase {
    * @return void
    */
   public void stopKraken() {
-    passthroughKraken.stopMotor();
+    if (!passthroughKrakenIsStopped) {
+      passthroughKraken.stopMotor();
+      passthroughKrakenIsStopped = true;
+    }
   }
 
   /**
