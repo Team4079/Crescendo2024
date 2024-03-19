@@ -125,15 +125,15 @@ public final class GlobalsValues {
       public static final PID rotationalPID = new PID(0.1, 0.001, 0.03, 0);
 
       // Path Planner Variables
-      public static PIDController pathTranslationPID = new PIDController(0.3, 0.000, 0.00);
-      public static PIDController pathRotationPID = new PIDController(2.0, 0.0, 0.0);
+      public static PIDController pathTranslationPID = new PIDController(5, 0.000, 0.00);
+      public static PIDController pathRotationPID = new PIDController(3.0, 0.0, 0.1);
 
       public static HolonomicPathFollowerConfig pathFollower = new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig,
                                                                                                 // this should likely
                                                                                                 // live in your
                                                                                                 // Constants class
-          new PIDConstants(0.15, 0.000, 0.00), // translation
-          new PIDConstants(0, 0.0, 0.0), // rotation
+          new PIDConstants(5, 0.000, 0.00), // translation
+          new PIDConstants(3, 0.0, 0.0), // rotation
           4.96824, // Max module speed, in m/s
           SwerveGlobalValues.robotSize, // Drive base radius in meters. Distance from robot center to furthest //
           // module.
@@ -195,12 +195,12 @@ public final class GlobalsValues {
 
     public static final double PIVOT_PID_RIGHT_F = 0.1;
 
-    public static final double PIVOT_NEUTRAL_ANGLE = 300 - PivotGlobalValues.offset; //All +75
-    public static final double PIVOT_AMP_ANGLE = 825 - PivotGlobalValues.offset;
-    public static final double PIVOT_SUBWOOFER_ANGLE = 425 - PivotGlobalValues.offset;
-    public static final double PIVOT_FENDER_ANGLE = 546 - PivotGlobalValues.offset;
-    public static final double PIVOT_MAX_ANGLE = 976 - PivotGlobalValues.offset;
-    public static final double PIVOT_MIN_ANGLE = 310 - PivotGlobalValues.offset;
+    public static final double PIVOT_NEUTRAL_ANGLE = (69 + PivotGlobalValues.offset); // All 3\
+    public static final double PIVOT_AMP_ANGLE = (574 + PivotGlobalValues.offset);
+    public static final double PIVOT_SUBWOOFER_ANGLE = (184 + PivotGlobalValues.offset);
+    public static final double PIVOT_FENDER_ANGLE = (305 + PivotGlobalValues.offset);
+    public static final double PIVOT_MAX_ANGLE = (1000 + PivotGlobalValues.offset);
+    public static final double PIVOT_MIN_ANGLE = (69 + PivotGlobalValues.offset);
 
     // Pivot Motor Speed Values
     public static boolean IS_NEUTRAL = true;
@@ -210,7 +210,8 @@ public final class GlobalsValues {
 
     // Pivot Softlimit Values
     public static boolean is_SOFTLIMIT = true;
-    public static double offset = 0.0;
+    public static double offset = 0;
+    public static double manual_offset = 1045;
   }
 
   public static class ShooterGlobalValues {
@@ -247,6 +248,7 @@ public final class GlobalsValues {
     // Shooter Motor Speeds
     public static final double SHOOTER_RPS = -40.0; // Positive is shooting, negative is intake
     public static final double PASSTHROUGH_RPS = -30.0; // Positive is shooting, negative is intake
+    public static final double AUTO_PASSTHROUGH_RPS = -35.0; // Positive is shooting, negative is intake
 
     // Shooter Misc Values
     public static boolean HAS_PIECE = false;

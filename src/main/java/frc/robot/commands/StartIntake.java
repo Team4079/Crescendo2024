@@ -48,18 +48,18 @@ public class StartIntake extends Command {
     if (ShooterGlobalValues.HAS_PIECE) {
       timer.start();
 
-      while (timer.get() < 0.3) {
+      while (timer.get() < 0.35) {
         // shooter.setShooterVelocity(6, 6);
-        shooter.setKrakenVelocity(ShooterGlobalValues.PASSTHROUGH_RPS);
-      }
-      shooter.stopKraken();
-      while (timer.get() < 0.5) {
-        shooter.setKrakenVelocity(20);
+        shooter.setKrakenVelocity(ShooterGlobalValues.AUTO_PASSTHROUGH_RPS);
       }
 
+      while (timer.get() < 0.52) {
+        shooter.setKrakenVelocity(20);
+      }
+      
       shooter.stopKraken();
-      isDone = true;
       intake.stopKraken();
+      timer.stop();
     }
 
   }

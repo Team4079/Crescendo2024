@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Pivot;
@@ -16,12 +17,18 @@ public class SetPivot extends Command {
   private double pos;
   private PIDController pidController;
   private double velocity;
+  private Timer timer;
+  private double deadband;
+  private boolean isDone;
+  
+
   // Get distance when after we mount the limelight
 
   /** Creates a new Shoot. */
   public SetPivot(Pivot pivot, double pos) {
     this.pivot = pivot;
     this.pos = pos;
+    timer = new Timer();
     pidController = new PIDController(0.0017, 0, 0.000005);
     addRequirements(pivot);
   }
@@ -29,7 +36,8 @@ public class SetPivot extends Command {
   // // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-   
+    deadband = 10;
+    isDone = false;
     // pidController.setTolerance(50);
   }
 
@@ -40,14 +48,30 @@ public class SetPivot extends Command {
     SmartDashboard.putNumber("Error Pivot", -pivot.getAbsoluteEncoder() + pos);
     SmartDashboard.putNumber("Setpoint", pos);
 
-    if (Math.abs(-pivot.getAbsoluteEncoder() + pos) < 10)
+    if (Math.abs(-pivot.getAbsoluteEncoder() + pos) < deadband)
     {
        pivot.stopMotors();
     }
 
-    else{
+    else {
       pivot.movePivot(-velocity);
     }
+    
+    if (Math.abs(pivot.getAbsoluteEncoder() - pos) <= deadband)
+    {
+      timer.start();
+      if (timer.get() >= 0.1) {
+        isDone = true;
+      }
+    }
+    
+    else {
+      timer.reset();
+      isDone = false;
+    }
+
+
+
   }
 
   // Called once the command ends or is interrupted.
@@ -60,6 +84,6 @@ public class SetPivot extends Command {
   @Override
   public boolean isFinished() {
     
-    return false;
+    return isDone;
   }
 }

@@ -16,12 +16,6 @@
           "data": {
             "pathName": "Forward Path"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "autoAlign"
-          }
         }
       ]
     }

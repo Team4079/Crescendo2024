@@ -36,6 +36,8 @@ public class Intake extends SubsystemBase {
   private VelocityVoltage m_request;
   // private VoltageOut m_out;
 
+  private boolean intakeIsStopped;
+
   public Intake() {
     this.intakeKaren = new TalonFX(IntakeGlobalValues.INTAKE_MOTOR_ID);
 
@@ -87,6 +89,7 @@ public class Intake extends SubsystemBase {
    */
   public void setIntakeVelocity(double speed) {
     intakeKaren.setControl(m_request.withVelocity(speed));
+    intakeIsStopped = false;
   }
 
   /**
@@ -96,6 +99,9 @@ public class Intake extends SubsystemBase {
    * @return void
    */
   public void stopKraken() {
-    intakeKaren.stopMotor();
+    if (!intakeIsStopped) {
+      intakeKaren.stopMotor();
+      intakeIsStopped = true;
+    }
   }
 }

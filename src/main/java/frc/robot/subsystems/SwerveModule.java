@@ -25,7 +25,8 @@ import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
 
 /**
- * The {@link SwerveModule} class includes all the motors to control the swerve drive.
+ * The {@link SwerveModule} class includes all the motors to control the swerve
+ * drive.
  */
 public class SwerveModule {
   /** Creates a new SwerveModule. */
@@ -94,7 +95,15 @@ public class SwerveModule {
     steerConfigurator.setPosition(CANCoderDriveStraightSteerSetPoint);
 
     driveCurrentLimitsConfigs = new CurrentLimitsConfigs();
+    driveMotor.getConfigurator().refresh(driveCurrentLimitsConfigs);
+    driveCurrentLimitsConfigs.StatorCurrentLimit = 70;
+    driveCurrentLimitsConfigs.StatorCurrentLimitEnable = true;
+
     steerCurrentLimitsConfigs = new CurrentLimitsConfigs();
+    steerMotor.getConfigurator().refresh(steerCurrentLimitsConfigs);
+    steerCurrentLimitsConfigs.StatorCurrentLimit = 70;
+    steerCurrentLimitsConfigs.StatorCurrentLimitEnable = true;
+
     driveClosedRampsConfigs = new ClosedLoopRampsConfigs();
     steerClosedRampsConfigs = new ClosedLoopRampsConfigs();
 
@@ -262,11 +271,10 @@ public class SwerveModule {
       }
 
       newRotations = currentRotations + angleToRotations(change, MotorGlobalValues.STEER_MOTOR_GEAR_RATIO);
-      SmartDashboard.putNumber("Set Rotations " + steerMotor.getDeviceID(), newRotations);
-      SmartDashboard.putNumber("Actual Rotations " + steerMotor.getDeviceID(),
-          steerMotor.getRotorPosition().getValue());
-      SmartDashboard.putNumber("Jayden Sun" + steerMotor.getDeviceID(),
-          newRotations - steerMotor.getRotorPosition().getValue());
+      // SmartDashboard.putNumber("Set Rotations " + steerMotor.getDeviceID(),
+      // newRotations);
+      // SmartDashboard.putNumber("Actual Rotations " + steerMotor.getDeviceID(),
+      // steerMotor.getRotorPosition().getValue());
       setSteerPosition(newRotations);
     }
   }

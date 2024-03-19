@@ -182,6 +182,7 @@ public class Pivot extends SubsystemBase {
     SmartDashboard.putNumber("Absolute Encoder Position", getAbsoluteEncoder());
     SmartDashboard.putNumber("Pivot Left Position", pivotMotorLeft.getPosition().getValue());
     SmartDashboard.putNumber("Pivot Right Position", pivotMotorRight.getPosition().getValue());
+    SmartDashboard.putBoolean("Pivot SoftLimit", getSoftLimit());
     // SmartDashboard.putBoolean("limit", limit);
 
     // pivotMotorLeft.setPosition(getAbsoluteEncoder());
@@ -289,6 +290,10 @@ public class Pivot extends SubsystemBase {
 
   public void recalibrateEncoders() {
     PivotGlobalValues.offset = PivotGlobalValues.PIVOT_NEUTRAL_ANGLE - getAbsoluteEncoder();
+  }
+
+  public boolean getSoftLimit() {
+    return PivotGlobalValues.is_SOFTLIMIT;
   }
 
   // public void CalibratePivot() {
