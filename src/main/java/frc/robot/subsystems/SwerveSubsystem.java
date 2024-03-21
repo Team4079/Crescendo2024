@@ -82,7 +82,7 @@ public class SwerveSubsystem extends SubsystemBase {
     swerveEstimator = new SwerveDrivePoseEstimator(SwerveGlobalValues.kinematics, pidggy.getRotation2d(), getModulePositions(), new Pose2d(),
     VecBuilder.fill(0.05, 0.05, Math.toRadians(5)),
     VecBuilder.fill(0.5, 0.5, Math.toRadians(30))); 
-    addRotorPositionsforModules();
+    // addRotorPositionsforModules();
 
     // Makes the rotation smooth (in a circle)
     // Blame Jayden for adding a useless line of code
@@ -97,7 +97,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * Backward -x
      * Left -y
      * Right +y
-     */
+     */ 
     AutoBuilder.configureHolonomic(
         this::getPose, // Robot pose supplier
         this::customPose, // Method to reset odometry (will be called if your auto has a starting pose)
@@ -129,6 +129,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
     turnSpeed = joyStickInput * MotorGlobalValues.TURN_CONSTANT;
 
+    System.out.println("Forward Speed: " + forwardSpeed);
+    System.out.println("Left Speed: " + leftSpeed);
+    System.out.println("Turn Speed: " + joyStickInput);
     // Runs robot/field-oriented based on the boolean value of isFieldOriented
     if (isFieldOriented) {
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -150,7 +153,6 @@ public class SwerveSubsystem extends SubsystemBase {
     for (int i = 0; i < modules.length; i++) {
       modules[i].setState(states[i]);
 
-      // SmartDashboard.putNumber("MotorRot" + i, modules[i].getRotationDegree() % 360);
     }
   }
 
@@ -297,6 +299,13 @@ public class SwerveSubsystem extends SubsystemBase {
     swerveOdomeryPose2d = swerveOdometry.update(headingGyroAnglething, getModulePositions());
 
     SmartDashboard.putNumber("heading", pgetHeading());
+    for (int i = 0; i < modules.length; i++) {
+      SmartDashboard.putNumber("Module Angle: " + i, modules[i].getCanCoderValueDegrees());
+    }
+
+    for (int i = 0; i < modules.length; i++) {
+      SmartDashboard.putNumber("Module Speed: " + i, modules[i].getDriveVelocity());
+    }
   }
 
   /**

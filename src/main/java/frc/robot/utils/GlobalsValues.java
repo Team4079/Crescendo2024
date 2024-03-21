@@ -96,7 +96,7 @@ public final class GlobalsValues {
     public static final double CANCoderValue10 = 0.327881; // 0.328613 + 0.5 add 0.5
     public static final double CANCoderValue11 = 0.979736 - 0.5; // 0.539794 - 0.5
     public static final double CANCoderValue12 = 0.536133; // 0.984863
-
+    public static final double[] CANCoderValues = {0.915283 + 0.5, 0.327881, 0.979736 - 0.5, 0.536133};
     // Whether the motors are inverted
     public static final boolean DRIVE_MOTOR_INVERETED = false;
     public static final boolean STEER_MOTOR_INVERTED = false;
