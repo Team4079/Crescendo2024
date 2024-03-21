@@ -3,15 +3,9 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "Center Path Files",
-    "Misc",
-    "Bot Path Files",
-    "Top Path Files"
+    "4 Peice"
   ],
-  "autoFolders": [
-    "Full Autos",
-    "Misc Autos"
-  ],
+  "autoFolders": [],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
