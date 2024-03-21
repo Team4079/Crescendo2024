@@ -172,8 +172,8 @@ public class Pivot extends SubsystemBase {
     pos_reqest = new PositionVoltage(0);
     positionDutyCycle = new PositionDutyCycle(0);
 
-    pivotMotorLeft.setPosition(getAbsoluteEncoder());
-    pivotMotorRight.setPosition(getAbsoluteEncoder());
+    pivotMotorLeft.setPosition(0);
+    pivotMotorRight.setPosition(0);
   }
 
   // This method will be called once per scheduler run
