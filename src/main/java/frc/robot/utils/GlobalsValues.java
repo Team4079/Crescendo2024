@@ -23,6 +23,7 @@ import frc.robot.subsystems.Pivot;
  * It is advised to statically import this class (or one of its inner classes)
  * wherever the
  * constants are needed, to reduce verbosity.
+ * 
  */
 public final class GlobalsValues {
   private static final String UTILITY_CLASS = "Utility class";
@@ -96,13 +97,14 @@ public final class GlobalsValues {
     public static final double CANCoderValue10 = 0.327881; // 0.328613 + 0.5 add 0.5
     public static final double CANCoderValue11 = 0.979736 - 0.5; // 0.539794 - 0.5
     public static final double CANCoderValue12 = 0.536133; // 0.984863
+
     public static final double[] CANCoderValues = {0.915283 + 0.5, 0.327881, 0.979736 - 0.5, 0.536133};
     // Whether the motors are inverted
     public static final boolean DRIVE_MOTOR_INVERETED = false;
     public static final boolean STEER_MOTOR_INVERTED = false;
 
     // THe deadband of the joystick to combat drift
-    public static final double JOYSTICK_DEADBAND = 0.05;
+    public static final double JOYSTICK_DEADBAND = 0.5;
 
     public static final boolean usingVision = false;
     public static final boolean isFieldOriented = true;
@@ -120,8 +122,8 @@ public final class GlobalsValues {
 
     public static class BasePIDGlobal {
       // public static final PID STEER_PID = new PID(0.14, 0.00002, 0.008, 0);
-      public static final PID STEER_PID = new PID(0.15, 0.0, 0, 0); // 0.05 P, 0 D
-      public static final PID DRIVE_PID = new PID(0.24, 0.00003, 0, 0);
+      public static final PID STEER_PID = new PID(2, 0.0000, 0.000005, 0); // 0.05 P, 0 D
+      public static final PID DRIVE_PID = new PID(0.0, 0.0, 0.0); // new PID(0.05, 0.00, 0, 0);
       // DON'T SET D PAST 0.03 - Erick or else the swerve moduls make funny nosie
 
       // AutoAlign PID
