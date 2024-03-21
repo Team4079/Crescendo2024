@@ -16,6 +16,8 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.SparkAbsoluteEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -61,10 +63,12 @@ public class Pivot extends SubsystemBase {
 
   private boolean limit;
 
-  // private SparkAbsoluteEncoder absoluteEncoder;
-  DutyCycleEncoder actualAbsEnc;
+  private SparkAbsoluteEncoder absoluteEncoder;
 
-  private DigitalInput absoluteEncoder;
+
+  // DutyCycleEncoder actualAbsEnc;
+
+  // private DigitalInput absoluteEncoder;
 
   private double deadband = 0.05;
 
@@ -157,12 +161,12 @@ public class Pivot extends SubsystemBase {
     pivotMotorLeft.getConfigurator().apply(leftSoftLimitConfig);
     pivotMotorRight.getConfigurator().apply(rightSoftLimitConfig);
 
-    absoluteEncoder = new DigitalInput(9);
+    // absoluteEncoder = new DigitalInput(9);
     // encoder = new AbsoluteEncoder(8);
 
-    actualAbsEnc = new DutyCycleEncoder(absoluteEncoder);
+    // actualAbsEnc = new DutyCycleEncoder(absoluteEncoder);
     // zeroAbsoluteEncoder();
-    actualAbsEnc.setDutyCycleRange(0, 1);
+    // actualAbsEnc.setDutyCycleRange(0, 1);
 
     vel_voltage = new VelocityVoltage(0);
     pos_reqest = new PositionVoltage(0);
@@ -254,7 +258,8 @@ public class Pivot extends SubsystemBase {
    * @return double, the absolute encoder position of the pivot motor
    */
   public double getAbsoluteEncoder() {
-    return actualAbsEnc.getAbsolutePosition() * 2048;
+    // return actualAbsEnc.getAbsolutePosition() * 2048;
+    return 0;
   }
 
   /**
@@ -264,7 +269,7 @@ public class Pivot extends SubsystemBase {
    * @return void
    */
   public void zeroAbsoluteEncoder() {
-    actualAbsEnc.reset();
+    // actualAbsEnc.reset();
   }
 
   public void movePivot(double velocity) {

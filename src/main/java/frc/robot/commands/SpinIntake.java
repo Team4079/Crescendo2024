@@ -54,7 +54,7 @@ public class SpinIntake extends Command {
 
 
     if (!ShooterGlobalValues.HAS_PIECE && shouldSpin) {
-      intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
+      // intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
       shooter.setKrakenVelocity(ShooterGlobalValues.PASSTHROUGH_RPS);
       d = true;
       timer.reset();
