@@ -16,9 +16,11 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
-import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -64,6 +66,7 @@ public class Pivot extends SubsystemBase {
   private boolean limit;
 
   private SparkAbsoluteEncoder absoluteEncoder;
+  private CANSparkMax encodeSparkMax;
 
 
   // DutyCycleEncoder actualAbsEnc;
@@ -164,6 +167,10 @@ public class Pivot extends SubsystemBase {
     // absoluteEncoder = new DigitalInput(9);
     // encoder = new AbsoluteEncoder(8);
 
+    encodeSparkMax = new CANSparkMax(21, MotorType.kBrushless);
+    absoluteEncoder = encodeSparkMax.getAbsoluteEncoder(Type.kDutyCycle);
+    
+
     // actualAbsEnc = new DutyCycleEncoder(absoluteEncoder);
     // zeroAbsoluteEncoder();
     // actualAbsEnc.setDutyCycleRange(0, 1);
@@ -259,7 +266,7 @@ public class Pivot extends SubsystemBase {
    */
   public double getAbsoluteEncoder() {
     // return actualAbsEnc.getAbsolutePosition() * 2048;
-    return 0;
+    return absoluteEncoder.getPosition();
   }
 
   /**
