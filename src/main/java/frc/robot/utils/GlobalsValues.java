@@ -115,10 +115,10 @@ public final class GlobalsValues {
 
     public static final double MOTOR_DEADBAND = 0.05;
 
-    // HSV Values for LED
-    public static final int[] greenLED = { 60, 255, 255 };
-    public static final int[] orangeLED = { 30, 255, 255 };
-    public static final int[] hightideLED = { 5, 200, 100 };
+    // RGB Values for LED
+    public static final int[] greenLED = { 0, 255, 0 };
+    public static final int[] orangeLED = { 255, 165, 0 };
+    public static final int[] hightideLED = { 0, 182, 174 };
 
     public static class BasePIDGlobal {
       // public static final PID STEER_PID = new PID(0.14, 0.00002, 0.008, 0);

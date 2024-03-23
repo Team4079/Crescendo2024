@@ -31,7 +31,7 @@ public class LED extends SubsystemBase {
   @Override
   public void periodic() {
     if (RobotState.isDisabled()) {
-      rainbow(SwerveGlobalValues.hightideLED[0], SwerveGlobalValues.hightideLED[1],
+      rainbowRGB(SwerveGlobalValues.hightideLED[0], SwerveGlobalValues.hightideLED[1],
           SwerveGlobalValues.hightideLED[2]);
       // setRedColor();
     }
@@ -45,17 +45,31 @@ public class LED extends SubsystemBase {
    * @param v (Value) Integer values between 0 - 255
    * @return void
    */
-  public void rainbow(int H, int S, int V) {
-    // rainbowOn += true;
+  public void rainbowHSV(int H, int S, int V) {
     for (int i = 0; i < ledBuffer1.getLength(); i++) {
       ledBuffer1.setHSV(i, H, S, V);
     }
     alignmentIndication1.setData(ledBuffer1);
   }
 
+  /**
+   * Sets the color for each of the LEDs based on RGB values
+   * 
+   * @param r (Red) Integer values between 0 - 255
+   * @param g (Green) Integer values between 0 - 255
+   * @param b (Blue) Integer values between 0 - 255
+   * @return void
+   */
+  public void rainbowRGB(int R, int G, int B) {
+    for (int i = 0; i < ledBuffer1.getLength(); i++) {
+      ledBuffer1.setRGB(i, R, G, B);
+    }
+    alignmentIndication1.setData(ledBuffer1);
+  }
+
   public void setRedColor() {
     for (int i = 0; i < ledBuffer1.getLength(); i++) {
-      ledBuffer1.setHSV(i, 100, 50, 50);
+      ledBuffer1.setRGB(i, 255, 0, 0);
     }
     alignmentIndication1.setData(ledBuffer1);
   }
