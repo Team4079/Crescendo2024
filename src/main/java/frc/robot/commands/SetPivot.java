@@ -29,14 +29,14 @@ public class SetPivot extends Command {
     this.pivot = pivot;
     this.pos = pos;
     timer = new Timer();
-    pidController = new PIDController(0.0017, 0, 0.000005);
+    pidController = new PIDController(0.037, 0, 0.000005);
     addRequirements(pivot);
   }
 
   // // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    deadband = 10;
+    deadband = 0.1;
     isDone = false;
     // pidController.setTolerance(50);
   }
@@ -44,20 +44,21 @@ public class SetPivot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    velocity = pidController.calculate(pivot.getAbsoluteEncoder(), pos);
-    SmartDashboard.putNumber("Error Pivot", -pivot.getAbsoluteEncoder() + pos);
+    velocity = pidController.calculate(pivot.getPivotLeftPos(), pos);
+    SmartDashboard.putNumber("Error Pivot", -pivot.getPivotLeftPos() + pos);
     SmartDashboard.putNumber("Setpoint", pos);
+    SmartDashboard.putNumber("Velocity Pivot", velocity);
 
-    if (Math.abs(-pivot.getAbsoluteEncoder() + pos) < deadband)
+    if (Math.abs(pivot.getPivotLeftPos() - pos) < deadband)
     {
        pivot.stopMotors();
     }
 
     else {
-      pivot.movePivot(-velocity);
+      pivot.movePivot(velocity);
     }
     
-    if (Math.abs(pivot.getAbsoluteEncoder() - pos) <= deadband)
+    if (Math.abs(pivot.getPivotLeftPos() - pos) <= deadband)
     {
       timer.start();
       if (timer.get() >= 0.1) {

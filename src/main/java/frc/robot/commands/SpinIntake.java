@@ -48,18 +48,23 @@ public class SpinIntake extends Command {
   @Override
   public void execute() {
     SmartDashboard.putBoolean("intake", d);
+    SmartDashboard.putBoolean("should spin", shouldSpin);
     if (opPad.getXReleased()) {
       shouldSpin = !shouldSpin;
     }
 
 
     if (!ShooterGlobalValues.HAS_PIECE && shouldSpin) {
-      // intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
+      intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
       shooter.setKrakenVelocity(ShooterGlobalValues.PASSTHROUGH_RPS);
+        System.out.println("jsd;lfakj;ldsakjf;lsajdf;lkajsd;lkfsa");
       d = true;
       timer.reset();
       // limelightTimer.reset();
     } else {
+    
+      shooter.stopKraken();
+      intake.stopKraken();
       if (!opPad.getBReleased() && !opPad.getRightBumperReleased()) {
         d = false;
         timer.start();
@@ -69,7 +74,7 @@ public class SpinIntake extends Command {
           shooter.setKrakenVelocity(ShooterGlobalValues.PASSTHROUGH_RPS);
         }
 
-        while (timer.get() < 0.45) {
+        while (timer.get() < 0.45) 
           shooter.setKrakenVelocity(20);
         }
 
@@ -83,8 +88,10 @@ public class SpinIntake extends Command {
         intake.stopKraken();
         timer.stop();
       }
+
+
     }
-  }
+
 
   /** Called once the command ends or is interrupted. */
   @Override

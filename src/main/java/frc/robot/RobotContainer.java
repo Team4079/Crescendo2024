@@ -7,6 +7,7 @@ package frc.robot;
 
 import frc.robot.commands.AmpScore;
 import frc.robot.commands.AutoAlign;
+import frc.robot.commands.LimelightValues;
 // import frc.robot.commands.LimelightValues;
 import frc.robot.commands.LowerPivot;
 import frc.robot.commands.ManualShoot;
@@ -66,7 +67,7 @@ public class RobotContainer {
   private final LogitechGamingPad pad;
   private final LogitechGamingPad opPad;
   private final LED led;
-  // private final Limelight limelety;
+  private final Limelight limelety;
   // private final Jevois jevois;
   private final Pivot pivotyboi;
   private final Shooter shootyboi;
@@ -95,7 +96,7 @@ public class RobotContainer {
     pad = new LogitechGamingPad(0);
     opPad = new LogitechGamingPad(1);
     led = new LED();
-    // limelety = new Limelight();
+    limelety = new Limelight();
     // jevois = new Jevois();
     pivotyboi = new Pivot();
     shootyboi = new Shooter();
@@ -139,7 +140,7 @@ public class RobotContainer {
     // limelety));
     intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, opPad));
     pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, opPad));
-    // limelety.setDefaultCommand(new LimelightValues(limelety));
+    limelety.setDefaultCommand(new LimelightValues(limelety));
     shootyboi.setDefaultCommand(new PadShoot(shootyboi, opPad));
 
     // Configure auto chooser
@@ -178,6 +179,7 @@ public class RobotContainer {
     opPadY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
     opRightBumper.whileTrue(new AmpScore(shootyboi, pivotyboi));
     opLeftBumper.onTrue(new InstantCommand(pivotyboi::toggleLimit));
+  
     // New instnat command pivot::toggleSoftLimit for Ria
     // New command to change offset for Ria
   }

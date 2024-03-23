@@ -15,9 +15,11 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Tracer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
 /**
@@ -55,6 +57,8 @@ public class Shooter extends SubsystemBase {
 
   private boolean leftFalconIsStopped, rightFalconIsStopped, passthroughKrakenIsStopped;
 
+  private Timer timer;
+
   public Shooter() {
     leftFalcon = new TalonFX(ShooterGlobalValues.FALCON_LEFT_ID);
     rightFalcon = new TalonFX(ShooterGlobalValues.FALCON_RIGHT_ID);
@@ -76,7 +80,7 @@ public class Shooter extends SubsystemBase {
     rightFalcon.getConfigurator().apply(new TalonFXConfiguration());
     passthroughKraken.getConfigurator().apply(new TalonFXConfiguration());
 
-    shooterConfigs.NeutralMode = NeutralModeValue.Brake;
+    shooterConfigs.NeutralMode = NeutralModeValue.Coast;
     leftShootConfigurator.apply(shooterConfigs);
     rightShootConfigurator.apply(shooterConfigs);
     passthroughKrakenConfigurator.apply(shooterConfigs);
@@ -124,9 +128,9 @@ public class Shooter extends SubsystemBase {
     rightFalcon.getConfigurator().apply(rightShootCurrentConfig);
     passthroughKraken.getConfigurator().apply(passthroughKrakenCurrentConfig);
 
-    leftShootRampConfig.DutyCycleClosedLoopRampPeriod = 0.1;
-    rightShootRampConfig.DutyCycleClosedLoopRampPeriod = 0.1;
-    passthroughKrakenRampConfig.DutyCycleClosedLoopRampPeriod = 0.1;
+    leftShootRampConfig.DutyCycleClosedLoopRampPeriod = 0.5;
+    rightShootRampConfig.DutyCycleClosedLoopRampPeriod = 0.5;
+    passthroughKrakenRampConfig.DutyCycleClosedLoopRampPeriod = 0.5;
 
     leftFalcon.getConfigurator().apply(leftShootRampConfig);
     rightFalcon.getConfigurator().apply(rightShootRampConfig);
@@ -135,6 +139,8 @@ public class Shooter extends SubsystemBase {
     toggleShooter = false;
 
     m_request = new VelocityVoltage(0);
+
+    timer = new Timer();
   }
 
   // This method will be called once per scheduler run
@@ -145,7 +151,18 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Left Shooter Error", leftFalcon.getVelocity().getValue() - 50);
     SmartDashboard.putNumber("Right Shooter Error", rightFalcon.getVelocity().getValue() - 50);
     SmartDashboard.putNumber("Kraken Velocity", passthroughKraken.getRotorVelocity().getValue());
-    ShooterGlobalValues.HAS_PIECE = getRingSensor();
+
+    
+    if (getRingSensor()) {
+      timer.start();
+      if (timer.get() < 0.35) {
+        ShooterGlobalValues.HAS_PIECE = true;
+      }
+    }
+    else {
+      ShooterGlobalValues.HAS_PIECE = false;
+      timer.reset();
+    }
 
     SmartDashboard.putBoolean("has peice", ShooterGlobalValues.HAS_PIECE);
     // setKrakenVelocity(-25);

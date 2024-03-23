@@ -121,9 +121,9 @@ public final class GlobalsValues {
     public static final int[] hightideLED = { 0, 182, 174 };
 
     public static class BasePIDGlobal {
-      // public static final PID STEER_PID = new PID(0.14, 0.00002, 0.008, 0);
-      public static final PID STEER_PID = new PID(2, 0.0000, 0.000005, 0); // 0.05 P, 0 D
-      public static final PID DRIVE_PID = new PID(0.0, 0.0, 0.0); // new PID(0.05, 0.00, 0, 0);
+      public static final PID STEER_PID = new PID(0.14, 0.00002, 0.008, 0);
+      // public static final PID STEER_PID = new PID(0.15, 0.0000, 0.000005, 0); // 0.05 P, 0 D
+      public static final PID DRIVE_PID = new PID(0.15, 0.0, 0.0); // new PID(0.05, 0.00, 0, 0);
       // DON'T SET D PAST 0.03 - Erick or else the swerve moduls make funny nosie
 
       // AutoAlign PID
@@ -189,25 +189,25 @@ public final class GlobalsValues {
     public static final int PIVOT_MOTOR_RIGHT_ID = 15;
 
     // Pivot PID Values
-    public static final double PIVOT_PID_LEFT_P = 0.02;
+    public static final double PIVOT_PID_LEFT_P = 0.2;
     public static final double PIVOT_PID_LEFT_I = 0.0;
     public static final double PIVOT_PID_LEFT_D = 0.0;
     public static final double PIVOT_PID_LEFT_V = 0.1;
     public static final double PIVOT_PID_LEFT_F = 0.1;
 
-    public static final double PIVOT_PID_RIGHT_P = 0.02;
+    public static final double PIVOT_PID_RIGHT_P = 0.2;
     public static final double PIVOT_PID_RIGHT_I = 0.0;
     public static final double PIVOT_PID_RIGHT_D = 0.0;
     public static final double PIVOT_PID_RIGHT_V = 0.1;
 
     public static final double PIVOT_PID_RIGHT_F = 0.1;
 
-    public static final double PIVOT_NEUTRAL_ANGLE = (69 + PivotGlobalValues.offset); // All 3\
+    public static final double PIVOT_NEUTRAL_ANGLE = (0 + PivotGlobalValues.offset); // All 3\
     public static final double PIVOT_AMP_ANGLE = (574 + PivotGlobalValues.offset);
-    public static final double PIVOT_SUBWOOFER_ANGLE = (184 + PivotGlobalValues.offset);
+    public static final double PIVOT_SUBWOOFER_ANGLE = (20 + PivotGlobalValues.offset);
     public static final double PIVOT_FENDER_ANGLE = (305 + PivotGlobalValues.offset);
     public static final double PIVOT_MAX_ANGLE = (1000 + PivotGlobalValues.offset);
-    public static final double PIVOT_MIN_ANGLE = (69 + PivotGlobalValues.offset);
+    public static final double PIVOT_MIN_ANGLE = (0 + PivotGlobalValues.offset);
 
     // Pivot Motor Speed Values
     public static boolean IS_NEUTRAL = true;

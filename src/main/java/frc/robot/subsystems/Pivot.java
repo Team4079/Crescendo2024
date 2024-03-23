@@ -11,10 +11,12 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
@@ -24,6 +26,7 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues;
@@ -67,15 +70,12 @@ public class Pivot extends SubsystemBase {
 
   private SparkAbsoluteEncoder absoluteEncoder;
   private CANSparkMax encodeSparkMax;
-
-
-  // DutyCycleEncoder actualAbsEnc;
-
-  // private DigitalInput absoluteEncoder;
-
+  private MotionMagicVoltage motionMagicVoltage;
   private double deadband = 0.05;
 
   private double absPos;
+
+  private Timer timer;
 
   public Pivot() {
     limit = false;
@@ -90,14 +90,24 @@ public class Pivot extends SubsystemBase {
 
     pivotLeftConfigs = new Slot0Configs();
     pivotRightConfigs = new Slot0Configs();
+    
 
     pivotLeftConfiguration = new TalonFXConfiguration();
-    pivotRightConfiguration = new TalonFXConfiguration();
+    pivotLeftConfiguration.MotionMagic.MotionMagicAcceleration = 2000;
+    pivotLeftConfiguration.MotionMagic.MotionMagicCruiseVelocity = 1000;
 
-    pivotMotorLeft.getConfigurator().apply(new TalonFXConfiguration());
-    pivotMotorRight.getConfigurator().apply(new TalonFXConfiguration());
+    pivotRightConfiguration = new TalonFXConfiguration();
+    pivotRightConfiguration.MotionMagic.MotionMagicAcceleration = 2000;
+    pivotRightConfiguration.MotionMagic.MotionMagicCruiseVelocity = 1000;
+
+    pivotMotorLeft.getConfigurator().apply(pivotLeftConfiguration);
+    pivotMotorRight.getConfigurator().apply(pivotRightConfiguration);
 
     pivotConfigs.NeutralMode = NeutralModeValue.Brake;
+    pivotConfigs.Inverted = InvertedValue.Clockwise_Positive;
+
+
+
     pivotLeftConfigurator.apply(pivotConfigs);
     pivotRightConfigurator.apply(pivotConfigs);
 
@@ -105,12 +115,14 @@ public class Pivot extends SubsystemBase {
     pivotLeftConfigs.kI = PivotGlobalValues.PIVOT_PID_LEFT_I;
     pivotLeftConfigs.kD = PivotGlobalValues.PIVOT_PID_LEFT_D;
     pivotLeftConfigs.kV = PivotGlobalValues.PIVOT_PID_LEFT_V;
+    pivotLeftConfigs.kG = 0.0;
     // pivotLeftConfigs.kF = PivotGlobalValues.PIVOT_PID_LEFT_F;
 
     pivotRightConfigs.kP = PivotGlobalValues.PIVOT_PID_RIGHT_P;
     pivotRightConfigs.kI = PivotGlobalValues.PIVOT_PID_RIGHT_I;
     pivotRightConfigs.kD = PivotGlobalValues.PIVOT_PID_RIGHT_D;
     pivotRightConfigs.kV = PivotGlobalValues.PIVOT_PID_RIGHT_V;
+    pivotRightConfigs.kG = 0.0;
     // pivotRightConfigs.kF = PivotGlobalValues.PIVOT_PID_RIGHT_F;
 
     pivotMotorLeft.getConfigurator().apply(pivotLeftConfigs);
@@ -141,15 +153,17 @@ public class Pivot extends SubsystemBase {
     pivotMotorRight.getConfigurator().apply(rightMotorRampConfig);
 
     // on
+
+    // forward is up and positive
     leftSoftLimitConfig.ForwardSoftLimitEnable = false;
     leftSoftLimitConfig.ReverseSoftLimitEnable = false;
-    leftSoftLimitConfig.ForwardSoftLimitThreshold = 1100;
-    leftSoftLimitConfig.ReverseSoftLimitThreshold = 415;
+    leftSoftLimitConfig.ForwardSoftLimitThreshold = 0;
+    leftSoftLimitConfig.ReverseSoftLimitThreshold = 0;
 
     rightSoftLimitConfig.ForwardSoftLimitEnable = false;
     rightSoftLimitConfig.ReverseSoftLimitEnable = false;
-    rightSoftLimitConfig.ForwardSoftLimitThreshold = 1100;
-    rightSoftLimitConfig.ReverseSoftLimitThreshold = 415;
+    rightSoftLimitConfig.ForwardSoftLimitThreshold = 0;
+    rightSoftLimitConfig.ReverseSoftLimitThreshold = 0;
 
     // off
     // leftSoftLimitConfig.ForwardSoftLimitEnable = false;
@@ -178,9 +192,13 @@ public class Pivot extends SubsystemBase {
     vel_voltage = new VelocityVoltage(0);
     pos_reqest = new PositionVoltage(0);
     positionDutyCycle = new PositionDutyCycle(0);
+    motionMagicVoltage = new MotionMagicVoltage(0, false, 0, 0, false, false, false);
+
 
     pivotMotorLeft.setPosition(0);
     pivotMotorRight.setPosition(0);
+
+    timer = new Timer();
   }
 
   // This method will be called once per scheduler run
@@ -211,8 +229,8 @@ public class Pivot extends SubsystemBase {
    * @return void
    */
   public void stopMotors() {
-    pivotMotorLeft.stopMotor();
-    pivotMotorRight.stopMotor();
+    pivotMotorLeft.disable();
+    pivotMotorRight.disable();
   }
 
   /**
@@ -223,6 +241,8 @@ public class Pivot extends SubsystemBase {
    * @return void
    */
   public void setMotorPosition(double left, double right) {
+    // pivotMotorLeft.setControl(motionMagicVoltage.withPosition(left));
+    // pivotMotorRight.setControl(motionMagicVoltage.withPosition(right));
     pivotMotorLeft.setControl(pos_reqest.withPosition(left));
     pivotMotorRight.setControl(pos_reqest.withPosition(right));
   }
