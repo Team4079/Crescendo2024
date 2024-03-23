@@ -52,10 +52,10 @@ public class PadPivot extends Command {
     if (Math.abs(opPad.getLeftAnalogYAxis()) > 0.03)
     {
       pivot.movePivot(-opPad.getLeftAnalogYAxis());
-
     }
-
     else{
+      // pivot.setMotorPosition(pivot.getPivotLeftPos(), pivot.getPivotRightPos());
+      // pivot.movePivot(0.17);
       pivot.stopMotors();
     }
     // }

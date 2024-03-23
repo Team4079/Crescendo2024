@@ -104,14 +104,14 @@ public final class GlobalsValues {
     public static final boolean STEER_MOTOR_INVERTED = false;
 
     // THe deadband of the joystick to combat drift
-    public static final double JOYSTICK_DEADBAND = 0.5;
+    public static final double JOYSTICK_DEADBAND = 0.05;
 
     public static final boolean usingVision = false;
     public static final boolean isFieldOriented = true;
 
     // Whether the limelight auto aligns and its deadband
     public static final boolean useLimelightAutoAlign = false;
-    public static final double limelightDeadband = 3.5;
+    public static final double limelightDeadband = 4.5;
 
     public static final double MOTOR_DEADBAND = 0.05;
 
@@ -129,7 +129,7 @@ public final class GlobalsValues {
       // AutoAlign PID
       public static final PID horizontalPID = new PID(0.05, 0.075, 0.03, 0);
       public static final PID verticalPID = new PID(0.25, 0.0085, 0.03);
-      public static final PID rotationalPID = new PID(0.1, 0.001, 0.03, 0);
+      public static final PID rotationalPID = new PID(0.063, 0.001, 0.035, 0);
 
       // Path Planner Variables
       public static PIDController pathTranslationPID = new PIDController(5, 0.000, 0.00);
@@ -173,7 +173,7 @@ public final class GlobalsValues {
     public static final double INTAKE_PID_D = 0.0;
 
     // Reverse Intake Values
-    public static final double REVERSE_INTAKE_SPEED = 15.0;
+    public static final double REVERSE_INTAKE_SPEED = 20.0;
   }
 
   public static class PivotGlobalValues {
@@ -203,14 +203,15 @@ public final class GlobalsValues {
     public static final double PIVOT_PID_RIGHT_F = 0.1;
 
     public static final double PIVOT_NEUTRAL_ANGLE = (0 + PivotGlobalValues.offset); // All 3\
-    public static final double PIVOT_AMP_ANGLE = (574 + PivotGlobalValues.offset);
-    public static final double PIVOT_SUBWOOFER_ANGLE = (20 + PivotGlobalValues.offset);
+    public static final double PIVOT_AMP_ANGLE = (49.55 + PivotGlobalValues.offset);
+    public static final double PIVOT_SUBWOOFER_ANGLE = (13 + PivotGlobalValues.offset);
     public static final double PIVOT_FENDER_ANGLE = (305 + PivotGlobalValues.offset);
     public static final double PIVOT_MAX_ANGLE = (1000 + PivotGlobalValues.offset);
     public static final double PIVOT_MIN_ANGLE = (0 + PivotGlobalValues.offset);
 
     // Pivot Motor Speed Values
     public static boolean IS_NEUTRAL = true;
+    public static boolean soft_limit_enabled = true;
 
     // Pivot Motor Encoder ID
     public static final int ENCODER_ID = 9;
@@ -249,7 +250,7 @@ public final class GlobalsValues {
     public static final double KRAKEN_V = 0.1;
 
     // Shooter Motor Speed Values
-    public static final double SHOOTER_SPEED = 40.0;
+    public static final double SHOOTER_SPEED = 33.0;
     public static final double KRAKEN_SPEED = 15.0;
 
     // Shooter Motor Speeds

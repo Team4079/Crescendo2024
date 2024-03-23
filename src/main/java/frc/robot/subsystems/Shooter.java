@@ -80,7 +80,7 @@ public class Shooter extends SubsystemBase {
     rightFalcon.getConfigurator().apply(new TalonFXConfiguration());
     passthroughKraken.getConfigurator().apply(new TalonFXConfiguration());
 
-    shooterConfigs.NeutralMode = NeutralModeValue.Coast;
+    shooterConfigs.NeutralMode = NeutralModeValue.Brake;
     leftShootConfigurator.apply(shooterConfigs);
     rightShootConfigurator.apply(shooterConfigs);
     passthroughKrakenConfigurator.apply(shooterConfigs);

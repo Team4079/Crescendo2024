@@ -214,4 +214,9 @@ public class Limelight extends SubsystemBase {
     SmartDashboard.putNumber("Distance", Math.abs(robotPoseTargetSpace[2]));
     return Math.abs(LimelightGlobalValues.robotPoseTargetSpace[2]);
   }
+
+  public double getPivotPosition() {
+    return (-1.06649 * Math.pow(getDistance(),2) + getDistance() * 9.91091 + 3.22782);
+    // return (-1.06649 * Math.pow(getDistance(),2) + getDistance() * 9.91091 + 3.92782);
+  }
 }

@@ -26,7 +26,7 @@ public class ManualShoot extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ShooterRampUp(shooter, ShooterGlobalValues.SHOOTER_SPEED).withTimeout(1),
-      new PushRing(shooter).withTimeout(0.3),
+      new PushRing(shooter).withTimeout(0.5),
       new StopShooter(shooter)
     );
   }

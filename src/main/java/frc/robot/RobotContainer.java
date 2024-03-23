@@ -138,7 +138,7 @@ public class RobotContainer {
     // led.setDefaultCommand(new SetLED(led));
     // intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, opPad,
     // limelety));
-    intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, opPad));
+    intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, pad, limelety));
     pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, opPad));
     limelety.setDefaultCommand(new LimelightValues(limelety));
     shootyboi.setDefaultCommand(new PadShoot(shootyboi, opPad));
@@ -167,10 +167,13 @@ public class RobotContainer {
   private void configureBindings() {
     padA.onTrue(new InstantCommand(pivotyboi::resetEncoders));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
+    padY.whileTrue(new AutoAlign(swerveSubsystem));
+    rightBumper.onTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, limelety));
+    leftBumper.onTrue(new AmpScore(shootyboi, pivotyboi));
     // padY.onTrue(new InstantCommand(pivotyboi::CalibratePivot));
     // padX.whileTrue(new TeleOpAlign(swerveSubsystem, pad));
 
-    opPadB.whileTrue(new ShootRing(shootyboi, pivotyboi));
+    opPadB.whileTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, limelety));
     // opPadB.whileTrue(new SetPivot(pivotyboi,
     // PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
     opPadA.whileTrue(new ManualShoot(shootyboi));
@@ -178,7 +181,7 @@ public class RobotContainer {
     // X: intake i think toggles intake
     opPadY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
     opRightBumper.whileTrue(new AmpScore(shootyboi, pivotyboi));
-    opLeftBumper.onTrue(new InstantCommand(pivotyboi::toggleLimit));
+    opLeftBumper.onTrue(new InstantCommand(pivotyboi::toggleSoftStop));
   
     // New instnat command pivot::toggleSoftLimit for Ria
     // New command to change offset for Ria

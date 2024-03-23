@@ -3,9 +3,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-
 // import edu.wpi.first.math.controller.PIDController;
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
@@ -19,9 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.MotorGlobalValues;
@@ -38,10 +33,7 @@ public class SwerveSubsystem extends SubsystemBase {
   private final SwerveDriveKinematics sKinematics;
 
   public SwerveDriveOdometry swerveOdometry;
-  public SwerveDrivePoseEstimator swerveEstimator;
   public Pose2d swerveOdomeryPose2d;
-
-  public Field2d field;
 
   private double rot;
   private double turnSpeed = 0;
@@ -79,25 +71,18 @@ public class SwerveSubsystem extends SubsystemBase {
     swerveOdometry = new SwerveDriveOdometry(sKinematics, gyroAngle, getModulePositions());
     swerveOdomeryPose2d = new Pose2d();
 
-    swerveEstimator = new SwerveDrivePoseEstimator(SwerveGlobalValues.kinematics, pidggy.getRotation2d(), getModulePositions(), new Pose2d(),
-    VecBuilder.fill(0.05, 0.05, Math.toRadians(5)),
-    VecBuilder.fill(0.5, 0.5, Math.toRadians(30))); 
-    // addRotorPositionsforModules();
+    addRotorPositionsforModules();
 
     // Makes the rotation smooth (in a circle)
-    // Blame Jayden for adding a useless line of code
     SwerveGlobalValues.BasePIDGlobal.pathTranslationPID.enableContinuousInput(-Math.PI, Math.PI);
 
-    field = new Field2d();
-    field.setRobotPose(swerveEstimator.getEstimatedPosition());
-    
     /**
      * PathPlanner Direction Values
      * Forward +x
      * Backward -x
      * Left -y
      * Right +y
-     */ 
+     */
     AutoBuilder.configureHolonomic(
         this::getPose, // Robot pose supplier
         this::customPose, // Method to reset odometry (will be called if your auto has a starting pose)
@@ -129,9 +114,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
     turnSpeed = joyStickInput * MotorGlobalValues.TURN_CONSTANT;
 
-    System.out.println("Forward Speed: " + forwardSpeed);
-    System.out.println("Left Speed: " + leftSpeed);
-    System.out.println("Turn Speed: " + joyStickInput);
     // Runs robot/field-oriented based on the boolean value of isFieldOriented
     if (isFieldOriented) {
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -153,6 +135,7 @@ public class SwerveSubsystem extends SubsystemBase {
     for (int i = 0; i < modules.length; i++) {
       modules[i].setState(states[i]);
 
+      SmartDashboard.putNumber("MotorRot" + i, modules[i].getRotationDegree() % 360);
     }
   }
 
@@ -279,8 +262,8 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param poses Pose2d pose of the robot
    * @return None
    */
-  public void customPose(Pose2d pose) {
-    swerveOdometry.resetPosition(pidggy.getRotation2d(), getModulePositions(), pose);
+  public void customPose(Pose2d poses) {
+    swerveOdometry.resetPosition(Rotation2d.fromDegrees(pgetHeading()), getModulePositions(), poses);
   }
 
   /**
@@ -292,20 +275,11 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     pidggy.getYaw().refresh();
-    swerveEstimator.update(pidggy.getRotation2d(), getModulePositions());
-    field.setRobotPose(swerveEstimator.getEstimatedPosition());
-
     Rotation2d headingGyroAnglething = Rotation2d.fromDegrees(pgetHeading());
     swerveOdomeryPose2d = swerveOdometry.update(headingGyroAnglething, getModulePositions());
 
     SmartDashboard.putNumber("heading", pgetHeading());
-    for (int i = 0; i < modules.length; i++) {
-      SmartDashboard.putNumber("Module Angle: " + i, modules[i].getCanCoderValueDegrees());
-    }
-
-    for (int i = 0; i < modules.length; i++) {
-      SmartDashboard.putNumber("Module Speed: " + i, modules[i].getDriveVelocity());
-    }
+    gyroAngle = getRotationPidggy();
   }
 
   /**
@@ -348,7 +322,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @return ChassisSpeeds auto speeds of the robot
    */
   public ChassisSpeeds getAutoSpeeds() {
-    return SwerveGlobalValues.kinematics.toChassisSpeeds(getModuleStates());
+    return ChassisSpeeds.fromRobotRelativeSpeeds(0, 0, 0, Rotation2d.fromDegrees(0));
   }
 
   /**
@@ -358,8 +332,9 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public void chassisSpeedsDrive(ChassisSpeeds chassisSpeeds) {
     SwerveModuleState[] states = SwerveGlobalValues.kinematics.toSwerveModuleStates(chassisSpeeds);
-    // SwerveDriveKinematics.desaturateWheelSpeeds(
-    //     states, MotorGlobalValues.MAX_SPEED);
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        states, MotorGlobalValues.MAX_SPEED);
+
     for (int i = 0; i < modules.length; i++) {
       modules[i].setState(states[i]);
     }
@@ -385,13 +360,5 @@ public class SwerveSubsystem extends SubsystemBase {
     for (int i = 0; i < modules.length; i++) {
       modules[i].stop();
     }
-  }
-
-  private SwerveModuleState[] getModuleStates() {
-    SwerveModuleState[] moduleStates = new SwerveModuleState[modules.length];
-    for (int i = 0; i < modules.length; i++) {
-      moduleStates[i] = modules[i].getState();
-    }
-    return moduleStates;
   }
 }

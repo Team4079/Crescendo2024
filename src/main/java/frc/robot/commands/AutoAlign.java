@@ -4,6 +4,9 @@
 
 package frc.robot.commands;
 
+import javax.swing.text.StyleContext.SmallAttributeSet;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.GlobalsValues.LimelightGlobalValues;
@@ -38,6 +41,7 @@ public class AutoAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    SmartDashboard.putNumber("Aaron Truong", -LimelightGlobalValues.tx);
     horizontalError = -LimelightGlobalValues.tx;
     
     if (Math.abs(horizontalError) >= SwerveGlobalValues.limelightDeadband) {
