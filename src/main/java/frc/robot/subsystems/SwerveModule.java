@@ -177,7 +177,7 @@ public class SwerveModule {
    * @return void
    */
   public void setSteerPosition(double degrees) {
-    steerMotor.setControl(m_cycle.withPosition(degrees));
+    steerMotor.setControl(m_cycle.withPosition(angleToRotations(degrees, MotorGlobalValues.STEER_MOTOR_GEAR_RATIO)));
   }
 
   /**
@@ -270,11 +270,10 @@ public class SwerveModule {
     state = optimize(state,
         Rotation2d.fromDegrees(
           //used abs
-            rotationsToAngle(getCanCoderValue(), MotorGlobalValues.STEER_MOTOR_GEAR_RATIO)),
+            rotationsToAngle(steerMotor.getRotorPosition().getValue(), MotorGlobalValues.STEER_MOTOR_GEAR_RATIO)),
         steerMotor.getDeviceID());
 
     double currentRotations = (steerMotor.getRotorPosition().getValue());
-    double currentCanRotations = (getCanCoderValue());
     Rotation2d currentAngle = Rotation2d
         .fromDegrees(rotationsToAngle(currentRotations, MotorGlobalValues.STEER_MOTOR_GEAR_RATIO));
 
@@ -282,7 +281,6 @@ public class SwerveModule {
 
     if (Math.abs(state.speedMetersPerSecond) > SwerveGlobalValues.STATE_SPEED_THRESHOLD) {
       double newRotations;
-      double newCanRotations;
       Rotation2d delta = state.angle.minus(currentAngle);
 
       double change = delta.getDegrees();
@@ -295,7 +293,6 @@ public class SwerveModule {
 
       newRotations = currentRotations + angleToRotations(change, MotorGlobalValues.STEER_MOTOR_GEAR_RATIO);
       SmartDashboard.putNumber("Set Rotations " + steerMotor.getDeviceID(), newRotations);
-      SmartDashboard.putNumber("Actual Rotations " + steerMotor.getDeviceID(), currentCanRotations);
       setSteerPosition(newRotations);
       
     }
@@ -439,6 +436,19 @@ public class SwerveModule {
   public double getCanCoderValueDegrees() {
     return ((360 * (canCoder.getAbsolutePosition().getValue() - SwerveGlobalValues.CANCoderValues[canCoder.getDeviceID() - 9]) % 360 + 360)) % 360;
   }
+
+  /**
+ * Calculates the current position of the CANCoder in terms of full wheel rotations.
+ * @return The number of rotations (including partial rotations as a decimal) based on the CANCoder's current position.
+ */
+public double getCANCoderRotations() {
+  double canCoderDegrees = canCoder.getAbsolutePosition().getValue();
+
+  double rotations = canCoderDegrees / 360.0;
+
+  return rotations;
+}
+
 
   public void addToSmartDashboard() {
     // Somebody pls add all the stuff to smartdashboard i dont want to do it -shawn
