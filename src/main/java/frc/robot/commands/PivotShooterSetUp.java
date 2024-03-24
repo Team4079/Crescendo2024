@@ -80,9 +80,9 @@ public class PivotShooterSetUp extends Command {
   @Override
   public void execute() {
     velocity = velocityPIDController.calculate(pivot.getPivotLeftPos(), pos);
-    SmartDashboard.putNumber("Error Pivot", -pivot.getPivotLeftPos() + pos);
-    SmartDashboard.putNumber("Setpoint", pos);
-    SmartDashboard.putNumber("Velocity Pivot", velocity);
+    // SmartDashboard.putNumber("Error Pivot", -pivot.getPivotLeftPos() + pos);
+    // SmartDashboard.putNumber("Setpoint", pos);
+    // SmartDashboard.putNumber("Velocity Pivot", velocity);
 
     horizontalError = -limelight.getTx();
     System.out.println(horizontalError);

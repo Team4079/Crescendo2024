@@ -84,7 +84,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Mid3Piece",
+  "folder": null,
   "previewStartingState": {
     "rotation": -59.28598629865483,
     "velocity": 0

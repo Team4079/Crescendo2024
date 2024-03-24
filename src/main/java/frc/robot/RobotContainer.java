@@ -138,7 +138,7 @@ public class RobotContainer {
     // led.setDefaultCommand(new SetLED(led));
     // intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, opPad,
     // limelety));
-    intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, pad, limelety));
+    intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, pad, limelety, led));
     pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, opPad));
     limelety.setDefaultCommand(new LimelightValues(limelety));
     shootyboi.setDefaultCommand(new PadShoot(shootyboi, opPad));

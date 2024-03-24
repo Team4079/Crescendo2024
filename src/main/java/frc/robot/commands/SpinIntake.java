@@ -5,9 +5,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.LogitechGamingPad;
@@ -20,6 +22,7 @@ public class SpinIntake extends Command {
   private Intake intake;
   private Shooter shooter;
   private Limelight limelight;
+  private LED led;
   private LogitechGamingPad pad;
   private Timer timer;
   private Timer limelightTimer;
@@ -27,14 +30,15 @@ public class SpinIntake extends Command {
   private boolean d;
 
   // lIMELIGHT IN THE CONSTRUCOT
-  public SpinIntake(Intake intake, Shooter shooter, LogitechGamingPad pad, Limelight limelight) {
+  public SpinIntake(Intake intake, Shooter shooter, LogitechGamingPad pad, Limelight limelight, LED led) {
     this.intake = intake;
     this.shooter = shooter;
     this.pad = pad;
     this.limelight = limelight;
+    this.led = led;
     timer = new Timer();
     limelightTimer = new Timer();
-    addRequirements(intake);
+    addRequirements(intake, led);
   }
 
   /** Called when the command is initially scheduled. */
@@ -47,12 +51,22 @@ public class SpinIntake extends Command {
   /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
+    // pad.setRumble(RumbleType.kBothRumble, 1);
     SmartDashboard.putBoolean("intake", d);
     SmartDashboard.putBoolean("should spin", shouldSpin);
     if (pad.getXReleased()) {
       shouldSpin = !shouldSpin;
     }
 
+    if (!shooter.getRingSensor()) {
+      led.setRedColor();
+    }
+    else if (shooter.getRingSensor() && limelight.getTx() == 0 || Math.abs(limelight.getTx()) > 3) {
+      led.setPurpleColor();
+    }
+    else {
+      led.setGreenColor();
+    }
 
     if (!ShooterGlobalValues.HAS_PIECE && shouldSpin) {
       intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);

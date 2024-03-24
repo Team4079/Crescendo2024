@@ -264,11 +264,10 @@ public class SwerveModule {
       }
 
       newRotations = currentRotations + angleToRotations(change, MotorGlobalValues.STEER_MOTOR_GEAR_RATIO);
-      SmartDashboard.putNumber("Set Rotations " + steerMotor.getDeviceID(), newRotations);
-      SmartDashboard.putNumber("Actual Rotations " + steerMotor.getDeviceID(),
-          steerMotor.getRotorPosition().getValue());
-      SmartDashboard.putNumber("Jayden Sun" + steerMotor.getDeviceID(),
-          newRotations - steerMotor.getRotorPosition().getValue());
+      // SmartDashboard.putNumber("Set Rotations " + steerMotor.getDeviceID(), newRotations);
+      // SmartDashboard.putNumber("Actual Rotations " + steerMotor.getDeviceID(),
+      //     steerMotor.getRotorPosition().getValue());
+          // newRotations - steerMotor.getRotorPosition().getValue());
       setSteerPosition(newRotations);
     }
   }
