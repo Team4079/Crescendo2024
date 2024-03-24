@@ -19,6 +19,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.GlobalsValues.MotorGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
@@ -92,6 +93,7 @@ public class SwerveModule {
     steerMotor.getConfigurator().apply(steerslot0Configs);
 
     steerConfigurator.setPosition(CANCoderDriveStraightSteerSetPoint);
+    driveConfigurator.setPosition(0);
 
     driveCurrentLimitsConfigs = new CurrentLimitsConfigs();
     steerCurrentLimitsConfigs = new CurrentLimitsConfigs();
@@ -170,7 +172,7 @@ public class SwerveModule {
    */
   public double encoderToAngle(double encoderCount, double gearRatio) {
     return encoderCount * 360 /
-        MotorGlobalValues.ENCODER_COUNTS_PER_ROTATION * gearRatio;
+        (MotorGlobalValues.ENCODER_COUNTS_PER_ROTATION * gearRatio);
   }
 
   /**
@@ -238,7 +240,7 @@ public class SwerveModule {
    * @return void
    */
   public void setState(SwerveModuleState state) {
-    state = optimize(state,
+    state = SwerveModule.optimize(state,
         Rotation2d.fromDegrees(
             rotationsToAngle(steerMotor.getRotorPosition().getValue(), MotorGlobalValues.STEER_MOTOR_GEAR_RATIO)),
         steerMotor.getDeviceID());
@@ -371,5 +373,17 @@ public class SwerveModule {
    */
   public double getRotationDegree() {
     return rotationsToAngle(steerMotor.getRotorPosition().getValue(), MotorGlobalValues.STEER_MOTOR_GEAR_RATIO);
+  }
+
+  public double getDriveVelocity() {
+    return driveMotor.getVelocity().getValue();
+  }
+
+  public SwerveModuleState getState() {
+    SwerveModuleState currentState = new SwerveModuleState();
+    currentState.angle = Rotation2d
+        .fromDegrees(rotationsToAngle(steerMotor.getRotorPosition().getValue(), MotorGlobalValues.STEER_MOTOR_GEAR_RATIO));
+    currentState.speedMetersPerSecond = getDriveVelocity();
+    return currentState;
   }
 }

@@ -4,10 +4,13 @@
 
 package frc.robot.commands;
 
+import javax.crypto.spec.RC2ParameterSpec;
 import javax.swing.text.StyleContext.SmallAttributeSet;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.GlobalsValues.LimelightGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
@@ -18,20 +21,23 @@ import frc.robot.utils.PID;
 public class AutoAlign extends Command {
   /** Creates a new AutoAlign. */
   private SwerveSubsystem swerveSubsystem;
+  private Limelight limelight;
 
   // Horizontal PID and offset
   private double horizontalError;
 
   // Rotation PID and offset
-  private PID rotationalPID;
+  private PIDController rotationalController;
 
   private double timeout = 0;
 
-  public AutoAlign(SwerveSubsystem swerveSubsystem) {
+  public AutoAlign(SwerveSubsystem swerveSubsystem, Limelight limelight) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.swerveSubsystem = swerveSubsystem;
-    rotationalPID = BasePIDGlobal.rotationalPID;
-    addRequirements(swerveSubsystem);
+    this.limelight = limelight;
+    rotationalController = new PIDController(BasePIDGlobal.rotationalPID.p, BasePIDGlobal.rotationalPID.i, BasePIDGlobal.rotationalPID.d);
+    rotationalController.setTolerance(3);
+    addRequirements(swerveSubsystem, limelight);
   }
 
   // Called when the command is initially scheduled.
@@ -41,13 +47,13 @@ public class AutoAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putNumber("Aaron Truong", -LimelightGlobalValues.tx);
-    horizontalError = -LimelightGlobalValues.tx;
-    
+    horizontalError = -limelight.getTx();
+    System.out.println(horizontalError);
     if (Math.abs(horizontalError) >= SwerveGlobalValues.limelightDeadband) {
-      swerveSubsystem.drive(0, 0, rotationalPID.calculate(horizontalError, 0), false);
+      swerveSubsystem.drive(0, 0, rotationalController.calculate(horizontalError, 0), false);
     } else {
       swerveSubsystem.stopModules();
+      timeout++;
     }
   }
 
@@ -61,10 +67,10 @@ public class AutoAlign extends Command {
   @Override
   public boolean isFinished() {
     // Checks if the april tag is within the deadband for at least half a second
-    if (horizontalError <= SwerveGlobalValues.limelightDeadband && timeout == 25) {
-      timeout = 0;
-      return true;
-    }
+    // if (horizontalError <= SwerveGlobalValues.limelightDeadband && timeout == 20) {
+    //   timeout = 0;
+    //   return true;
+    // }
 
     return false;
   }

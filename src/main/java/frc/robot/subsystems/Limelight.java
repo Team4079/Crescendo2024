@@ -38,6 +38,7 @@ public class Limelight extends SubsystemBase {
     // "http://limelight.local:5801/stream.mjpg");
     llresults = LimelightHelpers.getLatestResults("limelight");
     timer = new Timer();
+    setPipeline(0);
   }
 
   @Override
@@ -168,6 +169,13 @@ public class Limelight extends SubsystemBase {
     return llresults.targetingResults.latency_capture;
   }
 
+  public void highPixel() {
+    LimelightHelpers.setPipelineIndex("", 1);
+  }
+
+    public void lowPixel() {
+    LimelightHelpers.setPipelineIndex("", 0);
+  }
   /**
    * Returns the tag number of the april tag
    * 
@@ -196,7 +204,7 @@ public class Limelight extends SubsystemBase {
     LimelightHelpers.setLEDMode_ForceOff("limelight");
   }
 
-  /**
+  /*
    * index from 0
    * 0 is left-right distance from tag (left is +, right is -, accurate to +- 5cm
    * per meter)
@@ -216,7 +224,7 @@ public class Limelight extends SubsystemBase {
   }
 
   public double getPivotPosition() {
-    return (-1.06649 * Math.pow(getDistance(),2) + getDistance() * 9.91091 + 3.22782);
+    return (0.0403489 * Math.pow(getDistance(), 5) + -0.928218 * Math.pow(getDistance(), 4) + 8.24524 * Math.pow(getDistance(), 3) + -35.4851 * Math.pow(getDistance(), 2) + getDistance() * 75.7744 + -40.253);
     // return (-1.06649 * Math.pow(getDistance(),2) + getDistance() * 9.91091 + 3.92782);
   }
 }

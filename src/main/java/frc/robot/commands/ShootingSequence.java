@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
@@ -19,12 +20,14 @@ public class ShootingSequence extends SequentialCommandGroup {
 
   private Pivot pivot;
   private Shooter shooter;
+  private Limelight limelight;
 
-  public ShootingSequence(Pivot pivotyboi, Shooter shootyboi) {
+  public ShootingSequence(Pivot pivotyboi, Shooter shootyboi, Limelight limelight) {
     this.pivot = pivotyboi;
     this.shooter = shootyboi;
+    this.limelight = limelight;
 
-    addRequirements(pivotyboi, shootyboi);
+    addRequirements(pivotyboi, shootyboi, limelight);
 
     /** Command to run shooting sequence mainly in auto */
 
@@ -33,8 +36,8 @@ public class ShootingSequence extends SequentialCommandGroup {
     addCommands(
         new ParallelCommandGroup(
             new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(0.1),
-            new ShooterRampUp(shooter, ShooterGlobalValues.SHOOTER_SPEED).withTimeout(0.1)),
-        new PushRing(shootyboi),
+            new ShooterRampUp(shooter, limelight).withTimeout(0.1)),
+        new PushRing(shootyboi, limelight),
         new InstantCommand(shooter::stopAllMotors),
         new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE));
   }

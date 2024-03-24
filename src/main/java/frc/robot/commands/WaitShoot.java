@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
 
@@ -16,15 +17,17 @@ public class WaitShoot extends SequentialCommandGroup {
   /** Creates a new WaitShoot. */
   private Shooter shooter;
   private Pivot pivot;
+  private Limelight limelight;
 
-  public WaitShoot(Shooter shooter, Pivot pivot) {
+  public WaitShoot(Shooter shooter, Pivot pivot, Limelight limelight) {
     this.shooter = shooter;
     this.pivot = pivot;
+    this.limelight = limelight;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new WaitCommand(2),
-      new ShootingSequence(pivot, shooter)
+      new ShootingSequence(pivot, shooter, limelight)
     );
   }
 }

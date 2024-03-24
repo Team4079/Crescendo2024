@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
@@ -33,12 +34,10 @@ public class ShootRing extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new ParallelCommandGroup(
-            new PivotAutoSet(pivot, limelight).withTimeout(0.4),
-            new ShooterRampUp(shooter, ShooterGlobalValues.SHOOTER_SPEED).withTimeout(0.4),
-            new AutoAlign(swerveSubsystem).withTimeout(0.6)),
-        new PushRing(shooter).withTimeout(0.3),
+        new WaitCommand(0.05),
+        new PivotShooterSetUp(pivot, shooter, limelight, swerveSubsystem).withTimeout(0.7),
+        new PushRing(shooter, limelight).withTimeout(0.3),
         new StopShooter(shooter).withTimeout(0.1),
-        new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.2));
+        new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.4));
   }
 }

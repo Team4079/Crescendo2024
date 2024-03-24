@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
+import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 
 /** The {@link RePivotAutoSet} class is a command that resets the pivot to its neutral position. */
 public class PivotAutoSet extends Command {
@@ -40,6 +41,7 @@ public class PivotAutoSet extends Command {
   public void initialize() {
     deadband = 0.1;
     isDone = false;
+    pos = PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE;
     pos = limelight.getPivotPosition();
     // pidController.setTolerance(50);
   }

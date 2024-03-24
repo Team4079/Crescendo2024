@@ -51,7 +51,7 @@ public class PadPivot extends Command {
 
     if (Math.abs(opPad.getLeftAnalogYAxis()) > 0.03)
     {
-      pivot.movePivot(-opPad.getLeftAnalogYAxis());
+      pivot.movePivot(-opPad.getLeftAnalogYAxis() * 0.5);
     }
     else{
       // pivot.setMotorPosition(pivot.getPivotLeftPos(), pivot.getPivotRightPos());

@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
@@ -17,19 +18,21 @@ public class AmpScore extends SequentialCommandGroup {
   /** Creates a new ShootRing. */
   private Shooter shooter;
   private Pivot pivot;
+  private Limelight limelight;
 
-  public AmpScore(Shooter shooter, Pivot pivot) {
+  public AmpScore(Shooter shooter, Pivot pivot, Limelight limelight) {
     this.shooter = shooter;
     this.pivot = pivot;
-    addRequirements(shooter, pivot);
+    this.limelight = limelight;
+    addRequirements(shooter, pivot, limelight);
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new ParallelCommandGroup(
             new SetPivot(pivot, PivotGlobalValues.PIVOT_AMP_ANGLE).withTimeout(1),
-            new ShooterRampUp(shooter, 30).withTimeout(1)),
-        new PushRing(shooter).withTimeout(0.3),
+            new ShooterRampUp(shooter, limelight).withTimeout(1)),
+        new PushRing(shooter, limelight).withTimeout(0.3),
         new StopShooter(shooter).withTimeout(0.05),
         new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.5));
   }

@@ -111,7 +111,7 @@ public final class GlobalsValues {
 
     // Whether the limelight auto aligns and its deadband
     public static final boolean useLimelightAutoAlign = false;
-    public static final double limelightDeadband = 4.5;
+    public static final double limelightDeadband = 3;
 
     public static final double MOTOR_DEADBAND = 0.05;
 
@@ -129,7 +129,8 @@ public final class GlobalsValues {
       // AutoAlign PID
       public static final PID horizontalPID = new PID(0.05, 0.075, 0.03, 0);
       public static final PID verticalPID = new PID(0.25, 0.0085, 0.03);
-      public static final PID rotationalPID = new PID(0.063, 0.001, 0.035, 0);
+      public static final PID rotationalPID = new PID(0.04509, 0.00, 0.09, 0);
+      // public static final PID rotationalPID = new PID(0.063, 0.001, 0.035, 0);
 
       // Path Planner Variables
       public static PIDController pathTranslationPID = new PIDController(5, 0.000, 0.00);
@@ -139,8 +140,8 @@ public final class GlobalsValues {
                                                                                                 // this should likely
                                                                                                 // live in your
                                                                                                 // Constants class
-          new PIDConstants(5, 0.000, 0.00), // translation
-          new PIDConstants(3, 0.0, 0.0), // rotation
+          new PIDConstants(0.05, 0.000001, 0.00), // translation
+          new PIDConstants(0.5, 0.0, 0.0), // rotation
           4.96824, // Max module speed, in m/s
           SwerveGlobalValues.robotSize, // Drive base radius in meters. Distance from robot center to furthest //
           // module.

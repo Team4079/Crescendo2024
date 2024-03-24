@@ -131,8 +131,8 @@ public class RobotContainer {
     // NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem));
     NamedCommands.registerCommand("startIntake", new StartIntake(intakeyboi, shootyboi));
     NamedCommands.registerCommand("stopIntake", new StopIntake(intakeyboi));
-    NamedCommands.registerCommand("pushRing", new PushRing(shootyboi));
-    NamedCommands.registerCommand("shootSquence", new ShootingSequence(pivotyboi, shootyboi));
+    NamedCommands.registerCommand("pushRing", new PushRing(shootyboi, limelety));
+    NamedCommands.registerCommand("shootSquence", new ShootingSequence(pivotyboi, shootyboi, limelety));
     NamedCommands.registerCommand("setPivot", new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
     swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveGlobalValues.isFieldOriented));
     // led.setDefaultCommand(new SetLED(led));
@@ -167,20 +167,21 @@ public class RobotContainer {
   private void configureBindings() {
     padA.onTrue(new InstantCommand(pivotyboi::resetEncoders));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
-    padY.whileTrue(new AutoAlign(swerveSubsystem));
+    // padY.whileTrue(new AutoAlign(swerveSubsystem, limelety).withTimeout(0.5));
+    padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
     rightBumper.onTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, limelety));
-    leftBumper.onTrue(new AmpScore(shootyboi, pivotyboi));
+    leftBumper.onTrue(new AmpScore(shootyboi, pivotyboi, limelety));
     // padY.onTrue(new InstantCommand(pivotyboi::CalibratePivot));
     // padX.whileTrue(new TeleOpAlign(swerveSubsystem, pad));
 
     opPadB.whileTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, limelety));
     // opPadB.whileTrue(new SetPivot(pivotyboi,
     // PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
-    opPadA.whileTrue(new ManualShoot(shootyboi));
-    opLeftBumper.whileTrue(new ShooterFender(shootyboi, pivotyboi));
+    opPadA.whileTrue(new ManualShoot(shootyboi, limelety));
+    opLeftBumper.whileTrue(new ShooterFender(shootyboi, pivotyboi, limelety));
     // X: intake i think toggles intake
     opPadY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
-    opRightBumper.whileTrue(new AmpScore(shootyboi, pivotyboi));
+    opRightBumper.whileTrue(new AmpScore(shootyboi, pivotyboi, limelety));
     opLeftBumper.onTrue(new InstantCommand(pivotyboi::toggleSoftStop));
   
     // New instnat command pivot::toggleSoftLimit for Ria
@@ -201,7 +202,7 @@ public class RobotContainer {
 
     // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
     // return new PathPlannerAuto(m_chooser.getSelected());
-    return new WaitShoot(shootyboi, pivotyboi);
-    // return new PathPlannerAuto("Test Auto");
+    // return new WaitShoot(shootyboi, pivotyboi, limelety);
+    return new PathPlannerAuto("StraightAuto");
   }
 }
