@@ -1,0 +1,55 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.55,
+      "y": 5.55
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Piece2Grab"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Piece2Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PeiceTopGrab"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PeiceTopShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "GrabMid"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShootMid"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

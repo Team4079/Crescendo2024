@@ -3,7 +3,8 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "4 Peice"
+    "4 Peice",
+    "Aacorn Auto"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,

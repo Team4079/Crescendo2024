@@ -5,7 +5,7 @@
       "x": 1.4291761916857164,
       "y": 5.589805823486292
     },
-    "rotation": 0.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -15,12 +15,6 @@
           "type": "path",
           "data": {
             "pathName": "Basic3Piece"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "drived"
           }
         }
       ]
