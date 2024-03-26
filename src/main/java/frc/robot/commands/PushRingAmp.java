@@ -11,15 +11,15 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
-/** The {@link PushRing} class is the command that pushes the ring into the shooter. */
-public class PushRing extends Command {
+/** The {@link PushRingAmp} class is the command that pushes the ring into the shooter. */
+public class PushRingAmp extends Command {
 
   private Shooter shooter;
   private boolean isDone;
   private Limelight limelight;
 
   /** Creates a new Shoot. */
-  public PushRing(Shooter shooter, Limelight limelight) {
+  public PushRingAmp(Shooter shooter, Limelight limelight) {
     this.shooter = shooter;
     isDone = false;
     this.limelight = limelight;
@@ -29,18 +29,13 @@ public class PushRing extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (limelight.getDistance() > 0.1){
-      shooter.setKrakenVelocity(-30);
-    }
-    else {
-      shooter.stopAllMotors();
-    }
     // shooter.setKrakenVelocity(-30);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    shooter.setKrakenVelocity(-30);
   }
 
   // Called once the command ends or is interrupted.

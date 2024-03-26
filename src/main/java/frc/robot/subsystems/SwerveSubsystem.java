@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -86,7 +87,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
     // Makes the rotation smooth (in a circle)
     // Blame Jayden for adding a useless line of code
-    SwerveGlobalValues.BasePIDGlobal.pathTranslationPID.enableContinuousInput(-Math.PI, Math.PI);
 
     field = new Field2d();
     field.setRobotPose(swerveEstimator.getEstimatedPosition());
@@ -100,7 +100,7 @@ public class SwerveSubsystem extends SubsystemBase {
      */ 
     AutoBuilder.configureHolonomic(
         this::getPose, // Robot pose supplier
-        this::customPose, // Method to reset odometry (will be called if your auto has a starting pose)
+        this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
         this::getAutoSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         this::chassisSpeedsDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         SwerveGlobalValues.BasePIDGlobal.pathFollower,
@@ -279,7 +279,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param poses Pose2d pose of the robot
    * @return None
    */
-  public void customPose(Pose2d pose) {
+  public void resetOdometry(Pose2d pose) {
     swerveOdometry.resetPosition(pidggy.getRotation2d(), getModulePositions(), pose);
   }
 
@@ -294,11 +294,13 @@ public class SwerveSubsystem extends SubsystemBase {
     pidggy.getYaw().refresh();
     swerveEstimator.update(pidggy.getRotation2d(), getModulePositions());
     field.setRobotPose(swerveEstimator.getEstimatedPosition());
-    SmartDashboard.putNumber("Robot Pos X", swerveEstimator.getEstimatedPosition().getX());
-    SmartDashboard.putNumber("Robot Pos Y", swerveEstimator.getEstimatedPosition().getY());
+    // SmartDashboard.putNumber("Robot Pos X", swerveEstimator.getEstimatedPosition().getX());
+    // SmartDashboard.putNumber("Robot Pos Y", swerveEstimator.getEstimatedPosition().getY());
     Rotation2d headingGyroAnglething = Rotation2d.fromDegrees(pgetHeading());
     swerveOdomeryPose2d = swerveOdometry.update(headingGyroAnglething, getModulePositions());
-
+    SmartDashboard.putNumber("Robot Pos X", swerveOdomeryPose2d.getX());
+    SmartDashboard.putNumber("Robot Pos Y", swerveOdomeryPose2d.getY());
+    
     SmartDashboard.putNumber("heading", pgetHeading());
     for (int i = 0; i < modules.length; i++) {
       SmartDashboard.putNumber("Module Angle: " + i, modules[i].getRotationDegree());
@@ -321,15 +323,6 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   /**
-   * Resets odometry to a custom pose
-   * @param pose Pose2d
-   * @return None
-   */
-  public void resetOdometry(Pose2d pose) {
-    swerveOdometry.resetPosition(Rotation2d.fromDegrees(getYaw()), getModulePositions(), pose);
-  }
-
-  /**
    * Passes in the module states to the modules (speed and rotation)
    * @param states SwerveModuleState[] array of the module states
    * @return None
@@ -349,7 +342,8 @@ public class SwerveSubsystem extends SubsystemBase {
    * @return ChassisSpeeds auto speeds of the robot
    */
   public ChassisSpeeds getAutoSpeeds() {
-    return SwerveGlobalValues.kinematics.toChassisSpeeds(getModuleStates());
+    ChassisSpeeds speeds = SwerveGlobalValues.kinematics.toChassisSpeeds(getModuleStates());
+    return ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getRotationPidggy());
   }
 
   /**
@@ -358,7 +352,8 @@ public class SwerveSubsystem extends SubsystemBase {
    * @return None
    */
   public void chassisSpeedsDrive(ChassisSpeeds chassisSpeeds) {
-    SwerveModuleState[] states = SwerveGlobalValues.kinematics.toSwerveModuleStates(chassisSpeeds);
+    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, getRotationPidggy());
+    SwerveModuleState[] states = SwerveGlobalValues.kinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         states, MotorGlobalValues.MAX_SPEED);
     for (int i = 0; i < modules.length; i++) {

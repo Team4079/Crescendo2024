@@ -128,8 +128,8 @@ public class Shooter extends SubsystemBase {
     rightFalcon.getConfigurator().apply(rightShootCurrentConfig);
     passthroughKraken.getConfigurator().apply(passthroughKrakenCurrentConfig);
 
-    leftShootRampConfig.DutyCycleClosedLoopRampPeriod = 0.5;
-    rightShootRampConfig.DutyCycleClosedLoopRampPeriod = 0.5;
+    leftShootRampConfig.DutyCycleClosedLoopRampPeriod = 0.3;
+    rightShootRampConfig.DutyCycleClosedLoopRampPeriod = 0.3;
     passthroughKrakenRampConfig.DutyCycleClosedLoopRampPeriod = 0.5;
 
     leftFalcon.getConfigurator().apply(leftShootRampConfig);

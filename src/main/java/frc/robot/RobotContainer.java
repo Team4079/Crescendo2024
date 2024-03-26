@@ -12,11 +12,11 @@ import frc.robot.commands.LimelightValues;
 import frc.robot.commands.LowerPivot;
 import frc.robot.commands.ManualShoot;
 import frc.robot.commands.TeleOpAlign;
-import frc.robot.commands.WaitShoot;
 import frc.robot.commands.ShootingSequence;
 import frc.robot.commands.SpinIntake;
 import frc.robot.commands.StartIntake;
 import frc.robot.commands.StopIntake;
+import frc.robot.commands.SubwooferShot;
 import frc.robot.commands.PadDrive;
 import frc.robot.commands.PadPivot;
 import frc.robot.commands.PadShoot;
@@ -132,7 +132,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("startIntake", new StartIntake(intakeyboi, shootyboi));
     NamedCommands.registerCommand("stopIntake", new StopIntake(intakeyboi));
     NamedCommands.registerCommand("pushRing", new PushRing(shootyboi, limelety));
-    NamedCommands.registerCommand("shootSquence", new ShootingSequence(pivotyboi, shootyboi, limelety));
+    NamedCommands.registerCommand("shootSquence", new ShootingSequence(pivotyboi, shootyboi, limelety, swerveSubsystem));
     NamedCommands.registerCommand("setPivot", new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
     swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveGlobalValues.isFieldOriented));
     // led.setDefaultCommand(new SetLED(led));
@@ -165,7 +165,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    padA.onTrue(new InstantCommand(pivotyboi::resetEncoders));
+    // padA.onTrue(new InstantCommand(pivotyboi::resetEncoders));
+    padA.onTrue(new SubwooferShot(shootyboi, pivotyboi, swerveSubsystem, limelety));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
     // padY.whileTrue(new AutoAlign(swerveSubsystem, limelety).withTimeout(0.5));
     padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
@@ -203,6 +204,8 @@ public class RobotContainer {
     // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
     // return new PathPlannerAuto(m_chooser.getSelected());
     // return new WaitShoot(shootyboi, pivotyboi, limelety);
-    return new PathPlannerAuto("StraightAuto");
+    // return new PathPlannerAuto("Straight Auto");
+    // return new InstantCommand();
+    return new ShootingSequence(pivotyboi, shootyboi, limelety, swerveSubsystem);
   }
 }

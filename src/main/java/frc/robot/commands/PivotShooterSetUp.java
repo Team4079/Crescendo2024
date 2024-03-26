@@ -63,7 +63,7 @@ public class PivotShooterSetUp extends Command {
 
     deadband = 0.1;
     isDone = false;
-    if (limelight.getDistance() < 1.1) {
+    if (limelight.getDistance() < 1.5) {
       pos = PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE;
     }
     else {

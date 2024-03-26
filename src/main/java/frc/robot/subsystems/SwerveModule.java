@@ -176,22 +176,22 @@ public class SwerveModule {
   }
 
   /**
-   * Converts rotations to degrees.
+   * Converts rotor rotations to wheel degrees.
    * 
-   * @param rotations The wheel rotations to convert to degrees.
+   * @param rotations The rotor rotations to convert to degrees.
    * @param gearRatio The gear ratio of the motor.
-   * @return double The rotations in degrees.
+   * @return double The wheel rotations in degrees.
    */
-  public double rotationsToAngle(double wheelRotations, double gearRatio) {
-    return wheelRotations * 360 / gearRatio;
+  public double rotationsToAngle(double rotorRotations, double gearRatio) {
+    return rotorRotations * 360 / gearRatio;
   }
 
   /**
-   * Converts degrees to rotations.
+   * Converts degrees to rotor rotations.
    * 
-   * @param angle     The angle to convert to rotations.
+   * @param angle     The angle to convert to rotor rotations.
    * @param gearRatio The gear ratio of the motor.
-   * @return double The angle in rotations.
+   * @return double The number of rotor rotations.
    */
   public double angleToRotations(double angle, double gearRatio) {
     return angle / 360 * gearRatio;
@@ -205,7 +205,7 @@ public class SwerveModule {
    * @return double The angle in encoder counts.
    */
   public double angleToEncoder(double angle, double gearRatio) {
-    return angle * MotorGlobalValues.ENCODER_COUNTS_PER_ROTATION / 360 /
+    return angle * MotorGlobalValues.ENCODER_COUNTS_PER_ROTATION / 360 *
         gearRatio;
   }
 
@@ -290,7 +290,7 @@ public class SwerveModule {
    * @return void
    */
   public void setRotorPos() {
-    initialCANCoderValue = canCoder.getAbsolutePosition().refresh().getValue() % 360;
+    initialCANCoderValue = canCoder.getAbsolutePosition().refresh().getValue();
     steerMotor.setPosition(
         -(initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * MotorGlobalValues.STEER_MOTOR_GEAR_RATIO);
   }
@@ -375,7 +375,7 @@ public class SwerveModule {
   }
 
   public double getDriveVelocity() {
-    return driveMotor.getVelocity().getValue();
+    return driveMotor.getVelocity().getValue() / MotorGlobalValues.DRIVE_MOTOR_GEAR_RATIO;
   }
 
   public SwerveModuleState getState() {

@@ -219,12 +219,18 @@ public class Limelight extends SubsystemBase {
    *
    */
   public double getDistance() {
-    SmartDashboard.putNumber("Distance", Math.abs(robotPoseTargetSpace[2]));
-    return Math.abs(LimelightGlobalValues.robotPoseTargetSpace[2]);
+    if (getTag() > 0) {
+      SmartDashboard.putNumber("Distance", Math.abs(robotPoseTargetSpace[2]));
+      return Math.abs(LimelightGlobalValues.robotPoseTargetSpace[2]);
+    }
+    else {
+      return 0;
+    }
   }
 
   public double getPivotPosition() {
-    return (0.0403489 * Math.pow(getDistance(), 5) + -0.928218 * Math.pow(getDistance(), 4) + 8.24524 * Math.pow(getDistance(), 3) + -35.4851 * Math.pow(getDistance(), 2) + getDistance() * 75.7744 + -40.253);
+    // return (-0.288051 * Math.pow(getDistance(), 5) + 4.37563 * Math.pow(getDistance(), 4) + -24.8164 * Math.pow(getDistance(), 3) + 63.047 * Math.pow(getDistance(), 2) + getDistance() * -61.9595 + 28.877);
+      return (-0.288051 * Math.pow(getDistance(), 5) + 4.37563 * Math.pow(getDistance(), 4) + -24.8164 * Math.pow(getDistance(), 3) + 63.047 * Math.pow(getDistance(), 2) + getDistance() * -61.9595 + 28.577);
     // return (-1.06649 * Math.pow(getDistance(),2) + getDistance() * 9.91091 + 3.92782);
   }
 }

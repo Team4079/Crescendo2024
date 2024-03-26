@@ -129,19 +129,15 @@ public final class GlobalsValues {
       // AutoAlign PID
       public static final PID horizontalPID = new PID(0.05, 0.075, 0.03, 0);
       public static final PID verticalPID = new PID(0.25, 0.0085, 0.03);
-      public static final PID rotationalPID = new PID(0.04509, 0.00, 0.09, 0);
+      public static final PID rotationalPID = new PID(0.05509, 0.00, 0.09, 0);
       // public static final PID rotationalPID = new PID(0.063, 0.001, 0.035, 0);
-
-      // Path Planner Variables
-      public static PIDController pathTranslationPID = new PIDController(5, 0.000, 0.00);
-      public static PIDController pathRotationPID = new PIDController(3.0, 0.0, 0.1);
 
       public static HolonomicPathFollowerConfig pathFollower = new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig,
                                                                                                 // this should likely
                                                                                                 // live in your
                                                                                                 // Constants class
-          new PIDConstants(0.05, 0.000001, 0.00), // translation
-          new PIDConstants(0.5, 0.0, 0.0), // rotation
+          new PIDConstants(0.005, 0.000, 0.00), // translation
+          new PIDConstants(0.0, 0.0, 0.0), // rotation
           4.96824, // Max module speed, in m/s
           SwerveGlobalValues.robotSize, // Drive base radius in meters. Distance from robot center to furthest //
           // module.
@@ -150,9 +146,6 @@ public final class GlobalsValues {
 
     public static final double offBalanceAngleThreshold = 10;
     public static final double onBalanceAngleThreshold = 5;
-
-    // Auto Path Name
-    public static final String autoNamePath = "Center Auto";
   }
 
   public static class IntakeGlobalValues {
@@ -238,12 +231,12 @@ public final class GlobalsValues {
     public static final double SHOOTER_PID_LEFT_P = 0.0002;
     public static final double SHOOTER_PID_LEFT_I = 0.0;
     public static final double SHOOTER_PID_LEFT_D = 0.0;
-    public static final double SHOOTER_PID_LEFT_V = 0.3;
+    public static final double SHOOTER_PID_LEFT_V = 0.6;
 
     public static final double SHOOTER_PID_RIGHT_P = 0.0002;
     public static final double SHOOTER_PID_RIGHT_I = 0.0;
     public static final double SHOOTER_PID_RIGHT_D = 0.0;
-    public static final double SHOOTER_PID_RIGHT_V = 0.3;
+    public static final double SHOOTER_PID_RIGHT_V = 0.6;
 
     public static final double KRAKEN_P = 0.0002;
     public static final double KRAKEN_I = 0.0;

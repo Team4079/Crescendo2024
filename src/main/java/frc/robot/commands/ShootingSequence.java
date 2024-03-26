@@ -7,9 +7,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
@@ -21,24 +23,25 @@ public class ShootingSequence extends SequentialCommandGroup {
   private Pivot pivot;
   private Shooter shooter;
   private Limelight limelight;
+  private SwerveSubsystem swerveSubsystem;
 
-  public ShootingSequence(Pivot pivotyboi, Shooter shootyboi, Limelight limelight) {
+  public ShootingSequence(Pivot pivotyboi, Shooter shootyboi, Limelight limelight, SwerveSubsystem swerveSubsystem) {
     this.pivot = pivotyboi;
     this.shooter = shootyboi;
     this.limelight = limelight;
+    this.swerveSubsystem = swerveSubsystem;
 
-    addRequirements(pivotyboi, shootyboi, limelight);
+    addRequirements(pivotyboi, shootyboi, limelight, swerveSubsystem);
 
     /** Command to run shooting sequence mainly in auto */
 
     // Why is this not parallel command group for first two?
 
     addCommands(
-        new ParallelCommandGroup(
-            new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(0.1),
-            new ShooterRampUp(shooter, limelight).withTimeout(0.1)),
-        new PushRing(shootyboi, limelight),
-        new InstantCommand(shooter::stopAllMotors),
-        new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE));
+        new WaitCommand(0.05),
+        new PivotShooterSetUp(pivotyboi, shootyboi, limelight, swerveSubsystem).withTimeout(1.25),
+        new PushRing(shootyboi, limelight).withTimeout(0.3),
+        new StopShooter(shooter).withTimeout(0.1),
+        new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.4));
   }
 }
