@@ -78,7 +78,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     swerveOdometry = new SwerveDriveOdometry(sKinematics, gyroAngle, getModulePositions());
     swerveOdomeryPose2d = new Pose2d();
-    addRotorPositionsforModules();
+
     swerveEstimator = new SwerveDrivePoseEstimator(SwerveGlobalValues.kinematics, pidggy.getRotation2d(), getModulePositions(), new Pose2d(),
     VecBuilder.fill(0.05, 0.05, Math.toRadians(5)),
     VecBuilder.fill(0.5, 0.5, Math.toRadians(30))); 
@@ -294,14 +294,13 @@ public class SwerveSubsystem extends SubsystemBase {
     pidggy.getYaw().refresh();
     swerveEstimator.update(pidggy.getRotation2d(), getModulePositions());
     field.setRobotPose(swerveEstimator.getEstimatedPosition());
-    SmartDashboard.putNumber("Robot Pos X", swerveEstimator.getEstimatedPosition().getX());
-    SmartDashboard.putNumber("Robot Pos Y", swerveEstimator.getEstimatedPosition().getY());
+
     Rotation2d headingGyroAnglething = Rotation2d.fromDegrees(pgetHeading());
     swerveOdomeryPose2d = swerveOdometry.update(headingGyroAnglething, getModulePositions());
 
     SmartDashboard.putNumber("heading", pgetHeading());
     for (int i = 0; i < modules.length; i++) {
-      SmartDashboard.putNumber("Module Angle: " + i, modules[i].getRotationDegree());
+      SmartDashboard.putNumber("Module Angle: " + i, modules[i].getCanCoderValueDegrees());
     }
 
     for (int i = 0; i < modules.length; i++) {
@@ -359,8 +358,8 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public void chassisSpeedsDrive(ChassisSpeeds chassisSpeeds) {
     SwerveModuleState[] states = SwerveGlobalValues.kinematics.toSwerveModuleStates(chassisSpeeds);
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-        states, MotorGlobalValues.MAX_SPEED);
+    // SwerveDriveKinematics.desaturateWheelSpeeds(
+    //     states, MotorGlobalValues.MAX_SPEED);
     for (int i = 0; i < modules.length; i++) {
       modules[i].setState(states[i]);
     }
@@ -395,6 +394,4 @@ public class SwerveSubsystem extends SubsystemBase {
     }
     return moduleStates;
   }
-
-  
 }
