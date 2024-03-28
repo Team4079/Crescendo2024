@@ -71,7 +71,7 @@ public class Pivot extends SubsystemBase {
 
   private VoltageOut voltageOut;
 
-  private double deadband = 0.05;
+  private double deadband = 0.03;
 
   private double absPos;
 
@@ -92,8 +92,8 @@ public class Pivot extends SubsystemBase {
     pivotLeftConfiguration = new TalonFXConfiguration();
     pivotRightConfiguration = new TalonFXConfiguration();
 
-    pivotMotorLeft.getConfigurator().apply(new TalonFXConfiguration());
-    pivotMotorRight.getConfigurator().apply(new TalonFXConfiguration());
+    pivotMotorLeft.getConfigurator().apply(pivotLeftConfiguration);
+    pivotMotorRight.getConfigurator().apply(pivotRightConfiguration);
 
     pivotConfigs.NeutralMode = NeutralModeValue.Brake;
     pivotLeftConfigurator.apply(pivotConfigs);
@@ -124,10 +124,14 @@ public class Pivot extends SubsystemBase {
     rightSoftLimitConfig = new SoftwareLimitSwitchConfigs();
 
     leftMotorCurrentConfig.SupplyCurrentLimit = 100;
+    leftMotorCurrentConfig.SupplyCurrentLimitEnable = true;
     leftMotorCurrentConfig.StatorCurrentLimit = 100;
+    leftMotorCurrentConfig.StatorCurrentLimitEnable = true;
 
     rightMotorCurrentConfig.SupplyCurrentLimit = 100;
+    rightMotorCurrentConfig.SupplyCurrentLimitEnable = true;
     rightMotorCurrentConfig.StatorCurrentLimit = 100;
+    rightMotorCurrentConfig.StatorCurrentLimitEnable = true;
 
     pivotMotorLeft.getConfigurator().apply(leftMotorCurrentConfig);
     pivotMotorRight.getConfigurator().apply(rightMotorCurrentConfig);
@@ -170,11 +174,7 @@ public class Pivot extends SubsystemBase {
 
     encodeSparkMax = new CANSparkMax(21, MotorType.kBrushless);
     absoluteEncoder = encodeSparkMax.getAbsoluteEncoder(Type.kDutyCycle);
-    
-
-    // actualAbsEnc = new DutyCycleEncoder(absoluteEncoder);
-    // zeroAbsoluteEncoder();
-    // actualAbsEnc.setDutyCycleRange(0, 1);
+    absoluteEncoder.setPositionConversionFactor(PivotGlobalValues.PIVOT_GEAR_RATIO);
 
     vel_voltage = new VelocityVoltage(0);
     pos_reqest = new PositionVoltage(0);
@@ -288,16 +288,6 @@ public class Pivot extends SubsystemBase {
   public double getAbsoluteEncoder() {
     // return actualAbsEnc.getAbsolutePosition() * 2048;
     return absoluteEncoder.getPosition();
-  }
-
-  /**
-   * Zeros the absolute encoder
-   * 
-   * @param void
-   * @return void
-   */
-  public void zeroAbsoluteEncoder() {
-    // actualAbsEnc.reset();
   }
 
   public void movePivot(double velocity) {

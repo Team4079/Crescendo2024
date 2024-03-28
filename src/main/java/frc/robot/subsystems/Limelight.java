@@ -43,6 +43,7 @@ public class Limelight extends SubsystemBase {
 
   @Override
   public void periodic() {
+    llresults = LimelightHelpers.getLatestResults("limelight");
     unflash();
     // This method will be called once per scheduler run
     tv = m_limelightTable.getEntry("tv").getDouble(0);
@@ -66,7 +67,7 @@ public class Limelight extends SubsystemBase {
       SmartDashboard.putNumber("robotPoseTargetSpace" + i,
           robotPoseTargetSpace[i]);
     }
-    getDistance();
+    LimelightGlobalValues.distance = getDistance();
   }
 
   /**
@@ -221,16 +222,20 @@ public class Limelight extends SubsystemBase {
   public double getDistance() {
     if (getTag() > 0) {
       SmartDashboard.putNumber("Distance", Math.abs(robotPoseTargetSpace[2]));
-      return Math.abs(LimelightGlobalValues.robotPoseTargetSpace[2]);
+      return Math.abs(robotPoseTargetSpace[2]);
     }
     else {
       return 0;
     }
   }
 
+  private double getDis() {
+    return Math.abs(robotPoseTargetSpace[2]);
+  }
+
   public double getPivotPosition() {
     // return (-0.288051 * Math.pow(getDistance(), 5) + 4.37563 * Math.pow(getDistance(), 4) + -24.8164 * Math.pow(getDistance(), 3) + 63.047 * Math.pow(getDistance(), 2) + getDistance() * -61.9595 + 28.877);
-      return (-0.288051 * Math.pow(getDistance(), 5) + 4.37563 * Math.pow(getDistance(), 4) + -24.8164 * Math.pow(getDistance(), 3) + 63.047 * Math.pow(getDistance(), 2) + getDistance() * -61.9595 + 28.577);
+      return (-0.288051 * Math.pow(getDis(), 5) + 4.37563 * Math.pow(getDis(), 4) + -24.8164 * Math.pow(getDis(), 3) + 63.047 * Math.pow(getDis(), 2) + getDis() * -61.9595 + 28.577);
     // return (-1.06649 * Math.pow(getDistance(),2) + getDistance() * 9.91091 + 3.92782);
   }
 }

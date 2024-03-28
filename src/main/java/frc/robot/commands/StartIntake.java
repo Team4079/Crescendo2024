@@ -40,26 +40,27 @@ public class StartIntake extends Command {
   public void initialize() {
     intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
     shooter.setKrakenVelocity(ShooterGlobalValues.PASSTHROUGH_RPS);
+    timer.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (ShooterGlobalValues.HAS_PIECE) {
+    if (shooter.getRingSensor()) {
       timer.start();
-
-      while (timer.get() < 0.35) {
-        // shooter.setShooterVelocity(6, 6);
+      while (timer.get() < 0.2) {
         shooter.setKrakenVelocity(ShooterGlobalValues.AUTO_PASSTHROUGH_RPS);
       }
 
-      while (timer.get() < 0.52) {
-        shooter.setKrakenVelocity(20);
+      while (timer.get() < 0.4) {
+        shooter.setKrakenVelocity(30);
       }
       
       shooter.stopKraken();
+      shooter.stopShooter();
       intake.stopKraken();
       timer.stop();
+      isDone = true;
     }
 
   }

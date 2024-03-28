@@ -30,35 +30,18 @@ public class PadPivot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // if (PivotGlobalValues.is_SOFTLIMIT) {
-    //   if (pivot.getPivotLeftPos() < PivotGlobalValues.PIVOT_MIN_ANGLE) {
-    //     if (opPad.getLeftAnalogYAxis() < 0) {
-    //       pivot.movePivot(opPad.getLeftAnalogYAxis());
-    //     } else {
-    //       pivot.movePivot(0);
-    //     }
-    //   } else if (pivot.getPivotLeftPos() > PivotGlobalValues.PIVOT_MAX_ANGLE) {
-    //     if (opPad.getLeftAnalogYAxis() > 0) {
-    //       pivot.movePivot(opPad.getLeftAnalogYAxis());
-    //     } else {
-    //       pivot.movePivot(0);
-    //     }
-    //   } else {
-    //     pivot.movePivot(opPad.getLeftAnalogYAxis());
-    //   }
-    // } 
-    // else {
-
-    if (Math.abs(opPad.getLeftAnalogYAxis()) > 0.03)
+    if (Math.abs(opPad.getLeftTriggerValue()) > 0.03)
     {
-      pivot.movePivot(-opPad.getLeftAnalogYAxis() * 0.5);
+      pivot.movePivot(-opPad.getLeftTriggerValue() * 0.5);
+    }
+    else if (Math.abs(opPad.getRightTriggerValue()) > 0.03) {
+      pivot.movePivot(opPad.getRightTriggerValue() * 0.5);
     }
     else{
       // pivot.setMotorPosition(pivot.getPivotLeftPos(), pivot.getPivotRightPos());
       // pivot.movePivot(0.17);
       pivot.stopMotors();
     }
-    // }
   }
 
 

@@ -12,9 +12,9 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": null
+            "name": "startIntake"
           }
         }
       ]

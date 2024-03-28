@@ -41,7 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "intakeFinal"
+                "name": null
               }
             }
           ]
@@ -64,7 +64,7 @@
             {
               "type": "named",
               "data": {
-                "name": "intakeBasic2"
+                "name": null
               }
             }
           ]
@@ -73,8 +73,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 7.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

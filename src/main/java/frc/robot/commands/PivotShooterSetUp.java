@@ -49,7 +49,7 @@ public class PivotShooterSetUp extends Command {
     addRequirements(pivot, shooter, limelight, swerveSubsystem);
     this.swerveSubsystem = swerveSubsystem;
     timer = new Timer();
-    rotationalController = new PIDController(BasePIDGlobal.rotationalPID.p, BasePIDGlobal.rotationalPID.i, BasePIDGlobal.rotationalPID.d);
+    rotationalController = new PIDController(BasePIDGlobal.ROTATIONAL_PID.p, BasePIDGlobal.ROTATIONAL_PID.i, BasePIDGlobal.ROTATIONAL_PID.d);
     velocityPIDController = new PIDController(0.037, 0, 0.000005);
     rotationalController.setTolerance(3);
     this.pivot = pivot;
@@ -80,13 +80,12 @@ public class PivotShooterSetUp extends Command {
   @Override
   public void execute() {
     velocity = velocityPIDController.calculate(pivot.getPivotLeftPos(), pos);
-    // SmartDashboard.putNumber("Error Pivot", -pivot.getPivotLeftPos() + pos);
-    // SmartDashboard.putNumber("Setpoint", pos);
-    // SmartDashboard.putNumber("Velocity Pivot", velocity);
+    SmartDashboard.putNumber("Error Pivot Right", -pivot.getPivotRightPos() + pos);
+    SmartDashboard.putNumber("Error Pivot Left", -pivot.getPivotLeftPos() + pos);
 
     horizontalError = -limelight.getTx();
     System.out.println(horizontalError);
-    if (Math.abs(horizontalError) >= SwerveGlobalValues.limelightDeadband) {
+    if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
       swerveSubsystem.drive(0, 0, rotationalController.calculate(horizontalError, 0), false);
     } else {
       swerveSubsystem.stopModules();

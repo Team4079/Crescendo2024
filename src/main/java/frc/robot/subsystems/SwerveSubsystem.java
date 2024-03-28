@@ -297,13 +297,16 @@ public class SwerveSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("Robot Pos X", swerveEstimator.getEstimatedPosition().getX());
     // SmartDashboard.putNumber("Robot Pos Y", swerveEstimator.getEstimatedPosition().getY());
     Rotation2d headingGyroAnglething = Rotation2d.fromDegrees(pgetHeading());
-    swerveOdomeryPose2d = swerveOdometry.update(headingGyroAnglething, getModulePositions());
+    swerveOdometry.update(headingGyroAnglething, getModulePositions());
+    swerveOdomeryPose2d = swerveOdometry.getPoseMeters();
     SmartDashboard.putNumber("Robot Pos X", swerveOdomeryPose2d.getX());
     SmartDashboard.putNumber("Robot Pos Y", swerveOdomeryPose2d.getY());
     
     SmartDashboard.putNumber("heading", pgetHeading());
     for (int i = 0; i < modules.length; i++) {
       SmartDashboard.putNumber("Module Angle: " + i, modules[i].getRotationDegree());
+      SmartDashboard.putNumber("Drive Motor Speed " + i, modules[i].getDriveVelocity());
+      SmartDashboard.putNumber("Drive Error " + i, modules[i].getDriveVelocity() - modules[i].getState().speedMetersPerSecond);
     }
 
     for (int i = 0; i < modules.length; i++) {

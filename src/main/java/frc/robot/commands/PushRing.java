@@ -29,18 +29,18 @@ public class PushRing extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (limelight.getDistance() > 0.1){
-      shooter.setKrakenVelocity(-30);
-    }
-    else {
-      shooter.stopAllMotors();
-    }
     // shooter.setKrakenVelocity(-30);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (limelight.getDistance() > 0.1){
+      shooter.setKrakenVelocity(-30);
+    }
+    else {
+      shooter.stopAllMotors();
+    }
   }
 
   // Called once the command ends or is interrupted.

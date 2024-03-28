@@ -25,23 +25,20 @@ public class ShootingSequence extends SequentialCommandGroup {
   private Limelight limelight;
   private SwerveSubsystem swerveSubsystem;
 
-  public ShootingSequence(Pivot pivotyboi, Shooter shootyboi, Limelight limelight, SwerveSubsystem swerveSubsystem) {
-    this.pivot = pivotyboi;
-    this.shooter = shootyboi;
+  public ShootingSequence(Pivot pivot, Shooter shooter, Limelight limelight, SwerveSubsystem swerveSubsystem) {
+    this.pivot = pivot;
+    this.shooter = shooter;
     this.limelight = limelight;
     this.swerveSubsystem = swerveSubsystem;
 
-    addRequirements(pivotyboi, shootyboi, limelight, swerveSubsystem);
+    addRequirements(pivot, shooter, limelight, swerveSubsystem);
 
     /** Command to run shooting sequence mainly in auto */
-
-    // Why is this not parallel command group for first two?
-
     addCommands(
-        new WaitCommand(0.05),
-        new PivotShooterSetUp(pivotyboi, shootyboi, limelight, swerveSubsystem).withTimeout(1.25),
-        new PushRing(shootyboi, limelight).withTimeout(0.3),
-        new StopShooter(shooter).withTimeout(0.1),
-        new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.4));
+        new WaitCommand(0.2),
+        new PivotShooterSetUpAuto(pivot, shooter, limelight, swerveSubsystem).withTimeout(0.9),
+        new PushRing(shooter, limelight).withTimeout(0.3),
+        new StopShooterAuto(shooter).withTimeout(0.02));
+        // new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.3));
   }
 }

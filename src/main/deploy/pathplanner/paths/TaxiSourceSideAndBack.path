@@ -59,7 +59,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Preload Taxi",
+  "folder": null,
   "previewStartingState": null,
   "useDefaultConstraints": false
 }

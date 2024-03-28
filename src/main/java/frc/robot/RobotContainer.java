@@ -22,7 +22,6 @@ import frc.robot.commands.PadPivot;
 import frc.robot.commands.PadShoot;
 import frc.robot.commands.PushRing;
 import frc.robot.commands.ReverseIntake;
-import frc.robot.commands.SetLED;
 import frc.robot.commands.SetPivot;
 import frc.robot.commands.ShootRing;
 import frc.robot.commands.ShooterFender;
@@ -129,12 +128,13 @@ public class RobotContainer {
     // 5
 
     // NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem));
-    NamedCommands.registerCommand("startIntake", new StartIntake(intakeyboi, shootyboi));
-    NamedCommands.registerCommand("stopIntake", new StopIntake(intakeyboi));
+    NamedCommands.registerCommand("startIntake", new StartIntake(intakeyboi, shootyboi).withTimeout(4));
+    NamedCommands.registerCommand("stopIntake", new StopIntake(intakeyboi, shootyboi));
     NamedCommands.registerCommand("pushRing", new PushRing(shootyboi, limelety));
-    NamedCommands.registerCommand("shootSquence", new ShootingSequence(pivotyboi, shootyboi, limelety, swerveSubsystem));
+    NamedCommands.registerCommand("shootSequence", new ShootingSequence(pivotyboi, shootyboi, limelety, swerveSubsystem));
+    NamedCommands.registerCommand("setPivotDown", new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE));
     NamedCommands.registerCommand("setPivot", new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
-    swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveGlobalValues.isFieldOriented));
+    swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveGlobalValues.FIELD_ORIENTATED));
     // led.setDefaultCommand(new SetLED(led));
     // intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, opPad,
     // limelety));
@@ -142,10 +142,6 @@ public class RobotContainer {
     pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, opPad));
     limelety.setDefaultCommand(new LimelightValues(limelety));
     shootyboi.setDefaultCommand(new PadShoot(shootyboi, opPad));
-
-    // Configure auto chooser
-    m_chooser.setDefaultOption("Center Auto", "Center Auto");
-    m_chooser.addOption("Center Auto", "center Auto");
 
     configureBindings();
   }
@@ -202,10 +198,10 @@ public class RobotContainer {
     // System.out.println(swerveSubsystem.getPose());
 
     // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
-    // return new PathPlannerAuto(m_chooser.getSelected());
+    return new PathPlannerAuto("4NoteNoRotation");
     // return new WaitShoot(shootyboi, pivotyboi, limelety);
     // return new PathPlannerAuto("Straight Auto");
     // return new InstantCommand();
-    return new ShootingSequence(pivotyboi, shootyboi, limelety, swerveSubsystem);
+    // return new ShootingSequence(pivotyboi, shootyboi, limelety, swerveSubsystem);
   }
 }
