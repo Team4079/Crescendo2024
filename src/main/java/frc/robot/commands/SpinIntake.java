@@ -45,6 +45,7 @@ public class SpinIntake extends Command {
   @Override
   public void initialize() {
     shouldSpin = false;
+    shooter.stopAllMotors();
     d = false;
   }
 
@@ -58,25 +59,25 @@ public class SpinIntake extends Command {
       shouldSpin = !shouldSpin;
     }
 
-    if (!shooter.getRingSensor()) {
+    if (!shooter.getRingSensor() && intake.getIntakeStatus()) {
+      led.setTanColor();
+    } else if (!shooter.getRingSensor()) {
       led.setRedColor();
-    }
-    else if (shooter.getRingSensor() && Math.abs(limelight.getTx()) == 0) {
+    } else if (shooter.getRingSensor() && Math.abs(limelight.getTx()) == 0) {
       led.setHighTide();
-    }
-    else {
+    } else {
       led.setGreenColor();
     }
 
     if (!ShooterGlobalValues.HAS_PIECE && shouldSpin) {
       intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
       shooter.setKrakenVelocity(ShooterGlobalValues.PASSTHROUGH_RPS);
-        System.out.println("jsd;lfakj;ldsakjf;lsajdf;lkajsd;lkfsa");
+      // System.out.println("jsd;lfakj;ldsakjf;lsajdf;lkajsd;lkfsa");
       d = true;
       timer.reset();
       limelightTimer.reset();
     } else {
-    
+
       shooter.stopKraken();
       intake.stopKraken();
       if (!pad.getBReleased() && !pad.getRightBumperReleased()) {
@@ -88,24 +89,22 @@ public class SpinIntake extends Command {
           shooter.setKrakenVelocity(ShooterGlobalValues.PASSTHROUGH_RPS);
         }
 
-        while (timer.get() < 0.45) 
+        while (timer.get() < 0.45)
           shooter.setKrakenVelocity(20);
-        }
-
-        if (limelightTimer.get() < 3) {
-        limelight.flash();
-        } else {
-        limelight.unflash();
-        }
-
-        shooter.stopKraken();
-        intake.stopKraken();
-        timer.stop();
       }
 
+      if (limelightTimer.get() < 3) {
+        limelight.flash();
+      } else {
+        limelight.unflash();
+      }
 
+      shooter.stopKraken();
+      intake.stopKraken();
+      timer.stop();
     }
 
+  }
 
   /** Called once the command ends or is interrupted. */
   @Override

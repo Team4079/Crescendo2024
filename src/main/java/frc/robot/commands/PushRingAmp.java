@@ -35,13 +35,13 @@ public class PushRingAmp extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setKrakenVelocity(-30);
+    shooter.setKrakenVelocity(ShooterGlobalValues.PUSH_RING_AMP_RPS);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.stopKraken();
+    // shooter.stopKraken();
   }
 
   // Returns true when the command should end.

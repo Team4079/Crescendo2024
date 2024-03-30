@@ -35,7 +35,7 @@ public class AutoAlign extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     this.swerveSubsystem = swerveSubsystem;
     this.limelight = limelight;
-    rotationalController = new PIDController(BasePIDGlobal.rotationalPID.p, BasePIDGlobal.rotationalPID.i, BasePIDGlobal.rotationalPID.d);
+    rotationalController = new PIDController(BasePIDGlobal.ROTATIONAL_PID.p, BasePIDGlobal.ROTATIONAL_PID.i, BasePIDGlobal.ROTATIONAL_PID.d);
     rotationalController.setTolerance(3);
     addRequirements(swerveSubsystem, limelight);
   }
@@ -49,7 +49,7 @@ public class AutoAlign extends Command {
   public void execute() {
     horizontalError = -limelight.getTx();
     System.out.println(horizontalError);
-    if (Math.abs(horizontalError) >= SwerveGlobalValues.limelightDeadband) {
+    if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
       swerveSubsystem.drive(0, 0, rotationalController.calculate(horizontalError, 0), false);
     } else {
       swerveSubsystem.stopModules();

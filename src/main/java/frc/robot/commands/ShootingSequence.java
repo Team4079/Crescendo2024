@@ -35,9 +35,9 @@ public class ShootingSequence extends SequentialCommandGroup {
 
     /** Command to run shooting sequence mainly in auto */
     addCommands(
-        new WaitCommand(0.2),
-        new PivotShooterSetUpAuto(pivot, shooter, limelight, swerveSubsystem).withTimeout(0.9),
-        new PushRing(shooter, limelight).withTimeout(0.3),
+        new WaitCommand(0.02),
+        new PivotShooterSetUpAuto(pivot, shooter, limelight, swerveSubsystem).withTimeout(1.35),
+        new PushRing(shooter, limelight, false).withTimeout(0.45),
         new StopShooterAuto(shooter).withTimeout(0.02));
         // new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.3));
   }

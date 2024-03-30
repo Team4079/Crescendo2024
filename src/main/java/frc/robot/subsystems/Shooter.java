@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.Tracer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues;
+import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
 /**
@@ -152,14 +153,12 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Right Shooter Error", rightFalcon.getVelocity().getValue() - 50);
     SmartDashboard.putNumber("Kraken Velocity", passthroughKraken.getRotorVelocity().getValue());
 
-    
     if (getRingSensor()) {
       timer.start();
       if (timer.get() < 0.35) {
         ShooterGlobalValues.HAS_PIECE = true;
       }
-    }
-    else {
+    } else {
       ShooterGlobalValues.HAS_PIECE = false;
       timer.reset();
     }
@@ -215,7 +214,7 @@ public class Shooter extends SubsystemBase {
    * @return double, rightFalcon RPS
    */
   public double getRightShooterVelocity() {
-    return leftFalcon.getRotorVelocity().getValue();
+    return rightFalcon.getRotorVelocity().getValue();
   }
 
   /**
@@ -278,9 +277,20 @@ public class Shooter extends SubsystemBase {
     stopKraken();
   }
 
-    public void stopAllMotorsAuto() {
+  public void stopAllMotorsAuto() {
     passthroughKraken.stopMotor();
     stopShooter();
+  }
+
+  public void setAmpSpeed() {
+    if (ShooterGlobalValues.AMP_SPEED_JESSICA) {
+      ShooterGlobalValues.AMP_SPEED = 20;
+    } else {
+      ShooterGlobalValues.AMP_SPEED = 13.33;
+    }
+    
+    // System.out.println(ShooterGlobalValues.AMP_SPEED);
+    ShooterGlobalValues.AMP_SPEED_JESSICA = !ShooterGlobalValues.AMP_SPEED_JESSICA;
   }
 
   /**

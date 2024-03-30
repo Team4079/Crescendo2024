@@ -44,13 +44,14 @@ public class PivotShooterSetUp extends Command {
   private double timeout = 0;
   private boolean end = false;
   /** Creates a new PivotShooterSetUp. */
-  public PivotShooterSetUp(Pivot pivot, Shooter shooter, Limelight limelight, SwerveSubsystem swerveSubsystem) {
+  public 
+  PivotShooterSetUp(Pivot pivot, Shooter shooter, Limelight limelight, SwerveSubsystem swerveSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(pivot, shooter, limelight, swerveSubsystem);
     this.swerveSubsystem = swerveSubsystem;
     timer = new Timer();
     rotationalController = new PIDController(BasePIDGlobal.ROTATIONAL_PID.p, BasePIDGlobal.ROTATIONAL_PID.i, BasePIDGlobal.ROTATIONAL_PID.d);
-    velocityPIDController = new PIDController(0.037, 0, 0.000005);
+    velocityPIDController = new PIDController(0.00825, 0.000000, 0.00035);
     rotationalController.setTolerance(3);
     this.pivot = pivot;
     this.limelight = limelight;
@@ -79,9 +80,9 @@ public class PivotShooterSetUp extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    velocity = velocityPIDController.calculate(pivot.getPivotLeftPos(), pos);
+    velocity = velocityPIDController.calculate(pivot.getAbsoluteEncoder(), pos);
     SmartDashboard.putNumber("Error Pivot Right", -pivot.getPivotRightPos() + pos);
-    SmartDashboard.putNumber("Error Pivot Left", -pivot.getPivotLeftPos() + pos);
+    SmartDashboard.putNumber("Error Pivot Left", -pivot.getAbsoluteEncoder() + pos);
 
     horizontalError = -limelight.getTx();
     System.out.println(horizontalError);
@@ -92,7 +93,7 @@ public class PivotShooterSetUp extends Command {
       timeout++;
     }
 
-    if (Math.abs(pivot.getPivotLeftPos() - pos) < deadband)
+    if (Math.abs(pivot.getAbsoluteEncoder() - pos) < deadband)
     {
        pivot.stopMotors();
     }
@@ -100,7 +101,7 @@ public class PivotShooterSetUp extends Command {
       pivot.movePivot(velocity);
     }
     
-    if (Math.abs(pivot.getPivotLeftPos() - pos) <= deadband)
+    if (Math.abs(pivot.getAbsoluteEncoder() - pos) <= deadband)
     {
       timer.start();
       if (timer.get() >= 0.1) {

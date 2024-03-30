@@ -107,8 +107,8 @@ public class LED extends SubsystemBase {
     long currentTime = System.currentTimeMillis();
     int length = ledBuffer1.getLength();
 
-    final int waveSpeed = 30; // Adjust for faster or slower wave
-    final int waveWidth = 55; // Adjust for wider or narrower wave
+    final int waveSpeed = 30; 
+    final int waveWidth = 55;
 
     for (int i = 0; i < length; i++) {
         double wave = Math.sin((i + (currentTime / waveSpeed)) % length * (2 * Math.PI / waveWidth));
@@ -116,8 +116,8 @@ public class LED extends SubsystemBase {
         wave = (wave + 1) / 2;
 
         int r = (int)(wave * 0); 
-        int g = (int)(wave * 182); // Teal component, more pronounced with the wave
-        int b = (int)(wave * 174); // Teal component, more pronounced with the wave
+        int g = (int)(wave * 200);
+        int b = (int)(wave * 50);
 
         ledBuffer1.setRGB(i, r, g, b);
     }

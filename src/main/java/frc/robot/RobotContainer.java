@@ -20,6 +20,7 @@ import frc.robot.commands.SubwooferShot;
 import frc.robot.commands.PadDrive;
 import frc.robot.commands.PadPivot;
 import frc.robot.commands.PadShoot;
+import frc.robot.commands.PulseDown;
 import frc.robot.commands.PushRing;
 import frc.robot.commands.ReverseIntake;
 import frc.robot.commands.SetPivot;
@@ -128,20 +129,21 @@ public class RobotContainer {
     // 5
 
     // NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem));
-    NamedCommands.registerCommand("startIntake", new StartIntake(intakeyboi, shootyboi).withTimeout(4));
+    NamedCommands.registerCommand("startIntake", new StartIntake(intakeyboi, shootyboi).withTimeout(6));
     NamedCommands.registerCommand("stopIntake", new StopIntake(intakeyboi, shootyboi));
-    NamedCommands.registerCommand("pushRing", new PushRing(shootyboi, limelety));
+    NamedCommands.registerCommand("pushRing", new PushRing(shootyboi, limelety, true));
     NamedCommands.registerCommand("shootSequence", new ShootingSequence(pivotyboi, shootyboi, limelety, swerveSubsystem));
     NamedCommands.registerCommand("setPivotDown", new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE));
     NamedCommands.registerCommand("setPivot", new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
+    NamedCommands.registerCommand("pushback", new PulseDown(intakeyboi, shootyboi));
     swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveGlobalValues.FIELD_ORIENTATED));
     // led.setDefaultCommand(new SetLED(led));
     // intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, opPad,
     // limelety));
     intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, pad, limelety, led));
-    pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, opPad));
+    pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, pad));
     limelety.setDefaultCommand(new LimelightValues(limelety));
-    shootyboi.setDefaultCommand(new PadShoot(shootyboi, opPad));
+    shootyboi.setDefaultCommand(new PadShoot(shootyboi, pad, limelety, pivotyboi));
 
     configureBindings();
   }

@@ -11,6 +11,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Pivot;
 
 /**
@@ -24,7 +25,7 @@ import frc.robot.subsystems.Pivot;
  * wherever the
  * constants are needed, to reduce verbosity.
  * 
- */  
+ */
 public final class GlobalsValues {
   private static final String UTILITY_CLASS = "Utility class";
 
@@ -62,7 +63,7 @@ public final class GlobalsValues {
     public static final double AACORN_SPEED = 0.95;
     public static final double SLOW_SPEED = 0.3;
     public static final double TURN_CONSTANT = 0.3; // 0.3
-    public static final double MetersPerRevolution = WHEEL_DIAMETER * Math.PI;  
+    public static final double MetersPerRevolution = WHEEL_DIAMETER * Math.PI;
     public static double HEADING = 0.0;
 
     // Motor Speed Manipulation Values
@@ -98,7 +99,7 @@ public final class GlobalsValues {
     public static final double CANCoderValue11 = 0.979736 - 0.5; // 0.539794 - 0.5
     public static final double CANCoderValue12 = 0.536133; // 0.984863
 
-    public static final double[] CANCoderValues = {0.915283 + 0.5, 0.327881, 0.979736 - 0.5, 0.536133};
+    public static final double[] CANCoderValues = { 0.915283 + 0.5, 0.327881, 0.979736 - 0.5, 0.536133 };
     // Whether the motors are inverted
     public static final boolean DRIVE_MOTOR_INVERETED = false;
     public static final boolean STEER_MOTOR_INVERTED = false;
@@ -122,7 +123,8 @@ public final class GlobalsValues {
 
     public static class BasePIDGlobal {
       public static final PID STEER_PID = new PID(0.14, 0.00002, 0.008, 0);
-      // public static final PID STEER_PID = new PID(0.15, 0.0000, 0.000005, 0); // 0.05 P, 0 D
+      // public static final PID STEER_PID = new PID(0.15, 0.0000, 0.000005, 0); //
+      // 0.05 P, 0 D
       public static final PID DRIVE_PID = new PID(0.5, 0.0, 0.0); // new PID(0.05, 0.00, 0, 0);
       // DON'T SET D PAST 0.03 - Erick or else the swerve moduls make funny nosie
 
@@ -136,12 +138,12 @@ public final class GlobalsValues {
                                                                                                 // this should likely
                                                                                                 // live in your
                                                                                                 // Constants class
-        new PIDConstants(0.15, 0.0001, 0.00), // translation
-        new PIDConstants(0.1, 0.0, 0.0), // rotation
-        4.96824, // Max module speed, in m/s
-        SwerveGlobalValues.ROBOT_SIZE, // Drive base radius in meters. Distance from robot center to furthest //
-        // module.
-        new ReplanningConfig(false, false)); // Default path replanning config. See the API for the options here
+          new PIDConstants(0.15, 0.0001, 0.00), // translation
+          new PIDConstants(0.1, 0.0, 0.0), // rotation
+          4.96824, // Max module speed, in m/s
+          SwerveGlobalValues.ROBOT_SIZE, // Drive base radius in meters. Distance from robot center to furthest //
+          // module.
+          new ReplanningConfig(false, false)); // Default path replanning config. See the API for the options here
     }
 
     public static final double offBalanceAngleThreshold = 10;
@@ -196,9 +198,12 @@ public final class GlobalsValues {
     public static final double PIVOT_PID_RIGHT_V = 0.5;
     public static final double PIVOT_PID_RIGHT_F = 0.1;
 
-    public static final double PIVOT_NEUTRAL_ANGLE = (0 + PivotGlobalValues.offset); // All 3\
-    public static final double PIVOT_AMP_ANGLE = (49.55 + PivotGlobalValues.offset);
+    public static final double PIVOT_NEUTRAL_ANGLE = (0.5 + PivotGlobalValues.offset); // All 3\
+    // public static final double PIVOT_AMP_ANGLE = (46 + PivotGlobalValues.offset);
+    // //Ued to be 49.55
+    public static final double PIVOT_AMP_ANGLE = 50.2;
     public static final double PIVOT_SUBWOOFER_ANGLE = (13 + PivotGlobalValues.offset);
+    public static final double PIVOT_SOURCE = 93;
     public static final double PIVOT_FENDER_ANGLE = (305 + PivotGlobalValues.offset);
     public static final double PIVOT_MAX_ANGLE = (1000 + PivotGlobalValues.offset);
     public static final double PIVOT_MIN_ANGLE = (0 + PivotGlobalValues.offset);
@@ -231,12 +236,12 @@ public final class GlobalsValues {
     public static final double SHOOTER_PID_LEFT_P = 0.0002;
     public static final double SHOOTER_PID_LEFT_I = 0.0;
     public static final double SHOOTER_PID_LEFT_D = 0.0;
-    public static final double SHOOTER_PID_LEFT_V = 0.6;
+    public static final double SHOOTER_PID_LEFT_V = 0.5;
 
     public static final double SHOOTER_PID_RIGHT_P = 0.0002;
     public static final double SHOOTER_PID_RIGHT_I = 0.0;
     public static final double SHOOTER_PID_RIGHT_D = 0.0;
-    public static final double SHOOTER_PID_RIGHT_V = 0.6;
+    public static final double SHOOTER_PID_RIGHT_V = 0.5;
 
     public static final double KRAKEN_P = 0.0002;
     public static final double KRAKEN_I = 0.0;
@@ -245,17 +250,22 @@ public final class GlobalsValues {
 
     // Shooter Motor Speed Values
     public static final double SHOOTER_SPEED = 35.0;
+    public static double AMP_SPEED = 9.87;
+    public static boolean AMP_SPEED_JESSICA = true;
     public static final double KRAKEN_SPEED = 15.0;
 
     // Shooter Motor Speeds
     public static final double SHOOTER_RPS = -40.0; // Positive is shooting, negative is intake
+    public static final double STAGE_PASS_RPS = -20.0;
     public static final double PASSTHROUGH_RPS = -30.0; // Positive is shooting, negative is intake
     public static final double AUTO_PASSTHROUGH_RPS = -35.0; // Positive is shooting, negative is intake
+    public static final double PUSH_RING_AMP_RPS = -30;
+    public static final double PUSH_RING_RPS = -30;
 
     // Shooter Misc Values
     public static boolean HAS_PIECE = false;
     public static double SHOOTING_DEADBAND = 0.3;
-    public static double RPM_THRESHOLD = 50;
+    public static double RPM_THRESHOLD = 25;
 
     public static final int RING_SENSOR_PORT = 8;
   }

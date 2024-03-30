@@ -28,8 +28,8 @@ public class ManualShoot extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ShooterRampUp(shooter, limelight).withTimeout(1),
-      new PushRing(shooter, limelight).withTimeout(0.5),
+      new StagePass(shooter).withTimeout(0.5),
+      new PushRing(shooter, limelight, false).withTimeout(0.5),
       new StopShooter(shooter)
     );
   }

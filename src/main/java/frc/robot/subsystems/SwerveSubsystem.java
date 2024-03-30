@@ -46,6 +46,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   private double rot;
   private double turnSpeed = 0;
+  private boolean shouldInvert = false;
 
   /** Creates a new DriveTrain. */
   public SwerveSubsystem() {
@@ -105,9 +106,19 @@ public class SwerveSubsystem extends SubsystemBase {
         this::chassisSpeedsDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         SwerveGlobalValues.BasePIDGlobal.pathFollower,
         () -> {
+          //TODO remeber to hange back lol
           var alliance = DriverStation.getAlliance();
           if (alliance.isPresent()) {
-            return !(alliance.get() == DriverStation.Alliance.Red);
+            if (shouldInvert)
+            {
+              return (alliance.get() == DriverStation.Alliance.Red);
+            }
+
+            else {
+              return !(alliance.get() == DriverStation.Alliance.Red);
+            }
+            
+            
           }
           return false;
         },

@@ -3,7 +3,9 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "4 Peice"
+    "4 Note",
+    "MidLine",
+    "MiddleOnly"
   ],
   "autoFolders": [],
   "defaultMaxVel": 4.0,

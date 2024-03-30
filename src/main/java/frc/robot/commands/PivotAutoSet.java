@@ -32,7 +32,7 @@ public class PivotAutoSet extends Command {
     this.pivot = pivot;
     this.limelight = limelight;
     timer = new Timer();
-    pidController = new PIDController(0.037, 0, 0.000005);
+    pidController = new PIDController(0.00825, 0.000000, 0.00035);
     addRequirements(pivot, limelight);
   }
 
@@ -49,12 +49,12 @@ public class PivotAutoSet extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    velocity = pidController.calculate(pivot.getPivotLeftPos(), pos);
-    SmartDashboard.putNumber("Error Pivot", -pivot.getPivotLeftPos() + pos);
+    velocity = pidController.calculate(pivot.getAbsoluteEncoder(), pos);
+    SmartDashboard.putNumber("Error Pivot", -pivot.getAbsoluteEncoder() + pos);
     SmartDashboard.putNumber("Setpoint", pos);
     SmartDashboard.putNumber("Velocity Pivot", velocity);
 
-    if (Math.abs(pivot.getPivotLeftPos() - pos) < deadband)
+    if (Math.abs(pivot.getAbsoluteEncoder() - pos) < deadband)
     {
        pivot.stopMotors();
     }
@@ -63,7 +63,7 @@ public class PivotAutoSet extends Command {
       pivot.movePivot(velocity);
     }
     
-    if (Math.abs(pivot.getPivotLeftPos() - pos) <= deadband)
+    if (Math.abs(pivot.getAbsoluteEncoder() - pos) <= deadband)
     {
       timer.start();
       if (timer.get() >= 0.1) {

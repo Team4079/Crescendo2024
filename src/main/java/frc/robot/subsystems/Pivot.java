@@ -71,7 +71,7 @@ public class Pivot extends SubsystemBase {
 
   private VoltageOut voltageOut;
 
-  private double deadband = 0.03;
+  private double deadband = 0.001;
 
   private double absPos;
 
@@ -146,12 +146,12 @@ public class Pivot extends SubsystemBase {
     leftSoftLimitConfig.ForwardSoftLimitEnable = false;
     leftSoftLimitConfig.ReverseSoftLimitEnable = true;
     leftSoftLimitConfig.ForwardSoftLimitThreshold = 1100;
-    leftSoftLimitConfig.ReverseSoftLimitThreshold = 0;
+    leftSoftLimitConfig.ReverseSoftLimitThreshold = 0.2;
 
     rightSoftLimitConfig.ForwardSoftLimitEnable = false;
     rightSoftLimitConfig.ReverseSoftLimitEnable = true;
     rightSoftLimitConfig.ForwardSoftLimitThreshold = 1100;
-    rightSoftLimitConfig.ReverseSoftLimitThreshold = 0;
+    rightSoftLimitConfig.ReverseSoftLimitThreshold = 0.2;
 
     pivotMotorLeft.setInverted(true);
     pivotMotorRight.setInverted(true);
@@ -183,6 +183,8 @@ public class Pivot extends SubsystemBase {
 
     pivotMotorLeft.setPosition(0);
     pivotMotorRight.setPosition(0);
+
+    SmartDashboard.putNumber("Pivot Angle Value", 46);
   }
 
   // This method will be called once per scheduler run
@@ -191,7 +193,6 @@ public class Pivot extends SubsystemBase {
     // 0.545533063638327 High limit before 2048 mulitplier = 1,117.251714331294
     // 0.201015130025378 Low limit before 2048 multiplier = 411.6789862919741
     // absPos = absoluteEncoder.getPosition();
-
     SmartDashboard.putNumber("Absolute Encoder Position", getAbsoluteEncoder());
     SmartDashboard.putNumber("Pivot Left Position", pivotMotorLeft.getPosition().getValue());
     SmartDashboard.putNumber("Pivot Right Position", pivotMotorRight.getPosition().getValue());
@@ -215,7 +216,7 @@ public class Pivot extends SubsystemBase {
   public void stopMotors() {
     pivotMotorLeft.stopMotor();
     pivotMotorRight.stopMotor();
-    voltageOut.Output = -0.01;
+    voltageOut.Output = -0.014;
     pivotMotorLeft.setControl(voltageOut);
     pivotMotorRight.setControl(voltageOut);
   }
@@ -287,7 +288,12 @@ public class Pivot extends SubsystemBase {
    */
   public double getAbsoluteEncoder() {
     // return actualAbsEnc.getAbsolutePosition() * 2048;
-    return absoluteEncoder.getPosition();
+    if (absoluteEncoder.getPosition() > 190) {
+      return 0;
+    }
+    else {
+      return absoluteEncoder.getPosition();
+    }
   }
 
   public void movePivot(double velocity) {
