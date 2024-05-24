@@ -200,7 +200,7 @@ public class RobotContainer {
     // System.out.println(swerveSubsystem.getPose());
 
     // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
-    return new PathPlannerAuto("4NoteNoRotation");
+    return new PathPlannerAuto("TestAuto");
     // return new WaitShoot(shootyboi, pivotyboi, limelety);
     // return new PathPlannerAuto("Straight Auto");
     // return new InstantCommand();

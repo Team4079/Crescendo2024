@@ -108,6 +108,7 @@ public class SwerveModule {
     driveMotor.getConfigurator().apply(driveCurrentLimitsConfigs);
     steerMotor.getConfigurator().apply(steerCurrentLimitsConfigs);
 
+    steerMotor.setInverted(SwerveGlobalValues.STEER_MOTOR_INVERTED);
   }
 
   /**
@@ -281,15 +282,15 @@ public class SwerveModule {
    * @return void
    */
   public void stop() {
-    setDriveSpeed(0);
-    setSteerSpeed(0);
+    driveMotor.stopMotor();
+    steerMotor.stopMotor();
   }
 
   /**
    * Sets the position of the steer motor to the current CANCoder value.
    * 
    * @param None
-   * @return void
+   * @retu$rn void
    */
   public void setRotorPos() {
     initialCANCoderValue = canCoder.getAbsolutePosition().refresh().getValue();
@@ -376,8 +377,12 @@ public class SwerveModule {
     return rotationsToAngle(steerMotor.getRotorPosition().getValue(), MotorGlobalValues.STEER_MOTOR_GEAR_RATIO);
   }
 
+  public double getEncoderCount() {
+    return steerMotor.getRotorPosition().getValue();
+  }
+
   public double getDriveVelocity() {
-    return driveMotor.getVelocity().getValue() / MotorGlobalValues.DRIVE_MOTOR_GEAR_RATIO;
+    return driveMotor.getRotorVelocity().getValue() / MotorGlobalValues.DRIVE_MOTOR_GEAR_RATIO;
   }
 
   public SwerveModuleState getState() {

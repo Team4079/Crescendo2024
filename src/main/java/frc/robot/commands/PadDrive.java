@@ -85,10 +85,14 @@ public class PadDrive extends Command {
 
     turn = rotation * MotorGlobalValues.MAX_ANGULAR_SPEED * 2 * 1.5;
 
+    // x *= -1;
+    // y *= -1;
+    // turn *= -1;
+
     if (MotorGlobalValues.AACORN_MODE) {
-      swerveSubsystem.drive(x * MotorGlobalValues.AACORN_SPEED, y * MotorGlobalValues.AACORN_SPEED, turn, isFieldOriented);
+      swerveSubsystem.drive(-x * MotorGlobalValues.AACORN_SPEED, y * MotorGlobalValues.AACORN_SPEED, turn, isFieldOriented);
     } else {
-      swerveSubsystem.drive(x * MotorGlobalValues.SPEED_CONSTANT, y * MotorGlobalValues.SPEED_CONSTANT,
+      swerveSubsystem.drive(-x * MotorGlobalValues.SPEED_CONSTANT, y * MotorGlobalValues.SPEED_CONSTANT,
           turn, isFieldOriented);
     }
   }

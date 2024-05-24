@@ -79,10 +79,10 @@ public final class GlobalsValues {
     public static final double ROBOT_SIZE = 0.43105229381; // Keep constant *ideally*
 
     // Motor Locations (Relative to the center in meters)
-    public static final Translation2d FRONT_LEFT = new Translation2d(0.3048, -0.3048); // (0.263525, -0.263525);
-    public static final Translation2d FRONT_RIGHT = new Translation2d(0.3048, 0.3048); // (0.263525, 0.263525);
-    public static final Translation2d BACK_LEFT = new Translation2d(-0.3048, -0.3048); // (-0.263525, -0.263525);
-    public static final Translation2d BACK_RIGHT = new Translation2d(-0.3048, 0.3048); // (-0.263525, 0.263525);
+    public static final Translation2d FRONT_LEFT = new Translation2d(0.3048, 0.3048); // (0.263525, -0.263525);
+    public static final Translation2d FRONT_RIGHT = new Translation2d(0.3048, -0.3048); // (0.263525, 0.263525);
+    public static final Translation2d BACK_LEFT = new Translation2d(-0.3048, 0.3048); // (-0.263525, -0.263525);
+    public static final Translation2d BACK_RIGHT = new Translation2d(-0.3048, -0.3048); // (-0.263525, 0.263525);
     public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
         FRONT_LEFT,
         FRONT_RIGHT,
@@ -93,16 +93,22 @@ public final class GlobalsValues {
     public static final double STATE_SPEED_THRESHOLD = 0.05;
 
     // The values of the can coders when the wheels are straight according to Mr.
-    // Wright
+    
+    // public static final double CANCoderValue9 = -0.087891; //0.915283 + 0.5; // 0.9174805
+    // public static final double CANCoderValue10 = -0.164307 ; //0.327881; // 0.328613 + 0.5 add 0.5
+    // public static final double CANCoderValue11 = -0.014893; //0.979736 - 0.5; // 0.539794 - 0.5
+    // //-0.026367
+    // public static final double CANCoderValue12 = -0.468750; //0.536133; // 0.984863
+    // //-0.46
+
     public static final double CANCoderValue9 = 0.915283 + 0.5; // 0.9174805
     public static final double CANCoderValue10 = 0.327881; // 0.328613 + 0.5 add 0.5
     public static final double CANCoderValue11 = 0.979736 - 0.5; // 0.539794 - 0.5
     public static final double CANCoderValue12 = 0.536133; // 0.984863
 
-    public static final double[] CANCoderValues = { 0.915283 + 0.5, 0.327881, 0.979736 - 0.5, 0.536133 };
     // Whether the motors are inverted
     public static final boolean DRIVE_MOTOR_INVERETED = false;
-    public static final boolean STEER_MOTOR_INVERTED = false;
+    public static final boolean STEER_MOTOR_INVERTED = true;
 
     // THe deadband of the joystick to combat drift
     public static final double JOYSTICK_DEADBAND = 0.05;
@@ -134,16 +140,13 @@ public final class GlobalsValues {
       public static final PID ROTATIONAL_PID = new PID(0.05509, 0.00, 0.09, 0);
       // public static final PID rotationalPID = new PID(0.063, 0.001, 0.035, 0);
 
-      public static HolonomicPathFollowerConfig pathFollower = new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig,
-                                                                                                // this should likely
-                                                                                                // live in your
-                                                                                                // Constants class
+      public static HolonomicPathFollowerConfig pathFollower = new HolonomicPathFollowerConfig( 
           new PIDConstants(0.15, 0.0001, 0.00), // translation
           new PIDConstants(0.1, 0.0, 0.0), // rotation
-          4.96824, // Max module speed, in m/s
+          5.76, // Max module speed, in m/s
           SwerveGlobalValues.ROBOT_SIZE, // Drive base radius in meters. Distance from robot center to furthest //
           // module.
-          new ReplanningConfig(false, false)); // Default path replanning config. See the API for the options here
+          new ReplanningConfig(false, true)); // Default path replanning config. See the API for the options here
     }
 
     public static final double offBalanceAngleThreshold = 10;

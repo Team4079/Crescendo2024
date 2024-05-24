@@ -12,6 +12,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 // the WPILib BSD license file in the root directory of this project.
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -19,6 +20,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -36,11 +40,20 @@ public class SwerveSubsystem extends SubsystemBase {
   private SwerveModule[] modules;
   private Rotation2d gyroAngle;
   private Pigeon2 pidggy;
+  // private AdvantageScope advantageScope;
   private final SwerveDriveKinematics sKinematics;
 
   public SwerveDriveOdometry swerveOdometry;
   public SwerveDrivePoseEstimator swerveEstimator;
   public Pose2d swerveOdomeryPose2d;
+
+  // Advantage Scope
+  public Pose3d advantageScopePoseA;
+  public Pose3d advantageScopePoseB;
+  // WPILib
+  public StructPublisher<Pose3d> publisher;
+  public StructArrayPublisher<Pose3d> arrayPublisher;
+
 
   public Field2d field;
 
@@ -50,10 +63,12 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveTrain. */
   public SwerveSubsystem() {
+    // advantageScope = new AdvantageScope(this, pidggy, SwerveModule)
     sKinematics = GlobalsValues.SwerveGlobalValues.kinematics;
     gyroAngle = Rotation2d.fromDegrees(0);
     pidggy = new Pigeon2(16);
     pidggy.reset();
+  
 
     modules = new SwerveModule[] {
         new SwerveModule(
@@ -92,6 +107,17 @@ public class SwerveSubsystem extends SubsystemBase {
     field = new Field2d();
     field.setRobotPose(swerveEstimator.getEstimatedPosition());
     
+
+    // Advantage Scope
+    advantageScopePoseA = new Pose3d();
+    advantageScopePoseB = new Pose3d();
+    // WPILib
+    publisher = NetworkTableInstance.getDefault()
+      .getStructTopic("MyPose", Pose3d.struct).publish();
+    arrayPublisher = NetworkTableInstance.getDefault()
+      .getStructArrayTopic("MyPoses", Pose3d.struct).publish();
+
+
     /**
      * PathPlanner Direction Values
      * Forward +x
@@ -105,8 +131,8 @@ public class SwerveSubsystem extends SubsystemBase {
         this::getAutoSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         this::chassisSpeedsDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         SwerveGlobalValues.BasePIDGlobal.pathFollower,
+        // TODO remeber to hange back lol
         () -> {
-          //TODO remeber to hange back lol
           var alliance = DriverStation.getAlliance();
           if (alliance.isPresent()) {
             if (shouldInvert)
@@ -140,9 +166,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     turnSpeed = joyStickInput * MotorGlobalValues.TURN_CONSTANT;
 
-    System.out.println("Forward Speed: " + forwardSpeed);
-    System.out.println("Left Speed: " + leftSpeed);
-    System.out.println("Turn Speed: " + joyStickInput);
+    // System.out.println("Forward Speed: " + forwardSpeed);
+    // System.out.println("Left Speed: " + leftSpeed);
+    // System.out.println("Turn Speed: " + joyStickInput);
+
     // Runs robot/field-oriented based on the boolean value of isFieldOriented
     if (isFieldOriented) {
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -272,7 +299,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @return Pose2d pose of the robot
    */
   public Pose2d getPose() {
-    return swerveOdometry.getPoseMeters();
+    return swerveEstimator.getEstimatedPosition();
   }
 
   /**
@@ -281,7 +308,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @return None
    */
   public void newPose() {
-    swerveOdometry.resetPosition(Rotation2d.fromDegrees(pgetHeading()), getModulePositions(),
+    swerveEstimator.resetPosition(Rotation2d.fromDegrees(pgetHeading()), getModulePositions(),
         new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
   }
 
@@ -291,7 +318,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @return None
    */
   public void resetOdometry(Pose2d pose) {
-    swerveOdometry.resetPosition(pidggy.getRotation2d(), getModulePositions(), pose);
+    swerveEstimator.resetPosition(pidggy.getRotation2d(), getModulePositions(), pose);
   }
 
   /**
@@ -305,25 +332,32 @@ public class SwerveSubsystem extends SubsystemBase {
     pidggy.getYaw().refresh();
     swerveEstimator.update(pidggy.getRotation2d(), getModulePositions());
     field.setRobotPose(swerveEstimator.getEstimatedPosition());
-    // SmartDashboard.putNumber("Robot Pos X", swerveEstimator.getEstimatedPosition().getX());
-    // SmartDashboard.putNumber("Robot Pos Y", swerveEstimator.getEstimatedPosition().getY());
-    Rotation2d headingGyroAnglething = Rotation2d.fromDegrees(pgetHeading());
-    swerveOdometry.update(headingGyroAnglething, getModulePositions());
-    swerveOdomeryPose2d = swerveOdometry.getPoseMeters();
-    SmartDashboard.putNumber("Robot Pos X", swerveOdomeryPose2d.getX());
-    SmartDashboard.putNumber("Robot Pos Y", swerveOdomeryPose2d.getY());
+    SmartDashboard.putNumber("Robot Pos X", swerveEstimator.getEstimatedPosition().getX());
+    SmartDashboard.putNumber("Robot Pos Y", swerveEstimator.getEstimatedPosition().getY());
+    // Rotation2d headingGyroAnglething = Rotation2d.fromDegrees(pgetHeading());
+    // swerveOdometry.update(headingGyroAnglething, getModulePositions());
+    // swerveOdomeryPose2d = swerveOdometry.getPoseMeters();
+    // SmartDashboard.putNumber("Robot Pos X", swerveOdomeryPose2d.getX());
+    // SmartDashboard.putNumber("Robot Pos Y", swerveOdomeryPose2d.getY());
     
     SmartDashboard.putNumber("heading", pgetHeading());
+    SmartDashboard.putNumber("rot", getRotationPidggy().getRotations());
     for (int i = 0; i < modules.length; i++) {
       SmartDashboard.putNumber("Module Angle: " + i, modules[i].getRotationDegree());
-      SmartDashboard.putNumber("Drive Motor Speed " + i, modules[i].getDriveVelocity());
-      SmartDashboard.putNumber("Drive Error " + i, modules[i].getDriveVelocity() - modules[i].getState().speedMetersPerSecond);
+      SmartDashboard.putNumber("Module Encoder: " + i, modules[i].getEncoderCount());
+      // SmartDashboard.putNumber("Drive Motor Speed " + i, modules[i].getDriveVelocity());
+      // SmartDashboard.putNumber("Drive Error " + i, modules[i].getDriveVelocity() - modules[i].getState().speedMetersPerSecond);
     }
 
     for (int i = 0; i < modules.length; i++) {
       SmartDashboard.putNumber("Module Speed: " + i, modules[i].getDriveVelocity());
     }
+
+    publisher.set(advantageScopePoseA);
+    arrayPublisher.set(new Pose3d[] {advantageScopePoseA, advantageScopePoseB});
   }
+
+
 
   /**
    * Adds rotor positions for the modules
@@ -357,7 +391,7 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public ChassisSpeeds getAutoSpeeds() {
     ChassisSpeeds speeds = SwerveGlobalValues.kinematics.toChassisSpeeds(getModuleStates());
-    return ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getRotationPidggy());
+    return speeds;
   }
 
   /**
@@ -366,7 +400,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @return None
    */
   public void chassisSpeedsDrive(ChassisSpeeds chassisSpeeds) {
-    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, getRotationPidggy());
+    ChassisSpeeds speeds = ChassisSpeeds.fromRobotRelativeSpeeds(chassisSpeeds, getRotationPidggy());
     SwerveModuleState[] states = SwerveGlobalValues.kinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         states, MotorGlobalValues.MAX_SPEED);
