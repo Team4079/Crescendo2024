@@ -30,7 +30,7 @@ public class Limelight extends SubsystemBase {
 
   private double[] robotPoseTargetSpace;
 
-  private Field2d field = new Field2d();
+  // private Field2d field = new Field2d();
 
   public Limelight() {
     m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
@@ -61,8 +61,8 @@ public class Limelight extends SubsystemBase {
 
     robotPoseTargetSpace = LimelightHelpers.getBotPose_TargetSpace("limelight");
     SmartDashboard.putNumber("April Tag X", LimelightHelpers.getTX("limelight"));
-    field.setRobotPose(robotPose_FieldSpace);
-    SmartDashboard.putData("Field Vision", field);
+    // field.setRobotPose(robotPose_FieldSpace);
+    // SmartDashboard.putData("Field Vision", field);
     for (int i = 0; i < robotPoseTargetSpace.length; i++) {
       SmartDashboard.putNumber("robotPoseTargetSpace" + i,
           robotPoseTargetSpace[i]);

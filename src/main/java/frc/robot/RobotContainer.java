@@ -32,6 +32,7 @@ import frc.robot.subsystems.Intake;
 // import frc.robot.subsystems.Jevois;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.PhotonVision;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -72,6 +73,7 @@ public class RobotContainer {
   private final Pivot pivotyboi;
   private final Shooter shootyboi;
   private final Intake intakeyboi;
+  // private final PhotonVision photonVision;
 
   private final JoystickButton padA;
   private final JoystickButton padB;
@@ -101,6 +103,7 @@ public class RobotContainer {
     pivotyboi = new Pivot();
     shootyboi = new Shooter();
     intakeyboi = new Intake();
+    // photonVision = new PhotonVision();
 
     padA = new JoystickButton(pad, 1);
     padB = new JoystickButton(pad, 2);
