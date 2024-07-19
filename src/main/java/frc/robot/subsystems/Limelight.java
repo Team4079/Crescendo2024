@@ -53,11 +53,11 @@ public class Limelight extends SubsystemBase {
     robotPoseTargetSpace = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_targetspace")
         .getDoubleArray(new double[6]);
 
-    if (DriverStation.getAlliance().equals(DriverStation.Alliance.Red)) {
-      robotPose_FieldSpace = llresults.targetingResults.getBotPose2d_wpiRed();
-    } else {
-      robotPose_FieldSpace = llresults.targetingResults.getBotPose2d_wpiBlue();
-    }
+    // if (DriverStation.getAlliance().equals(DriverStation.Alliance.Red)) {
+    //   robotPose_FieldSpace = llresults.targetingResults.getBotPose2d_wpiRed();
+    // } else {
+    //   robotPose_FieldSpace = llresults.targetingResults.getBotPose2d_wpiBlue();
+    // }
 
     robotPoseTargetSpace = LimelightHelpers.getBotPose_TargetSpace("limelight");
     SmartDashboard.putNumber("April Tag X", LimelightHelpers.getTX("limelight"));
@@ -166,9 +166,9 @@ public class Limelight extends SubsystemBase {
    * @param void
    * @return Latency in ms
    */
-  public double getLatency() {
-    return llresults.targetingResults.latency_capture;
-  }
+  // public double getLatency() {
+  //   return llresults.targetingResults.latency_capture;
+  // }
 
   public void highPixel() {
     LimelightHelpers.setPipelineIndex("", 1);

@@ -169,8 +169,8 @@ public class RobotContainer {
     // padA.onTrue(new InstantCommand(pivotyboi::resetEncoders));
     padA.onTrue(new SubwooferShot(shootyboi, pivotyboi, swerveSubsystem, limelety));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
-    // padY.whileTrue(new AutoAlign(swerveSubsystem, limelety).withTimeout(0.5));
-    padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
+    padY.whileTrue(new AutoAlign(swerveSubsystem, limelety).withTimeout(2));
+    // padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
     rightBumper.onTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, limelety));
     leftBumper.onTrue(new AmpScore(shootyboi, pivotyboi, limelety));
     // padY.onTrue(new InstantCommand(pivotyboi::CalibratePivot));
