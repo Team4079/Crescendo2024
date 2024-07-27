@@ -236,7 +236,7 @@ public class Limelight extends SubsystemBase {
   public double getPivotPosition() {
     // return (-0.288051 * Math.pow(getDistance(), 5) + 4.37563 * Math.pow(getDistance(), 4) + -24.8164 * Math.pow(getDistance(), 3) + 63.047 * Math.pow(getDistance(), 2) + getDistance() * -61.9595 + 28.877);
       // return (-0.288051 * Math.pow(getDis(), 5) + 4.37563 * Math.pow(getDis(), 4) + -24.8164 * Math.pow(getDis(), 3) + 63.047 * Math.pow(getDis(), 2) + getDis() * -61.9595 + 28.577);
-    return (-0.273166 * Math.pow(getDis(), 5) + 4.16168 * Math.pow(getDis(), 4) + -23.6466 * Math.pow(getDis(), 3) + 60.022 * Math.pow(getDis(), 2) + getDis() * -58.4714 + 27.0329);
+    return (-0.273166 * Math.pow(getDis(), 5) + 4.16168 * Math.pow(getDis(), 4) + -23.6466 * Math.pow(getDis(), 3) + 60.022 * Math.pow(getDis(), 2) + getDis() * -58.4714 + 27.1329); //( 27.0538)
     // return (-1.06649 * Math.pow(getDistance(),2) + getDistance() * 9.91091 + 3.92782);
   }
 }

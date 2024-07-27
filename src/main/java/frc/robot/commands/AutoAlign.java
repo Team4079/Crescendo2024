@@ -36,7 +36,7 @@ public class AutoAlign extends Command {
     this.swerveSubsystem = swerveSubsystem;
     this.limelight = limelight;
     rotationalController = new PIDController(BasePIDGlobal.ROTATIONAL_PID.p, BasePIDGlobal.ROTATIONAL_PID.i, BasePIDGlobal.ROTATIONAL_PID.d);
-    rotationalController.setTolerance(3);
+    rotationalController.setTolerance(2);
     addRequirements(swerveSubsystem, limelight);
   }
 
@@ -47,10 +47,10 @@ public class AutoAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    horizontalError = -limelight.getTx();
+    horizontalError = -limelight.getTx() - 1;
     System.out.println(horizontalError);
     if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
-      swerveSubsystem.drive(0, 0, rotationalController.calculate(horizontalError, 0), false);
+      swerveSubsystem.drive(0, 0, rotationalController.calculate(horizontalError, 1), false);
     } else {
       swerveSubsystem.stopModules();
       timeout++;
