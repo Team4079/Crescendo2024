@@ -14,6 +14,7 @@ import frc.robot.commands.ManualShoot;
 import frc.robot.commands.TeleOpAlign;
 import frc.robot.commands.ShootingSequence;
 import frc.robot.commands.SpinIntake;
+import frc.robot.commands.StagePass;
 import frc.robot.commands.StartIntake;
 import frc.robot.commands.StopIntake;
 import frc.robot.commands.SubwooferShot;
@@ -32,7 +33,6 @@ import frc.robot.subsystems.Intake;
 // import frc.robot.subsystems.Jevois;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.PhotonVision;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -81,6 +81,7 @@ public class RobotContainer {
   private final JoystickButton padY;
   private final JoystickButton rightBumper;
   private final JoystickButton leftBumper;
+  private final JoystickButton startButton;
 
   private final JoystickButton opPadA;
   private final JoystickButton opPadB;
@@ -111,6 +112,7 @@ public class RobotContainer {
     padY = new JoystickButton(pad, 4);
     rightBumper = new JoystickButton(pad, 6);
     leftBumper = new JoystickButton(pad, 5);
+    startButton = new JoystickButton(pad, 8);
 
     opPadA = new JoystickButton(opPad, 1);
     opPadB = new JoystickButton(opPad, 2);
@@ -169,17 +171,19 @@ public class RobotContainer {
     // padA.onTrue(new InstantCommand(pivotyboi::resetEncoders));
     padA.onTrue(new SubwooferShot(shootyboi, pivotyboi, swerveSubsystem, limelety));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
-    padY.whileTrue(new AutoAlign(swerveSubsystem, limelety).withTimeout(2));
-    // padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
+    // padY.whileTrue(new AutoAlign(swerveSubsystem, limelety).withTimeout(2));
+    padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
     rightBumper.onTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, limelety));
     leftBumper.onTrue(new AmpScore(shootyboi, pivotyboi, limelety));
+    // startButton.onTrue(new StagePass(shootyboi));
+
     // padY.onTrue(new InstantCommand(pivotyboi::CalibratePivot));
     // padX.whileTrue(new TeleOpAlign(swerveSubsystem, pad));
 
     opPadB.whileTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, limelety));
     // opPadB.whileTrue(new SetPivot(pivotyboi,
     // PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
-    opPadA.whileTrue(new ManualShoot(shootyboi, limelety));
+    // opPadA.whileTrue(new ManualShoot(shootyboi, limelety));
     opLeftBumper.whileTrue(new ShooterFender(shootyboi, pivotyboi, limelety));
     // X: intake i think toggles intake
     opPadY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
@@ -203,10 +207,11 @@ public class RobotContainer {
     // System.out.println(swerveSubsystem.getPose());
 
     // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
-    return new PathPlannerAuto("TestAuto");
+    // return new PathPlannerAuto("4NoteNoRotation");
+
     // return new WaitShoot(shootyboi, pivotyboi, limelety);
     // return new PathPlannerAuto("Straight Auto");
-    // return new InstantCommand();
+    return new InstantCommand();
     // return new ShootingSequence(pivotyboi, shootyboi, limelety, swerveSubsystem);
   }
 }

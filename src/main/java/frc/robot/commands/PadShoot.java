@@ -42,7 +42,7 @@ public class PadShoot extends Command {
     // }
 
     if (pad.getDPadUp()) {
-      new ManualShoot(shooter, limelight).schedule();
+      new ManualShoot(shooter, limelight, pivot).schedule();
     } else {
       shooter.stopShooter();
     }

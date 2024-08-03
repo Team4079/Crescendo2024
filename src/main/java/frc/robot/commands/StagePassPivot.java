@@ -21,10 +21,8 @@ import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
 import frc.robot.utils.PID;
 
-public class PivotShooterSetUp extends Command {
+public class StagePassPivot extends Command {
   private Pivot pivot;
-  private Shooter shooter;
-  private Limelight limelight;
   private Timer timer;
   private double deadband;
   private boolean isDone;
@@ -32,7 +30,6 @@ public class PivotShooterSetUp extends Command {
   private double velocity;
   private double rps;
 
-  private SwerveSubsystem swerveSubsystem;
 
   // Horizontal PID and offset
   private double horizontalError;
@@ -44,17 +41,14 @@ public class PivotShooterSetUp extends Command {
   private double timeout = 0;
   private boolean end = false;
   /** Creates a new PivotShooterSetUp. */
-  public PivotShooterSetUp(Pivot pivot, Shooter shooter, Limelight limelight, SwerveSubsystem swerveSubsystem) {
+  public StagePassPivot(Pivot pivot) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(pivot, shooter, limelight, swerveSubsystem);
-    this.swerveSubsystem = swerveSubsystem;
+    addRequirements(pivot);
     timer = new Timer();
     rotationalController = new PIDController(BasePIDGlobal.ROTATIONAL_PID.p, BasePIDGlobal.ROTATIONAL_PID.i, BasePIDGlobal.ROTATIONAL_PID.d);
     velocityPIDController = new PIDController(0.00825, 0.000000, 0.00035);
     rotationalController.setTolerance(3);
     this.pivot = pivot;
-    this.limelight = limelight;
-    this.shooter = shooter;
   }
 
   // Called when the command is initially scheduled.
@@ -63,16 +57,9 @@ public class PivotShooterSetUp extends Command {
 
     deadband = 0.1;
     isDone = false;
-    if (limelight.getDistance() < 1.5) {
-      pos = PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE;
-    }
-    else {
-      pos = limelight.getPivotPosition();
-    }
+    pos = 15;
 
-    rps = ShooterGlobalValues.SHOOTER_SPEED + (limelight.getDistance()-1.5) * 5;
     // shooter.setShooterVelocity(-rps, -rps);\[]
-    shooter.setShooterVelocity(-rps, -rps);
 
   }
 
@@ -83,14 +70,6 @@ public class PivotShooterSetUp extends Command {
     SmartDashboard.putNumber("Error Pivot Right", -pivot.getPivotRightPos() + pos);
     SmartDashboard.putNumber("Error Pivot Left", -pivot.getAbsoluteEncoder() + pos);
 
-    horizontalError = -limelight.getTx();
-    System.out.println(horizontalError);
-    if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
-      swerveSubsystem.drive(0, 0, rotationalController.calculate(horizontalError, 0), false);
-    } else {
-      swerveSubsystem.stopModules();
-      timeout++;
-    }
 
     if (Math.abs(pivot.getAbsoluteEncoder() - pos) < deadband)
     {
@@ -118,7 +97,6 @@ public class PivotShooterSetUp extends Command {
   @Override
   public void end(boolean interrupted) {
     pivot.stopMotors();
-    swerveSubsystem.stopModules();
   }
 
   // Returns true when the command should end.
