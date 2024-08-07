@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
@@ -17,16 +18,21 @@ import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 public class ManualShoot extends SequentialCommandGroup {
   /** Creates a new ManualShoot. */
   private Shooter shooter;
+  private Limelight limelight;
+  private Pivot pivot;
 
-  public ManualShoot(Shooter shooter) {
+  public ManualShoot(Shooter shooter, Limelight limelight, Pivot pivot) {
     this.shooter = shooter;
-    addRequirements(shooter);
+    this.limelight = limelight;
+    this.pivot = pivot;
+    addRequirements(shooter, limelight, pivot);
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ShooterRampUp(shooter, ShooterGlobalValues.SHOOTER_SPEED).withTimeout(1),
-      new PushRing(shooter).withTimeout(0.3),
+      new StagePassPivot(pivot).withTimeout(0.75),
+      new StagePass(shooter).withTimeout(0.4414),
+      new PushRing(shooter, limelight, false).withTimeout(0.5),
       new StopShooter(shooter)
     );
   }

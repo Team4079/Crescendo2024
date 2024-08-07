@@ -12,6 +12,8 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -19,6 +21,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.GlobalsValues.MotorGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
@@ -54,8 +57,6 @@ public class SwerveModule {
   private ClosedLoopRampsConfigs driveClosedRampsConfigs;
   private ClosedLoopRampsConfigs steerClosedRampsConfigs;
 
-  private SwerveModuleState currentState;
-
   /** Creates a new SwerveModule. */
   public SwerveModule(int driveId, int steerId, int canCoderID, double CANCoderDriveStraightSteerSetPoint) {
     driveMotor = new TalonFX(driveId);
@@ -75,35 +76,12 @@ public class SwerveModule {
     m_request = new DutyCycleOut(0);
     m_cycle = new PositionDutyCycle(0);
 
-    TalonFXConfiguration driveMotorConfigs = new TalonFXConfiguration();
-    // driveConfigurator.refresh(driveMotorConfigs);
-    // driveMotorConfigs.Voltage.PeakForwardVoltage = 11.5;
-    // driveMotorConfigs.Voltage.PeakReverseVoltage = -11.5;
-    driveMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    // driveMotorConfigs.CurrentLimits.SupplyCurrentLimit = 40;
-    // driveMotorConfigs.CurrentLimits.SupplyCurrentLimitEnable = false;
-    // driveMotorConfigs.CurrentLimits.SupplyCurrentThreshold = 30;
-    // driveMotorConfigs.CurrentLimits.SupplyTimeThreshold = 0.25;
-    // driveMotorConfigs.CurrentLimits.StatorCurrentLimit = 70;
-    // driveMotorConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
-    // driveMotorConfigs.Audio.AllowMusicDurDisable = true;
-    driveConfigurator.apply(driveMotorConfigs);
+    driveMotor.getConfigurator().apply(new TalonFXConfiguration());
+    steerMotor.getConfigurator().apply(new TalonFXConfiguration());
 
-    TalonFXConfiguration steerMotorconfigs = new TalonFXConfiguration();
-    // steerConfigurator.refresh(steerMotorconfigs);
-    // steerMotorconfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-    // steerMotorconfigs.Feedback.RotorToSensorRatio = 150.0/7.0;
-    // steerMotorconfigs.Feedback.SensorToMechanismRatio = 1;
-    // steerMotorconfigs.ClosedLoopGeneral.ContinuousWrap = true;
-    // steerMotorconfigs.Voltage.PeakForwardVoltage = 11.5;
-    // steerMotorconfigs.Voltage.PeakReverseVoltage = -11.5;
-    steerMotorconfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    // steerMotorconfigs.CurrentLimits.SupplyCurrentLimit = 30;
-    // steerMotorconfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
-    // steerMotorconfigs.CurrentLimits.SupplyCurrentThreshold = 20;
-    // steerMotorconfigs.CurrentLimits.SupplyTimeThreshold = 0.25;
-    // steerMotorconfigs.Audio.AllowMusicDurDisable = true;
-    steerConfigurator.apply(steerMotorconfigs);
+    motorConfigs.NeutralMode = NeutralModeValue.Brake;
+    driveConfigurator.apply(motorConfigs);
+    steerConfigurator.apply(motorConfigs);
 
     driveslot0Configs.kP = BasePIDGlobal.DRIVE_PID.p;
     driveslot0Configs.kI = BasePIDGlobal.DRIVE_PID.i;
@@ -116,8 +94,8 @@ public class SwerveModule {
     driveMotor.getConfigurator().apply(driveslot0Configs);
     steerMotor.getConfigurator().apply(steerslot0Configs);
 
-    
-    steerConfigurator.setPosition(canCoder.getAbsolutePosition().getValue()%360);
+    steerConfigurator.setPosition(CANCoderDriveStraightSteerSetPoint);
+    driveConfigurator.setPosition(0);
 
     driveCurrentLimitsConfigs = new CurrentLimitsConfigs();
     steerCurrentLimitsConfigs = new CurrentLimitsConfigs();
@@ -130,9 +108,7 @@ public class SwerveModule {
     driveMotor.getConfigurator().apply(driveCurrentLimitsConfigs);
     steerMotor.getConfigurator().apply(steerCurrentLimitsConfigs);
 
-    currentState = new SwerveModuleState();
-
-  
+    steerMotor.setInverted(SwerveGlobalValues.STEER_MOTOR_INVERTED);
   }
 
   /**
@@ -199,26 +175,26 @@ public class SwerveModule {
    */
   public double encoderToAngle(double encoderCount, double gearRatio) {
     return encoderCount * 360 /
-        MotorGlobalValues.ENCODER_COUNTS_PER_ROTATION * gearRatio;
+        (MotorGlobalValues.ENCODER_COUNTS_PER_ROTATION * gearRatio);
   }
 
   /**
-   * Converts rotations to degrees.
+   * Converts rotor rotations to wheel degrees.
    * 
-   * @param rotations The wheel rotations to convert to degrees.
+   * @param rotations The rotor rotations to convert to degrees.
    * @param gearRatio The gear ratio of the motor.
-   * @return double The rotations in degrees.
+   * @return double The wheel rotations in degrees.
    */
-  public double rotationsToAngle(double wheelRotations, double gearRatio) {
-    return wheelRotations * 360 / gearRatio;
+  public double rotationsToAngle(double rotorRotations, double gearRatio) {
+    return rotorRotations * 360 / gearRatio;
   }
 
   /**
-   * Converts degrees to rotations.
+   * Converts degrees to rotor rotations.
    * 
-   * @param angle     The angle to convert to rotations.
+   * @param angle     The angle to convert to rotor rotations.
    * @param gearRatio The gear ratio of the motor.
-   * @return double The angle in rotations.
+   * @return double The number of rotor rotations.
    */
   public double angleToRotations(double angle, double gearRatio) {
     return angle / 360 * gearRatio;
@@ -232,7 +208,7 @@ public class SwerveModule {
    * @return double The angle in encoder counts.
    */
   public double angleToEncoder(double angle, double gearRatio) {
-    return angle * MotorGlobalValues.ENCODER_COUNTS_PER_ROTATION / 360 /
+    return angle * MotorGlobalValues.ENCODER_COUNTS_PER_ROTATION / 360 *
         gearRatio;
   }
 
@@ -267,7 +243,7 @@ public class SwerveModule {
    * @return void
    */
   public void setState(SwerveModuleState state) {
-    state = optimize(state,
+    state = SwerveModule.optimize(state,
         Rotation2d.fromDegrees(
           //used abs
             rotationsToAngle(steerMotor.getRotorPosition().getValue(), MotorGlobalValues.STEER_MOTOR_GEAR_RATIO)),
@@ -293,8 +269,11 @@ public class SwerveModule {
 
       newRotations = currentRotations + angleToRotations(change, MotorGlobalValues.STEER_MOTOR_GEAR_RATIO);
       SmartDashboard.putNumber("Set Rotations " + steerMotor.getDeviceID(), newRotations);
+      // SmartDashboard.putNumber("Set Rotations " + steerMotor.getDeviceID(), newRotations);
+      // SmartDashboard.putNumber("Actual Rotations " + steerMotor.getDeviceID(),
+      //     steerMotor.getRotorPosition().getValue());
+          // newRotations - steerMotor.getRotorPosition().getValue());
       setSteerPosition(newRotations);
-      
     }
   }
 
@@ -305,18 +284,18 @@ public class SwerveModule {
    * @return void
    */
   public void stop() {
-    setDriveSpeed(0);
-    setSteerSpeed(0);
+    driveMotor.stopMotor();
+    steerMotor.stopMotor();
   }
 
   /**
    * Sets the position of the steer motor to the current CANCoder value.
    * 
    * @param None
-   * @return void
+   * @retu$rn void
    */
   public void setRotorPos() {
-    initialCANCoderValue = canCoder.getAbsolutePosition().refresh().getValue() % 360;
+    initialCANCoderValue = canCoder.getAbsolutePosition().refresh().getValue();
     steerMotor.setPosition(
         -(initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * MotorGlobalValues.STEER_MOTOR_GEAR_RATIO);
   }
@@ -400,29 +379,18 @@ public class SwerveModule {
     return rotationsToAngle(steerMotor.getRotorPosition().getValue(), MotorGlobalValues.STEER_MOTOR_GEAR_RATIO);
   }
 
-  public double getDrivePosition() {
-    return driveMotor.getRotorPosition().getValue()
-    * MotorGlobalValues.MetersPerRevolution
-    * MotorGlobalValues.DRIVE_MOTOR_GEAR_RATIO  ;
+  public double getEncoderCount() {
+    return steerMotor.getRotorPosition().getValue();
   }
 
-    /**
-   * Get the velocity of the drive motor
-   * @return Velocity of the drive motor in m/s
-   */
   public double getDriveVelocity() {
-      return driveMotor.getRotorVelocity().getValue() 
-          * MotorGlobalValues.MetersPerRevolution
-          * MotorGlobalValues.DRIVE_MOTOR_GEAR_RATIO;
-  }
-
-  public double getSteerVelocity() {
-    double turnVelocity = canCoder.getVelocity().getValue() * 360;
-    return turnVelocity;
+    return driveMotor.getRotorVelocity().getValue() / MotorGlobalValues.DRIVE_MOTOR_GEAR_RATIO;
   }
 
   public SwerveModuleState getState() {
-    currentState.angle = Rotation2d.fromDegrees(getCanCoderValueDegrees());
+    SwerveModuleState currentState = new SwerveModuleState();
+    currentState.angle = Rotation2d
+        .fromDegrees(rotationsToAngle(steerMotor.getRotorPosition().getValue(), MotorGlobalValues.STEER_MOTOR_GEAR_RATIO));
     currentState.speedMetersPerSecond = getDriveVelocity();
     return currentState;
   }

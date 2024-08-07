@@ -21,6 +21,7 @@ public class StartIntake extends Command {
   private Intake intake;
   private Shooter shooter;
   private Timer timer;
+  private Timer timer2;
   private boolean isDone;
 
   // Get distance when after we mount the limelight
@@ -31,7 +32,7 @@ public class StartIntake extends Command {
     this.shooter = shooter;
     timer = new Timer();
     isDone = false;
-
+    timer2 = new Timer();
     addRequirements(intake, shooter);
   }
 
@@ -40,29 +41,31 @@ public class StartIntake extends Command {
   public void initialize() {
     intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
     shooter.setKrakenVelocity(ShooterGlobalValues.PASSTHROUGH_RPS);
+    timer.reset();
+    timer2.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (ShooterGlobalValues.HAS_PIECE) {
-      timer.start();
+    if (shooter.getRingSensor()) {
+      // timer.start();
+      // while (timer.get() < 0.2) {
+      //   shooter.setKrakenVelocity(ShooterGlobalValues.AUTO_PASSTHROUGH_RPS);
+      // }
 
-      while (timer.get() < 0.35) {
-        // shooter.setShooterVelocity(6, 6);
-        shooter.setKrakenVelocity(ShooterGlobalValues.AUTO_PASSTHROUGH_RPS);
-      }
-
-      while (timer.get() < 0.52) {
-        shooter.setKrakenVelocity(20);
-      }
+      // while (timer.get() < 0.45) {
+      //   shooter.setKrakenVelocity(30);
+      // }
       
       shooter.stopKraken();
+      shooter.stopShooter();
       intake.stopKraken();
       timer.stop();
+      isDone = true;
     }
 
-  }
+  }  
 
   // Called once the command ends or is interrupted.
   @Override

@@ -92,6 +92,10 @@ public class Intake extends SubsystemBase {
     intakeIsStopped = false;
   }
 
+  public boolean getIntakeStatus() {
+    return !intakeIsStopped;
+  }
+
   /**
    * Stops the intake motor
    * 

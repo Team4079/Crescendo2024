@@ -31,7 +31,7 @@ public class TeleOpAlign extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     this.pad = pad;
     this.swerveSubsystem = swerveSubsystem;
-    rotationalPID = BasePIDGlobal.rotationalPID;
+    rotationalPID = BasePIDGlobal.ROTATIONAL_PID;
     addRequirements(swerveSubsystem);
   }
 
@@ -44,7 +44,7 @@ public class TeleOpAlign extends Command {
   public void execute() {
     horizontalError = -LimelightGlobalValues.tx;
 
-    if (Math.abs(horizontalError) >= SwerveGlobalValues.limelightDeadband) {
+    if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
       rot = rotationalPID.calculate(horizontalError, 0);
     }
 

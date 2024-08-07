@@ -30,7 +30,7 @@ public class Limelight extends SubsystemBase {
 
   private double[] robotPoseTargetSpace;
 
-  private Field2d field = new Field2d();
+  // private Field2d field = new Field2d();
 
   public Limelight() {
     m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
@@ -38,10 +38,12 @@ public class Limelight extends SubsystemBase {
     // "http://limelight.local:5801/stream.mjpg");
     llresults = LimelightHelpers.getLatestResults("limelight");
     timer = new Timer();
+    setPipeline(0);
   }
 
   @Override
   public void periodic() {
+    llresults = LimelightHelpers.getLatestResults("limelight");
     unflash();
     // This method will be called once per scheduler run
     tv = m_limelightTable.getEntry("tv").getDouble(0);
@@ -51,21 +53,21 @@ public class Limelight extends SubsystemBase {
     robotPoseTargetSpace = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_targetspace")
         .getDoubleArray(new double[6]);
 
-    if (DriverStation.getAlliance().equals(DriverStation.Alliance.Red)) {
-      robotPose_FieldSpace = llresults.targetingResults.getBotPose2d_wpiRed();
-    } else {
-      robotPose_FieldSpace = llresults.targetingResults.getBotPose2d_wpiBlue();
-    }
+    // if (DriverStation.getAlliance().equals(DriverStation.Alliance.Red)) {
+    //   robotPose_FieldSpace = llresults.targetingResults.getBotPose2d_wpiRed();
+    // } else {
+    //   robotPose_FieldSpace = llresults.targetingResults.getBotPose2d_wpiBlue();
+    // }
 
     robotPoseTargetSpace = LimelightHelpers.getBotPose_TargetSpace("limelight");
     SmartDashboard.putNumber("April Tag X", LimelightHelpers.getTX("limelight"));
-    field.setRobotPose(robotPose_FieldSpace);
-    SmartDashboard.putData("Field Vision", field);
+    // field.setRobotPose(robotPose_FieldSpace);
+    // SmartDashboard.putData("Field Vision", field);
     for (int i = 0; i < robotPoseTargetSpace.length; i++) {
       SmartDashboard.putNumber("robotPoseTargetSpace" + i,
           robotPoseTargetSpace[i]);
     }
-    getDistance();
+    LimelightGlobalValues.distance = getDistance();
   }
 
   /**
@@ -164,10 +166,17 @@ public class Limelight extends SubsystemBase {
    * @param void
    * @return Latency in ms
    */
-  public double getLatency() {
-    return llresults.targetingResults.latency_capture;
+  // public double getLatency() {
+  //   return llresults.targetingResults.latency_capture;
+  // }
+
+  public void highPixel() {
+    LimelightHelpers.setPipelineIndex("", 1);
   }
 
+    public void lowPixel() {
+    LimelightHelpers.setPipelineIndex("", 0);
+  }
   /**
    * Returns the tag number of the april tag
    * 
@@ -196,7 +205,7 @@ public class Limelight extends SubsystemBase {
     LimelightHelpers.setLEDMode_ForceOff("limelight");
   }
 
-  /**
+  /*
    * index from 0
    * 0 is left-right distance from tag (left is +, right is -, accurate to +- 5cm
    * per meter)
@@ -211,7 +220,23 @@ public class Limelight extends SubsystemBase {
    *
    */
   public double getDistance() {
-    SmartDashboard.putNumber("Distance", Math.abs(robotPoseTargetSpace[2]));
-    return Math.abs(LimelightGlobalValues.robotPoseTargetSpace[2]);
+    if (getTag() > 0) {
+      SmartDashboard.putNumber("Distance", Math.abs(robotPoseTargetSpace[2]));
+      return Math.abs(robotPoseTargetSpace[2]);
+    }
+    else {
+      return 0;
+    }
+  }
+
+  private double getDis() {
+    return Math.abs(robotPoseTargetSpace[2]);
+  }
+
+  public double getPivotPosition() {
+    // return (-0.288051 * Math.pow(getDistance(), 5) + 4.37563 * Math.pow(getDistance(), 4) + -24.8164 * Math.pow(getDistance(), 3) + 63.047 * Math.pow(getDistance(), 2) + getDistance() * -61.9595 + 28.877);
+      // return (-0.288051 * Math.pow(getDis(), 5) + 4.37563 * Math.pow(getDis(), 4) + -24.8164 * Math.pow(getDis(), 3) + 63.047 * Math.pow(getDis(), 2) + getDis() * -61.9595 + 28.577);
+    return (-0.273166 * Math.pow(getDis(), 5) + 4.16168 * Math.pow(getDis(), 4) + -23.6466 * Math.pow(getDis(), 3) + 60.022 * Math.pow(getDis(), 2) + getDis() * -58.4714 + 27.1329); //( 27.0538)
+    // return (-1.06649 * Math.pow(getDistance(),2) + getDistance() * 9.91091 + 3.92782);
   }
 }

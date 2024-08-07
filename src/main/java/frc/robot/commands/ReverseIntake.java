@@ -32,6 +32,7 @@ public class ReverseIntake extends Command {
   public void execute() {
     intake.setIntakeVelocity(-IntakeGlobalValues.REVERSE_INTAKE_SPEED);
     shooter.setKrakenVelocity(IntakeGlobalValues.REVERSE_INTAKE_SPEED);
+    shooter.setShooterVelocity(IntakeGlobalValues.REVERSE_INTAKE_SPEED/2, IntakeGlobalValues.REVERSE_INTAKE_SPEED/2);
   }
 
   // Called once the command ends or is interrupted.

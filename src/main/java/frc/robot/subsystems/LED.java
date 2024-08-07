@@ -11,15 +11,13 @@ import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
  */
 public class LED extends SubsystemBase {
   private AddressableLED alignmentIndication1;
-  // private AddressableLED alignmentIndication2;
 
   private AddressableLEDBuffer ledBuffer1;
-  // private AddressableLEDBuffer ledBuffer2;
 
   public LED() {
-    alignmentIndication1 = new AddressableLED(5); // 6 and 7
+    alignmentIndication1 = new AddressableLED(9); // 6 and 7
 
-    ledBuffer1 = new AddressableLEDBuffer(21);
+    ledBuffer1 = new AddressableLEDBuffer(55);
 
     alignmentIndication1.setLength(ledBuffer1.getLength());
 
@@ -31,9 +29,12 @@ public class LED extends SubsystemBase {
   @Override
   public void periodic() {
     if (RobotState.isDisabled()) {
-      rainbowRGB(SwerveGlobalValues.hightideLED[0], SwerveGlobalValues.hightideLED[1],
-          SwerveGlobalValues.hightideLED[2]);
-      // setRedColor();
+      // rainbowRGB(SwerveGlobalValues.hightideLED[0], SwerveGlobalValues.hightideLED[1],
+          // SwerveGlobalValues.hightideLED[2]);
+      highTideFlow();
+    }
+    else {
+      rainbowRGB(0, 0, 0);
     }
   }
 
@@ -67,10 +68,60 @@ public class LED extends SubsystemBase {
     alignmentIndication1.setData(ledBuffer1);
   }
 
+  public void setTanColor() {
+    for (int i = 0; i < ledBuffer1.getLength(); i++) {
+      ledBuffer1.setRGB(i, 255, 120, 20);
+    }
+    alignmentIndication1.setData(ledBuffer1);
+  }
+  
   public void setRedColor() {
     for (int i = 0; i < ledBuffer1.getLength(); i++) {
       ledBuffer1.setRGB(i, 255, 0, 0);
     }
     alignmentIndication1.setData(ledBuffer1);
   }
+
+  public void setGreenColor() {
+    for (int i = 0; i < ledBuffer1.getLength(); i++) {
+      ledBuffer1.setRGB(i, 0, 255, 0);
+    }
+    alignmentIndication1.setData(ledBuffer1);
+  }
+
+  public void setPurpleColor() {
+    for (int i = 0; i < ledBuffer1.getLength(); i++) {
+      ledBuffer1.setRGB(i, 160, 32, 240);
+    }
+    alignmentIndication1.setData(ledBuffer1);
+  }
+
+  public void setHighTide() {
+    for (int i = 0; i < ledBuffer1.getLength(); i++) {
+      ledBuffer1.setRGB(i, 0, 182, 174);
+    }
+    alignmentIndication1.setData(ledBuffer1);
+  }
+
+  public void highTideFlow() {
+    long currentTime = System.currentTimeMillis();
+    int length = ledBuffer1.getLength();
+
+    final int waveSpeed = 30; 
+    final int waveWidth = 55;
+
+    for (int i = 0; i < length; i++) {
+        double wave = Math.sin((i + (currentTime / waveSpeed)) % length * (2 * Math.PI / waveWidth));
+
+        wave = (wave + 1) / 2;
+
+        int r = (int)(wave * 0); 
+        int g = (int)(wave * 200);
+        int b = (int)(wave * 50);
+
+        ledBuffer1.setRGB(i, r, g, b);
+    }
+    alignmentIndication1.setData(ledBuffer1);
+}
+
 }

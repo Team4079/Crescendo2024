@@ -19,7 +19,7 @@ public class ResetMotorHeading extends Command {
   
   public ResetMotorHeading(SwerveSubsystem swerveSubsystem) {
     this.swerveSubsystem = swerveSubsystem;
-    pid = BasePIDGlobal.rotationalPID;
+    pid = BasePIDGlobal.ROTATIONAL_PID;
     deadband = 5;
 
     // Use addRequirements() here to declare subsystem dependencies.

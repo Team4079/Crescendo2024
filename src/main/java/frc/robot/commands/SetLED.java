@@ -44,7 +44,7 @@ public class SetLED extends Command {
     //   }
     // } else {
       // Set LED to HighTide 4414 colors (Based on not aligned with AprilTag and doesn't have piece)
-      led.rainbowRGB(SwerveGlobalValues.hightideLED[0], SwerveGlobalValues.hightideLED[1], SwerveGlobalValues.hightideLED[2]);
+      led.rainbowRGB(SwerveGlobalValues.HIGHTIDE_LED[0], SwerveGlobalValues.HIGHTIDE_LED[1], SwerveGlobalValues.HIGHTIDE_LED[2]);
     // }
   }
 

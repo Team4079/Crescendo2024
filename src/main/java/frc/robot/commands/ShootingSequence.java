@@ -7,8 +7,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
@@ -19,23 +22,23 @@ public class ShootingSequence extends SequentialCommandGroup {
 
   private Pivot pivot;
   private Shooter shooter;
+  private Limelight limelight;
+  private SwerveSubsystem swerveSubsystem;
 
-  public ShootingSequence(Pivot pivotyboi, Shooter shootyboi) {
-    this.pivot = pivotyboi;
-    this.shooter = shootyboi;
+  public ShootingSequence(Pivot pivot, Shooter shooter, Limelight limelight, SwerveSubsystem swerveSubsystem) {
+    this.pivot = pivot;
+    this.shooter = shooter;
+    this.limelight = limelight;
+    this.swerveSubsystem = swerveSubsystem;
 
-    addRequirements(pivotyboi, shootyboi);
+    addRequirements(pivot, shooter, limelight, swerveSubsystem);
 
     /** Command to run shooting sequence mainly in auto */
-
-    // Why is this not parallel command group for first two?
-
     addCommands(
-        new ParallelCommandGroup(
-            new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(0.1),
-            new ShooterRampUp(shooter, ShooterGlobalValues.SHOOTER_SPEED).withTimeout(0.1)),
-        new PushRing(shootyboi),
-        new InstantCommand(shooter::stopAllMotors),
-        new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE));
+        new WaitCommand(0.02),
+        new PivotShooterSetUpAuto(pivot, shooter, limelight, swerveSubsystem).withTimeout(1.35),
+        new PushRing(shooter, limelight, false).withTimeout(0.45),
+        new StopShooterAuto(shooter).withTimeout(0.02));
+        // new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.3));
   }
 }

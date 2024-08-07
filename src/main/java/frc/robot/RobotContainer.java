@@ -12,17 +12,18 @@ import frc.robot.commands.LimelightValues;
 import frc.robot.commands.LowerPivot;
 import frc.robot.commands.ManualShoot;
 import frc.robot.commands.TeleOpAlign;
-import frc.robot.commands.WaitShoot;
 import frc.robot.commands.ShootingSequence;
 import frc.robot.commands.SpinIntake;
+import frc.robot.commands.StagePass;
 import frc.robot.commands.StartIntake;
 import frc.robot.commands.StopIntake;
+import frc.robot.commands.SubwooferShot;
 import frc.robot.commands.PadDrive;
 import frc.robot.commands.PadPivot;
 import frc.robot.commands.PadShoot;
+import frc.robot.commands.PulseDown;
 import frc.robot.commands.PushRing;
 import frc.robot.commands.ReverseIntake;
-import frc.robot.commands.SetLED;
 import frc.robot.commands.SetPivot;
 import frc.robot.commands.ShootRing;
 import frc.robot.commands.ShooterFender;
@@ -72,6 +73,7 @@ public class RobotContainer {
   private final Pivot pivotyboi;
   private final Shooter shootyboi;
   private final Intake intakeyboi;
+  // private final PhotonVision photonVision;
 
   private final JoystickButton padA;
   private final JoystickButton padB;
@@ -79,6 +81,7 @@ public class RobotContainer {
   private final JoystickButton padY;
   private final JoystickButton rightBumper;
   private final JoystickButton leftBumper;
+  private final JoystickButton startButton;
 
   private final JoystickButton opPadA;
   private final JoystickButton opPadB;
@@ -101,6 +104,7 @@ public class RobotContainer {
     pivotyboi = new Pivot();
     shootyboi = new Shooter();
     intakeyboi = new Intake();
+    // photonVision = new PhotonVision();
 
     padA = new JoystickButton(pad, 1);
     padB = new JoystickButton(pad, 2);
@@ -108,6 +112,7 @@ public class RobotContainer {
     padY = new JoystickButton(pad, 4);
     rightBumper = new JoystickButton(pad, 6);
     leftBumper = new JoystickButton(pad, 5);
+    startButton = new JoystickButton(pad, 8);
 
     opPadA = new JoystickButton(opPad, 1);
     opPadB = new JoystickButton(opPad, 2);
@@ -129,23 +134,21 @@ public class RobotContainer {
     // 5
 
     // NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem));
-    NamedCommands.registerCommand("startIntake", new StartIntake(intakeyboi, shootyboi));
-    NamedCommands.registerCommand("stopIntake", new StopIntake(intakeyboi));
-    NamedCommands.registerCommand("pushRing", new PushRing(shootyboi));
-    NamedCommands.registerCommand("shootSquence", new ShootingSequence(pivotyboi, shootyboi));
+    NamedCommands.registerCommand("startIntake", new StartIntake(intakeyboi, shootyboi).withTimeout(6));
+    NamedCommands.registerCommand("stopIntake", new StopIntake(intakeyboi, shootyboi));
+    NamedCommands.registerCommand("pushRing", new PushRing(shootyboi, limelety, true));
+    NamedCommands.registerCommand("shootSequence", new ShootingSequence(pivotyboi, shootyboi, limelety, swerveSubsystem));
+    NamedCommands.registerCommand("setPivotDown", new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE));
     NamedCommands.registerCommand("setPivot", new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
-    swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveGlobalValues.isFieldOriented));
+    NamedCommands.registerCommand("pushback", new PulseDown(intakeyboi, shootyboi));
+    swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveGlobalValues.FIELD_ORIENTATED));
     // led.setDefaultCommand(new SetLED(led));
     // intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, opPad,
     // limelety));
-    intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, opPad));
-    pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, opPad));
+    intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, pad, limelety, led));
+    pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, pad));
     limelety.setDefaultCommand(new LimelightValues(limelety));
-    shootyboi.setDefaultCommand(new PadShoot(shootyboi, opPad));
-
-    // Configure auto chooser
-    m_chooser.setDefaultOption("Center Auto", "Center Auto");
-    m_chooser.addOption("Center Auto", "center Auto");
+    shootyboi.setDefaultCommand(new PadShoot(shootyboi, pad, limelety, pivotyboi));
 
     configureBindings();
   }
@@ -165,20 +168,27 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    padA.onTrue(new InstantCommand(pivotyboi::resetEncoders));
+    // padA.onTrue(new InstantCommand(pivotyboi::resetEncoders));
+    padA.onTrue(new SubwooferShot(shootyboi, pivotyboi, swerveSubsystem, limelety));
     padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
+    // padY.whileTrue(new AutoAlign(swerveSubsystem, limelety).withTimeout(2));
+    padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
+    rightBumper.onTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, limelety));
+    leftBumper.onTrue(new AmpScore(shootyboi, pivotyboi, limelety));
+    // startButton.onTrue(new StagePass(shootyboi));
+
     // padY.onTrue(new InstantCommand(pivotyboi::CalibratePivot));
     // padX.whileTrue(new TeleOpAlign(swerveSubsystem, pad));
 
-    opPadB.whileTrue(new ShootRing(shootyboi, pivotyboi));
+    opPadB.whileTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, limelety));
     // opPadB.whileTrue(new SetPivot(pivotyboi,
     // PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
-    opPadA.whileTrue(new ManualShoot(shootyboi));
-    opLeftBumper.whileTrue(new ShooterFender(shootyboi, pivotyboi));
+    // opPadA.whileTrue(new ManualShoot(shootyboi, limelety));
+    opLeftBumper.whileTrue(new ShooterFender(shootyboi, pivotyboi, limelety));
     // X: intake i think toggles intake
     opPadY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
-    opRightBumper.whileTrue(new AmpScore(shootyboi, pivotyboi));
-    opLeftBumper.onTrue(new InstantCommand(pivotyboi::toggleLimit));
+    opRightBumper.whileTrue(new AmpScore(shootyboi, pivotyboi, limelety));
+    opLeftBumper.onTrue(new InstantCommand(pivotyboi::toggleSoftStop));
   
     // New instnat command pivot::toggleSoftLimit for Ria
     // New command to change offset for Ria
@@ -197,8 +207,11 @@ public class RobotContainer {
     // System.out.println(swerveSubsystem.getPose());
 
     // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
-    // return new PathPlannerAuto(m_chooser.getSelected());
-    return new WaitShoot(shootyboi, pivotyboi);
-    // return new PathPlannerAuto("Test Auto");
+    // return new PathPlannerAuto("4NoteNoRotation");
+
+    // return new WaitShoot(shootyboi, pivotyboi, limelety);
+    // return new PathPlannerAuto("Straight Auto");
+    return new InstantCommand();
+    // return new ShootingSequence(pivotyboi, shootyboi, limelety, swerveSubsystem);
   }
 }
