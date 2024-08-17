@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 
-import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
@@ -73,21 +72,6 @@ public class SwerveSubsystem extends SubsystemBase {
   private double rot;
   private double turnSpeed = 0;
   private boolean shouldInvert = false;
-
-  //PhotonVision Stuff
-  PhotonCamera camera1 = new PhotonCamera("Camera One");
-  PhotonCamera camera2 = new PhotonCamera("Camera Two");
-  PhotonTrackedTarget target1;
-  PhotonTrackedTarget target2;
-  PhotonPoseEstimator photonPoseEstimator1;
-  PhotonPoseEstimator photonPoseEstimator2;
-
-  double ambiguity1;
-  double ambiguity2;
-
-  AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-  Transform3d robotToCam1 = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
-  Transform3d robotToCam2 = new Transform3d(new Translation3d(-0.5, 0.0, -0.5), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
 
   /** Creates a new DriveTrain. */
   public SwerveSubsystem() {
@@ -178,8 +162,6 @@ public class SwerveSubsystem extends SubsystemBase {
         this // Reference to this subsystem to set requirements
     );
         
-    photonPoseEstimator1 = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera1, robotToCam1);
-    photonPoseEstimator2 = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera2, robotToCam2);
 
   }
 
@@ -360,8 +342,6 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     pidggy.getYaw().refresh();
-    var results1 = camera1.getLatestResult();
-    var results2 = camera2.getLatestResult();
     swerveEstimator.update(pidggy.getRotation2d(), getModulePositions());
     // field.setRobotPose(swerveEstimator.getEstimatedPosition());
     SmartDashboard.putNumber("Robot Pos X", swerveEstimator.getEstimatedPosition().getX());
@@ -388,48 +368,6 @@ public class SwerveSubsystem extends SubsystemBase {
     publisher.set(advantageScopePoseA);
     arrayPublisher.set(new Pose3d[] {advantageScopePoseA, advantageScopePoseB});
 
-    Optional<EstimatedRobotPose> estimatedRobotPose1 = getEstimatedGlobalPose1(swerveEstimator.getEstimatedPosition());
-    Optional<EstimatedRobotPose> estimatedRobotPose2 = getEstimatedGlobalPose2(swerveEstimator.getEstimatedPosition());
-
-    if (results1.hasTargets()) {
-      try {
-        ambiguity1 = camera1.getLatestResult().getBestTarget().getPoseAmbiguity();
-      }
-      catch(NullPointerException e) {
-        System.out.println("Jayden had a skill issue");
-      }
-    } 
-    else {
-      ambiguity1 = 1;
-    }
-
-    if (results2.hasTargets()) {
-      try {
-        ambiguity2 = camera2.getLatestResult().getBestTarget().getPoseAmbiguity();
-      }
-      catch(NullPointerException e) {
-        System.out.println("Jayden had a huge skill issue");
-      }
-    } 
-    else {
-      ambiguity2 = 1;
-    }
-
-    if (estimatedRobotPose1.isPresent() && estimatedRobotPose2.isPresent()) {
-      Pose2d newPose = (ambiguity1 < ambiguity2) ? estimatedRobotPose1.get().estimatedPose.toPose2d() : estimatedRobotPose2.get().estimatedPose.toPose2d();
-      swerveEstimator.addVisionMeasurement(newPose, results1.getTimestampSeconds());
-    }
-    else if (estimatedRobotPose1.isPresent()) {
-      Pose2d newPose = estimatedRobotPose1.get().estimatedPose.toPose2d();
-      swerveEstimator.addVisionMeasurement(newPose, results1.getTimestampSeconds());
-    }
-    else if (estimatedRobotPose2.isPresent()){
-      Pose2d newPose = estimatedRobotPose2.get().estimatedPose.toPose2d();
-      swerveEstimator.addVisionMeasurement(newPose, results1.getTimestampSeconds());
-    }
-
-    field.setRobotPose(swerveEstimator.getEstimatedPosition());
-    SmartDashboard.putData("AACORN", field);
   }
 
 
@@ -514,14 +452,5 @@ public class SwerveSubsystem extends SubsystemBase {
     return moduleStates;
   }
 
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPose1(Pose2d prevEstimatedRobotPose) {
-    photonPoseEstimator1.setReferencePose(prevEstimatedRobotPose);
-    return photonPoseEstimator1.update();
-  }
-
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPose2(Pose2d prevEstimatedRobotPose) {
-    photonPoseEstimator2.setReferencePose(prevEstimatedRobotPose);
-    return photonPoseEstimator2.update();
-  }
   
 }
