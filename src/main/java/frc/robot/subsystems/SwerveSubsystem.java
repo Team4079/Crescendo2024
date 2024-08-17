@@ -204,15 +204,15 @@ public class SwerveSubsystem extends SubsystemBase {
     // Runs robot/field-oriented based on the boolean value of isFieldOriented
     if (isFieldOriented) {
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-          forwardSpeed,
-          leftSpeed,
-          turnSpeed,
-          getRotationPidggy());
+        forwardSpeed,
+        leftSpeed,
+        turnSpeed,
+        getRotationPidggy());
     } else {
       speeds = new ChassisSpeeds(
-          forwardSpeed,
-          leftSpeed,
-          joyStickInput);
+        forwardSpeed,
+        leftSpeed,
+        joyStickInput);
     }
 
     SwerveModuleState[] states = SwerveGlobalValues.kinematics.toSwerveModuleStates(speeds);
@@ -221,7 +221,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
     for (int i = 0; i < modules.length; i++) {
       modules[i].setState(states[i]);
-
     }
   }
 

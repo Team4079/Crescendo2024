@@ -6,16 +6,20 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -41,6 +45,8 @@ public class SwerveModule {
   private TalonFXConfigurator driveConfigurator;
   private TalonFXConfigurator steerConfigurator;
 
+  private TalonFXConfiguration steerConfiguration;
+
   private Slot0Configs driveslot0Configs;
   private Slot0Configs steerslot0Configs;
 
@@ -57,6 +63,9 @@ public class SwerveModule {
   private ClosedLoopRampsConfigs driveClosedRampsConfigs;
   private ClosedLoopRampsConfigs steerClosedRampsConfigs;
 
+  private PositionVoltage positionVoltage = new PositionVoltage(0);
+  private VelocityVoltage velocityVoltage = new VelocityVoltage(0);
+
   /** Creates a new SwerveModule. */
   public SwerveModule(int driveId, int steerId, int canCoderID, double CANCoderDriveStraightSteerSetPoint) {
     driveMotor = new TalonFX(driveId);
@@ -69,6 +78,13 @@ public class SwerveModule {
 
     driveConfigurator = driveMotor.getConfigurator();
     steerConfigurator = steerMotor.getConfigurator();
+
+    steerConfiguration = new TalonFXConfiguration();
+    steerConfiguration.Feedback.FeedbackRemoteSensorID = canCoderID;
+    steerConfiguration.Feedback.RotorToSensorRatio = MotorGlobalValues.STEER_MOTOR_GEAR_RATIO;
+    steerConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+    steerConfiguration.ClosedLoopGeneral.ContinuousWrap = true;
+
 
     driveslot0Configs = new Slot0Configs();
     steerslot0Configs = new Slot0Configs();
@@ -94,8 +110,10 @@ public class SwerveModule {
     driveMotor.getConfigurator().apply(driveslot0Configs);
     steerMotor.getConfigurator().apply(steerslot0Configs);
 
-    steerConfigurator.setPosition(CANCoderDriveStraightSteerSetPoint);
-    driveConfigurator.setPosition(0);
+    steerMotor.getConfigurator().apply(steerConfiguration);
+
+    steerMotor.setPosition(CANCoderDriveStraightSteerSetPoint);
+    driveMotor.setPosition(0);
 
     driveCurrentLimitsConfigs = new CurrentLimitsConfigs();
     steerCurrentLimitsConfigs = new CurrentLimitsConfigs();
@@ -120,9 +138,9 @@ public class SwerveModule {
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
         encoderToMeters(
-            driveMotor.getRotorPosition().getValue(), MotorGlobalValues.DRIVE_MOTOR_GEAR_RATIO),
+            driveMotor.getRotorPosition().refresh().getValue(), MotorGlobalValues.DRIVE_MOTOR_GEAR_RATIO),
         Rotation2d.fromDegrees(
-            encoderToAngle(steerMotor.getRotorPosition().getValue(),
+            encoderToAngle(steerMotor.getRotorPosition().refresh().getValue(),
                 MotorGlobalValues.STEER_MOTOR_GEAR_RATIO)));
   }
 
@@ -143,7 +161,7 @@ public class SwerveModule {
    * @return void
    */
   public void setSteerSpeed(double speed) {
-    steerMotor.setControl(m_request.withOutput(speed));
+    steerMotor.setControl(velocityVoltage.withVelocity(speed));
   }
 
   /**
@@ -153,7 +171,7 @@ public class SwerveModule {
    * @return void
    */
   public void setSteerPosition(double degrees) {
-    steerMotor.setControl(m_cycle.withPosition(angleToRotations(degrees, MotorGlobalValues.STEER_MOTOR_GEAR_RATIO)));
+    steerMotor.setControl(positionVoltage.withPosition(degrees));
   }
 
   /**
@@ -245,36 +263,21 @@ public class SwerveModule {
   public void setState(SwerveModuleState state) {
     state = SwerveModule.optimize(state,
         Rotation2d.fromDegrees(
-          //used abs
             rotationsToAngle(steerMotor.getRotorPosition().getValue(), MotorGlobalValues.STEER_MOTOR_GEAR_RATIO)),
         steerMotor.getDeviceID());
 
-    double currentRotations = (steerMotor.getRotorPosition().getValue());
-    Rotation2d currentAngle = Rotation2d
-        .fromDegrees(rotationsToAngle(currentRotations, MotorGlobalValues.STEER_MOTOR_GEAR_RATIO));
+    double angle = state.angle.getDegrees();
 
-    setDriveSpeed(state.speedMetersPerSecond / MotorGlobalValues.MAX_SPEED);
+    double speed = state.speedMetersPerSecond;
 
-    if (Math.abs(state.speedMetersPerSecond) > SwerveGlobalValues.STATE_SPEED_THRESHOLD) {
-      double newRotations;
-      Rotation2d delta = state.angle.minus(currentAngle);
+    SmartDashboard.putNumber("Angle", angle);
+    SmartDashboard.putNumber("Speed", speed);
 
-      double change = delta.getDegrees();
+    SmartDashboard.putNumber("Steer Motor Angle", steerMotor.getRotorPosition().refresh().getValueAsDouble());
 
-      if (change > 90) {
-        change -= 180;
-      } else if (change < -90) {
-        change += 180;
-      }
+    steerMotor.setControl(positionVoltage.withPosition(angle));
+    // driveMotor.setControl(velocityVoltage.withVelocity(speed));
 
-      newRotations = currentRotations + angleToRotations(change, MotorGlobalValues.STEER_MOTOR_GEAR_RATIO);
-      SmartDashboard.putNumber("Set Rotations " + steerMotor.getDeviceID(), newRotations);
-      // SmartDashboard.putNumber("Set Rotations " + steerMotor.getDeviceID(), newRotations);
-      // SmartDashboard.putNumber("Actual Rotations " + steerMotor.getDeviceID(),
-      //     steerMotor.getRotorPosition().getValue());
-          // newRotations - steerMotor.getRotorPosition().getValue());
-      setSteerPosition(newRotations);
-    }
   }
 
   /**
