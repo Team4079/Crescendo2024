@@ -134,7 +134,7 @@ public class RobotContainer {
     // NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem));
     NamedCommands.registerCommand("startIntake", new StartIntake(intakeyboi, shootyboi).withTimeout(6));
     NamedCommands.registerCommand("stopIntake", new StopIntake(intakeyboi, shootyboi));
-    NamedCommands.registerCommand("pushRing", new PushRing(shootyboi, limelety, true));
+    NamedCommands.registerCommand("pushRing", new PushRing(shootyboi, limelety, swerveSubsystem, true));
     NamedCommands.registerCommand("shootSequence", new ShootingSequence(pivotyboi, shootyboi, limelety, swerveSubsystem));
     NamedCommands.registerCommand("setPivotDown", new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE));
     NamedCommands.registerCommand("setPivot", new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));

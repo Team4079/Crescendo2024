@@ -36,7 +36,7 @@ public class ShootRing extends SequentialCommandGroup {
     addCommands(
         new WaitCommand(0.05),
         new PivotShooterSetUp(pivot, shooter, limelight, swerveSubsystem).withTimeout(1.2),
-        new PushRing(shooter, limelight, true).withTimeout(0.8),
+        new PushRing(shooter, limelight, swerveSubsystem, true).withTimeout(0.8),
         new StopShooter(shooter).withTimeout(0.1),
         new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.4));
   }

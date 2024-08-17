@@ -32,9 +32,9 @@ public class ShooterFender extends SequentialCommandGroup {
     addCommands(
         new ParallelCommandGroup(
             new SetPivot(pivot, PivotGlobalValues.PIVOT_FENDER_ANGLE).withTimeout(1),
-            new ShooterRampUp(shooter, limelight).withTimeout(1)
+            new ShooterRampUp(shooter, limelight, null).withTimeout(1)
       ),
-      new PushRing(shooter, limelight, true).withTimeout(0.3),
+      new PushRing(shooter, limelight, null, true).withTimeout(0.3),
       new StopShooter(shooter),
       new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.3)
     );
