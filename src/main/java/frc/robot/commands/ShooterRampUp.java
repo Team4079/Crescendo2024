@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SwerveSubsystem;
 // import frc.robot.utils.GlobalsValues.ShooterConstants;
 // import frc.robot.utils.GlobalsValues;
 // import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
@@ -18,23 +19,27 @@ public class ShooterRampUp extends Command {
   private double deadband;
 
   private Shooter shooter;
+  private SwerveSubsystem swerveSubsystem;
 
   private double rps;
   private Limelight limelight;
 
   /** Creates a new Shoot. */
-  public ShooterRampUp(Shooter shooter, Limelight limelight) {
+  public ShooterRampUp(Shooter shooter, Limelight limelight, SwerveSubsystem swerveSubsystem) {
     deadband = 5;
     this.shooter = shooter;
+    this.swerveSubsystem = swerveSubsystem;
     // this.rps = rps;
     this.limelight = limelight;
-    addRequirements(shooter, limelight);
+    addRequirements(shooter, limelight, swerveSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    rps = ShooterGlobalValues.SHOOTER_SPEED + limelight.getDistance() * 3;
+    // rps = ShooterGlobalValues.SHOOTER_SPEED + limelight.getDistance() * 3;
+    rps = ShooterGlobalValues.SHOOTER_SPEED + swerveSubsystem.getDistancePhoton() * 3;
+
     SmartDashboard.putNumber("Jessica is smart", rps);
     // shooter.setShooterVelocity(-rps, -rps);
     shooter.setShooterVelocity(-rps, -rps);

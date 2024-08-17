@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
@@ -21,14 +22,16 @@ public class PushRing extends Command {
   private boolean isDone;
   private Limelight limelight;
   private boolean limelight_Enabled;
+  private SwerveSubsystem swerveSubsystem;
 
   /** Creates a new Shoot. */
-  public PushRing(Shooter shooter, Limelight limelight, boolean limelight_Enabled) {
+  public PushRing(Shooter shooter, Limelight limelight, SwerveSubsystem swerveSubsystem, boolean limelight_Enabled) {
     this.shooter = shooter;
     isDone = false;
     this.limelight = limelight;
     this.limelight_Enabled = limelight_Enabled;
-    addRequirements(shooter, limelight);
+    this.swerveSubsystem = swerveSubsystem;
+    addRequirements(shooter, limelight, swerveSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -41,7 +44,8 @@ public class PushRing extends Command {
   @Override
   public void execute() {
     if (limelight_Enabled) {
-      if (limelight.getDistance() > 0.1) {
+      // if (limelight.getDistance() > 0.1) {
+      if (swerveSubsystem.getDistancePhoton() > 0.1) {
         shooter.setKrakenVelocity(ShooterGlobalValues.PUSH_RING_RPS);
       } else {
         shooter.stopAllMotors();

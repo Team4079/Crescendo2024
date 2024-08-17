@@ -9,7 +9,6 @@ import frc.robot.commands.AmpScore;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.LimelightValues;
 // import frc.robot.commands.LimelightValues;
-import frc.robot.commands.LowerPivot;
 import frc.robot.commands.ManualShoot;
 import frc.robot.commands.TeleOpAlign;
 import frc.robot.commands.ShootingSequence;

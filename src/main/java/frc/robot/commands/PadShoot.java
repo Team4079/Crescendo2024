@@ -47,12 +47,12 @@ public class PadShoot extends Command {
       shooter.stopShooter();
     }
 
-    if (pad.getDPadRight()) {
-      new AmpScoreOld(shooter, pivot, limelight).schedule();
-    }
-      else { 
-        shooter.stopShooter();
-      }
+    // if (pad.getDPadRight()) {
+    //   new AmpScoreOld(shooter, pivot, limelight).schedule();
+    // }
+    //   else { 
+    //     shooter.stopShooter();
+      // }
     
   }
 
