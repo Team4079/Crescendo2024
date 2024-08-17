@@ -53,7 +53,8 @@ public class PadShoot extends Command {
       else { 
         shooter.stopShooter();
       }
-    }
+    
+  }
 
   // Called once the command ends or is interrupted.
   @Override
