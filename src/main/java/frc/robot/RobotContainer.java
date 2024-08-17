@@ -42,7 +42,6 @@ import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 
 import com.pathplanner.lib.auto.NamedCommands;
-
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -175,7 +174,7 @@ public class RobotContainer {
     padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
     rightBumper.onTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, limelety));
     leftBumper.onTrue(new AmpScore(shootyboi, pivotyboi, limelety));
-    // startButton.onTrue(new StagePass(shootyboi));
+    startButton.onTrue(new StagePass(shootyboi));
 
     // padY.onTrue(new InstantCommand(pivotyboi::CalibratePivot));
     // padX.whileTrue(new TeleOpAlign(swerveSubsystem, pad));

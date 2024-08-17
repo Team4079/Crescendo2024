@@ -102,6 +102,8 @@ public class SpinIntake extends Command {
       shooter.stopKraken();
       intake.stopKraken();
       timer.stop();
+
+      shooter.setShooterVelocity(-3, -3);
     }
 
   }
