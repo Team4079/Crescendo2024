@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
@@ -20,21 +21,24 @@ public class ShooterFender extends SequentialCommandGroup {
   private Shooter shooter;
   private Pivot pivot;
   private Limelight limelight;
+  private SwerveSubsystem swerveSubsystem;
 
-  public ShooterFender(Shooter shooter, Pivot pivot, Limelight limelight) {
+  public ShooterFender(Shooter shooter, Pivot pivot, Limelight limelight, SwerveSubsystem swerveSubsystem) {
     this.shooter = shooter;
     this.pivot = pivot;
     this.limelight = limelight;
-    addRequirements(shooter, pivot, limelight);
+    this.swerveSubsystem = swerveSubsystem;
+
+    addRequirements(shooter, pivot, limelight, swerveSubsystem);
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new ParallelCommandGroup(
             new SetPivot(pivot, PivotGlobalValues.PIVOT_FENDER_ANGLE).withTimeout(1),
-            new ShooterRampUp(shooter, limelight, null).withTimeout(1)
+            new ShooterRampUp(shooter, limelight, swerveSubsystem).withTimeout(1)
       ),
-      new PushRing(shooter, limelight, null, true).withTimeout(0.3),
+      new PushRing(shooter, limelight, swerveSubsystem, true).withTimeout(0.3),
       new StopShooter(shooter),
       new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.3)
     );

@@ -146,7 +146,7 @@ public class RobotContainer {
     intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, pad, limelety, led));
     pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, pad));
     limelety.setDefaultCommand(new LimelightValues(limelety));
-    shootyboi.setDefaultCommand(new PadShoot(shootyboi, pad, limelety, pivotyboi));
+    shootyboi.setDefaultCommand(new PadShoot(shootyboi, pad, limelety, pivotyboi, swerveSubsystem));
 
     configureBindings();
   }
@@ -182,7 +182,7 @@ public class RobotContainer {
     // opPadB.whileTrue(new SetPivot(pivotyboi,
     // PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
     // opPadA.whileTrue(new ManualShoot(shootyboi, limelety));
-    opLeftBumper.whileTrue(new ShooterFender(shootyboi, pivotyboi, limelety));
+    opLeftBumper.whileTrue(new ShooterFender(shootyboi, pivotyboi, limelety, swerveSubsystem));
     // X: intake i think toggles intake
     opPadY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
     opRightBumper.whileTrue(new AmpScore(shootyboi, pivotyboi, limelety));

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
@@ -18,14 +19,16 @@ public class PadShoot extends Command {
   private LogitechGamingPad pad;
   private Limelight limelight;
   private Pivot pivot;
+  private SwerveSubsystem swerveSubsystem;
 
-  public PadShoot(Shooter shooter, LogitechGamingPad pad, Limelight limelight, Pivot pivot) {
+  public PadShoot(Shooter shooter, LogitechGamingPad pad, Limelight limelight, Pivot pivot, SwerveSubsystem swerveSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.shooter = shooter;
     this.pad = pad;
+    this.swerveSubsystem = swerveSubsystem;
     this.limelight = limelight;
     this.pivot = pivot;
-    addRequirements(shooter);
+    addRequirements(shooter, pivot, swerveSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -42,7 +45,7 @@ public class PadShoot extends Command {
     // }
 
     if (pad.getDPadUp()) {
-      new ManualShoot(shooter, limelight, pivot).schedule();
+      new ManualShoot(shooter, limelight, pivot, swerveSubsystem).schedule();
     } else {
       shooter.stopShooter();
     }
