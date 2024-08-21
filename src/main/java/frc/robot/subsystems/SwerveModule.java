@@ -52,9 +52,7 @@ public class SwerveModule {
   private TalonFXConfigurator steerConfigurator;
 
   private TalonFXConfiguration steerConfiguration;
-
-  private Slot0Configs driveslot0Configs;
-  private Slot0Configs steerslot0Configs;
+  private TalonFXConfiguration driveConfiguration;
 
   private DutyCycleOut m_request;
 
@@ -86,6 +84,7 @@ public class SwerveModule {
 
     motorConfigs = new MotorOutputConfigs();
 
+    // TODO: These don't currently do anything (are they supposed to?)
     driveConfigurator = driveMotor.getConfigurator();
     steerConfigurator = steerMotor.getConfigurator();
 
@@ -95,29 +94,25 @@ public class SwerveModule {
     steerConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
     steerConfiguration.ClosedLoopGeneral.ContinuousWrap = true;
 
-    driveslot0Configs = new Slot0Configs();
-    steerslot0Configs = new Slot0Configs();
+    driveConfiguration = new TalonFXConfiguration();
+    // TODO: Add same stuff as steerConfiguration to driveConfiguration or not?
 
     m_request = new DutyCycleOut(0);
     m_cycle = new PositionDutyCycle(0);
 
     driveMotor.getConfigurator().apply(new TalonFXConfiguration());
-    steerMotor.getConfigurator().apply(new TalonFXConfiguration());
 
     motorConfigs.NeutralMode = NeutralModeValue.Brake;
     driveConfigurator.apply(motorConfigs);
     steerConfigurator.apply(motorConfigs);
 
-    driveslot0Configs.kP = BasePIDGlobal.DRIVE_PID.p;
-    driveslot0Configs.kI = BasePIDGlobal.DRIVE_PID.i;
-    driveslot0Configs.kD = BasePIDGlobal.DRIVE_PID.d;
+    driveConfiguration.Slot0.withKP(BasePIDGlobal.DRIVE_PID.p).withKI(BasePIDGlobal.DRIVE_PID.i)
+        .withKD(BasePIDGlobal.DRIVE_PID.d);
 
-    steerslot0Configs.kP = BasePIDGlobal.STEER_PID.p;
-    steerslot0Configs.kI = BasePIDGlobal.STEER_PID.i;
-    steerslot0Configs.kD = BasePIDGlobal.STEER_PID.d;
+    steerConfiguration.Slot0.withKP(BasePIDGlobal.STEER_PID.p).withKI(BasePIDGlobal.STEER_PID.i)
+        .withKD(BasePIDGlobal.STEER_PID.d);
 
-    driveMotor.getConfigurator().apply(driveslot0Configs);
-    steerMotor.getConfigurator().apply(steerslot0Configs);
+    driveMotor.getConfigurator().apply(driveConfiguration);
 
     steerMotor.getConfigurator().apply(steerConfiguration);
 
@@ -146,8 +141,7 @@ public class SwerveModule {
 
   /**
    * Returns the current position of the module.
-   * 
-   * @param None
+   *
    * @return SwerveModulePosition The current position of the module.
    */
   public SwerveModulePosition getPosition() {
@@ -163,7 +157,6 @@ public class SwerveModule {
    * Sets the speed of the drive motor.
    * 
    * @param speed The speed to set the drive motor to.
-   * @return void
    */
   public void setDriveSpeed(double speed) {
     driveMotor.setControl(velocityVoltage.withVelocity(speed));
@@ -173,7 +166,6 @@ public class SwerveModule {
    * Sets the speed of the steer motor.
    * 
    * @param speed The speed in RPM to set the steer motor to.
-   * @return void
    */
   public void setSteerSpeed(double speed) {
     steerMotor.setControl(velocityVoltage.withVelocity(speed));
@@ -181,9 +173,7 @@ public class SwerveModule {
 
   /**
    * Sets the position of the steer motor.
-   * 
-   * @param rotations The rotations in degrees to set the steer motor to.
-   * @return void
+   *
    */
   public void setSteerPosition(double degrees) {
     steerMotor.setControl(positionVoltage.withPosition(degrees));
@@ -191,9 +181,7 @@ public class SwerveModule {
 
   /**
    * Resets the drive motor encoder.
-   * 
-   * @param void
-   * @return void
+   *
    */
   public void resetEncoders() {
     driveMotor.setPosition(0);
@@ -214,7 +202,7 @@ public class SwerveModule {
   /**
    * Converts rotor rotations to wheel degrees.
    * 
-   * @param rotations The rotor rotations to convert to degrees.
+   * @param rotorRotations The rotor rotations to convert to degrees.
    * @param gearRatio The gear ratio of the motor.
    * @return double The wheel rotations in degrees.
    */
@@ -297,8 +285,7 @@ public class SwerveModule {
 
   /**
    * Stops the module.
-   * 
-   * @param None
+   *
    * @return void
    */
   public void stop() {
@@ -308,8 +295,7 @@ public class SwerveModule {
 
   /**
    * Sets the position of the steer motor to the current CANCoder value.
-   * 
-   * @param None
+   *
    * @retu$rn void
    */
   public void setRotorPos() {
@@ -379,8 +365,7 @@ public class SwerveModule {
 
   /**
    * Returns the CANCoder value.
-   * 
-   * @param void
+   *
    * @return double The CANCoder value.
    */
   public double getCanCoderValue() {
@@ -389,8 +374,7 @@ public class SwerveModule {
 
   /**
    * Returns the current position of the steer motor.
-   * 
-   * @param void
+   *
    * @return double The current position of the steer motor.
    */
   public double getRotationDegree() {
@@ -415,8 +399,7 @@ public class SwerveModule {
 
   /**
    * Returns the CANCoder value in degrees.
-   * 
-   * @param void
+   *
    * @return double The CANCoder value in degrees.
    */
   public double getCanCoderValueDegrees() {
