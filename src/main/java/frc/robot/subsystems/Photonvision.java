@@ -43,12 +43,12 @@ public class Photonvision extends SubsystemBase {
   PhotonPipelineResult results1;
   PhotonPipelineResult results2;
 
+  double range1;
+  double range2;
+
   AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
   Transform3d robotToCam1 = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
   Transform3d robotToCam2 = new Transform3d(new Translation3d(-0.5, 0.0, -0.5), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
-
-  Optional<EstimatedRobotPose> estimatedRobotPose1 = getEstimatedGlobalPose1(swerveEstimator.getEstimatedPosition());
-  Optional<EstimatedRobotPose> estimatedRobotPose2 = getEstimatedGlobalPose2(swerveEstimator.getEstimatedPosition());
 
   public Photonvision() {
     photonPoseEstimator1 = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera1, robotToCam1);
@@ -57,15 +57,58 @@ public class Photonvision extends SubsystemBase {
 
   @Override
   public void periodic() {
-    results1 = camera1.getLatestResult();
-    results2 = camera2.getLatestResult();
+    // results1 = camera1.getLatestResult();
+    // results2 = camera2.getLatestResult();
 
+    
 
-    SmartDashboard.putData("AACORN", field);
+    // SmartDashboard.putData("AACORN", field);
     // This method will be called once per scheduler run
   }
 
-  public Pose2d getVisionMeasurement() {
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPose1(Pose2d prevEstimatedRobotPose) {
+    photonPoseEstimator1.setReferencePose(prevEstimatedRobotPose);
+    return photonPoseEstimator1.update();
+  }
+
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPose2(Pose2d prevEstimatedRobotPose) {
+    photonPoseEstimator2.setReferencePose(prevEstimatedRobotPose);
+    return photonPoseEstimator2.update();
+  }
+
+  public Optional<EstimatedRobotPose> getBestEstimatedPose(Pose2d prevEstimatedRobotPose) {
+    if (results1.hasTargets() && results2.hasTargets()) {
+      if (results1.getTargets().get(0).getPoseAmbiguity() < results2.getTargets().get(0).getPoseAmbiguity()) {
+        photonPoseEstimator1.setReferencePose(prevEstimatedRobotPose);
+        return photonPoseEstimator1.update();
+      }
+      else {
+        photonPoseEstimator2.setReferencePose(prevEstimatedRobotPose);
+        return photonPoseEstimator2.update();
+      }
+    }
+    else if (results1.hasTargets()) {
+      photonPoseEstimator1.setReferencePose(prevEstimatedRobotPose);
+      return photonPoseEstimator1.update();
+    }
+    else if (results2.hasTargets()) {
+      photonPoseEstimator2.setReferencePose(prevEstimatedRobotPose);
+      return photonPoseEstimator2.update();
+    }
+    else {
+      return Optional.empty();
+    }
+  }
+
+  public boolean hasTargets1() {
+    return results1.hasTargets();
+  }
+
+  public boolean hasTargets2() {
+    return results2.hasTargets();
+  }
+
+  public void setAmbiguity() {
 
     Pose2d newPose;
 
@@ -93,30 +136,14 @@ public class Photonvision extends SubsystemBase {
       ambiguity2 = 1;
     }
 
-    if (estimatedRobotPose1.isPresent() && estimatedRobotPose2.isPresent()) {
-      newPose = (ambiguity1 < ambiguity2) ? estimatedRobotPose1.get().estimatedPose.toPose2d() : estimatedRobotPose2.get().estimatedPose.toPose2d();
-      // swerveEstimator.addVisionMeasurement(newPose, results1.getTimestampSeconds());
-    }
-    else if (estimatedRobotPose1.isPresent()) {
-      newPose = estimatedRobotPose1.get().estimatedPose.toPose2d();
-      // swerveEstimator.addVisionMeasurement(newPose, results1.getTimestampSeconds());
-    }
-    else if (estimatedRobotPose2.isPresent()){
-      newPose = estimatedRobotPose2.get().estimatedPose.toPose2d();
-      // swerveEstimator.addVisionMeasurement(newPose, results1.getTimestampSeconds());
-    }
-
     // field.setRobotPose(swerveEstimator.getEstimatedPosition());
-    return newPose;
   }
 
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPose1(Pose2d prevEstimatedRobotPose) {
-    photonPoseEstimator1.setReferencePose(prevEstimatedRobotPose);
-    return photonPoseEstimator1.update();
+  public double getDistancePhoton()  {
+    return ambiguity1 < ambiguity2 ? range1 : range2;
   }
 
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPose2(Pose2d prevEstimatedRobotPose) {
-    photonPoseEstimator2.setReferencePose(prevEstimatedRobotPose);
-    return photonPoseEstimator2.update();
+  public double getTimestampSeconds() {
+    return results1.getTimestampSeconds();
   }
 }

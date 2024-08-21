@@ -126,7 +126,7 @@ public final class GlobalsValues {
       public static final PID STEER_PID = new PID(0.14, 0.00002, 0.008, 0);
       // public static final PID STEER_PID = new PID(0.15, 0.0000, 0.000005, 0); //
       // 0.05 P, 0 D
-      public static final PID DRIVE_PID = new PID(0.5, 0.0, 0.0); // new PID(0.05, 0.00, 0, 0);
+      public static final PID DRIVE_PID = new PID(0.25, 0.0, 0.0); // new PID(0.05, 0.00, 0, 0);
       // DON'T SET D PAST 0.03 - Erick or else the swerve moduls make funny nosie
 
       // AutoAlign PID

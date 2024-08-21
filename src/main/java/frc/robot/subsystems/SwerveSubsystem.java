@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
@@ -43,6 +44,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.MotorGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
+import frc.robot.subsystems.Photonvision;
 
 /**
  * The {@link SwerveSubsystem} class includes all the motors to drive the robot.
@@ -51,7 +53,8 @@ public class SwerveSubsystem extends SubsystemBase {
   // Variables for the swerve drive train
   private SwerveModule[] modules;
   private Rotation2d gyroAngle;
-  private Pigeon2 pidggy;
+  public Pigeon2 pidggy;
+  private Photonvision photonVision;
   // private AdvantageScope advantageScope;
   private final SwerveDriveKinematics sKinematics;
 
@@ -66,17 +69,26 @@ public class SwerveSubsystem extends SubsystemBase {
   public StructPublisher<Pose3d> publisher;
   public StructArrayPublisher<Pose3d> arrayPublisher;
 
-
   public Field2d field;
 
   private double rot;
   private double turnSpeed = 0;
   private boolean shouldInvert = false;
 
+  double ambiguity1;
+  double ambiguity2;
+
+  AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+  Transform3d robotToCam1 = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
+  Transform3d robotToCam2 = new Transform3d(new Translation3d(-0.5, 0.0, -0.5), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
+
+  Optional<EstimatedRobotPose> estimatedRobotPose = Optional.empty();
+
   /** Creates a new DriveTrain. */
   public SwerveSubsystem() {
     // advantageScope = new AdvantageScope(this, pidggy, SwerveModule)
     sKinematics = GlobalsValues.SwerveGlobalValues.kinematics;
+    photonVision = new Photonvision();
     gyroAngle = Rotation2d.fromDegrees(0);
     pidggy = new Pigeon2(16);
     pidggy.reset();
@@ -161,7 +173,6 @@ public class SwerveSubsystem extends SubsystemBase {
         },
         this // Reference to this subsystem to set requirements
     );
-        
 
   }
 
@@ -186,15 +197,15 @@ public class SwerveSubsystem extends SubsystemBase {
     // Runs robot/field-oriented based on the boolean value of isFieldOriented
     if (isFieldOriented) {
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-        forwardSpeed,
-        leftSpeed,
-        turnSpeed,
-        getRotationPidggy());
+          forwardSpeed,
+          leftSpeed,
+          turnSpeed,
+          getRotationPidggy());
     } else {
       speeds = new ChassisSpeeds(
-        forwardSpeed,
-        leftSpeed,
-        joyStickInput);
+          forwardSpeed,
+          leftSpeed,
+          joyStickInput);
     }
 
     SwerveModuleState[] states = SwerveGlobalValues.kinematics.toSwerveModuleStates(speeds);
@@ -368,6 +379,13 @@ public class SwerveSubsystem extends SubsystemBase {
     publisher.set(advantageScopePoseA);
     arrayPublisher.set(new Pose3d[] {advantageScopePoseA, advantageScopePoseB});
 
+    // estimatedRobotPose = photonVision.getBestEstimatedPose(swerveEstimator.getEstimatedPosition());
+    // if (estimatedRobotPose.isPresent()) {
+    //   Pose2d newPose = estimatedRobotPose.get().estimatedPose.toPose2d();
+    //   swerveEstimator.addVisionMeasurement(newPose, photonVision.getTimestampSeconds());
+    //   field.setRobotPose(swerveEstimator.getEstimatedPosition());
+    // }
+    SmartDashboard.putData("AACORN", field);
   }
 
 
@@ -452,5 +470,6 @@ public class SwerveSubsystem extends SubsystemBase {
     return moduleStates;
   }
 
+  
   
 }

@@ -4,9 +4,11 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -63,8 +65,12 @@ public class SwerveModule {
   private ClosedLoopRampsConfigs driveClosedRampsConfigs;
   private ClosedLoopRampsConfigs steerClosedRampsConfigs;
 
+  private CANcoderConfiguration canCoderConfiguration;
+  private MagnetSensorConfigs magnetSensorConfigs;
+
   private PositionVoltage positionVoltage = new PositionVoltage(0);
   private VelocityVoltage velocityVoltage = new VelocityVoltage(0);
+  private VelocityDutyCycle velocityDutyCycle = new VelocityDutyCycle(0);
 
   /** Creates a new SwerveModule. */
   public SwerveModule(int driveId, int steerId, int canCoderID, double CANCoderDriveStraightSteerSetPoint) {
@@ -126,6 +132,12 @@ public class SwerveModule {
     driveMotor.getConfigurator().apply(driveCurrentLimitsConfigs);
     steerMotor.getConfigurator().apply(steerCurrentLimitsConfigs);
 
+    canCoderConfiguration = new CANcoderConfiguration();
+    magnetSensorConfigs = new MagnetSensorConfigs();
+    canCoderConfiguration.FutureProofConfigs = true;
+    magnetSensorConfigs.MagnetOffset = SwerveGlobalValues.CANCoderValues[canCoderID - 9];
+    canCoder.getConfigurator().apply(magnetSensorConfigs);
+
     steerMotor.setInverted(SwerveGlobalValues.STEER_MOTOR_INVERTED);
   }
 
@@ -151,7 +163,7 @@ public class SwerveModule {
    * @return void
    */
   public void setDriveSpeed(double speed) {
-    driveMotor.setControl(m_request.withOutput(speed));
+    driveMotor.setControl(velocityVoltage.withVelocity(speed));
   }
 
   /**
@@ -262,8 +274,7 @@ public class SwerveModule {
    */
   public void setState(SwerveModuleState state) {
     state = SwerveModule.optimize(state,
-        Rotation2d.fromDegrees(
-            rotationsToAngle(steerMotor.getRotorPosition().getValue(), MotorGlobalValues.STEER_MOTOR_GEAR_RATIO)),
+        Rotation2d.fromDegrees(getCanCoderValueDegrees()),
         steerMotor.getDeviceID());
 
     double angle = state.angle.getDegrees();
@@ -272,11 +283,12 @@ public class SwerveModule {
 
     SmartDashboard.putNumber("Angle", angle);
     SmartDashboard.putNumber("Speed", speed);
+    SmartDashboard.putNumber("Speed of Motor", driveMotor.getRotorVelocity().getValueAsDouble());
 
     SmartDashboard.putNumber("Steer Motor Angle", steerMotor.getRotorPosition().refresh().getValueAsDouble());
 
-    steerMotor.setControl(positionVoltage.withPosition(angle));
-    // driveMotor.setControl(velocityVoltage.withVelocity(speed));
+    steerMotor.setControl(m_cycle.withPosition(angle));
+    driveMotor.setControl(m_request.withOutput(speed / MotorGlobalValues.MAX_SPEED));
 
   }
 
@@ -405,7 +417,7 @@ public class SwerveModule {
    * @return double The CANCoder value in degrees.
    */
   public double getCanCoderValueDegrees() {
-    return ((360 * (canCoder.getAbsolutePosition().getValue() - SwerveGlobalValues.CANCoderValues[canCoder.getDeviceID() - 9]) % 360 + 360)) % 360;
+    return ((360 * (canCoder.getAbsolutePosition().getValue()) % 360 + 360)) % 360;
   }
 
   /**
