@@ -4,34 +4,23 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.configs.TorqueCurrentConfigs;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.VelocityDutyCycle;
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
-import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.GlobalsValues.MotorGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
@@ -42,27 +31,20 @@ import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
  */
 public class SwerveModule {
   /** Creates a new SwerveModule. */
-  public TalonFX driveMotor;
-  public TalonFX steerMotor;
-  public CANcoder canCoder;
+  private TalonFX driveMotor;
+  private TalonFX steerMotor;
+  private CANcoder canCoder;
 
   private MotorOutputConfigs motorConfigs;
-
-  private TalonFXConfigurator driveConfigurator;
-  private TalonFXConfigurator steerConfigurator;
 
   private TalonFXConfiguration steerConfiguration;
   private TalonFXConfiguration driveConfiguration;
 
-  private DutyCycleOut m_request;
+  private DutyCycleOut request;
 
-  private PositionDutyCycle m_cycle;
-  private double initialCANCoderValue;
+  private PositionDutyCycle cycle;
 
   private final double CANCoderDriveStraightSteerSetPoint;
-
-  private CurrentLimitsConfigs driveCurrentLimitsConfigs;
-  private CurrentLimitsConfigs steerCurrentLimitsConfigs;
 
   private ClosedLoopRampsConfigs driveClosedRampsConfigs;
   private ClosedLoopRampsConfigs steerClosedRampsConfigs;
@@ -72,7 +54,6 @@ public class SwerveModule {
 
   private PositionVoltage positionVoltage = new PositionVoltage(0);
   private VelocityVoltage velocityVoltage = new VelocityVoltage(0);
-  private VelocityDutyCycle velocityDutyCycle = new VelocityDutyCycle(0);
 
   /** Creates a new SwerveModule. */
   public SwerveModule(int driveId, int steerId, int canCoderID, double CANCoderDriveStraightSteerSetPoint) {
@@ -84,10 +65,6 @@ public class SwerveModule {
 
     motorConfigs = new MotorOutputConfigs();
 
-    // TODO: These don't currently do anything (are they supposed to?)
-    driveConfigurator = driveMotor.getConfigurator();
-    steerConfigurator = steerMotor.getConfigurator();
-
     steerConfiguration = new TalonFXConfiguration();
     steerConfiguration.Feedback.FeedbackRemoteSensorID = canCoderID;
     steerConfiguration.Feedback.RotorToSensorRatio = MotorGlobalValues.STEER_MOTOR_GEAR_RATIO;
@@ -95,16 +72,15 @@ public class SwerveModule {
     steerConfiguration.ClosedLoopGeneral.ContinuousWrap = true;
 
     driveConfiguration = new TalonFXConfiguration();
-    // TODO: Add same stuff as steerConfiguration to driveConfiguration or not?
-
-    m_request = new DutyCycleOut(0);
-    m_cycle = new PositionDutyCycle(0);
+    
+    request = new DutyCycleOut(0);
+    cycle = new PositionDutyCycle(0);
 
     driveMotor.getConfigurator().apply(new TalonFXConfiguration());
 
     motorConfigs.NeutralMode = NeutralModeValue.Brake;
-    driveConfigurator.apply(motorConfigs);
-    steerConfigurator.apply(motorConfigs);
+    driveMotor.getConfigurator().apply(motorConfigs);
+    steerMotor.getConfigurator().apply(motorConfigs);
 
     driveConfiguration.Slot0.withKP(BasePIDGlobal.DRIVE_PID.p).withKI(BasePIDGlobal.DRIVE_PID.i)
         .withKD(BasePIDGlobal.DRIVE_PID.d);
@@ -119,16 +95,14 @@ public class SwerveModule {
     steerMotor.setPosition(CANCoderDriveStraightSteerSetPoint);
     driveMotor.setPosition(0);
 
-    driveCurrentLimitsConfigs = new CurrentLimitsConfigs();
-    steerCurrentLimitsConfigs = new CurrentLimitsConfigs();
     driveClosedRampsConfigs = new ClosedLoopRampsConfigs();
     steerClosedRampsConfigs = new ClosedLoopRampsConfigs();
 
     driveClosedRampsConfigs.DutyCycleClosedLoopRampPeriod = 0.1;
     steerClosedRampsConfigs.DutyCycleClosedLoopRampPeriod = 0.05;
 
-    driveMotor.getConfigurator().apply(driveCurrentLimitsConfigs);
-    steerMotor.getConfigurator().apply(steerCurrentLimitsConfigs);
+    driveMotor.getConfigurator().apply(new CurrentLimitsConfigs());
+    steerMotor.getConfigurator().apply(new CurrentLimitsConfigs());
 
     canCoderConfiguration = new CANcoderConfiguration();
     magnetSensorConfigs = new MagnetSensorConfigs();
@@ -278,8 +252,8 @@ public class SwerveModule {
 
     SmartDashboard.putNumber("Steer Motor Angle", steerMotor.getRotorPosition().refresh().getValueAsDouble());
 
-    steerMotor.setControl(m_cycle.withPosition(angle));
-    driveMotor.setControl(m_request.withOutput(speed / MotorGlobalValues.MAX_SPEED));
+    steerMotor.setControl(cycle.withPosition(angle));
+    driveMotor.setControl(request.withOutput(speed / MotorGlobalValues.MAX_SPEED));
 
   }
 
@@ -299,6 +273,7 @@ public class SwerveModule {
    * @retu$rn void
    */
   public void setRotorPos() {
+    double initialCANCoderValue;
     initialCANCoderValue = canCoder.getAbsolutePosition().refresh().getValue();
     steerMotor.setPosition(
         -(initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * MotorGlobalValues.STEER_MOTOR_GEAR_RATIO);
@@ -323,7 +298,7 @@ public class SwerveModule {
 
     if (Math.abs(delta) > 90) {
       targetSpeed = -targetSpeed;
-      targetAngle = delta > 90 ? (targetAngle -= 180) : (targetAngle += 180);
+      targetAngle = delta > 90 ? (targetAngle - 180) : (targetAngle + 180);
     }
     SmartDashboard.putNumber(deviceID + " Motor", currentAngle.getDegrees() - targetAngle);
     return new SwerveModuleState(targetSpeed, Rotation2d.fromDegrees(targetAngle));
@@ -411,11 +386,8 @@ public class SwerveModule {
  * @return The number of rotations (including partial rotations as a decimal) based on the CANCoder's current position.
  */
 public double getCANCoderRotations() {
-  double canCoderDegrees = canCoder.getAbsolutePosition().getValue();
 
-  double rotations = canCoderDegrees / 360.0;
-
-  return rotations;
+  return canCoder.getAbsolutePosition().getValue() / 360.0;
 }
 
 
