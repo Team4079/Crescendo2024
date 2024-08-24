@@ -108,7 +108,7 @@ public final class GlobalsValues {
     public static final double JOYSTICK_DEADBAND = 0.05;
 
     public static final boolean USING_VISION = false;
-    public static final boolean FIELD_ORIENTATED = true;
+    public static final boolean FIELD_ORIENTATED = false;
 
     // Whether the limelight auto aligns and its deadband
     public static final boolean AUTO_ALIGN = false;

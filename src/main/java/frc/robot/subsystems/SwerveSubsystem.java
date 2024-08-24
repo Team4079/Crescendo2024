@@ -220,7 +220,7 @@ public class SwerveSubsystem extends SubsystemBase {
         states, MotorGlobalValues.MAX_SPEED);
 
     for (int i = 0; i < modules.length; i++) {
-      modules[i].setState(states[i]);
+      modules[i].setState(states[i], i);
 
     }
   }
@@ -376,7 +376,7 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("heading", pgetHeading());
     SmartDashboard.putNumber("rot", getRotationPidggy().getRotations());
     for (int i = 0; i < modules.length; i++) {
-      SmartDashboard.putNumber("Module Angle: " + i, modules[i].getRotationDegree());
+      SmartDashboard.putNumber("Module Angle: " + i, modules[i].getRotationDegree() % 360);
       SmartDashboard.putNumber("Module Encoder: " + i, modules[i].getEncoderCount());
       // SmartDashboard.putNumber("Drive Motor Speed " + i, modules[i].getDriveVelocity());
       // SmartDashboard.putNumber("Drive Error " + i, modules[i].getDriveVelocity() - modules[i].getState().speedMetersPerSecond);
@@ -456,7 +456,7 @@ public class SwerveSubsystem extends SubsystemBase {
         states, MotorGlobalValues.MAX_SPEED);
 
     for (int i = 0; i < modules.length; i++) {
-      modules[i].setState(states[i]);
+      modules[i].setState(states[i], i);
     }
   }
 
@@ -481,7 +481,7 @@ public class SwerveSubsystem extends SubsystemBase {
     SwerveDriveKinematics.desaturateWheelSpeeds(
         states, MotorGlobalValues.MAX_SPEED);
     for (int i = 0; i < modules.length; i++) {
-      modules[i].setState(states[i]);
+      modules[i].setState(states[i], i);
     }
   }
 

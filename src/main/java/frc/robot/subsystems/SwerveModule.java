@@ -242,15 +242,22 @@ public class SwerveModule {
    * @param state SwerveModuleState The state to set the module to.
    * @return void
    */
-  public void setState(SwerveModuleState state) {
-    state = SwerveModule.optimize(state,
-        Rotation2d.fromDegrees(
-            rotationsToAngle(steerMotor.getRotorPosition().getValue(), MotorGlobalValues.STEER_MOTOR_GEAR_RATIO)),
-        steerMotor.getDeviceID());
+  public void setState(SwerveModuleState state, int i) {
+
+    SmartDashboard.putNumber("state 1 of " + i,  state.angle.getDegrees());
+
+    // state = SwerveModule.optimize(state,
+    //     Rotation2d.fromDegrees(
+    //         rotationsToAngle(steerMotor.getRotorPosition().getValue(), MotorGlobalValues.STEER_MOTOR_GEAR_RATIO)),
+    //     steerMotor.getDeviceID());
+
+    SmartDashboard.putNumber("state 2 of " + i,  state.angle.getDegrees() % 360);
 
     double currentRotations = (steerMotor.getRotorPosition().getValue());
     Rotation2d currentAngle = Rotation2d
         .fromDegrees(rotationsToAngle(currentRotations, MotorGlobalValues.STEER_MOTOR_GEAR_RATIO));
+
+    SmartDashboard.putNumber("current angle at point 2 of " + i, currentAngle.getDegrees() % 360);
 
     setDriveSpeed(state.speedMetersPerSecond / MotorGlobalValues.MAX_SPEED);
 
@@ -260,13 +267,21 @@ public class SwerveModule {
 
       double change = delta.getDegrees();
 
+      SmartDashboard.putNumber("change at point 3 of " + i, change);
+
+      // end 
+
       if (change > 90) {
         change -= 180;
       } else if (change < -90) {
         change += 180;
       }
 
+      SmartDashboard.putNumber("change atfter point 3 of " + i, change);
+
       newRotations = currentRotations + angleToRotations(change, MotorGlobalValues.STEER_MOTOR_GEAR_RATIO);
+
+      SmartDashboard.putNumber("new rotations at point 4 of " + i, newRotations % 360);
       // SmartDashboard.putNumber("Set Rotations " + steerMotor.getDeviceID(), newRotations);
       // SmartDashboard.putNumber("Actual Rotations " + steerMotor.getDeviceID(),
       //     steerMotor.getRotorPosition().getValue());
@@ -312,6 +327,8 @@ public class SwerveModule {
   public static SwerveModuleState optimize(SwerveModuleState desiredState, Rotation2d currentAngle, int deviceID) {
     double targetAngle = placeInAppropriate0To360Scope(
         currentAngle.getDegrees(), desiredState.angle.getDegrees());
+
+    SmartDashboard.putNumber("targetANgle fater 360 chagne", targetAngle);
     double targetSpeed = desiredState.speedMetersPerSecond;
     double delta = targetAngle - currentAngle.getDegrees();
 
