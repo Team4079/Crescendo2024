@@ -63,15 +63,14 @@ public class PivotShooterSetUp extends Command {
 
     deadband = 0.1;
     isDone = false;
-    if (swerveSubsystem.getDistancePhoton() < 1.5) {
+    if (limelight.getDistance() < 1.5) {
       pos = PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE;
     }
     else {
-      // pos = limelight.getPivotPosition();
-      pos = swerveSubsystem.getDistancePhoton();
+      pos = limelight.getPivotPosition();
     }
 
-    rps = ShooterGlobalValues.SHOOTER_SPEED + (swerveSubsystem.getDistancePhoton()-1.5) * 5;
+    rps = ShooterGlobalValues.SHOOTER_SPEED + (limelight.getDistance()-1.5) * 5;
     // shooter.setShooterVelocity(-rps, -rps);\[]
     shooter.setShooterVelocity(-rps, -rps);
 

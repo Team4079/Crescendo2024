@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
-import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 
 /** The {@link RePivotAutoSet} class is a command that resets the pivot to its neutral position. */
@@ -24,20 +23,17 @@ public class PivotAutoSet extends Command {
   private double deadband;
   private boolean isDone;
   private Limelight limelight;
-  private SwerveSubsystem subsystem;
-  
   
 
   // Get distance when after we mount the limelight
 
   /** Creates a new Shoot. */
-  public PivotAutoSet(Pivot pivot, Limelight limelight, SwerveSubsystem subsystem) {
+  public PivotAutoSet(Pivot pivot, Limelight limelight) {
     this.pivot = pivot;
     this.limelight = limelight;
-    this.subsystem = subsystem;
     timer = new Timer();
     pidController = new PIDController(0.00825, 0.000000, 0.00035);
-    addRequirements(pivot, limelight, subsystem);
+    addRequirements(pivot, limelight);
   }
 
   // // Called when the command is initially scheduled.
@@ -46,8 +42,7 @@ public class PivotAutoSet extends Command {
     deadband = 0.1;
     isDone = false;
     pos = PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE;
-    // pos = limelight.getPivotPosition();
-    pos = subsystem.getDistancePhoton();
+    pos = limelight.getPivotPosition();
     // pidController.setTolerance(50);
   }
 

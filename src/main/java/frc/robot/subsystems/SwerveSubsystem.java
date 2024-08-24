@@ -6,7 +6,6 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -34,7 +33,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
@@ -46,7 +44,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.MotorGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
-
 
 /**
  * The {@link SwerveSubsystem} class includes all the motors to drive the robot.
@@ -87,9 +84,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
   double ambiguity1;
   double ambiguity2;
-
-  double range1;
-  double range2;
 
   AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
   Transform3d robotToCam1 = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
@@ -405,8 +399,6 @@ public class SwerveSubsystem extends SubsystemBase {
       catch(NullPointerException e) {
         System.out.println("Jayden had a skill issue");
       }
-
-      range1 = PhotonUtils.calculateDistanceToTargetMeters(0.65, 1.5, 0.349066, Units.degreesToRadians(camera1.getLatestResult().getBestTarget().getPitch()));      
     } 
     else {
       ambiguity1 = 1;
@@ -419,8 +411,6 @@ public class SwerveSubsystem extends SubsystemBase {
       catch(NullPointerException e) {
         System.out.println("Jayden had a huge skill issue");
       }
-
-      range2 = PhotonUtils.calculateDistanceToTargetMeters(0.65, 1.5, 0.349066, Units.degreesToRadians(camera2.getLatestResult().getBestTarget().getPitch()));      
     } 
     else {
       ambiguity2 = 1;
@@ -534,15 +524,5 @@ public class SwerveSubsystem extends SubsystemBase {
     photonPoseEstimator2.setReferencePose(prevEstimatedRobotPose);
     return photonPoseEstimator2.update();
   }
-
-  public double getDistancePhoton()  {
-    return ambiguity1 < ambiguity2 ? range1 : range2;
-  }
-
-  public double getPivotPositionPhoton() {
-    // return (-0.288051 * Math.pow(getDistance(), 5) + 4.37563 * Math.pow(getDistance(), 4) + -24.8164 * Math.pow(getDistance(), 3) + 63.047 * Math.pow(getDistance(), 2) + getDistance() * -61.9595 + 28.877);
-      // return (-0.288051 * Math.pow(getDis(), 5) + 4.37563 * Math.pow(getDis(), 4) + -24.8164 * Math.pow(getDis(), 3) + 63.047 * Math.pow(getDis(), 2) + getDis() * -61.9595 + 28.577);
-    return (-0.273166 * Math.pow(getDistancePhoton(), 5) + 4.16168 * Math.pow(getDistancePhoton(), 4) + -23.6466 * Math.pow(getDistancePhoton(), 3) + 60.022 * Math.pow(getDistancePhoton(), 2) + getDistancePhoton() * -58.4714 + 27.1329); //( 27.0538)
-    // return (-1.06649 * Math.pow(getDistance(),2) + getDistance() * 9.91091 + 3.92782);
-  }
+  
 }
