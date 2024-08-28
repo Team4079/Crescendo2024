@@ -51,6 +51,7 @@ public final class GlobalsValues {
     public static final int FRONT_RIGHT_CAN_CODER_ID = 10;
     public static final int BACK_LEFT_CAN_CODER_ID = 11;
     public static final int BACK_RIGHT_CAN_CODER_ID = 12;
+    public static final int ELEVATOR_NEO_ID = 13;
 
     // Motor Property Values
     public static final double MAX_SPEED = 5.76;
