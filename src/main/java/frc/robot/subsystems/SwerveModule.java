@@ -263,7 +263,14 @@ public class SwerveModule {
 
     if (Math.abs(state.speedMetersPerSecond) > SwerveGlobalValues.STATE_SPEED_THRESHOLD) {
       double newRotations;
+
       Rotation2d delta = state.angle.minus(currentAngle);
+
+      // Problem: current angle is from 0-360
+      // state angle is from -180 to 180
+      // values cannot be subtracted as different values
+      SmartDashboard.putNumber("state angle", state.angle.getDegrees() % 360);
+      SmartDashboard.putNumber("currentAngle", currentAngle.getDegrees() % 360);
 
       double change = delta.getDegrees();
 
