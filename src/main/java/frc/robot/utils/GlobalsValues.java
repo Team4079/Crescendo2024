@@ -72,6 +72,15 @@ public final class GlobalsValues {
     public static boolean AACORN_MODE = true;
   }
 
+  public static class ElevatorGlobalValues {
+    public static final double closedLoopRampRate = 0.5;
+    public static final double ELEVATOR_UP = 1; // TODO: git gud
+    public static final double ELEVATOR_DOWN = 0;
+    public static final double kP = 0.1; // TODO: git gud
+    public static final double kI = 0; // TODO: git gud
+    public static final double kD = 0; // TODO: git gud
+  }
+
   public static class SwerveGlobalValues {
     private SwerveGlobalValues() {
       throw new IllegalStateException(UTILITY_CLASS);
