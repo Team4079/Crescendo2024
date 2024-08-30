@@ -51,6 +51,7 @@ public final class GlobalsValues {
     public static final int FRONT_RIGHT_CAN_CODER_ID = 10;
     public static final int BACK_LEFT_CAN_CODER_ID = 11;
     public static final int BACK_RIGHT_CAN_CODER_ID = 12;
+    public static final int ELEVATOR_NEO_ID = 13;
 
     // Motor Property Values
     public static final double MAX_SPEED = 5.76;
@@ -69,6 +70,15 @@ public final class GlobalsValues {
     // Motor Speed Manipulation Values
     public static boolean SLOW_MODE = false;
     public static boolean AACORN_MODE = true;
+  }
+
+  public static class ElevatorGlobalValues {
+    public static final double closedLoopRampRate = 0.5;
+    public static final double ELEVATOR_UP = 1; // TODO: git gud
+    public static final double ELEVATOR_DOWN = 0;
+    public static final double kP = 0.1; // TODO: git gud
+    public static final double kI = 0; // TODO: git gud
+    public static final double kD = 0; // TODO: git gud
   }
 
   public static class SwerveGlobalValues {
@@ -108,7 +118,7 @@ public final class GlobalsValues {
     public static final double JOYSTICK_DEADBAND = 0.05;
 
     public static final boolean USING_VISION = false;
-    public static final boolean FIELD_ORIENTATED = true;
+    public static final boolean FIELD_ORIENTATED = false;
 
     // Whether the limelight auto aligns and its deadband
     public static final boolean AUTO_ALIGN = false;

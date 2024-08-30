@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.utils.GlobalsValues.MotorGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
@@ -65,23 +66,26 @@ public class PadDrive extends Command {
     double heading_deadband = 0.2;
     double controller_deadband = 0.05;
 
-    // If the right joystick is within the deadband, don't turn
-    if (Math.abs(pad.getRightAnalogXAxis()) <= controller_deadband) {
-      if (MotorGlobalValues.HEADING > (swerveSubsystem.pgetHeading() + heading_deadband)) {
-        turn = -MotorGlobalValues.MAX_ANGULAR_SPEED;
-      } else if (MotorGlobalValues.HEADING < (swerveSubsystem.pgetHeading() - heading_deadband)) {
-        turn = MotorGlobalValues.MAX_ANGULAR_SPEED;
-      } else {
-        turn = 0;
-      } 
-    } else {
-      turn = pad.getRightAnalogXAxis() * MotorGlobalValues.MAX_ANGULAR_SPEED;
-      MotorGlobalValues.HEADING = swerveSubsystem.pgetHeading();
-    }
+    // // If the right joystick is within the deadband, don't turn
+    // if (Math.abs(pad.getRightAnalogXAxis()) <= controller_deadband) {
+    //   if (MotorGlobalValues.HEADING > (swerveSubsystem.pgetHeading() + heading_deadband)) {
+    //     turn = -MotorGlobalValues.MAX_ANGULAR_SPEED;
+    //   } else if (MotorGlobalValues.HEADING < (swerveSubsystem.pgetHeading() - heading_deadband)) {
+    //     turn = MotorGlobalValues.MAX_ANGULAR_SPEED;
+    //   } else {
+    //     turn = 0;
+    //   } 
+    // } else {
+    //   turn = pad.getRightAnalogXAxis() * MotorGlobalValues.MAX_ANGULAR_SPEED;
+    //   MotorGlobalValues.HEADING = swerveSubsystem.pgetHeading();
+    // }
 
     if (Math.abs(rotation) < 0.05) {
       rotation = 0;
     }
+
+    SmartDashboard.putNumber("X axis joystick", x);
+    SmartDashboard.putNumber("y axis joystick", y);
 
     turn = rotation * MotorGlobalValues.MAX_ANGULAR_SPEED * 2 * 1.5;
 

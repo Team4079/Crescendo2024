@@ -12,7 +12,6 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
 import frc.robot.utils.GlobalsValues.IntakeGlobalValues;
 // import frc.robot.utils.GlobalsValues.PivotGlobalValues;
@@ -103,12 +102,6 @@ public class SpinIntake extends Command {
       shooter.stopKraken();
       intake.stopKraken();
       timer.stop();
-      timer.reset();
-
-      if (timer.get() > 0.3)
-      {
-        shooter.setShooterVelocity(-3, -3);
-      }
     }
 
   }
