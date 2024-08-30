@@ -12,8 +12,6 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
-import com.ctre.phoenix6.controls.VelocityDutyCycle;
-import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -21,7 +19,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.GlobalsValues.MotorGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
@@ -32,9 +29,9 @@ import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
  */
 public class SwerveModule {
   /** Creates a new SwerveModule. */
-  public TalonFX driveMotor;
-  public TalonFX steerMotor;
-  public CANcoder canCoder;
+  private TalonFX driveMotor;
+  private TalonFX steerMotor;
+  private CANcoder canCoder;
 
   private MotorOutputConfigs motorConfigs;
 
@@ -44,10 +41,9 @@ public class SwerveModule {
   private Slot0Configs driveslot0Configs;
   private Slot0Configs steerslot0Configs;
 
-  private DutyCycleOut m_request;
+  private DutyCycleOut dutyCycle;
 
-  private PositionDutyCycle m_cycle;
-  private double initialCANCoderValue;
+  private PositionDutyCycle cycle;
 
   private final double CANCoderDriveStraightSteerSetPoint;
 
@@ -59,9 +55,9 @@ public class SwerveModule {
 
   /** Creates a new SwerveModule. */
   public SwerveModule(int driveId, int steerId, int canCoderID, double CANCoderDriveStraightSteerSetPoint) {
-    driveMotor = new TalonFX(driveId);
-    steerMotor = new TalonFX(steerId);
-    canCoder = new CANcoder(canCoderID);
+    setDriveMotor(new TalonFX(driveId));
+    setSteerMotor(new TalonFX(steerId));
+    setCanCoder(new CANcoder(canCoderID));
 
     this.CANCoderDriveStraightSteerSetPoint = CANCoderDriveStraightSteerSetPoint;
 
@@ -73,8 +69,8 @@ public class SwerveModule {
     driveslot0Configs = new Slot0Configs();
     steerslot0Configs = new Slot0Configs();
 
-    m_request = new DutyCycleOut(0);
-    m_cycle = new PositionDutyCycle(0);
+    dutyCycle = new DutyCycleOut(0);
+    cycle = new PositionDutyCycle(0);
 
     driveMotor.getConfigurator().apply(new TalonFXConfiguration());
     steerMotor.getConfigurator().apply(new TalonFXConfiguration());
@@ -133,7 +129,7 @@ public class SwerveModule {
    * @return void
    */
   public void setDriveSpeed(double speed) {
-    driveMotor.setControl(m_request.withOutput(speed));
+    driveMotor.setControl(dutyCycle.withOutput(speed));
   }
 
   /**
@@ -143,7 +139,7 @@ public class SwerveModule {
    * @return void
    */
   public void setSteerSpeed(double speed) {
-    steerMotor.setControl(m_request.withOutput(speed));
+    steerMotor.setControl(dutyCycle.withOutput(speed));
   }
 
   /**
@@ -153,7 +149,7 @@ public class SwerveModule {
    * @return void
    */
   public void setSteerPosition(double degrees) {
-    steerMotor.setControl(m_cycle.withPosition(degrees));
+    steerMotor.setControl(cycle.withPosition(degrees));
   }
 
   /**
@@ -293,7 +289,6 @@ public class SwerveModule {
   /**
    * Stops the module.
    * 
-   * @param None
    * @return void
    */
   public void stop() {
@@ -304,10 +299,10 @@ public class SwerveModule {
   /**
    * Sets the position of the steer motor to the current CANCoder value.
    * 
-   * @param None
-   * @retu$rn void
+   * @return void
    */
   public void setRotorPos() {
+    double initialCANCoderValue;
     initialCANCoderValue = canCoder.getAbsolutePosition().refresh().getValue();
     steerMotor.setPosition(
         -(initialCANCoderValue - CANCoderDriveStraightSteerSetPoint) * MotorGlobalValues.STEER_MOTOR_GEAR_RATIO);
@@ -328,14 +323,15 @@ public class SwerveModule {
     double targetAngle = placeInAppropriate0To360Scope(
         currentAngle.getDegrees(), desiredState.angle.getDegrees());
 
-    SmartDashboard.putNumber("targetANgle fater 360 chagne", targetAngle);
+    SmartDashboard.putNumber("targetAngle faster 360 change", targetAngle);
     double targetSpeed = desiredState.speedMetersPerSecond;
     double delta = targetAngle - currentAngle.getDegrees();
 
     if (Math.abs(delta) > 90) {
       targetSpeed = -targetSpeed;
-      targetAngle = delta > 90 ? (targetAngle -= 180) : (targetAngle += 180);
+      targetAngle = delta > 90 ? targetAngle - 180 : targetAngle + 180;
     }
+
     SmartDashboard.putNumber(deviceID + " Motor", currentAngle.getDegrees() - targetAngle);
     return new SwerveModuleState(targetSpeed, Rotation2d.fromDegrees(targetAngle));
   }
@@ -408,5 +404,29 @@ public class SwerveModule {
         .fromDegrees(rotationsToAngle(steerMotor.getRotorPosition().getValue(), MotorGlobalValues.STEER_MOTOR_GEAR_RATIO));
     currentState.speedMetersPerSecond = getDriveVelocity();
     return currentState;
+  }
+
+  public TalonFX getDriveMotor() {
+    return driveMotor;
+  }
+
+  public void setDriveMotor(TalonFX driveMotor) {
+    this.driveMotor = driveMotor;
+  }
+
+  public TalonFX getSteerMotor() {
+    return steerMotor;
+  }
+
+  public void setSteerMotor(TalonFX steerMotor) {
+    this.steerMotor = steerMotor;
+  }
+
+  public CANcoder getCanCoder() {
+    return canCoder;
+  }
+
+  public void setCanCoder(CANcoder canCoder) {
+    this.canCoder = canCoder;
   }
 }
