@@ -16,11 +16,8 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.Tracer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.GlobalsValues;
-import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
 /**
@@ -50,13 +47,15 @@ public class Shooter extends SubsystemBase {
   private ClosedLoopRampsConfigs rightShootRampConfig;
   private ClosedLoopRampsConfigs passthroughKrakenRampConfig;
 
-  private VelocityVoltage m_request;
+  private VelocityVoltage velocitySetPoint;
 
   private boolean toggleShooter;
 
   private DigitalInput ringSensor;
 
-  private boolean leftFalconIsStopped, rightFalconIsStopped, passthroughKrakenIsStopped;
+  private boolean leftFalconIsStopped;
+  private boolean rightFalconIsStopped;
+  private boolean passthroughKrakenIsStopped;
 
   private Timer timer;
 
@@ -139,7 +138,7 @@ public class Shooter extends SubsystemBase {
 
     toggleShooter = false;
 
-    m_request = new VelocityVoltage(0);
+    velocitySetPoint = new VelocityVoltage(0);
 
     timer = new Timer();
   }
@@ -176,8 +175,8 @@ public class Shooter extends SubsystemBase {
    * @return void
    */
   public void setShooterVelocity(double left, double right) {
-    leftFalcon.setControl(m_request.withVelocity(left));
-    rightFalcon.setControl(m_request.withVelocity(right));
+    leftFalcon.setControl(velocitySetPoint.withVelocity(left));
+    rightFalcon.setControl(velocitySetPoint.withVelocity(right));
     leftFalconIsStopped = false;
     rightFalconIsStopped = false;
   }
@@ -224,7 +223,7 @@ public class Shooter extends SubsystemBase {
    * @return void
    */
   public void setKrakenVelocity(double speed) {
-    passthroughKraken.setControl(m_request.withVelocity(speed));
+    passthroughKraken.setControl(velocitySetPoint.withVelocity(speed));
     passthroughKrakenIsStopped = false;
   }
 
@@ -282,21 +281,9 @@ public class Shooter extends SubsystemBase {
     stopShooter();
   }
 
-  public void setAmpSpeed() {
-    if (ShooterGlobalValues.AMP_SPEED_JESSICA) {
-      ShooterGlobalValues.AMP_SPEED = 20;
-    } else {
-      ShooterGlobalValues.AMP_SPEED = 13.33;
-    }
-    
-    // System.out.println(ShooterGlobalValues.AMP_SPEED);
-    ShooterGlobalValues.AMP_SPEED_JESSICA = !ShooterGlobalValues.AMP_SPEED_JESSICA;
-  }
-
   /**
    * Gets the value of the ring sensor
    * 
-   * @param void
    * @return boolean, ring sensor value, default false
    */
   public boolean getRingSensor() {

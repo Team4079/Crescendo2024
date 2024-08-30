@@ -19,12 +19,9 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
-import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues;
@@ -48,8 +45,6 @@ public class Pivot extends SubsystemBase {
   private Slot0Configs pivotLeftConfigs;
   private Slot0Configs pivotRightConfigs;
 
-  private PositionDutyCycle positionDutyCycle;
-
   private PositionVoltage pos_reqest;
   private VelocityVoltage vel_voltage;
 
@@ -64,8 +59,6 @@ public class Pivot extends SubsystemBase {
   private SoftwareLimitSwitchConfigs leftSoftLimitConfig;
   private SoftwareLimitSwitchConfigs rightSoftLimitConfig;
 
-  private boolean limit;
-
   private SparkAbsoluteEncoder absoluteEncoder;
   private CANSparkMax encodeSparkMax;
 
@@ -76,8 +69,6 @@ public class Pivot extends SubsystemBase {
   private double absPos;
 
   public Pivot() {
-    limit = false;
-
     pivotMotorLeft = new TalonFX(PivotGlobalValues.PIVOT_MOTOR_LEFT_ID);
     pivotMotorRight = new TalonFX(PivotGlobalValues.PIVOT_MOTOR_RIGHT_ID);
 
@@ -179,7 +170,7 @@ public class Pivot extends SubsystemBase {
     vel_voltage = new VelocityVoltage(0);
     pos_reqest = new PositionVoltage(0);
     voltageOut = new VoltageOut(0);
-    positionDutyCycle = new PositionDutyCycle(0);
+    new PositionDutyCycle(0);
 
     pivotMotorLeft.setPosition(0);
     pivotMotorRight.setPosition(0);
@@ -255,7 +246,7 @@ public class Pivot extends SubsystemBase {
    */
   public double shootPos(double distance) {
     // line function
-    // do stuf
+    // TODO: do stuf
     return 0.0;
   }
 
@@ -266,7 +257,6 @@ public class Pivot extends SubsystemBase {
 
   public void toggleSoftStop() {
     PivotGlobalValues.soft_limit_enabled = !PivotGlobalValues.soft_limit_enabled;
-    // leftSoftLimitConfig.ForwardSoftLimitEnable = PivotGlobalValues.soft_limit_enabled;
     leftSoftLimitConfig.ReverseSoftLimitEnable = PivotGlobalValues.soft_limit_enabled;
     // leftSoftLimitConfig.ForwardSoftLimitThreshold = 1100;
     leftSoftLimitConfig.ReverseSoftLimitThreshold = 0;
@@ -283,7 +273,6 @@ public class Pivot extends SubsystemBase {
   /**
    * Get the absolute encoder position
    * 
-   * @param void
    * @return double, the absolute encoder position of the pivot motor
    */
   public double getAbsoluteEncoder() {

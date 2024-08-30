@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 
 /**
  * The {@link LED} class includes all the methods to control the LEDs.
@@ -29,8 +28,6 @@ public class LED extends SubsystemBase {
   @Override
   public void periodic() {
     if (RobotState.isDisabled()) {
-      // rainbowRGB(SwerveGlobalValues.hightideLED[0], SwerveGlobalValues.hightideLED[1],
-          // SwerveGlobalValues.hightideLED[2]);
       highTideFlow();
     }
     else {
@@ -111,15 +108,15 @@ public class LED extends SubsystemBase {
     final int waveWidth = 55;
 
     for (int i = 0; i < length; i++) {
-        double wave = Math.sin((i + (currentTime / waveSpeed)) % length * (2 * Math.PI / waveWidth));
+      double wave = Math.sin((i + ((double)currentTime / waveSpeed)) % length * (2 * Math.PI / waveWidth));
 
-        wave = (wave + 1) / 2;
+      wave = (wave + 1) / 2;
 
-        int r = (int)(wave * 0); 
-        int g = (int)(wave * 200);
-        int b = (int)(wave * 50);
+      int r = (int)(wave * 0); 
+      int g = (int)(wave * 200);
+      int b = (int)(wave * 50);
 
-        ledBuffer1.setRGB(i, r, g, b);
+      ledBuffer1.setRGB(i, r, g, b);
     }
     alignmentIndication1.setData(ledBuffer1);
 }

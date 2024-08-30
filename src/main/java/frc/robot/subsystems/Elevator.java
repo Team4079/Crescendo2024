@@ -44,6 +44,8 @@ public class Elevator extends SubsystemBase {
     getPIDController().setP(ElevatorGlobalValues.kP);
     getPIDController().setI(ElevatorGlobalValues.kI);
     getPIDController().setD(ElevatorGlobalValues.kD);
+
+    logData();
   }
 
   /**
