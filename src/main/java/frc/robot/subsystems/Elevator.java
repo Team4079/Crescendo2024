@@ -28,22 +28,34 @@ public class Elevator extends SubsystemBase {
   }
 
   private final CANSparkMax elevatorMotorSparkMax;
+  private final CANSparkMax passMotorSparkMax;
   private ElevatorState state = ElevatorState.DOWN;
 
   /** Creates a new Elevator. */
   public Elevator() {
-    elevatorMotorSparkMax = new CANSparkMax(MotorGlobalValues.ELEVATOR_NEO_ID, MotorType.kBrushless);
+    elevatorMotorSparkMax = new CANSparkMax(ElevatorGlobalValues.ELEVATOR_NEO_ID, MotorType.kBrushless);
+    passMotorSparkMax = new CANSparkMax(ElevatorGlobalValues.PASS_NEO_ID, MotorType.kBrushless);
 
     elevatorMotorSparkMax.restoreFactoryDefaults();
     elevatorMotorSparkMax.setIdleMode(IdleMode.kBrake);
+
+    passMotorSparkMax.restoreFactoryDefaults();
+    passMotorSparkMax.setIdleMode(IdleMode.kBrake);
     
     elevatorMotorSparkMax.setClosedLoopRampRate(ElevatorGlobalValues.closedLoopRampRate);
+    passMotorSparkMax.setClosedLoopRampRate(ElevatorGlobalValues.passClosedLoopRampRate);
+
 
     getEncoder().setPosition(0);
 
     getPIDController().setP(ElevatorGlobalValues.kP);
     getPIDController().setI(ElevatorGlobalValues.kI);
     getPIDController().setD(ElevatorGlobalValues.kD);
+
+    
+    getPIDController().setP(ElevatorGlobalValues.PasskP);
+    getPIDController().setI(ElevatorGlobalValues.PasskI);
+    getPIDController().setD(ElevatorGlobalValues.PasskD);
 
     logData();
   }
@@ -57,8 +69,10 @@ public class Elevator extends SubsystemBase {
   public void periodic() {
     if (state == ElevatorState.UP) {
       setElevatorPosition(ElevatorGlobalValues.ELEVATOR_UP);
+      setPassSpeed(0.5);
     } else if (state == ElevatorState.DOWN) {
       setElevatorPosition(ElevatorGlobalValues.ELEVATOR_DOWN);
+      stopPassMotor();
     }
   }
 
@@ -76,6 +90,16 @@ public class Elevator extends SubsystemBase {
    */
   public ElevatorState getState() {
     return state;
+  }
+
+  public void setPassSpeed(double speed)
+  {
+    passMotorSparkMax.set(speed);
+  }
+
+  public void stopPassMotor()
+  {
+    passMotorSparkMax.set(0);
   }
 
   /**
