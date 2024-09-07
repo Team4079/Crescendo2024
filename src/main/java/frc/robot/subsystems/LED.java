@@ -11,16 +11,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class LED extends SubsystemBase {
   private AddressableLED alignmentIndication1;
 
-  private AddressableLEDBuffer ledBuffer1;
+  private AddressableLEDBuffer shawnComesIntoMyPEClass;
 
   public LED() {
     alignmentIndication1 = new AddressableLED(9); // 6 and 7
 
-    ledBuffer1 = new AddressableLEDBuffer(55);
+    shawnComesIntoMyPEClass = new AddressableLEDBuffer(55);
 
-    alignmentIndication1.setLength(ledBuffer1.getLength());
+    alignmentIndication1.setLength(shawnComesIntoMyPEClass.getLength());
 
-    alignmentIndication1.setData(ledBuffer1);
+    alignmentIndication1.setData(shawnComesIntoMyPEClass);
 
     alignmentIndication1.start();
   }
@@ -44,10 +44,10 @@ public class LED extends SubsystemBase {
    * @return void
    */
   public void rainbowHSV(int H, int S, int V) {
-    for (int i = 0; i < ledBuffer1.getLength(); i++) {
-      ledBuffer1.setHSV(i, H, S, V);
+    for (int i = 0; i < shawnComesIntoMyPEClass.getLength(); i++) {
+      shawnComesIntoMyPEClass.setHSV(i, H, S, V);
     }
-    alignmentIndication1.setData(ledBuffer1);
+    alignmentIndication1.setData(shawnComesIntoMyPEClass);
   }
 
   /**
@@ -59,50 +59,50 @@ public class LED extends SubsystemBase {
    * @return void
    */
   public void rainbowRGB(int R, int G, int B) {
-    for (int i = 0; i < ledBuffer1.getLength(); i++) {
-      ledBuffer1.setRGB(i, R, G, B);
+    for (int i = 0; i < shawnComesIntoMyPEClass.getLength(); i++) {
+      shawnComesIntoMyPEClass.setRGB(i, R, G, B);
     }
-    alignmentIndication1.setData(ledBuffer1);
+    alignmentIndication1.setData(shawnComesIntoMyPEClass);
   }
 
   public void setTanColor() {
-    for (int i = 0; i < ledBuffer1.getLength(); i++) {
-      ledBuffer1.setRGB(i, 255, 120, 20);
+    for (int i = 0; i < shawnComesIntoMyPEClass.getLength(); i++) {
+      shawnComesIntoMyPEClass.setRGB(i, 255, 120, 20);
     }
-    alignmentIndication1.setData(ledBuffer1);
+    alignmentIndication1.setData(shawnComesIntoMyPEClass);
   }
   
   public void setRedColor() {
-    for (int i = 0; i < ledBuffer1.getLength(); i++) {
-      ledBuffer1.setRGB(i, 255, 0, 0);
+    for (int i = 0; i < shawnComesIntoMyPEClass.getLength(); i++) {
+      shawnComesIntoMyPEClass.setRGB(i, 255, 0, 0);
     }
-    alignmentIndication1.setData(ledBuffer1);
+    alignmentIndication1.setData(shawnComesIntoMyPEClass);
   }
 
   public void setGreenColor() {
-    for (int i = 0; i < ledBuffer1.getLength(); i++) {
-      ledBuffer1.setRGB(i, 0, 255, 0);
+    for (int i = 0; i < shawnComesIntoMyPEClass.getLength(); i++) {
+      shawnComesIntoMyPEClass.setRGB(i, 0, 255, 0);
     }
-    alignmentIndication1.setData(ledBuffer1);
+    alignmentIndication1.setData(shawnComesIntoMyPEClass);
   }
 
   public void setPurpleColor() {
-    for (int i = 0; i < ledBuffer1.getLength(); i++) {
-      ledBuffer1.setRGB(i, 160, 32, 240);
+    for (int i = 0; i < shawnComesIntoMyPEClass.getLength(); i++) {
+      shawnComesIntoMyPEClass.setRGB(i, 160, 32, 240);
     }
-    alignmentIndication1.setData(ledBuffer1);
+    alignmentIndication1.setData(shawnComesIntoMyPEClass);
   }
 
   public void setHighTide() {
-    for (int i = 0; i < ledBuffer1.getLength(); i++) {
-      ledBuffer1.setRGB(i, 0, 182, 174);
+    for (int i = 0; i < shawnComesIntoMyPEClass.getLength(); i++) {
+      shawnComesIntoMyPEClass.setRGB(i, 0, 182, 174);
     }
-    alignmentIndication1.setData(ledBuffer1);
+    alignmentIndication1.setData(shawnComesIntoMyPEClass);
   }
 
   public void highTideFlow() {
     long currentTime = System.currentTimeMillis();
-    int length = ledBuffer1.getLength();
+    int length = shawnComesIntoMyPEClass.getLength();
 
     final int waveSpeed = 30; 
     final int waveWidth = 55;
@@ -116,9 +116,9 @@ public class LED extends SubsystemBase {
       int g = (int)(wave * 200);
       int b = (int)(wave * 50);
 
-      ledBuffer1.setRGB(i, r, g, b);
+      shawnComesIntoMyPEClass.setRGB(i, r, g, b);
     }
-    alignmentIndication1.setData(ledBuffer1);
+    alignmentIndication1.setData(shawnComesIntoMyPEClass);
 }
 
 }
