@@ -5,12 +5,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.LogitechGamingPad;
-import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
 public class PadShoot extends Command {
   /** Creates a new PadShoot. */
@@ -48,7 +46,7 @@ public class PadShoot extends Command {
     }
 
     if (pad.getDPadRight()) {
-      new AmpScoreOld(shooter, pivot, limelight).schedule();
+      new AmpScoreAlt(shooter, pivot, limelight).schedule();
     }
       else { 
         shooter.stopShooter();

@@ -14,13 +14,13 @@ import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AmpScoreOld extends SequentialCommandGroup {
+public class AmpScoreAlt extends SequentialCommandGroup {
   /** Creates a new ShootRing. */
   private Shooter shooter;
   private Pivot pivot;
   private Limelight limelight;
 
-  public AmpScoreOld(Shooter shooter, Pivot pivot, Limelight limelight) {
+  public AmpScoreAlt(Shooter shooter, Pivot pivot, Limelight limelight) {
     this.shooter = shooter;
     this.pivot = pivot;
     this.limelight = limelight;
@@ -31,7 +31,7 @@ public class AmpScoreOld extends SequentialCommandGroup {
     addCommands(
         new ParallelCommandGroup(
             new SetPivot(pivot, 52.5).withTimeout(1),
-            new AmpRampUpOld(shooter, limelight).withTimeout(1)),
+            new AmpRampUpAlt(shooter).withTimeout(1)),
         new PushRingAmp(shooter, limelight).withTimeout(0.3),
         new StopShooter(shooter).withTimeout(0.05),
         new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.5));
