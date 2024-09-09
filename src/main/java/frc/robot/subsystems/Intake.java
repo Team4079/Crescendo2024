@@ -33,7 +33,7 @@ public class Intake extends SubsystemBase {
 
   private ClosedLoopRampsConfigs karenRampConfig;
 
-  private VelocityVoltage m_request;
+  private final VelocityVoltage request;
   // private VoltageOut m_out;
 
   private boolean intakeIsStopped;
@@ -71,7 +71,7 @@ public class Intake extends SubsystemBase {
 
     intakeKaren.getConfigurator().apply(karenRampConfig);
 
-    m_request = new VelocityVoltage(0);
+    request = new VelocityVoltage(0);
     // m_out = new VoltageOut(0);
   }
 
@@ -88,7 +88,7 @@ public class Intake extends SubsystemBase {
    * @return void
    */
   public void setIntakeVelocity(double speed) {
-    intakeKaren.setControl(m_request.withVelocity(speed));
+    intakeKaren.setControl(request.withVelocity(speed));
     intakeIsStopped = false;
   }
 
