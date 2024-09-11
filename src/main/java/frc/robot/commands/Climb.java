@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Pivot;
-import frc.robot.utils.LogitechGamingPad;
 
 public class Climb extends Command {
   private Pivot pivot;
@@ -15,7 +14,6 @@ public class Climb extends Command {
   public Climb(Pivot pivot) {
     this.pivot = pivot;
     addRequirements(pivot);
-    
 
     // Use addRequirements() here to declare subsystem dependencies.
   }
