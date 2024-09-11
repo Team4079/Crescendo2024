@@ -59,15 +59,7 @@ public class PivotAutoSet extends Command {
   @Override
   public void execute() {
     double velocity = pidController.calculate(pivot.getAbsoluteEncoder(), pos);
-    SmartDashboard.putNumber("Error Pivot", -pivot.getAbsoluteEncoder() + pos);
-    SmartDashboard.putNumber("Setpoint", pos);
-    SmartDashboard.putNumber("Velocity Pivot", velocity);
-
-    if (Math.abs(pivot.getAbsoluteEncoder() - pos) < deadband) {
-      pivot.stopMotors();
-    } else {
-      pivot.movePivot(velocity);
-    }
+    SetPivot.motorPivot(velocity, pivot, pos, deadband);
 
     if (Math.abs(pivot.getAbsoluteEncoder() - pos) <= deadband) {
       timer.start();

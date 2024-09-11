@@ -67,22 +67,31 @@ public class LED extends SubsystemBase {
   /**
    * Sets the LED color to tan.
    */
-  public void setTanColor() {
+  public void setTan() {
     setRGB(255, 120, 20);
   }
 
   /**
    * Sets the LED color to red.
    */
-  public void setRedColor() {
+  public void setRed() {
     setRGB(255, 0, 0);
   }
 
   /**
    * Sets the LED color to green.
    */
-  public void setGreenColor() {
+  public void setGreen() {
     setRGB(0, 255, 0);
+  }
+
+  /**
+   * Sets the LED color to green version 2.
+   * <p>
+   * (Colin says hi)
+   */
+  public void setOrange() {
+    setRGB(255, 165, 0);
   }
 
   /**

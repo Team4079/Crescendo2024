@@ -165,13 +165,13 @@ public class SpinIntake extends Command {
      */
     private void ledControl() {
         if (!shooter.getRingSensor() && intake.getIntakeStatus()) {
-            led.setTanColor();
+            led.setTan();
         } else if (!shooter.getRingSensor()) {
-            led.setRedColor();
+            led.setRed();
         } else if (shooter.getRingSensor() && Math.abs(limelight.getTx()) == 0) {
             led.setHighTide();
         } else {
-            led.setGreenColor();
+            led.setGreen();
         }
     }
 

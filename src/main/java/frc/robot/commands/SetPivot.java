@@ -5,81 +5,93 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Pivot;
 
-/** The {@link ResetPivot} class is a command that resets the pivot to its neutral position. */
+/** The {@link SetPivot} class is a command that sets the pivot to a specified position. */
 public class SetPivot extends Command {
+  /** The Pivot subsystem used by this command. */
+  private final Pivot pivot;
 
-  private Pivot pivot;
-  private double pos;
-  private PIDController pidController;
-  private double velocity;
-  private Timer timer;
+  /** The target position for the pivot. */
+  private final double pos;
+
+  /** The PID controller for position adjustment. */
+  private final PIDController pidController;
+
+  /** The deadband value for the position error. */
   private double deadband;
+
+  /** Indicates whether the command is done. */
   private boolean isDone;
-  
 
-  // Get distance when after we mount the limelight
-
-  /** Creates a new Shoot. */
+  /**
+   * Creates a new SetPivot command.
+   *
+   * @param pivot The Pivot subsystem used by this command.
+   * @param pos The target position for the pivot.
+   */
   public SetPivot(Pivot pivot, double pos) {
     this.pivot = pivot;
     this.pos = pos;
-    timer = new Timer();
-    // pidController = new PIDController(0.037, 0, 0.000005);
     pidController = new PIDController(0.00825, 0.000000, 0.00035);
     addRequirements(pivot);
   }
 
-  // // Called when the command is initially scheduled.
+  /** Called when the command is initially scheduled. */
   @Override
   public void initialize() {
     deadband = 0.5;
     isDone = false;
-    // pidController.setTolerance(50);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
+  /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
-    velocity = pidController.calculate(pivot.getAbsoluteEncoder(), pos);
+    double velocity = pidController.calculate(pivot.getAbsoluteEncoder(), pos);
+    motorPivot(velocity, pivot, pos, deadband);
+
+    if (Math.abs(pivot.getAbsoluteEncoder() - pos) <= deadband) {
+      isDone = true;
+    }
+  }
+
+  /**
+   * Updates the motor velocity and SmartDashboard values based on the pivot position.
+   *
+   * @param velocity The calculated velocity for the pivot.
+   * @param pivot The Pivot subsystem used by this command.
+   * @param pos The target position for the pivot.
+   * @param deadband The deadband value for the position error.
+   */
+  static void motorPivot(double velocity, Pivot pivot, double pos, double deadband) {
     SmartDashboard.putNumber("Error Pivot", -pivot.getAbsoluteEncoder() + pos);
     SmartDashboard.putNumber("Setpoint", pos);
     SmartDashboard.putNumber("Velocity Pivot", velocity);
 
     if (Math.abs(pivot.getAbsoluteEncoder() - pos) < deadband) {
-       pivot.stopMotors();
+      pivot.stopMotors();
     } else {
       pivot.movePivot(velocity);
     }
-    
-    if (Math.abs(pivot.getAbsoluteEncoder() - pos) <= deadband)
-    {
-      // timer.start();
-      // if (timer.get() >= 0.1) {
-        isDone = true;
-      // }
-    }
-    
-    // else {
-    //   timer.reset();
-    //   isDone = false;
-    // }
-
-
-
   }
 
-  // Called once the command ends or is interrupted.
+  /**
+   * Called once the command ends or is interrupted.
+   *
+   * @param interrupted Whether the command was interrupted/canceled.
+   */
   @Override
   public void end(boolean interrupted) {
     pivot.stopMotors();
   }
 
-  // Returns true when the command should end.
+  /**
+   * Returns true when the command should end.
+   *
+   * @return true if the command is done, false otherwise.
+   */
   @Override
   public boolean isFinished() {
     return isDone;
