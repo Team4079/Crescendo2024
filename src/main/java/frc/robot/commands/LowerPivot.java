@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -9,30 +5,43 @@ import frc.robot.subsystems.Pivot;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
-/** The {@link LowerPivot} class is a command that lowers the pivot to its neutral position. */
+/**
+ * The {@link LowerPivot} class is a command that lowers the pivot to its neutral position.
+ */
 public class LowerPivot extends Command {
-  /** Creates a new LowerPivot. */
-  private Pivot pivot;
-  private double deadband;
-  
-  public LowerPivot(Pivot pivot) {
-    pivot = this.pivot;
-    deadband = 25;
+  /** The Pivot subsystem used by this command. */
+  private final Pivot pivot;
+  /** The deadband value for the pivot position. */
+  private final double deadband;
 
-    // Use addRequirements() here to declare subsystem dependencies.
+  /**
+   * Creates a new LowerPivot command.
+   *
+   * @param pivot The Pivot subsystem used by this command.
+   */
+  public LowerPivot(Pivot pivot) {
+    this.pivot = pivot;
+    deadband = 25;
     addRequirements(pivot);
   }
 
-  // Called when the command is initially scheduled.
+  /**
+   * Called when the command is initially scheduled.
+   */
   @Override
-  public void initialize() {}
+  public void initialize() {
+    // No specific action needed when the command is initialized.
+  }
 
-  // Called every time the scheduler runs while the command is scheduled.
+  /**
+   * Called every time the scheduler runs while the command is scheduled.
+   */
   @Override
   public void execute() {
     if (!ShooterGlobalValues.HAS_PIECE) {
       if (Math.abs(pivot.getAbsoluteEncoder() - PivotGlobalValues.PIVOT_NEUTRAL_ANGLE) > deadband) {
-        pivot.setMotorPosition(PivotGlobalValues.PIVOT_NEUTRAL_ANGLE, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE);
+        pivot.setMotorPosition(
+            PivotGlobalValues.PIVOT_NEUTRAL_ANGLE, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE);
       } else {
         pivot.stopMotors();
       }
@@ -41,13 +50,21 @@ public class LowerPivot extends Command {
     }
   }
 
-  // Called once the command ends or is interrupted.
+  /**
+   * Called once the command ends or is interrupted.
+   *
+   * @param interrupted Whether the command was interrupted/canceled.
+   */
   @Override
   public void end(boolean interrupted) {
     pivot.stopMotors();
   }
 
-  // Returns true when the command should end.
+  /**
+   * Returns true when the command should end.
+   *
+   * @return false, as this command never finishes on its own.
+   */
   @Override
   public boolean isFinished() {
     return false;

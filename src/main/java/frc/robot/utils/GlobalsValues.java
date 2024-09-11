@@ -71,6 +71,21 @@ public final class GlobalsValues {
     public static boolean AACORN_MODE = true;
   }
 
+  public static class ElevatorGlobalValues {
+    public static final int ELEVATOR_NEO_ID = 13;
+    public static final int PASS_NEO_ID = 13; //TODO: this should not be the same
+    public static final double closedLoopRampRate = 0.5;
+    public static final double passClosedLoopRampRate = 0.5;
+    public static final double ELEVATOR_UP = 1; // TODO: git gud
+    public static final double ELEVATOR_DOWN = 0;
+    public static final double kP = 0.1; // TODO: git gud
+    public static final double kI = 0; // TODO: git gud
+    public static final double kD = 0; // TODO: git gud
+    public static final double PasskP = 0.1; // TODO: git gud
+    public static final double PasskI = 0; // TODO: git gud
+    public static final double PasskD = 0; // TODO: git gud
+  }
+
   public static class SwerveGlobalValues {
     private SwerveGlobalValues() {
       throw new IllegalStateException(UTILITY_CLASS);
@@ -202,6 +217,7 @@ public final class GlobalsValues {
     // public static final double PIVOT_AMP_ANGLE = (46 + PivotGlobalValues.offset);
     // //Ued to be 49.55
     public static final double PIVOT_AMP_ANGLE = 50.2;
+    public static final double PIVOT_AMP_ANGLE_ALT = 52.5;
     public static final double PIVOT_SUBWOOFER_ANGLE = (13 + PivotGlobalValues.offset);
     public static final double PIVOT_SOURCE = 93;
     public static final double PIVOT_FENDER_ANGLE = (305 + PivotGlobalValues.offset);

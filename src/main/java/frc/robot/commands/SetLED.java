@@ -6,8 +6,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LED;
-import frc.robot.utils.GlobalsValues.LimelightGlobalValues;
-import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 
 /**
@@ -44,7 +42,7 @@ public class SetLED extends Command {
     //   }
     // } else {
       // Set LED to HighTide 4414 colors (Based on not aligned with AprilTag and doesn't have piece)
-      led.rainbowRGB(SwerveGlobalValues.HIGHTIDE_LED[0], SwerveGlobalValues.HIGHTIDE_LED[1], SwerveGlobalValues.HIGHTIDE_LED[2]);
+      led.setRGB(SwerveGlobalValues.HIGHTIDE_LED[0], SwerveGlobalValues.HIGHTIDE_LED[1], SwerveGlobalValues.HIGHTIDE_LED[2]);
     // }
   }
 

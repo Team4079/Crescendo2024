@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -12,22 +8,31 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 
-/** The {@link RePivotAutoSet} class is a command that resets the pivot to its neutral position. */
+/**
+ * The {@link PivotAutoSet} class is a command that resets the pivot to its neutral position.
+ */
 public class PivotAutoSet extends Command {
-
-  private Pivot pivot;
+  /** The Pivot subsystem used by this command. */
+  private final Pivot pivot;
+  /** The target position for the pivot. */
   private double pos;
-  private PIDController pidController;
-  private double velocity;
-  private Timer timer;
+  /** The PID controller for the pivot. */
+  private final PIDController pidController;
+  /** The timer used to determine when the command is done. */
+  private final Timer timer;
+  /** The deadband value for the pivot position. */
   private double deadband;
+  /** Whether the command is done. */
   private boolean isDone;
-  private Limelight limelight;
-  
+  /** The Limelight subsystem used by this command. */
+  private final Limelight limelight;
 
-  // Get distance when after we mount the limelight
-
-  /** Creates a new Shoot. */
+  /**
+   * Creates a new PivotAutoSet command.
+   *
+   * @param pivot The Pivot subsystem used by this command.
+   * @param limelight The Limelight subsystem used by this command.
+   */
   public PivotAutoSet(Pivot pivot, Limelight limelight) {
     this.pivot = pivot;
     this.limelight = limelight;
@@ -36,7 +41,9 @@ public class PivotAutoSet extends Command {
     addRequirements(pivot, limelight);
   }
 
-  // // Called when the command is initially scheduled.
+  /**
+   * Called when the command is initially scheduled.
+   */
   @Override
   public void initialize() {
     deadband = 0.1;
@@ -46,50 +53,50 @@ public class PivotAutoSet extends Command {
     // pidController.setTolerance(50);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
+  /**
+   * Called every time the scheduler runs while the command is scheduled.
+   */
   @Override
   public void execute() {
-    velocity = pidController.calculate(pivot.getAbsoluteEncoder(), pos);
+    double velocity = pidController.calculate(pivot.getAbsoluteEncoder(), pos);
     SmartDashboard.putNumber("Error Pivot", -pivot.getAbsoluteEncoder() + pos);
     SmartDashboard.putNumber("Setpoint", pos);
     SmartDashboard.putNumber("Velocity Pivot", velocity);
 
-    if (Math.abs(pivot.getAbsoluteEncoder() - pos) < deadband)
-    {
-       pivot.stopMotors();
-    }
-
-    else {
+    if (Math.abs(pivot.getAbsoluteEncoder() - pos) < deadband) {
+      pivot.stopMotors();
+    } else {
       pivot.movePivot(velocity);
     }
-    
-    if (Math.abs(pivot.getAbsoluteEncoder() - pos) <= deadband)
-    {
+
+    if (Math.abs(pivot.getAbsoluteEncoder() - pos) <= deadband) {
       timer.start();
       if (timer.get() >= 0.1) {
         isDone = true;
       }
-    }
-    
-    else {
+    } else {
       timer.reset();
       isDone = false;
     }
-
-
-
   }
 
-  // Called once the command ends or is interrupted.
+  /**
+   * Called once the command ends or is interrupted.
+   *
+   * @param interrupted Whether the command was interrupted/canceled.
+   */
   @Override
   public void end(boolean interrupted) {
     pivot.stopMotors();
   }
 
-  // Returns true when the command should end.
+  /**
+   * Returns true when the command should end.
+   *
+   * @return true if the command is done, false otherwise.
+   */
   @Override
   public boolean isFinished() {
-    
     return isDone;
   }
 }

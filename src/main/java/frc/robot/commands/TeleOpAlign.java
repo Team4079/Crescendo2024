@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -13,70 +9,76 @@ import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
 import frc.robot.utils.LogitechGamingPad;
 import frc.robot.utils.PID;
 
+/**
+ * The {@link TeleOpAlign} class is a command that aligns the robot during teleoperation using the
+ * Limelight and a gamepad.
+ */
 public class TeleOpAlign extends Command {
-  /** Creates a new AutoAlign. */
+  /** The gamepad used to control the robot. */
   private final LogitechGamingPad pad;
-  private SwerveSubsystem swerveSubsystem;
-  private double x;
-  private double y;
+
+  /** The SwerveSubsystem used by this command. */
+  private final SwerveSubsystem swerveSubsystem;
+
+  /** The rotation value calculated by the PID controller. */
   private double rot;
 
-  // Horizontal PID and offset
-  private double horizontalError;
+  /** The PID controller for rotational alignment. */
+  private final PID rotationalPID;
 
-  // Rotation PID and offset
-  private PID rotationalPID;
-
+  /**
+   * Creates a new TeleOpAlign command.
+   *
+   * @param swerveSubsystem The SwerveSubsystem used by this command.
+   * @param pad The gamepad used to control the robot.
+   */
   public TeleOpAlign(SwerveSubsystem swerveSubsystem, LogitechGamingPad pad) {
-    // Use addRequirements() here to declare subsystem dependencies.
     this.pad = pad;
     this.swerveSubsystem = swerveSubsystem;
     rotationalPID = BasePIDGlobal.ROTATIONAL_PID;
     addRequirements(swerveSubsystem);
   }
 
-  // Called when the command is initially scheduled.
+  /** Called when the command is initially scheduled. */
   @Override
-  public void initialize() {}
+  public void initialize() {
+    // No specific action needed when the command is initialized.
+  }
 
-  // Called every time the scheduler runs while the command is scheduled.
+  /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
-    horizontalError = -LimelightGlobalValues.tx;
+    // Horizontal PID and offset
+    double horizontalError = -LimelightGlobalValues.tx;
 
     if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
       rot = rotationalPID.calculate(horizontalError, 0);
     }
 
-    if (MotorGlobalValues.SLOW_MODE) {
-      y = pad.getLeftAnalogXAxis() * MotorGlobalValues.MAX_SPEED * MotorGlobalValues.SLOW_SPEED;
-      x = pad.getLeftAnalogYAxis() * -MotorGlobalValues.MAX_SPEED * MotorGlobalValues.SLOW_SPEED;
-    } else if (MotorGlobalValues.AACORN_MODE) {
-      y = pad.getLeftAnalogXAxis() * MotorGlobalValues.MAX_SPEED * MotorGlobalValues.AACORN_SPEED;
-      x = pad.getLeftAnalogYAxis() * -MotorGlobalValues.MAX_SPEED * MotorGlobalValues.AACORN_SPEED;
-    } else {
-      y = pad.getLeftAnalogXAxis() * MotorGlobalValues.MAX_SPEED * 0.6;
-      x = pad.getLeftAnalogYAxis() * -MotorGlobalValues.MAX_SPEED * 0.6;
-    }
+    PadDrive.Coordinate position = PadDrive.positionSet(pad);
 
-    if (Math.abs(pad.getLeftAnalogXAxis()) < SwerveGlobalValues.JOYSTICK_DEADBAND) {
-      y = 0;
-    }
-
-    if (Math.abs(pad.getLeftAnalogYAxis()) < SwerveGlobalValues.JOYSTICK_DEADBAND) {
-      x = 0;
-    }
-
-    swerveSubsystem.drive(x * MotorGlobalValues.SPEED_CONSTANT, y * MotorGlobalValues.SPEED_CONSTANT, rot, true);
+    swerveSubsystem.drive(
+        position.getX() * MotorGlobalValues.SPEED_CONSTANT,
+        position.getY() * MotorGlobalValues.SPEED_CONSTANT,
+        rot,
+        true);
   }
 
-  // Called once the command ends or is interrupted.
+  /**
+   * Called once the command ends or is interrupted.
+   *
+   * @param interrupted Whether the command was interrupted/canceled.
+   */
   @Override
   public void end(boolean interrupted) {
     swerveSubsystem.stopModules();
   }
 
-  // Returns true when the command should end.
+  /**
+   * Returns true when the command should end.
+   *
+   * @return false, as this command never finishes on its own.
+   */
   @Override
   public boolean isFinished() {
     return false;

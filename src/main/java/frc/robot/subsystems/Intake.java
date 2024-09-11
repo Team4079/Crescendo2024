@@ -4,108 +4,97 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.controls.VelocityVoltage;
-// import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues.IntakeGlobalValues;
 
 /**
- * The {@link Intake} class includes all the motors to intake notes.
+ * The Intake subsystem controls the intake mechanism of the robot.
+ * It uses a TalonFX motor controller to manage the intake motor.
  */
 public class Intake extends SubsystemBase {
-  /** Creates a new Intake. */
-  private TalonFX intakeKaren;
-  private TalonFXConfigurator intakeKarenConfigurator;
-  private Slot0Configs karenConfig;
+    private final TalonFX intakeKaren;
+    private final VelocityVoltage request;
+    private boolean intakeIsStopped;
 
-  private MotorOutputConfigs intakeConfigs;
+    /**
+     * Constructs a new Intake subsystem.
+     * Initializes the TalonFX motor controller and configures its settings.
+     */
+    public Intake() {
+        this.intakeKaren = new TalonFX(IntakeGlobalValues.INTAKE_MOTOR_ID);
 
-  private CurrentLimitsConfigs karenCurrentConfig;
+        TalonFXConfigurator intakeKarenConfigurator = intakeKaren.getConfigurator();
 
-  private ClosedLoopRampsConfigs karenRampConfig;
+        Slot0Configs karenConfig = new Slot0Configs();
 
-  private VelocityVoltage m_request;
-  // private VoltageOut m_out;
+        intakeKaren.getConfigurator().apply(new TalonFXConfiguration());
 
-  private boolean intakeIsStopped;
+        MotorOutputConfigs intakeConfigs = new MotorOutputConfigs();
 
-  public Intake() {
-    this.intakeKaren = new TalonFX(IntakeGlobalValues.INTAKE_MOTOR_ID);
+        intakeKarenConfigurator.apply(intakeConfigs);
 
-    intakeKarenConfigurator = intakeKaren.getConfigurator();
+        karenConfig.kV = IntakeGlobalValues.INTAKE_PID_V;
+        karenConfig.kP = IntakeGlobalValues.INTAKE_PID_P;
+        karenConfig.kI = IntakeGlobalValues.INTAKE_PID_I;
+        karenConfig.kD = IntakeGlobalValues.INTAKE_PID_D;
 
-    karenConfig = new Slot0Configs();
+        intakeKaren.getConfigurator().apply(karenConfig);
 
-    intakeKaren.getConfigurator().apply(new TalonFXConfiguration());
+        CurrentLimitsConfigs karenCurrentConfig = new CurrentLimitsConfigs();
 
-    intakeConfigs = new MotorOutputConfigs();
+        ClosedLoopRampsConfigs karenRampConfig = new ClosedLoopRampsConfigs();
 
-    intakeKarenConfigurator.apply(intakeConfigs);
+        karenCurrentConfig.SupplyCurrentLimit = 100;
+        karenCurrentConfig.StatorCurrentLimit = 100;
 
-    karenConfig.kV = IntakeGlobalValues.INTAKE_PID_V;
-    karenConfig.kP = IntakeGlobalValues.INTAKE_PID_P;
-    karenConfig.kI = IntakeGlobalValues.INTAKE_PID_I;
-    karenConfig.kP = IntakeGlobalValues.INTAKE_PID_D;
+        intakeKaren.getConfigurator().apply(karenCurrentConfig);
 
-    intakeKaren.getConfigurator().apply(karenConfig);
+        karenRampConfig.DutyCycleClosedLoopRampPeriod = 0.01;
 
-    karenCurrentConfig = new CurrentLimitsConfigs();
+        intakeKaren.getConfigurator().apply(karenRampConfig);
 
-    karenRampConfig = new ClosedLoopRampsConfigs();
-
-    karenCurrentConfig.SupplyCurrentLimit = 100;
-    karenCurrentConfig.StatorCurrentLimit = 100;
-
-    intakeKaren.getConfigurator().apply(karenCurrentConfig);
-
-    karenRampConfig.DutyCycleClosedLoopRampPeriod = 0.01;
-
-    intakeKaren.getConfigurator().apply(karenRampConfig);
-
-    m_request = new VelocityVoltage(0);
-    // m_out = new VoltageOut(0);
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Intake Velocity", intakeKaren.getRotorPosition().getValue());
-  }
-
-  /**
-   * Sets the intake motor to a specific speed
-   * 
-   * @param speed The speed to set the intake motor to
-   * @return void
-   */
-  public void setIntakeVelocity(double speed) {
-    intakeKaren.setControl(m_request.withVelocity(speed));
-    intakeIsStopped = false;
-  }
-
-  public boolean getIntakeStatus() {
-    return !intakeIsStopped;
-  }
-
-  /**
-   * Stops the intake motor
-   * 
-   * @param None
-   * @return void
-   */
-  public void stopKraken() {
-    if (!intakeIsStopped) {
-      intakeKaren.stopMotor();
-      intakeIsStopped = true;
+        request = new VelocityVoltage(0);
     }
-  }
+
+    /**
+     * This method will be called once per scheduler run.
+     * Updates the SmartDashboard with the current intake motor velocity.
+     */
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Intake Velocity", intakeKaren.getRotorPosition().getValue());
+    }
+
+    /**
+     * Sets the intake motor to a specific speed.
+     *
+     * @param speed The speed to set the intake motor to.
+     */
+    public void setIntakeVelocity(double speed) {
+        intakeKaren.setControl(request.withVelocity(speed));
+        intakeIsStopped = false;
+    }
+
+    /**
+     * Returns the current status of the intake.
+     *
+     * @return true if the intake is running, false if it is stopped.
+     */
+    public boolean getIntakeStatus() {
+        return !intakeIsStopped;
+    }
+
+    /**
+     * Stops the intake motor.
+     */
+    public void stopKraken() {
+        if (!intakeIsStopped) {
+            intakeKaren.stopMotor();
+            intakeIsStopped = true;
+        }
+    }
 }

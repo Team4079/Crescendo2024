@@ -7,9 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.LimelightHelpers;
@@ -22,34 +20,30 @@ import frc.robot.utils.GlobalsValues.LimelightGlobalValues;
  */
 public class Limelight extends SubsystemBase {
   /** Creates a new Limelight. */
-  private final NetworkTable m_limelightTable;
-  private LimelightHelpers.LimelightResults llresults;
-  private double tv, tx, ty, ta = 0.0;
+  private final NetworkTable limelightTable;
+  private double tv;
+  private double tx;
+  private double ty;
+  private double ta = 0.0;
   private Pose2d robotPose_FieldSpace;
-  private Timer timer;
-
   private double[] robotPoseTargetSpace;
 
-  // private Field2d field = new Field2d();
-
   public Limelight() {
-    m_limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
-    // HttpCamera limelightCamera = new HttpCamera("limelight",
-    // "http://limelight.local:5801/stream.mjpg");
-    llresults = LimelightHelpers.getLatestResults("limelight");
-    timer = new Timer();
+    limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+    LimelightHelpers.getLatestResults("limelight");
+    new Timer();
     setPipeline(0);
   }
 
   @Override
   public void periodic() {
-    llresults = LimelightHelpers.getLatestResults("limelight");
+    LimelightHelpers.getLatestResults("limelight");
     unflash();
     // This method will be called once per scheduler run
-    tv = m_limelightTable.getEntry("tv").getDouble(0);
-    tx = m_limelightTable.getEntry("tx").getDouble(0);
-    ty = m_limelightTable.getEntry("ty").getDouble(0);
-    ta = m_limelightTable.getEntry("ta").getDouble(0);
+    tv = limelightTable.getEntry("tv").getDouble(0);
+    tx = limelightTable.getEntry("tx").getDouble(0);
+    ty = limelightTable.getEntry("ty").getDouble(0);
+    ta = limelightTable.getEntry("ta").getDouble(0);
     robotPoseTargetSpace = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose_targetspace")
         .getDoubleArray(new double[6]);
 
@@ -147,7 +141,7 @@ public class Limelight extends SubsystemBase {
    * @return void
    */
   public void setPipeline(double pipeline) {
-    m_limelightTable.getEntry("pipeline").setNumber(pipeline);
+    limelightTable.getEntry("pipeline").setNumber(pipeline);
   }
 
   /**
@@ -157,18 +151,8 @@ public class Limelight extends SubsystemBase {
    * @return void
    */
   public void setAdvanced(double mode) {
-    m_limelightTable.getEntry("advanced_mode").setNumber(mode);
+    limelightTable.getEntry("advanced_mode").setNumber(mode);
   }
-
-  /**
-   * Gets the latency of the limelight
-   * 
-   * @param void
-   * @return Latency in ms
-   */
-  // public double getLatency() {
-  //   return llresults.targetingResults.latency_capture;
-  // }
 
   public void highPixel() {
     LimelightHelpers.setPipelineIndex("", 1);

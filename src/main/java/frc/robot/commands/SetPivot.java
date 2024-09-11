@@ -50,12 +50,9 @@ public class SetPivot extends Command {
     SmartDashboard.putNumber("Setpoint", pos);
     SmartDashboard.putNumber("Velocity Pivot", velocity);
 
-    if (Math.abs(pivot.getAbsoluteEncoder() - pos) < deadband)
-    {
+    if (Math.abs(pivot.getAbsoluteEncoder() - pos) < deadband) {
        pivot.stopMotors();
-    }
-
-    else {
+    } else {
       pivot.movePivot(velocity);
     }
     

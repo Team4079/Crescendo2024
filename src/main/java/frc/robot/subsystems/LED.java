@@ -4,124 +4,121 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 
 /**
- * The {@link LED} class includes all the methods to control the LEDs.
+ * The LED subsystem controls the LED strip on the robot.
+ * It uses an AddressableLED and AddressableLEDBuffer to manage the LED colors and patterns.
  */
 public class LED extends SubsystemBase {
-  private AddressableLED alignmentIndication1;
+  private final AddressableLED alignmentIndication1;
+  private final AddressableLEDBuffer addressableLEDBuffer;
 
-  private AddressableLEDBuffer ledBuffer1;
-
+  /**
+   * Constructs a new LED subsystem.
+   * Initializes the AddressableLED and AddressableLEDBuffer with a specified length.
+   */
   public LED() {
-    alignmentIndication1 = new AddressableLED(9); // 6 and 7
-
-    ledBuffer1 = new AddressableLEDBuffer(55);
-
-    alignmentIndication1.setLength(ledBuffer1.getLength());
-
-    alignmentIndication1.setData(ledBuffer1);
-
+    alignmentIndication1 = new AddressableLED(9);
+    addressableLEDBuffer = new AddressableLEDBuffer(55);
+    alignmentIndication1.setLength(addressableLEDBuffer.getLength());
+    alignmentIndication1.setData(addressableLEDBuffer);
     alignmentIndication1.start();
   }
 
+  /**
+   * This method will be called once per scheduler run.
+   * Updates the LED pattern based on the robot state.
+   */
   @Override
   public void periodic() {
     if (RobotState.isDisabled()) {
-      // rainbowRGB(SwerveGlobalValues.hightideLED[0], SwerveGlobalValues.hightideLED[1],
-          // SwerveGlobalValues.hightideLED[2]);
       highTideFlow();
     }
-    else {
-      rainbowRGB(0, 0, 0);
+  }
+
+  /**
+   * Sets the color for each of the LEDs based on RGB values.
+   *
+   * @param r (Red) Integer values between 0 - 255
+   * @param g (Green) Integer values between 0 - 255
+   * @param b (Blue) Integer values between 0 - 255
+   */
+  public void setRGB(int r, int g, int b) {
+    for (int i = 0; i < addressableLEDBuffer.getLength(); i++) {
+      addressableLEDBuffer.setRGB(i, r, g, b);
     }
+    alignmentIndication1.setData(addressableLEDBuffer);
   }
 
   /**
    * Sets the color for each of the LEDs based on HSV values
-   * 
+   *
    * @param h (Hue) Integer values between 0 - 180
    * @param s (Saturation) Integer values between 0 - 255
    * @param v (Value) Integer values between 0 - 255
-   * @return void
    */
-  public void rainbowHSV(int H, int S, int V) {
-    for (int i = 0; i < ledBuffer1.getLength(); i++) {
-      ledBuffer1.setHSV(i, H, S, V);
+  public void rainbowHSV(int h, int s, int v) {
+    for (int i = 0; i < addressableLEDBuffer.getLength(); i++) {
+      addressableLEDBuffer.setHSV(i, h, s, v);
     }
-    alignmentIndication1.setData(ledBuffer1);
+    alignmentIndication1.setData(addressableLEDBuffer);
   }
 
   /**
-   * Sets the color for each of the LEDs based on RGB values
-   * 
-   * @param r (Red) Integer values between 0 - 255
-   * @param g (Green) Integer values between 0 - 255
-   * @param b (Blue) Integer values between 0 - 255
-   * @return void
+   * Sets the LED color to tan.
    */
-  public void rainbowRGB(int R, int G, int B) {
-    for (int i = 0; i < ledBuffer1.getLength(); i++) {
-      ledBuffer1.setRGB(i, R, G, B);
-    }
-    alignmentIndication1.setData(ledBuffer1);
-  }
-
   public void setTanColor() {
-    for (int i = 0; i < ledBuffer1.getLength(); i++) {
-      ledBuffer1.setRGB(i, 255, 120, 20);
-    }
-    alignmentIndication1.setData(ledBuffer1);
+    setRGB(255, 120, 20);
   }
-  
+
+  /**
+   * Sets the LED color to red.
+   */
   public void setRedColor() {
-    for (int i = 0; i < ledBuffer1.getLength(); i++) {
-      ledBuffer1.setRGB(i, 255, 0, 0);
-    }
-    alignmentIndication1.setData(ledBuffer1);
+    setRGB(255, 0, 0);
   }
 
+  /**
+   * Sets the LED color to green.
+   */
   public void setGreenColor() {
-    for (int i = 0; i < ledBuffer1.getLength(); i++) {
-      ledBuffer1.setRGB(i, 0, 255, 0);
-    }
-    alignmentIndication1.setData(ledBuffer1);
+    setRGB(0, 255, 0);
   }
 
-  public void setPurpleColor() {
-    for (int i = 0; i < ledBuffer1.getLength(); i++) {
-      ledBuffer1.setRGB(i, 160, 32, 240);
-    }
-    alignmentIndication1.setData(ledBuffer1);
-  }
+  /**
+   * Sets the LED color to purple.
+   */
+  public void setPurpleColor() { setRGB(160, 32, 240); }
 
+  /**
+   * Sets the LED color to high tide (a specific shade of blue-green).
+   */
   public void setHighTide() {
-    for (int i = 0; i < ledBuffer1.getLength(); i++) {
-      ledBuffer1.setRGB(i, 0, 182, 174);
-    }
-    alignmentIndication1.setData(ledBuffer1);
+    setRGB(0, 182, 174);
   }
 
+  /**
+   * Creates a flowing high tide effect on the LED strip.
+   * The effect is based on a sine wave pattern that changes over time.
+   */
   public void highTideFlow() {
     long currentTime = System.currentTimeMillis();
-    int length = ledBuffer1.getLength();
+    int length = addressableLEDBuffer.getLength();
 
-    final int waveSpeed = 30; 
+    final int waveSpeed = 30;
     final int waveWidth = 55;
 
     for (int i = 0; i < length; i++) {
-        double wave = Math.sin((i + (currentTime / waveSpeed)) % length * (2 * Math.PI / waveWidth));
+      double wave = Math.sin((i + ((double)currentTime / waveSpeed)) % length * (2 * Math.PI / waveWidth));
 
-        wave = (wave + 1) / 2;
+      wave = (wave + 1) / 2;
 
-        int r = (int)(wave * 0); 
-        int g = (int)(wave * 200);
-        int b = (int)(wave * 50);
+      int r = (int)(wave * 0);
+      int g = (int)(wave * 200);
+      int b = (int)(wave * 50);
 
-        ledBuffer1.setRGB(i, r, g, b);
+      addressableLEDBuffer.setRGB(i, r, g, b);
     }
-    alignmentIndication1.setData(ledBuffer1);
-}
-
+    alignmentIndication1.setData(addressableLEDBuffer);
+  }
 }
