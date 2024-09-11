@@ -33,8 +33,6 @@ public class LED extends SubsystemBase {
   public void periodic() {
     if (RobotState.isDisabled()) {
       highTideFlow();
-    } else {
-      setRGB(0, 0, 0);
     }
   }
 
@@ -45,9 +43,23 @@ public class LED extends SubsystemBase {
    * @param g (Green) Integer values between 0 - 255
    * @param b (Blue) Integer values between 0 - 255
    */
-  public void setRGB(int R, int G, int B) {
+  public void setRGB(int r, int g, int b) {
     for (int i = 0; i < addressableLEDBuffer.getLength(); i++) {
-      addressableLEDBuffer.setRGB(i, R, G, B);
+      addressableLEDBuffer.setRGB(i, r, g, b);
+    }
+    alignmentIndication1.setData(addressableLEDBuffer);
+  }
+
+  /**
+   * Sets the color for each of the LEDs based on HSV values
+   *
+   * @param h (Hue) Integer values between 0 - 180
+   * @param s (Saturation) Integer values between 0 - 255
+   * @param v (Value) Integer values between 0 - 255
+   */
+  public void rainbowHSV(int h, int s, int v) {
+    for (int i = 0; i < addressableLEDBuffer.getLength(); i++) {
+      addressableLEDBuffer.setHSV(i, h, s, v);
     }
     alignmentIndication1.setData(addressableLEDBuffer);
   }
@@ -72,6 +84,11 @@ public class LED extends SubsystemBase {
   public void setGreenColor() {
     setRGB(0, 255, 0);
   }
+
+  /**
+   * Sets the LED color to purple.
+   */
+  public void setPurpleColor() { setRGB(160, 32, 240); }
 
   /**
    * Sets the LED color to high tide (a specific shade of blue-green).
