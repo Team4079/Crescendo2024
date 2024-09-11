@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,15 +6,20 @@ import frc.robot.utils.GlobalsValues.LimelightGlobalValues;
 
 /** The {@link PivotAlign} class is a command that aligns the pivot to the target. */
 public class PivotAlign extends Command {
+  /** The Pivot subsystem used by this command. */
+  private final Pivot pivot;
 
-  private Pivot pivot;
-  // // Get distance when after we mount the limelight
-  private double[] llValues;
-  private double setPoint;
-  private double deadband;
+  /** The deadband value for the pivot position. */
+  private final double deadband;
+
+  /** The timeout counter for the alignment process. */
   private double timeout;
 
-  /** Creates a new Shoot. */
+  /**
+   * Creates a new PivotAlign command.
+   *
+   * @param pivot The Pivot subsystem used by this command.
+   */
   public PivotAlign(Pivot pivot) {
     this.pivot = pivot;
     deadband = 0.5;
@@ -26,40 +27,40 @@ public class PivotAlign extends Command {
     addRequirements(pivot);
   }
 
-  // Called when the command is initially scheduled.
+  /** Called when the command is initially scheduled. */
   @Override
-  public void initialize() {}
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    llValues = LimelightGlobalValues.robotPoseTargetSpace;
-
-    setPoint = pivot.shootPos(llValues[2]);
-
-    pivot.setMotorPosition(pivot.shootPos(setPoint), pivot.shootPos(setPoint)); // yessica noted
-
-    if (Math.abs(setPoint - pivot.getAbsoluteEncoder()) < deadband)
-    {
-      timeout++;
-    }
-    else
-    {
-      timeout = 0;
-    }
+  public void initialize() {
+    // No specific action needed when the command is initialized.
   }
 
-  // Called once the command ends or is interrupted.
+  /** Called every time the scheduler runs while the command is scheduled. */
   @Override
-  public void end(boolean interrupted) {}
+  public void execute() {
+    // Get distance when after we mount the limelight
+    double[] llValues = LimelightGlobalValues.robotPoseTargetSpace;
+    double setPoint = pivot.shootPos(llValues[2]);
+    pivot.setMotorPosition(pivot.shootPos(setPoint), pivot.shootPos(setPoint)); // yessica noted
 
-  // Returns true when the command should end.
+    timeout = Math.abs(setPoint - pivot.getAbsoluteEncoder()) < deadband ? timeout + 1 : 0;
+  }
+
+  /**
+   * Called once the command ends or is interrupted.
+   *
+   * @param interrupted Whether the command was interrupted/canceled.
+   */
+  @Override
+  public void end(boolean interrupted) {
+    // No specific action needed when the command ends.
+  }
+
+  /**
+   * Returns true when the command should end.
+   *
+   * @return true if the timeout counter has reached 10, false otherwise.
+   */
   @Override
   public boolean isFinished() {
-    if (timeout == 10)
-    {
-      return true;
-    }
-    return false;
+    return timeout == 10;
   }
 }
