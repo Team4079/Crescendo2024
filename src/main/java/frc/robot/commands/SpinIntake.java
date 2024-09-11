@@ -59,7 +59,7 @@ public class SpinIntake extends Command {
 
     /**
      * Executes the SpinIntake command.
-     *
+     * <p>
      * This method is called periodically while the command is scheduled. It updates
      * the SmartDashboard with the current state of `shouldSpin`, toggles the
      * `shouldSpin` state based on the gamepad input, controls the LED state, and
@@ -84,7 +84,7 @@ public class SpinIntake extends Command {
 
     /**
      * Starts the intake and shooter mechanisms.
-     *
+     * <p>
      * This method sets the intake velocity to the predefined intake speed and the
      * shooter velocity to the passthrough rate per second. It also resets the
      * timers for the intake and limelight.
@@ -98,7 +98,7 @@ public class SpinIntake extends Command {
 
     /**
      * Stops the intake and shooter mechanisms.
-     *
+     * <p>
      * This method stops the kraken motors for both the shooter and intake subsystems.
      */
     private void stopIntakeAndShooter() {
@@ -108,7 +108,7 @@ public class SpinIntake extends Command {
 
     /**
      * Handles the timing logic for the shooter and limelight.
-     *
+     * <p>
      * This method starts the timers if specific gamepad buttons are not released,
      * manages the shooter timing, controls the limelight flashing, and stops the
      * kraken motors and timers.
@@ -128,7 +128,7 @@ public class SpinIntake extends Command {
 
     /**
      * Manages the timing for the shooter mechanism.
-     *
+     * <p>
      * This method sets the shooter velocity to the passthrough rate per second for
      * the first 0.3 seconds and then sets it to a velocity of 20 for the next 0.15
      * seconds.
@@ -145,7 +145,7 @@ public class SpinIntake extends Command {
 
     /**
      * Controls the flashing of the limelight.
-     *
+     * <p>
      * This method flashes the limelight if the limelight timer is less than 3
      * seconds, otherwise it stops the flashing.
      */
@@ -159,7 +159,7 @@ public class SpinIntake extends Command {
 
     /**
      * Controls the LED state based on the shooter and intake status.
-     *
+     * <p>
      * This method sets the LED color based on the ring sensor status of the shooter
      * and the intake status.
      */
