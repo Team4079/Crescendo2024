@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import static frc.robot.utils.GlobalsValues.PivotGlobalValues.PIVOT_AMP_ANGLE_ALT;
+
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Limelight;
@@ -15,22 +17,11 @@ import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AmpScoreAlt extends SequentialCommandGroup {
-  /** Creates a new ShootRing. */
-  private Shooter shooter;
-  private Pivot pivot;
-  private Limelight limelight;
-
   public AmpScoreAlt(Shooter shooter, Pivot pivot, Limelight limelight) {
-    this.shooter = shooter;
-    this.pivot = pivot;
-    this.limelight = limelight;
     addRequirements(shooter, pivot, limelight);
-
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new ParallelCommandGroup(
-            new SetPivot(pivot, 52.5).withTimeout(1),
+            new SetPivot(pivot, PIVOT_AMP_ANGLE_ALT).withTimeout(1),
             new AmpRampUpAlt(shooter).withTimeout(1)),
         new PushRingAmp(shooter, limelight).withTimeout(0.3),
         new StopShooter(shooter).withTimeout(0.05),

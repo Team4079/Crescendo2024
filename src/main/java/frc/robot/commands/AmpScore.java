@@ -15,23 +15,12 @@ import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AmpScore extends SequentialCommandGroup {
-  /** Creates a new ShootRing. */
-  private Shooter shooter;
-  private Pivot pivot;
-  private Limelight limelight;
-
   public AmpScore(Shooter shooter, Pivot pivot, Limelight limelight) {
-    this.shooter = shooter;
-    this.pivot = pivot;
-    this.limelight = limelight;
     addRequirements(shooter, pivot, limelight);
-
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new ParallelCommandGroup(
             new SetPivot(pivot, PivotGlobalValues.PIVOT_AMP_ANGLE).withTimeout(1.5),
-            new AmpRampUp(shooter, limelight).withTimeout(1.5)),
+            new AmpRampUp(shooter).withTimeout(1.5)),
         new PushRingAmp(shooter, limelight).withTimeout(1),
         new StopShooter(shooter).withTimeout(0.05),
         new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.5));
