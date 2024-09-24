@@ -2,99 +2,64 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 
-import org.photonvision.EstimatedRobotPose;
-import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.PhotonTrackedTarget;
-
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.GlobalsValues.MotorGlobalValues;
+import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 
 // import edu.wpi.first.math.controller.PIDController;
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructArrayPublisher;
-import edu.wpi.first.networktables.StructPublisher;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.GlobalsValues;
-import frc.robot.utils.GlobalsValues.MotorGlobalValues;
-import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
-
 /**
  * The {@link SwerveSubsystem} class includes all the motors to drive the robot.
  */
 public class SwerveSubsystem extends SubsystemBase {
-  // Variables for the swerve drive train
+
+  private SwerveModule frontLeft;
+  private SwerveModule frontRight;
+  private SwerveModule backLeft;
+  private SwerveModule backRight;
+
+  private SwerveDrivePoseEstimator poseEstimator;
+  private Field2d field;
+
+  private Pigeon2 pidgey;
+  private SwerveModuleState[] states;
   private SwerveModule[] modules;
-  private Rotation2d gyroAngle;
-  private Pigeon2 pidggy;
-  // private AdvantageScope advantageScope;
-  private final SwerveDriveKinematics sKinematics;
 
-  public SwerveDriveOdometry swerveOdometry;
-  public SwerveDrivePoseEstimator swerveEstimator;
-  public Pose2d swerveOdomeryPose2d;
+  private Photonvision photonvision;
 
-  // Advantage Scope
-  public Pose3d advantageScopePoseA;
-  public Pose3d advantageScopePoseB;
-  // WPILib
-  public StructPublisher<Pose3d> publisher;
-  public StructArrayPublisher<Pose3d> arrayPublisher;
-
-
-  public Field2d field;
+  double turnSpeed;
 
   private double rot;
-  private double turnSpeed = 0;
   private boolean shouldInvert = false;
 
-  //PhotonVision Stuff
-  PhotonCamera camera1 = new PhotonCamera("Camera One");
-  PhotonCamera camera2 = new PhotonCamera("Camera Two");
-  PhotonTrackedTarget target1;
-  PhotonTrackedTarget target2;
-  PhotonPoseEstimator photonPoseEstimator1;
-  PhotonPoseEstimator photonPoseEstimator2;
-
-  double ambiguity1;
-  double ambiguity2;
-
-  AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-  Transform3d robotToCam1 = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
-  Transform3d robotToCam2 = new Transform3d(new Translation3d(-0.5, 0.0, -0.5), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
-
   /** Creates a new DriveTrain. */
-  public SwerveSubsystem() {
-    // advantageScope = new AdvantageScope(this, pidggy, SwerveModule)
-    sKinematics = GlobalsValues.SwerveGlobalValues.kinematics;
-    gyroAngle = Rotation2d.fromDegrees(0);
-    pidggy = new Pigeon2(16);
-    pidggy.reset();
+  public SwerveSubsystem(Photonvision photonvision) {
+    frontLeft = new SwerveModule(MotorGlobalValues.FRONT_LEFT_DRIVE_ID, MotorGlobalValues.FRONT_LEFT_STEER_ID,
+        MotorGlobalValues.FRONT_LEFT_CAN_CODER_ID, SwerveGlobalValues.CANCoderValue9);
+    frontRight = new SwerveModule(MotorGlobalValues.FRONT_RIGHT_DRIVE_ID, MotorGlobalValues.FRONT_RIGHT_STEER_ID,
+        MotorGlobalValues.FRONT_RIGHT_CAN_CODER_ID, SwerveGlobalValues.CANCoderValue10);
+    backLeft = new SwerveModule(MotorGlobalValues.BACK_LEFT_DRIVE_ID, MotorGlobalValues.BACK_LEFT_STEER_ID,
+        MotorGlobalValues.BACK_LEFT_CAN_CODER_ID, SwerveGlobalValues.CANCoderValue11);
+    backRight = new SwerveModule(MotorGlobalValues.BACK_RIGHT_DRIVE_ID, MotorGlobalValues.BACK_RIGHT_STEER_ID,
+        MotorGlobalValues.BACK_RIGHT_CAN_CODER_ID, SwerveGlobalValues.CANCoderValue12);
 
+    // TODO: temporary addition
     modules = new SwerveModule[] {
         new SwerveModule(
             MotorGlobalValues.FRONT_LEFT_DRIVE_ID,
@@ -118,94 +83,85 @@ public class SwerveSubsystem extends SubsystemBase {
             SwerveGlobalValues.CANCoderValue12)
     };
 
-    swerveOdometry = new SwerveDriveOdometry(sKinematics, gyroAngle, getModulePositions());
-    swerveOdomeryPose2d = new Pose2d();
-    addRotorPositionsforModules();
-    swerveEstimator = new SwerveDrivePoseEstimator(SwerveGlobalValues.kinematics, pidggy.getRotation2d(), getModulePositions(), new Pose2d(),
-    VecBuilder.fill(0.05, 0.05, Math.toRadians(5)),
-    VecBuilder.fill(0.5, 0.5, Math.toRadians(30))); 
-    // addRotorPositionsforModules();
-
-    // Makes the rotation smooth (in a circle)
-    // Blame Jayden for adding a useless line of code
-
     field = new Field2d();
-    field.setRobotPose(new Pose2d());
-    
 
-    // Advantage Scope
-    advantageScopePoseA = new Pose3d();
-    advantageScopePoseB = new Pose3d();
-    // WPILib
-    publisher = NetworkTableInstance.getDefault()
-      .getStructTopic("MyPose", Pose3d.struct).publish();
-    arrayPublisher = NetworkTableInstance.getDefault()
-      .getStructArrayTopic("MyPoses", Pose3d.struct).publish();
+    pidgey = new Pigeon2(MotorGlobalValues.PIDGEY_ID);
+    pidgey.reset();
+    states = new SwerveModuleState[4];
+    this.photonvision = photonvision;
 
-
-    /**
-     * PathPlanner Direction Values
-     * Forward +x
-     * Backward -x
-     * Left -y
-     * Right +y
-     */ 
     AutoBuilder.configureHolonomic(
         this::getPose, // Robot pose supplier
-        this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+        this::newPose, // Method to reset odometry (will be called if your auto has a starting pose)
         this::getAutoSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         this::chassisSpeedsDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         SwerveGlobalValues.BasePIDGlobal.pathFollower,
-        // TODO remeber to hange back lol
         () -> {
-          var alliance = DriverStation.getAlliance();
+          Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
           if (alliance.isPresent()) {
-            if (shouldInvert)
-            {
+            if (shouldInvert) {
               return (alliance.get() == DriverStation.Alliance.Red);
             }
 
-            else {
-              return !(alliance.get() == DriverStation.Alliance.Red);
+        else {
+              return !(alliance.get() == DriverStation.Alliance.Blue);
             }
-            
-            
+
           }
           return false;
         },
         this // Reference to this subsystem to set requirements
     );
-        
-    photonPoseEstimator1 = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera1, robotToCam1);
-    photonPoseEstimator2 = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera2, robotToCam2);
+  }
 
+  @Override
+  public void periodic() {}
+
+  /**
+   * Sets the desired module states.
+   * @param states SwerveModuleState[]
+   * @return void
+   */
+  public void setModuleStates(SwerveModuleState[] states) {
+    for (int i = 0; i < states.length; i++) {
+      modules[i].setState(states[i]);
+    }
   }
 
   /**
-   * Drives the robot using the joystick input
-   * 
-   * @param forwardSpeed double Speed value in meters per second
-   * @param leftSpeed double Speed value in meters per second
-   * @param joyStickInput double joystick input value
-   * @param isFieldOriented boolean value to determine if the robot is field oriented
-   * @return void
+   * Gets the module states.
+   * @param states SwerveModuleState[]
+   * @return SwerveModuleState[]
    */
-  public void drive(double forwardSpeed, double leftSpeed, double joyStickInput, boolean isFieldOriented) {
+  public SwerveModuleState[] getModuleStates(SwerveModuleState[] states) {
+    for (int i = 0; i < states.length; i++) {
+      states[i] = modules[i].getState();
+    }
+    return states;
+  }
+
+  /**
+   * Gets the module positions.
+   * @param forwardSpeed double
+   * @param leftSpeed double
+   * @param joyStickInput double
+   * @param isFieldOriented boolean
+   * @return SwerveModulePosition[]
+   */
+  public void getDriveSpeeds(double forwardSpeed, double leftSpeed, double joyStickInput, boolean isFieldOriented) {
     ChassisSpeeds speeds;
+
+    SmartDashboard.putNumber("Forward speed", forwardSpeed);
+    SmartDashboard.putNumber("Left speed", leftSpeed);
 
     turnSpeed = joyStickInput * MotorGlobalValues.TURN_CONSTANT;
 
-    // System.out.println("Forward Speed: " + forwardSpeed);
-    // System.out.println("Left Speed: " + leftSpeed);
-    // System.out.println("Turn Speed: " + joyStickInput);
-
-    // Runs robot/field-oriented based on the boolean value of isFieldOriented
     if (isFieldOriented) {
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
           forwardSpeed,
           leftSpeed,
           turnSpeed,
-          getRotationPidggy());
+          getPidgeyRotation());
     } else {
       speeds = new ChassisSpeeds(
           forwardSpeed,
@@ -216,285 +172,125 @@ public class SwerveSubsystem extends SubsystemBase {
     SwerveModuleState[] states = SwerveGlobalValues.kinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         states, MotorGlobalValues.MAX_SPEED);
-
-    for (int i = 0; i < modules.length; i++) {
-      modules[i].setState(states[i], i);
-
-    }
+    setModuleStates(states);
   }
 
   /**
-   * Gets the position of the modules in the swerve drive train
-   * @param void
-   * @return SwerveModulePosition[] array of the position of the modules
+   * Gets the pidgey rotation.
+   * @return Rotation2d
    */
-  public SwerveModulePosition[] getModulePositions() {
-    SwerveModulePosition[] positions = new SwerveModulePosition[modules.length];
-    for (int i = 0; i < modules.length; i++) {
-      positions[i] = modules[i].getPosition();
-    }
-    return positions;
+  public Rotation2d getPidgeyRotation() {
+    return pidgey.getRotation2d();
   }
 
   /**
-   * Gets the rotation of the pigeon
-   * @param void
-   * @return Rotation2d rotation of the pigeon in degrees
+   * Gets the pidgey angle.
+   * @return double
    */
-  public Rotation2d getRotationPidggy() {
-    rot = -pidggy.getRotation2d().getDegrees();
-    return Rotation2d.fromDegrees(rot);
+  public double getHeading() {
+    return pidgey.getAngle();
   }
 
   /**
-   * Resets the pigeon to zero
-   * @param void
-   * @return None
+   * Resets the pidgey(gyro) heading to 0.
+   * @return void
    */
-  public void zeroHeading() {
-    pidggy.reset();
+  public void resetPidgey() {
+    pidgey.reset();
   }
 
   /**
-   * Resets the drive encoders
-   * @param void
-   * @return None
-   */
-  public void resetDriveEncoders() {
-    for (int i = 0; i < modules.length; i++) {
-      modules[i].resetEncoders();
-    }
-  }
-
-  /**
-   * Gets the yaw of the pigeon in double degrees
-   * @param void
-   * @return double yaw of the pigeon in degrees
-   */
-  public double getYaw() {
-    return pidggy.getYaw().getValue();
-  }
-
-  /**
-   * Gets the heading of the pigeon in double degrees
-   * @param void
-   * @return double heading of the pigeon in degrees
-   */
-  public double pgetHeading() {
-    return (pidggy.getYaw().getValue() % 360);
-  }
-
-  // Speed modifiers
-  /**
-   * Configures the slow mode of the robot
-   * @param void
-   * @return None
-   */
-  public void configSlowMode() {
-    MotorGlobalValues.SLOW_MODE = !MotorGlobalValues.SLOW_MODE;
-  }
-
-  /**
-   * Gets the slow mode of the robot in boolean value
-   * @param void
-   * @return boolean value of the slow mode
-   */
-  public boolean getSlowMode() {
-    return MotorGlobalValues.SLOW_MODE;
-  }
-
-  /**
-   * Configures the acorn mode of the robot
-   * @param void
-   * @return None
-   */
-  public void configAAcornMode() {
-    MotorGlobalValues.AACORN_MODE = !MotorGlobalValues.AACORN_MODE;
-  }
-
-  /**
-   * Gets the acorn mode of the robot in boolean value
-   * @param void
-   * @return boolean value of the acorn mode
-   */
-  public boolean getAAcornMode() {
-    return MotorGlobalValues.AACORN_MODE;
-  }
-
-  // Position methods - used for odometry
-  /**
-   * Gets the pose of the robot in Pose2d
-   * @param void
-   * @return Pose2d pose of the robot
+   * Gets the pose.
+   * @return Pose2d
    */
   public Pose2d getPose() {
-    return swerveEstimator.getEstimatedPosition();
+    return poseEstimator.getEstimatedPosition();
   }
 
   /**
-   * Resets the heading of the robot to 0
-   * @param void
-   * @return None
+   * Zeros the pose.
+   * @return void
    */
-  public void newPose() {
-    swerveEstimator.resetPosition(Rotation2d.fromDegrees(pgetHeading()), getModulePositions(),
+  public void zeroPose() {
+    poseEstimator.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(),
         new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
   }
 
   /**
-   * Resets the pose of the robot to a custom pose
-   * @param poses Pose2d pose of the robot
-   * @return None
+   * Resets the pose.
+   * @param pose Pose2d
+   * @return void
    */
-  public void resetOdometry(Pose2d pose) {
-    swerveEstimator.resetPosition(pidggy.getRotation2d(), getModulePositions(), pose);
+  public void newPose(Pose2d pose) {
+    poseEstimator.resetPosition(pidgey.getRotation2d(), getModulePositions(), pose);
   }
 
   /**
-   * Updates odometry and gets heading of the pigeon
-   * @param void
-   * @return None
-   */
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    pidggy.getYaw().refresh();
-    var results1 = camera1.getLatestResult();
-    var results2 = camera2.getLatestResult();
-    swerveEstimator.update(pidggy.getRotation2d(), getModulePositions());
-    // field.setRobotPose(swerveEstimator.getEstimatedPosition());
-    SmartDashboard.putNumber("Robot Pos X", swerveEstimator.getEstimatedPosition().getX());
-    SmartDashboard.putNumber("Robot Pos Y", swerveEstimator.getEstimatedPosition().getY());
-    // Rotation2d headingGyroAnglething = Rotation2d.fromDegrees(pgetHeading());
-    // swerveOdometry.update(headingGyroAnglething, getModulePositions());
-    // swerveOdomeryPose2d = swerveOdometry.getPoseMeters();
-    // SmartDashboard.putNumber("Robot Pos X", swerveOdomeryPose2d.getX());
-    // SmartDashboard.putNumber("Robot Pos Y", swerveOdomeryPose2d.getY());
-    
-    SmartDashboard.putNumber("heading", pgetHeading());
-    SmartDashboard.putNumber("rot", getRotationPidggy().getRotations());
-    for (int i = 0; i < modules.length; i++) {
-      SmartDashboard.putNumber("Module Angle: " + i, modules[i].getRotationDegree() % 360);
-      SmartDashboard.putNumber("Module Encoder: " + i, modules[i].getEncoderCount());
-      // SmartDashboard.putNumber("Drive Motor Speed " + i, modules[i].getDriveVelocity());
-      // SmartDashboard.putNumber("Drive Error " + i, modules[i].getDriveVelocity() - modules[i].getState().speedMetersPerSecond);
-    }
-
-    for (int i = 0; i < modules.length; i++) {
-      SmartDashboard.putNumber("Module Speed: " + i, modules[i].getDriveVelocity());
-    }
-
-    publisher.set(advantageScopePoseA);
-    arrayPublisher.set(new Pose3d[] {advantageScopePoseA, advantageScopePoseB});
-
-    Optional<EstimatedRobotPose> estimatedRobotPose1 = getEstimatedGlobalPose1(swerveEstimator.getEstimatedPosition());
-    Optional<EstimatedRobotPose> estimatedRobotPose2 = getEstimatedGlobalPose2(swerveEstimator.getEstimatedPosition());
-
-    if (results1.hasTargets()) {
-      try {
-        ambiguity1 = camera1.getLatestResult().getBestTarget().getPoseAmbiguity();
-      }
-      catch(NullPointerException e) {
-        System.out.println("Jayden had a skill issue");
-      }
-    } 
-    else {
-      ambiguity1 = 1;
-    }
-
-    if (results2.hasTargets()) {
-      try {
-        ambiguity2 = camera2.getLatestResult().getBestTarget().getPoseAmbiguity();
-      }
-      catch(NullPointerException e) {
-        System.out.println("Jayden had a huge skill issue");
-      }
-    } 
-    else {
-      ambiguity2 = 1;
-    }
-
-    if (estimatedRobotPose1.isPresent() && estimatedRobotPose2.isPresent()) {
-      Pose2d newPose = (ambiguity1 < ambiguity2) ? estimatedRobotPose1.get().estimatedPose.toPose2d() : estimatedRobotPose2.get().estimatedPose.toPose2d();
-      swerveEstimator.addVisionMeasurement(newPose, results1.getTimestampSeconds());
-    }
-    else if (estimatedRobotPose1.isPresent()) {
-      Pose2d newPose = estimatedRobotPose1.get().estimatedPose.toPose2d();
-      swerveEstimator.addVisionMeasurement(newPose, results1.getTimestampSeconds());
-    }
-    else if (estimatedRobotPose2.isPresent()){
-      Pose2d newPose = estimatedRobotPose2.get().estimatedPose.toPose2d();
-      swerveEstimator.addVisionMeasurement(newPose, results1.getTimestampSeconds());
-    }
-
-    field.setRobotPose(swerveEstimator.getEstimatedPosition());
-    SmartDashboard.putData("AACORN", field);
-  }
-
-
-
-  /**
-   * Adds rotor positions for the modules
-   * @param void
-   * @return None
-   */
-  public void addRotorPositionsforModules() {
-    for (int i = 0; i < modules.length; i++) {
-      modules[i].setRotorPos();
-    }
-  }
-
-  /**
-   * Passes in the module states to the modules (speed and rotation)
-   * @param states SwerveModuleState[] array of the module states
-   * @return None
-   */
-  public void outputModuleStates(SwerveModuleState[] states) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-        states, MotorGlobalValues.MAX_SPEED);
-
-    for (int i = 0; i < modules.length; i++) {
-      modules[i].setState(states[i], i);
-    }
-  }
-
-  /**
-   * Gets the auto speeds of the robot in meters per second
-   * @param void
-   * @return ChassisSpeeds auto speeds of the robot
+   * Sets the field.
+   * @return void
    */
   public ChassisSpeeds getAutoSpeeds() {
     ChassisSpeeds speeds = SwerveGlobalValues.kinematics.toChassisSpeeds(getModuleStates());
     return speeds;
   }
 
+  // TODO: Look at this code later
   /**
-   * Drives the robot using the chassis speeds in meters per second
-   * @param chassisSpeeds chassis speeds
-   * @return None
+   * Gets the rotation pidggy.
+   * @return Rotation2d
+   */
+  public Rotation2d getRotationPidggy() {
+    rot = -pidgey.getRotation2d().getDegrees();
+    return Rotation2d.fromDegrees(rot);
+  }
+
+  /**
+   * Drives the robot using the chassis speeds.
+   * @param chassisSpeeds ChassisSpeeds
+   * @return void
    */
   public void chassisSpeedsDrive(ChassisSpeeds chassisSpeeds) {
     ChassisSpeeds speeds = ChassisSpeeds.fromRobotRelativeSpeeds(chassisSpeeds, getRotationPidggy());
     SwerveModuleState[] states = SwerveGlobalValues.kinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         states, MotorGlobalValues.MAX_SPEED);
-    for (int i = 0; i < modules.length; i++) {
-      modules[i].setState(states[i], i);
-    }
+    setModuleStates(states);
   }
 
   /**
-   * Stops the modules
-   * @param void
-   * @return None
+   * Gets the field.
+   * @return Field2d
    */
-  public void stopModules() {
-    for (SwerveModule module : modules) {
-      module.stop();
+  private SwerveModuleState[] getModuleStates() {
+    SwerveModuleState[] moduleStates = new SwerveModuleState[modules.length];
+    for (int i = 0; i < modules.length; i++) {
+      moduleStates[i] = modules[i].getState();
     }
+    return moduleStates;
   }
 
   /**
+   * Prints the module states
+   */
+  private void printModuleStates() {
+    System.out.println("");
+  }
+  /**
+   * Gets the module positions.
+   * @return SwerveModulePosition[]
+   */
+  public SwerveModulePosition[] getModulePositions() {
+    SwerveModulePosition[] positions = new SwerveModulePosition[states.length];
+
+    positions[0] = frontLeft.getPosition();
+    positions[1] = frontRight.getPosition();
+    positions[2] = backLeft.getPosition();
+    positions[3] = backRight.getPosition();
+
+    return positions;
+  }
+
+    /**
    * Stops the robot
    * @param void
    * @return None
@@ -504,23 +300,4 @@ public class SwerveSubsystem extends SubsystemBase {
       modules[i].stop();
     }
   }
-
-  private SwerveModuleState[] getModuleStates() {
-    SwerveModuleState[] moduleStates = new SwerveModuleState[modules.length];
-    for (int i = 0; i < modules.length; i++) {
-      moduleStates[i] = modules[i].getState();
-    }
-    return moduleStates;
-  }
-
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPose1(Pose2d prevEstimatedRobotPose) {
-    photonPoseEstimator1.setReferencePose(prevEstimatedRobotPose);
-    return photonPoseEstimator1.update();
-  }
-
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPose2(Pose2d prevEstimatedRobotPose) {
-    photonPoseEstimator2.setReferencePose(prevEstimatedRobotPose);
-    return photonPoseEstimator2.update();
-  }
-  
 }

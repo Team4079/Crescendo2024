@@ -45,16 +45,16 @@ public class AutoAlign extends Command {
     double horizontalError = -limelight.getTx() - 1;
     System.out.println(horizontalError);
     if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
-      swerveSubsystem.drive(0, 0, rotationalController.calculate(horizontalError, 1), false);
+      swerveSubsystem.getDriveSpeeds(0, 0, rotationalController.calculate(horizontalError, 1), false);
     } else {
-      swerveSubsystem.stopModules();
+      swerveSubsystem.stop();
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    swerveSubsystem.stopModules();
+    swerveSubsystem.stop();
   }
 
   // Returns true when the command should end.

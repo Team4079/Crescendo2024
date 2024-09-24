@@ -4,6 +4,8 @@
 
 package frc.robot.utils;
 
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -12,7 +14,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.Pivot;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -51,6 +52,8 @@ public final class GlobalsValues {
     public static final int FRONT_RIGHT_CAN_CODER_ID = 10;
     public static final int BACK_LEFT_CAN_CODER_ID = 11;
     public static final int BACK_RIGHT_CAN_CODER_ID = 12;
+
+    public static final int PIDGEY_ID = 16;
 
     // Motor Property Values
     public static final double MAX_SPEED = 5.76;
@@ -109,15 +112,14 @@ public final class GlobalsValues {
 
     // The values of the can coders when the wheels are straight according to Mr.
     // Wright
-    public static final double CANCoderValue9 = 0.915283 + 0.5; // 0.9174805
-    public static final double CANCoderValue10 = 0.327881; // 0.328613 + 0.5 add 0.5
-    public static final double CANCoderValue11 = 0.979736 - 0.5; // 0.539794 - 0.5
-    public static final double CANCoderValue12 = 0.536133; // 0.984863
+    public static final double CANCoderValue9 = -0.419189; // 0.4198189
+    public static final double CANCoderValue10 = -0.825928; // 0.328613 + 0.5 add 0.5
+    public static final double CANCoderValue11 = -0.475098; // 0.539794 - 0.5%
+    public static final double CANCoderValue12 = -0.032959 ; // 0.984863
 
-    public static final double[] CANCoderValues = { 0.915283 + 0.5, 0.327881, 0.979736 - 0.5, 0.536133 };
     // Whether the motors are inverted
-    public static final boolean DRIVE_MOTOR_INVERETED = false;
-    public static final boolean STEER_MOTOR_INVERTED = false;
+    public static final InvertedValue DRIVE_MOTOR_INVERETED = InvertedValue.CounterClockwise_Positive;
+    public static final InvertedValue STEER_MOTOR_INVERTED = InvertedValue.Clockwise_Positive;
 
     // THe deadband of the joystick to combat drift
     public static final double JOYSTICK_DEADBAND = 0.05;
@@ -130,6 +132,8 @@ public final class GlobalsValues {
     public static final double LIMELIGHT_DEADBAND = 3;
 
     public static final double MOTOR_DEADBAND = 0.05;
+    public static final boolean IS_FIELD_ORIENTATED = true;
+    public static final double ENCODER_OFFSET = 0 / 360; //TODO add an offset for the canCoder getting the position at the beginning
 
     // RGB Values for LED
     public static final int[] GREEN_LED = { 0, 255, 0 };
@@ -137,10 +141,10 @@ public final class GlobalsValues {
     public static final int[] HIGHTIDE_LED = { 0, 182, 174 };
 
     public static class BasePIDGlobal {
-      public static final PID STEER_PID = new PID(0.14, 0.00002, 0.008, 0);
+      public static final PID STEER_PID = new PID(7.0, 0.00002, 0.008, 0);
       // public static final PID STEER_PID = new PID(0.15, 0.0000, 0.000005, 0); //
       // 0.05 P, 0 D
-      public static final PID DRIVE_PID = new PID(0.5, 0.0, 0.0); // new PID(0.05, 0.00, 0, 0);
+      public static final PID DRIVE_PID = new PID(0.7, 0.0, 0.0); // new PID(0.05, 0.00, 0, 0);
       // DON'T SET D PAST 0.03 - Erick or else the swerve moduls make funny nosie
 
       // AutoAlign PID
@@ -217,7 +221,6 @@ public final class GlobalsValues {
     // public static final double PIVOT_AMP_ANGLE = (46 + PivotGlobalValues.offset);
     // //Ued to be 49.55
     public static final double PIVOT_AMP_ANGLE = 50.2;
-    public static final double PIVOT_AMP_ANGLE_ALT = 52.5;
     public static final double PIVOT_SUBWOOFER_ANGLE = (13 + PivotGlobalValues.offset);
     public static final double PIVOT_SOURCE = 93;
     public static final double PIVOT_FENDER_ANGLE = (305 + PivotGlobalValues.offset);

@@ -50,6 +50,8 @@ public class RobotContainer {
     private final JoystickButton opRightBumper;
     private final JoystickButton opLeftBumper;
 
+    private final Photonvision photonvision;
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -62,7 +64,7 @@ public class RobotContainer {
         pivotyboi = new Pivot();
         shootyboi = new Shooter();
         intakeyboi = new Intake();
-        // photonVision = new PhotonVision();
+        photonvision = new Photonvision();
 
         padA = new JoystickButton(pad, 1);
         padB = new JoystickButton(pad, 2);
@@ -79,7 +81,7 @@ public class RobotContainer {
         opRightBumper = new JoystickButton(opPad, 6);
         opLeftBumper = new JoystickButton(opPad, 5);
 
-        swerveSubsystem = new SwerveSubsystem();
+        swerveSubsystem = new SwerveSubsystem(photonvision);
 
         // index from 0
         // 0 is left-right distance from tag (left is +, right is -, accurate to +- 5cm
@@ -128,7 +130,7 @@ public class RobotContainer {
     private void configureBindings() {
         // padA.onTrue(new InstantCommand(pivotyboi::resetEncoders));
         padA.onTrue(new SubwooferShot(shootyboi, pivotyboi, swerveSubsystem, limelety));
-        padB.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
+        padB.onTrue(new InstantCommand(swerveSubsystem::resetPidgey));
         // padY.whileTrue(new AutoAlign(swerveSubsystem, limelety).withTimeout(2));
         padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
         rightBumper.onTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, limelety));
@@ -159,9 +161,9 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        swerveSubsystem.zeroHeading();
-        swerveSubsystem.newPose();
-        swerveSubsystem.addRotorPositionsforModules();
+        swerveSubsystem.resetPidgey();
+        swerveSubsystem.zeroPose();
+        // swerveSubsystem.addRotorPositionsforModules();
         // System.out.println(swerveSubsystem.getPose());
 
         // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS

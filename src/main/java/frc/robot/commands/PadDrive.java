@@ -56,13 +56,13 @@ public class PadDrive extends Command {
     turn = rotation * MotorGlobalValues.MAX_ANGULAR_SPEED * 2 * 1.5; // magic numbers
 
     if (MotorGlobalValues.AACORN_MODE) {
-      swerveSubsystem.drive(
+      swerveSubsystem.getDriveSpeeds(
           -position.getX() * MotorGlobalValues.AACORN_SPEED,
           position.getY() * MotorGlobalValues.AACORN_SPEED,
           turn,
           isFieldOriented);
     } else {
-      swerveSubsystem.drive(
+      swerveSubsystem.getDriveSpeeds(
           -position.getX() * MotorGlobalValues.SPEED_CONSTANT,
           position.getY() * MotorGlobalValues.SPEED_CONSTANT,
           turn,

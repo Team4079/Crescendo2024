@@ -4,13 +4,14 @@
 
 package frc.robot.commands;
 
-import static frc.robot.utils.GlobalsValues.PivotGlobalValues.PIVOT_AMP_ANGLE_ALT;
+// import static frc.robot.utils.GlobalsValues.PivotGlobalValues.PIVOT_AMP_ANGLE_ALT;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
+import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -21,7 +22,7 @@ public class AmpScoreAlt extends SequentialCommandGroup {
     addRequirements(shooter, pivot, limelight);
     addCommands(
         new ParallelCommandGroup(
-            new SetPivot(pivot, PIVOT_AMP_ANGLE_ALT).withTimeout(1),
+            new SetPivot(pivot, GlobalsValues.PivotGlobalValues.PIVOT_AMP_ANGLE).withTimeout(1),
             new AmpRampUpAlt(shooter).withTimeout(1)),
         new PushRingAmp(shooter, limelight).withTimeout(0.3),
         new StopShooter(shooter).withTimeout(0.05),

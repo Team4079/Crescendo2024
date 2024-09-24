@@ -57,21 +57,21 @@ public class TeleOpAlign extends Command {
 
     PadDrive.Coordinate position = PadDrive.positionSet(pad);
 
-    swerveSubsystem.drive(
+    swerveSubsystem.getDriveSpeeds(
         position.getX() * MotorGlobalValues.SPEED_CONSTANT,
         position.getY() * MotorGlobalValues.SPEED_CONSTANT,
         rot,
         true);
   }
 
-  /**
+  /**wq
    * Called once the command ends or is interrupted.
    *
    * @param interrupted Whether the command was interrupted/canceled.
    */
   @Override
   public void end(boolean interrupted) {
-    swerveSubsystem.stopModules();
+    swerveSubsystem.stop();
   }
 
   /**

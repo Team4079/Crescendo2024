@@ -37,11 +37,11 @@ public class ResetMotorHeading extends Command {
   /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
-    double error = swerveSubsystem.pgetHeading();
+    double error = swerveSubsystem.getHeading();
     if (Math.abs(error) > deadband) {
-      swerveSubsystem.drive(0, 0, pid.calculate(error, 0), false);
+      swerveSubsystem.getDriveSpeeds(0, 0, pid.calculate(error, 0), false);
     } else {
-      swerveSubsystem.stopModules();
+      swerveSubsystem.stop();
     }
   }
 
