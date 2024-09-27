@@ -29,10 +29,10 @@ import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
  */
 public class SwerveSubsystem extends SubsystemBase {
 
-  private SwerveModule frontLeft;
-  private SwerveModule frontRight;
-  private SwerveModule backLeft;
-  private SwerveModule backRight;
+  // private SwerveModule frontLeft;
+  // private SwerveModule frontRight;
+  // private SwerveModule backLeft;
+  // private SwerveModule backRight;
 
   private SwerveDrivePoseEstimator poseEstimator;
   private Field2d field;
@@ -49,15 +49,15 @@ public class SwerveSubsystem extends SubsystemBase {
   private boolean shouldInvert = false;
 
   /** Creates a new DriveTrain. */
-  public SwerveSubsystem(Photonvision photonvision) {
-    frontLeft = new SwerveModule(MotorGlobalValues.FRONT_LEFT_DRIVE_ID, MotorGlobalValues.FRONT_LEFT_STEER_ID,
-        MotorGlobalValues.FRONT_LEFT_CAN_CODER_ID, SwerveGlobalValues.CANCoderValue9);
-    frontRight = new SwerveModule(MotorGlobalValues.FRONT_RIGHT_DRIVE_ID, MotorGlobalValues.FRONT_RIGHT_STEER_ID,
-        MotorGlobalValues.FRONT_RIGHT_CAN_CODER_ID, SwerveGlobalValues.CANCoderValue10);
-    backLeft = new SwerveModule(MotorGlobalValues.BACK_LEFT_DRIVE_ID, MotorGlobalValues.BACK_LEFT_STEER_ID,
-        MotorGlobalValues.BACK_LEFT_CAN_CODER_ID, SwerveGlobalValues.CANCoderValue11);
-    backRight = new SwerveModule(MotorGlobalValues.BACK_RIGHT_DRIVE_ID, MotorGlobalValues.BACK_RIGHT_STEER_ID,
-        MotorGlobalValues.BACK_RIGHT_CAN_CODER_ID, SwerveGlobalValues.CANCoderValue12);
+  public SwerveSubsystem() {
+    // frontLeft = new SwerveModule(MotorGlobalValues.FRONT_LEFT_DRIVE_ID, MotorGlobalValues.FRONT_LEFT_STEER_ID,
+    //     MotorGlobalValues.FRONT_LEFT_CAN_CODER_ID, SwerveGlobalValues.CANCoderValue9);
+    // frontRight = new SwerveModule(MotorGlobalValues.FRONT_RIGHT_DRIVE_ID, MotorGlobalValues.FRONT_RIGHT_STEER_ID,
+    //     MotorGlobalValues.FRONT_RIGHT_CAN_CODER_ID, SwerveGlobalValues.CANCoderValue10);
+    // backLeft = new SwerveModule(MotorGlobalValues.BACK_LEFT_DRIVE_ID, MotorGlobalValues.BACK_LEFT_STEER_ID,
+    //     MotorGlobalValues.BACK_LEFT_CAN_CODER_ID, SwerveGlobalValues.CANCoderValue11);
+    // backRight = new SwerveModule(MotorGlobalValues.BACK_RIGHT_DRIVE_ID, MotorGlobalValues.BACK_RIGHT_STEER_ID,
+    //     MotorGlobalValues.BACK_RIGHT_CAN_CODER_ID, SwerveGlobalValues.CANCoderValue12);
 
     // TODO: temporary addition
     modules = new SwerveModule[] {
@@ -101,9 +101,7 @@ public class SwerveSubsystem extends SubsystemBase {
           if (alliance.isPresent()) {
             if (shouldInvert) {
               return (alliance.get() == DriverStation.Alliance.Red);
-            }
-
-        else {
+            } else {
               return !(alliance.get() == DriverStation.Alliance.Blue);
             }
 
@@ -161,7 +159,8 @@ public class SwerveSubsystem extends SubsystemBase {
           forwardSpeed,
           leftSpeed,
           turnSpeed,
-          getPidgeyRotation());
+          getPidgeyRotation()
+      );
     } else {
       speeds = new ChassisSpeeds(
           forwardSpeed,
@@ -282,10 +281,9 @@ public class SwerveSubsystem extends SubsystemBase {
   public SwerveModulePosition[] getModulePositions() {
     SwerveModulePosition[] positions = new SwerveModulePosition[states.length];
 
-    positions[0] = frontLeft.getPosition();
-    positions[1] = frontRight.getPosition();
-    positions[2] = backLeft.getPosition();
-    positions[3] = backRight.getPosition();
+    for (int i = 0; i < positions.length; i++) {
+      positions[i] = modules[i].getPosition();
+    }
 
     return positions;
   }
