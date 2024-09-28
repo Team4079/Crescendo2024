@@ -146,6 +146,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
 
     poseEstimator.addVisionMeasurement(visionMeasurement2d, timestamp);
+
+    field.setRobotPose(poseEstimator.getEstimatedPosition());
+    SmartDashboard.putData(field);
   }
 
   /**
@@ -175,17 +178,17 @@ public class SwerveSubsystem extends SubsystemBase {
    * Gets the module positions.
    * @param forwardSpeed double
    * @param leftSpeed double
-   * @param joyStickInput double
+   * @param turnSpeed  double
    * @param isFieldOriented boolean
    * @return SwerveModulePosition[]
    */
-  public void getDriveSpeeds(double forwardSpeed, double leftSpeed, double joyStickInput, boolean isFieldOriented) {
+  public void getDriveSpeeds(double forwardSpeed, double leftSpeed, double turnSpeed , boolean isFieldOriented) {
     ChassisSpeeds speeds;
 
     SmartDashboard.putNumber("Forward speed", forwardSpeed);
     SmartDashboard.putNumber("Left speed", leftSpeed);
 
-    turnSpeed = joyStickInput * MotorGlobalValues.TURN_CONSTANT;
+    turnSpeed = turnSpeed * MotorGlobalValues.TURN_CONSTANT;
 
     if (isFieldOriented) {
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -198,7 +201,7 @@ public class SwerveSubsystem extends SubsystemBase {
       speeds = new ChassisSpeeds(
           forwardSpeed,
           leftSpeed,
-          joyStickInput);
+          turnSpeed);
     }
 
     SwerveModuleState[] states = SwerveGlobalValues.kinematics.toSwerveModuleStates(speeds);

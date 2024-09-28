@@ -13,6 +13,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.units.Angle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -113,9 +114,9 @@ public final class GlobalsValues {
     // The values of the can coders when the wheels are straight according to Mr.
     // Wright
     public static final double CANCoderValue9 = -0.419189; // 0.4198189
-    public static final double CANCoderValue10 = -0.825928; // 0.328613 + 0.5 add 0.5
+    public static final double CANCoderValue10 = -0.825928 - 0.5; // 0.328613 + 0.5 add 0.5
     public static final double CANCoderValue11 = -0.475098; // 0.539794 - 0.5%
-    public static final double CANCoderValue12 = -0.032959 ; // 0.984863
+    public static final double CANCoderValue12 = -0.032959 + 0.5; // 0.984863
 
     // Whether the motors are inverted
     public static final InvertedValue DRIVE_MOTOR_INVERETED = InvertedValue.CounterClockwise_Positive;
@@ -141,7 +142,7 @@ public final class GlobalsValues {
     public static final int[] HIGHTIDE_LED = { 0, 182, 174 };
 
     public static class BasePIDGlobal {
-      public static final PID STEER_PID = new PID(7.0, 0.00002, 0.008, 0);
+      public static final PID STEER_PID = new PID(13, 0.00085, 0.008, 0);
       // public static final PID STEER_PID = new PID(0.15, 0.0000, 0.000005, 0); //
       // 0.05 P, 0 D
       public static final PID DRIVE_PID = new PID(0.7, 0.0, 0.0); // new PID(0.05, 0.00, 0, 0);
@@ -287,6 +288,10 @@ public final class GlobalsValues {
     public static double RPM_THRESHOLD = 25;
 
     public static final int RING_SENSOR_PORT = 8;
+
+    // Side Angles
+    public static Double blueSideAngle = 90.0;
+    public static Double redSideAngle = 90.0;
   }
 
   public static class LimelightGlobalValues {

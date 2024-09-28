@@ -161,7 +161,7 @@ public class SwerveModule {
   }
 
   public void stop() {
-    driveMotor.stopMotor();
     steerMotor.stopMotor();
+    driveMotor.stopMotor();;
   }
 }

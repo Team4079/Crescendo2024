@@ -33,7 +33,9 @@ public class Photonvision extends SubsystemBase {
   PhotonTrackedTarget target2;
 
   // Pose estimator for determining the robot's position on the field
-  PhotonPoseEstimator photonPoseEstimator;
+  PhotonPoseEstimator photonPoseEstimator1;
+  PhotonPoseEstimator photonPoseEstimator2;
+
 
   // AprilTag field layout for the 2024 Crescendo field
   AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
@@ -59,7 +61,8 @@ public class Photonvision extends SubsystemBase {
    * Constructs a new PhotonVision subsystem.
    */
   public Photonvision() {
-    photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera1, robotToCam);
+    photonPoseEstimator1 = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera1, robotToCam);
+    photonPoseEstimator2 = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera2, robotToCam);
   }
 
   /**
@@ -109,7 +112,6 @@ public class Photonvision extends SubsystemBase {
 
         else {
             targetVisible1 = false;
-            targetPoseAmbiguity1 = 1e9;
         }
     if (result2.hasTargets()) {
         // Camera processed a new frame since last
@@ -136,7 +138,6 @@ public class Photonvision extends SubsystemBase {
 
       else {
         targetVisible2 = false;
-        targetPoseAmbiguity2 = 1e9;
       }
 
       if (targetPoseAmbiguity1 > targetPoseAmbiguity2)
@@ -161,8 +162,9 @@ public class Photonvision extends SubsystemBase {
    * @return An Optional containing the estimated robot pose, or empty if no pose could be estimated.
    */
   public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
-    photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
-    return photonPoseEstimator.update();
+    photonPoseEstimator1.setReferencePose(prevEstimatedRobotPose);
+    photonPoseEstimator2.setReferencePose(prevEstimatedRobotPose);
+    return targetPoseAmbiguity1 > targetPoseAmbiguity2 ? photonPoseEstimator2.update() : photonPoseEstimator1.update();
   }
 
   public double getYaw()
