@@ -134,14 +134,14 @@ public class Pivot extends SubsystemBase {
     pivotMotorRight.getConfigurator().apply(rightMotorRampConfig);
 
     // on
-    leftSoftLimitConfig.ForwardSoftLimitEnable = false;
+    leftSoftLimitConfig.ForwardSoftLimitEnable = true;
     leftSoftLimitConfig.ReverseSoftLimitEnable = true;
-    leftSoftLimitConfig.ForwardSoftLimitThreshold = 1100;
+    leftSoftLimitConfig.ForwardSoftLimitThreshold = 40;
     leftSoftLimitConfig.ReverseSoftLimitThreshold = 0.2;
 
-    rightSoftLimitConfig.ForwardSoftLimitEnable = false;
+    rightSoftLimitConfig.ForwardSoftLimitEnable = true;
     rightSoftLimitConfig.ReverseSoftLimitEnable = true;
-    rightSoftLimitConfig.ForwardSoftLimitThreshold = 1100;
+    rightSoftLimitConfig.ForwardSoftLimitThreshold = 40;
     rightSoftLimitConfig.ReverseSoftLimitThreshold = 0.2;
 
     pivotMotorLeft.setInverted(true);
@@ -154,8 +154,8 @@ public class Pivot extends SubsystemBase {
     // rightSoftLimitConfig.ForwardSoftLimitEnable = false;
     // rightSoftLimitConfig.ReverseSoftLimitEnable = false;
 
-    // pivotLeftConfiguration.SoftwareLimitSwitch = leftSoftLimitConfig;
-    // pivotRightConfiguration.SoftwareLimitSwitch = rightSoftLimitConfig;
+    pivotLeftConfiguration.SoftwareLimitSwitch = leftSoftLimitConfig;
+    pivotRightConfiguration.SoftwareLimitSwitch = rightSoftLimitConfig;
 
     pivotMotorLeft.getConfigurator().apply(leftSoftLimitConfig);
     pivotMotorRight.getConfigurator().apply(rightSoftLimitConfig);

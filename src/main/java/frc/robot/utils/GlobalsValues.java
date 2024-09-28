@@ -98,10 +98,10 @@ public final class GlobalsValues {
     public static final double ROBOT_SIZE = 0.43105229381; // Keep constant *ideally*
 
     // Motor Locations (Relative to the center in meters)
-    public static final Translation2d FRONT_LEFT = new Translation2d(0.3048, -0.3048); // (0.263525, -0.263525);
-    public static final Translation2d FRONT_RIGHT = new Translation2d(0.3048, 0.3048); // (0.263525, 0.263525);
-    public static final Translation2d BACK_LEFT = new Translation2d(-0.3048, -0.3048); // (-0.263525, -0.263525);
-    public static final Translation2d BACK_RIGHT = new Translation2d(-0.3048, 0.3048); // (-0.263525, 0.263525);
+    public static final Translation2d FRONT_LEFT = new Translation2d(0.3048, 0.3048); // (0.263525, -0.263525);
+    public static final Translation2d FRONT_RIGHT = new Translation2d(0.3048, -0.3048); // (0.263525, 0.263525);
+    public static final Translation2d BACK_LEFT = new Translation2d(-0.3048, 0.3048); // (-0.263525, -0.263525);
+    public static final Translation2d BACK_RIGHT = new Translation2d(-0.3048, -0.3048); // (-0.263525, 0.263525);
     public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
         FRONT_LEFT,
         FRONT_RIGHT,
@@ -126,7 +126,7 @@ public final class GlobalsValues {
     public static final double JOYSTICK_DEADBAND = 0.05;
 
     public static final boolean USING_VISION = false;
-    public static final boolean FIELD_ORIENTATED = false;
+    public static final boolean FIELD_ORIENTATED = true;
 
     // Whether the limelight auto aligns and its deadband
     public static final boolean AUTO_ALIGN = false;
@@ -165,6 +165,10 @@ public final class GlobalsValues {
           // module.
           new ReplanningConfig(false, false)); // Default path replanning config. See the API for the options here
     }
+
+    // Controller X and Y deadbands
+    public static final double xDEADZONE = 0.1;
+    public static final double yDEADZONE = 0.1;
 
     public static final double offBalanceAngleThreshold = 10;
     public static final double onBalanceAngleThreshold = 5;

@@ -188,7 +188,7 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Forward speed", forwardSpeed);
     SmartDashboard.putNumber("Left speed", leftSpeed);
 
-    turnSpeed = turnSpeed * MotorGlobalValues.TURN_CONSTANT;
+    // turnSpeed = turnSpeed * MotorGlobalValues.TURN_CONSTANT;
 
     if (isFieldOriented) {
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(

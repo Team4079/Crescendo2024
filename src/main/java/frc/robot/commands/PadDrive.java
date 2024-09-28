@@ -34,9 +34,17 @@ public class PadDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double y = -pad.getLeftAnalogYAxis() * MotorGlobalValues.MAX_SPEED;
     double x = -pad.getLeftAnalogXAxis() * MotorGlobalValues.MAX_SPEED;
-    double rotation = pad.getRightAnalogXAxis() * MotorGlobalValues.MAX_ANGULAR_SPEED;
+    if (Math.abs(x) < SwerveGlobalValues.xDEADZONE) {
+      x = 0;
+    }
+
+    double y = -pad.getLeftAnalogYAxis() * MotorGlobalValues.MAX_SPEED;
+    if (Math.abs(y) < SwerveGlobalValues.yDEADZONE) {
+      y = 0;
+    }
+    
+    double rotation = -pad.getRightAnalogXAxis() * MotorGlobalValues.MAX_ANGULAR_SPEED;
 
     SmartDashboard.putNumber("Y Joystick", y);
     SmartDashboard.putNumber("X Jostick", x);
