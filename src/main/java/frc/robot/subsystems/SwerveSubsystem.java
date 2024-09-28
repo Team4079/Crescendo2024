@@ -2,20 +2,26 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 
+import org.photonvision.EstimatedRobotPose;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.MotorGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 
@@ -49,7 +55,7 @@ public class SwerveSubsystem extends SubsystemBase {
   private boolean shouldInvert = false;
 
   /** Creates a new DriveTrain. */
-  public SwerveSubsystem() {
+  public SwerveSubsystem(Photonvision photonvision) {
     // frontLeft = new SwerveModule(MotorGlobalValues.FRONT_LEFT_DRIVE_ID, MotorGlobalValues.FRONT_LEFT_STEER_ID,
     //     MotorGlobalValues.FRONT_LEFT_CAN_CODER_ID, SwerveGlobalValues.CANCoderValue9);
     // frontRight = new SwerveModule(MotorGlobalValues.FRONT_RIGHT_DRIVE_ID, MotorGlobalValues.FRONT_RIGHT_STEER_ID,
@@ -90,6 +96,14 @@ public class SwerveSubsystem extends SubsystemBase {
     states = new SwerveModuleState[4];
     this.photonvision = photonvision;
 
+    poseEstimator = new SwerveDrivePoseEstimator(
+      GlobalsValues.SwerveGlobalValues.kinematics, 
+      Rotation2d.fromDegrees(getHeading()),
+      getModulePositions(), new Pose2d(0, 0,
+      Rotation2d.fromDegrees(0)),
+          VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
+          VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
+
     AutoBuilder.configureHolonomic(
         this::getPose, // Robot pose supplier
         this::newPose, // Method to reset odometry (will be called if your auto has a starting pose)
@@ -110,10 +124,29 @@ public class SwerveSubsystem extends SubsystemBase {
         },
         this // Reference to this subsystem to set requirements
     );
+
+
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    Optional<EstimatedRobotPose> visionMeasurement3d = photonvision.getEstimatedGlobalPose(poseEstimator.getEstimatedPosition());
+    if (visionMeasurement3d.isEmpty()) {
+      return;
+    }
+
+    double timestamp = visionMeasurement3d.get().timestampSeconds;
+    Pose3d estimatedPose = visionMeasurement3d.get().estimatedPose;
+    Pose2d visionMeasurement2d = estimatedPose.toPose2d();
+
+
+
+    poseEstimator.update(getPidgeyRotation(), getModulePositions());
+    
+
+
+    poseEstimator.addVisionMeasurement(visionMeasurement2d, timestamp);
+  }
 
   /**
    * Sets the desired module states.

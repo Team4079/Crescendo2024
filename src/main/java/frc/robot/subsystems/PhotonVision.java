@@ -89,7 +89,8 @@ public class Photonvision extends SubsystemBase {
 
             for (var tag : result1.getTargets()) {
                 // IMPORTANT: CHANGE DA TAGRGET ID FOR STUFF AND THIGNS LOLOLOLOL
-                if (tag.getFiducialId() == 7) {
+                // if (tag.getFiducialId() == 7) {
+                if (true) {
                     // Found Tag 7, record its information
 
                     targetPoseAmbiguity1 = tag.getPoseAmbiguity();
@@ -116,7 +117,8 @@ public class Photonvision extends SubsystemBase {
 
             for (var tag : result2.getTargets()) {
                 // IMPORTANT: CHANGE DA TAGRGET ID FOR STUFF AND THIGNS LOLOLOLOL
-                if (tag.getFiducialId() == 7) {
+                // if (tag.getFiducialId() == 7) {
+                if (true) {
                     // Found Tag 7, record its information
 
                     targetPoseAmbiguity2 = tag.getPoseAmbiguity();
@@ -148,6 +150,8 @@ public class Photonvision extends SubsystemBase {
         rangeToTarget = range2;
       }
 
+      SmartDashboard.putNumber("photon yaw", targetYaw);
+      SmartDashboard.putNumber("range target", rangeToTarget);
   }
 
   /**

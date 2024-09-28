@@ -81,7 +81,7 @@ public class RobotContainer {
         opRightBumper = new JoystickButton(opPad, 6);
         opLeftBumper = new JoystickButton(opPad, 5);
 
-        swerveSubsystem = new SwerveSubsystem();
+        swerveSubsystem = new SwerveSubsystem(photonvision);
 
         // index from 0
         // 0 is left-right distance from tag (left is +, right is -, accurate to +- 5cm
