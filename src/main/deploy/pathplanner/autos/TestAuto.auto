@@ -16,6 +16,12 @@
           "data": {
             "pathName": "Forward1Meter"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left1Meter"
+          }
         }
       ]
     }

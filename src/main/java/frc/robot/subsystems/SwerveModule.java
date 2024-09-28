@@ -82,6 +82,18 @@ public class SwerveModule {
     steerConfigs.Feedback.RotorToSensorRatio = MotorGlobalValues.STEER_MOTOR_GEAR_RATIO;
     steerConfigs.ClosedLoopGeneral.ContinuousWrap = true;
 
+    driveConfigs.CurrentLimits.SupplyCurrentLimit = MotorGlobalValues.DRIVE_SUPPLY_LIMIT;
+    driveConfigs.CurrentLimits.SupplyCurrentThreshold = MotorGlobalValues.DRIVE_SUPPLY_THRESHOLD;
+    driveConfigs.CurrentLimits.SupplyTimeThreshold = MotorGlobalValues.DRIVE_TIME_THRESHOLD;
+    driveConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+
+    steerConfigs.CurrentLimits.SupplyCurrentLimit = MotorGlobalValues.STEER_SUPPLY_LIMIT;
+    steerConfigs.CurrentLimits.SupplyCurrentThreshold = MotorGlobalValues.STEER_SUPPLY_THRESHOLD;
+    steerConfigs.CurrentLimits.SupplyTimeThreshold = MotorGlobalValues.STEER_TIME_THRESHOLD;
+    steerConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+
+
+
     canCoderConfiguration.MagnetSensor.AbsoluteSensorRange =
         AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     canCoderConfiguration.MagnetSensor.SensorDirection =

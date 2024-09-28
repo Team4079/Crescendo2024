@@ -5,6 +5,8 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -141,13 +143,10 @@ public class RobotContainer {
         // padX.whileTrue(new TeleOpAlign(swerveSubsystem, pad));
 
         opPadB.whileTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, limelety));
-        // opPadB.whileTrue(new SetPivot(pivotyboi,
-        // PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
-        // opPadA.whileTrue(new ManualShoot(shootyboi, limelety));
         opLeftBumper.whileTrue(new ShooterFender(shootyboi, pivotyboi, limelety));
         // X: intake i think toggles intake
         opPadY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
-        opRightBumper.whileTrue(new AmpScore(shootyboi, pivotyboi, limelety));
+        // opRightBumper.whileTrue(new AmpScore(shootyboi, pivotyboi, limelety));
         opLeftBumper.onTrue(new InstantCommand(pivotyboi::toggleSoftStop));
 
         // New instnat command pivot::toggleSoftLimit for Ria
@@ -170,8 +169,8 @@ public class RobotContainer {
         // return new PathPlannerAuto("4NoteNoRotation");
 
         // return new WaitShoot(shootyboi, pivotyboi, limelety);
-        // return new PathPlannerAuto("Straight Auto");
-        return new InstantCommand();
+        return new PathPlannerAuto("4NoteNoRotation");
+        // return new InstantCommand();
         // return new ShootingSequence(pivotyboi, shootyboi, limelety, swerveSubsystem);
     }
 }

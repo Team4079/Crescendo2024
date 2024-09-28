@@ -70,6 +70,14 @@ public final class GlobalsValues {
     public static final double MetersPerRevolution = WHEEL_DIAMETER * Math.PI;
     public static double HEADING = 0.0;
 
+    // Limit Values
+    public static final double DRIVE_SUPPLY_LIMIT = 30;
+    public static final double DRIVE_SUPPLY_THRESHOLD = 30;
+    public static final double DRIVE_TIME_THRESHOLD = 0.25;
+    public static final double STEER_SUPPLY_LIMIT = 30;
+    public static final double STEER_SUPPLY_THRESHOLD = 30;
+    public static final double STEER_TIME_THRESHOLD = 0.25;
+
     // Motor Speed Manipulation Values
     public static boolean SLOW_MODE = false;
     public static boolean AACORN_MODE = true;
@@ -158,7 +166,7 @@ public final class GlobalsValues {
                                                                                                 // this should likely
                                                                                                 // live in your
                                                                                                 // Constants class
-          new PIDConstants(0.15, 0.0001, 0.00), // translation
+          new PIDConstants(5, 0.00085, 0.008), // translation
           new PIDConstants(0.1, 0.0, 0.0), // rotation
           4.96824, // Max module speed, in m/s
           SwerveGlobalValues.ROBOT_SIZE, // Drive base radius in meters. Distance from robot center to furthest //
