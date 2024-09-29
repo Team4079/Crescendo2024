@@ -39,7 +39,7 @@ public class ResetMotorHeading extends Command {
   public void execute() {
     double error = swerveSubsystem.getHeading();
     if (Math.abs(error) > deadband) {
-      swerveSubsystem.getDriveSpeeds(0, 0, pid.calculate(error, 0), false);
+      swerveSubsystem.setDriveSpeeds(0, 0, pid.calculate(error, 0), false);
     } else {
       swerveSubsystem.stop();
     }

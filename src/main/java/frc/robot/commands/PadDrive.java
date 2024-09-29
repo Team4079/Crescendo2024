@@ -49,7 +49,7 @@ public class PadDrive extends Command {
     SmartDashboard.putNumber("Y Joystick", y);
     SmartDashboard.putNumber("X Jostick", x);
 
-    swerveSubsystem.getDriveSpeeds(y, x, rotation * 0.5, isFieldOriented);
+    swerveSubsystem.setDriveSpeeds(y, x, rotation * 0.5, isFieldOriented);
   }
 
   // Called once the command ends or is interrupted.

@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
 
 /** The {@link PadShoot} class is a command that controls the shooter using a gamepad. */
@@ -20,6 +21,8 @@ public class PadShoot extends Command {
   /** The Pivot subsystem used by this command. */
   private final Pivot pivot;
 
+  private final SwerveSubsystem swerve;
+
   /**
    * Creates a new PadShoot command.
    *
@@ -28,11 +31,12 @@ public class PadShoot extends Command {
    * @param limelight The Limelight subsystem used by this command.
    * @param pivot The Pivot subsystem used by this command.
    */
-  public PadShoot(Shooter shooter, LogitechGamingPad pad, Limelight limelight, Pivot pivot) {
+  public PadShoot(Shooter shooter, SwerveSubsystem swerve, LogitechGamingPad pad, Limelight limelight, Pivot pivot) {
     this.shooter = shooter;
     this.pad = pad;
     this.limelight = limelight;
     this.pivot = pivot;
+    this.swerve = swerve;
     addRequirements(shooter);
   }
 
@@ -53,7 +57,7 @@ public class PadShoot extends Command {
     // }
 
     if (pad.getDPadUp()) {
-      new ManualShoot(shooter, limelight, pivot).schedule();
+      new ManualShoot(swerve, shooter, limelight, pivot).schedule();
     } else {
       shooter.stopShooter();
     }

@@ -110,7 +110,7 @@ public class RobotContainer {
         intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, pad, limelety, led));
         pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, pad));
         limelety.setDefaultCommand(new LimelightValues(limelety));
-        shootyboi.setDefaultCommand(new PadShoot(shootyboi, pad, limelety, pivotyboi));
+        shootyboi.setDefaultCommand(new PadShoot(shootyboi, swerveSubsystem, pad, limelety, pivotyboi));
 
         configureBindings();
     }
@@ -130,7 +130,6 @@ public class RobotContainer {
      * joysticks}.
      */
     private void configureBindings() {
-        // padA.onTrue(new InstantCommand(pivotyboi::resetEncoders));
         padA.onTrue(new SubwooferShot(shootyboi, pivotyboi, swerveSubsystem, limelety));
         padB.onTrue(new InstantCommand(swerveSubsystem::resetPidgey));
         // padY.whileTrue(new AutoAlign(swerveSubsystem, limelety).withTimeout(2));
@@ -138,19 +137,7 @@ public class RobotContainer {
         rightBumper.onTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, limelety));
         leftBumper.onTrue(new AmpScore(shootyboi, pivotyboi, limelety));
         // startButton.onTrue(new StagePass(shootyboi));
-
-        // padY.onTrue(new InstantCommand(pivotyboi::CalibratePivot));
-        // padX.whileTrue(new TeleOpAlign(swerveSubsystem, pad));
-
-        opPadB.whileTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, limelety));
-        opLeftBumper.whileTrue(new ShooterFender(shootyboi, pivotyboi, limelety));
-        // X: intake i think toggles intake
-        opPadY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
-        // opRightBumper.whileTrue(new AmpScore(shootyboi, pivotyboi, limelety));
-        opLeftBumper.onTrue(new InstantCommand(pivotyboi::toggleSoftStop));
-
-        // New instnat command pivot::toggleSoftLimit for Ria
-        // New command to change offset for Ria
+        startButton.onTrue(new PassNoteGyro(swerveSubsystem, pivotyboi, shootyboi));
     }
 
     /**

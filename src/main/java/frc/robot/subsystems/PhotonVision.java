@@ -7,6 +7,7 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.PhotonUtils;
+import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -57,6 +58,9 @@ public class Photonvision extends SubsystemBase {
   double targetYaw = 0.0;
   double rangeToTarget = 0.0;
 
+  PhotonPipelineResult result1;
+  PhotonPipelineResult result2;
+
   /**
    * Constructs a new PhotonVision subsystem.
    */
@@ -71,8 +75,8 @@ public class Photonvision extends SubsystemBase {
    */
   @Override
   public void periodic() {
-    var result1 = camera1.getLatestResult();
-    var result2 = camera2.getLatestResult();
+    result1 = camera1.getLatestResult();
+    result2 = camera2.getLatestResult();
 
     // if (result1.hasTargets()){
     //   target1 = result1.getBestTarget();
@@ -83,62 +87,6 @@ public class Photonvision extends SubsystemBase {
     // }
 
     // target2 = result2.hasTargets() ? result2.getBestTarget() : target2;
-
-
-
-    if (result1.hasTargets()) {
-        // Camera processed a new frame since last
-        // Get the last one in the list.
-
-            for (var tag : result1.getTargets()) {
-                // IMPORTANT: CHANGE DA TAGRGET ID FOR STUFF AND THIGNS LOLOLOLOL
-                // if (tag.getFiducialId() == 7) {
-                if (true) {
-                    // Found Tag 7, record its information
-
-                    targetPoseAmbiguity1 = tag.getPoseAmbiguity();
-                    targetYaw1 = tag.getYaw();
-                    targetVisible1 = true;
-
-                    range1 = PhotonUtils.calculateDistanceToTargetMeters(
-                                        PhotonVisionConstants.CAMERA_ONE_HEIGHT,
-                                        1.435, // From 2024 game manual for ID 7 | IMPORTANT TO CHANGE
-                                        PhotonVisionConstants.CAMERA_ONE_ANGLE, // Rotation about Y = Pitch | UP IS POSITIVE
-                                        Units.degreesToRadians(tag.getPitch()));
-
-                }
-            }
-        }
-
-        else {
-            targetVisible1 = false;
-        }
-    if (result2.hasTargets()) {
-        // Camera processed a new frame since last
-        // Get the last one in the list.
-
-            for (var tag : result2.getTargets()) {
-                // IMPORTANT: CHANGE DA TAGRGET ID FOR STUFF AND THIGNS LOLOLOLOL
-                // if (tag.getFiducialId() == 7) {
-                if (true) {
-                    // Found Tag 7, record its information
-
-                    targetPoseAmbiguity2 = tag.getPoseAmbiguity();
-                    targetYaw2 = tag.getYaw();
-                    targetVisible2 = true;
-
-                    range2 = PhotonUtils.calculateDistanceToTargetMeters(
-                                        PhotonVisionConstants.CAMERA_TWO_HEIGHT,
-                                        1.435, // From 2024 game manual for ID 7 | IMPORTANT TO CHANGE
-                                        PhotonVisionConstants.CAMERA_TWO_ANGLE, // Rotation about Y = Pitch | UP IS POSITIVE
-                                        Units.degreesToRadians(tag.getPitch()));
-                }
-            }
-      }
-
-      else {
-        targetVisible2 = false;
-      }
 
       if (targetPoseAmbiguity1 > targetPoseAmbiguity2)
       {
@@ -153,6 +101,7 @@ public class Photonvision extends SubsystemBase {
 
       SmartDashboard.putNumber("photon yaw", targetYaw);
       SmartDashboard.putNumber("range target", rangeToTarget);
+      SmartDashboard.putNumber("april tag distance", getDistanceSubwoofer());
   }
 
   /**
@@ -175,5 +124,72 @@ public class Photonvision extends SubsystemBase {
   public double getRange()
   {
     return rangeToTarget;
+  }
+
+  public double getDistanceSubwoofer() {
+    if (result1.hasTargets()) {
+    // Camera processed a new frame since last
+    // Get the last one in the list.
+      for (var tag : result1.getTargets()) {
+          // IMPORTANT: CHANGE DA TAGRGET ID FOR STUFF AND THIGNS LOLOLOLOL
+          // if (tag.getFiducialId() == 7) {
+          if (true) {
+            // Found Tag 7, record its information
+
+            targetPoseAmbiguity1 = tag.getPoseAmbiguity();
+            targetYaw1 = tag.getYaw();
+            targetVisible1 = true;
+
+            range1 = PhotonUtils.calculateDistanceToTargetMeters(
+              PhotonVisionConstants.CAMERA_ONE_HEIGHT,
+              1.435, // From 2024 game manual for ID 7 | IMPORTANT TO CHANGE
+              PhotonVisionConstants.CAMERA_ONE_ANGLE, // Rotation about Y = Pitch | UP IS POSITIVE
+              Units.degreesToRadians(tag.getPitch()));
+
+            }
+          }
+      }
+
+        else {
+            targetVisible1 = false;
+        }
+    if (result2.hasTargets()) {
+      // Camera processed a new frame since last
+      // Get the last one in the list.
+
+      for (var tag : result2.getTargets()) {
+          // IMPORTANT: CHANGE DA TAGRGET ID FOR STUFF AND THIGNS LOLOLOLOL
+          // if (tag.getFiducialId() == 7) {
+          if (true) {
+            // Found Tag 7, record its information
+
+            targetPoseAmbiguity2 = tag.getPoseAmbiguity();
+            targetYaw2 = tag.getYaw();
+            targetVisible2 = true;
+
+            range2 = PhotonUtils.calculateDistanceToTargetMeters(
+              PhotonVisionConstants.CAMERA_TWO_HEIGHT,
+              1.435, // From 2024 game manual for ID 7 | IMPORTANT TO CHANGE
+              PhotonVisionConstants.CAMERA_TWO_ANGLE, // Rotation about Y = Pitch | UP IS POSITIVE
+              Units.degreesToRadians(tag.getPitch()));
+          }
+      }
+      }
+
+      else {
+        targetVisible2 = false;
+      } 
+    if (targetPoseAmbiguity1 > targetPoseAmbiguity2 && targetVisible1)
+    {
+      return range1;
+    }
+    else if (targetVisible2)
+    {
+      return range2;
+    }
+    else
+    {
+      return 0.0;
+    }
   }
 }

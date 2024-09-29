@@ -160,6 +160,7 @@ public final class GlobalsValues {
       public static final PID HORIZONTAL_PID = new PID(0.05, 0.075, 0.03, 0);
       public static final PID VERTICAL_PID = new PID(0.25, 0.0085, 0.03);
       public static final PID ROTATIONAL_PID = new PID(0.05509, 0.00, 0.09, 0);
+      public static final PID PASS_ROTATIONAL_PID = new PID(0.023, 0, 0.005, 0);
       // public static final PID rotationalPID = new PID(0.063, 0.001, 0.035, 0);
 
       public static HolonomicPathFollowerConfig pathFollower = new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig,
@@ -302,8 +303,8 @@ public final class GlobalsValues {
     public static final int RING_SENSOR_PORT = 8;
 
     // Side Angles
-    public static Double blueSideAngle = 90.0;
-    public static Double redSideAngle = 90.0;
+    public static final double blueSideAngle = 90.0;
+    public static final double redSideAngle = 90.0;
   }
 
   public static class LimelightGlobalValues {

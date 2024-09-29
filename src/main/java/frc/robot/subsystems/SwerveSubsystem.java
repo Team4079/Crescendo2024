@@ -182,11 +182,12 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param isFieldOriented boolean
    * @return SwerveModulePosition[]
    */
-  public void getDriveSpeeds(double forwardSpeed, double leftSpeed, double turnSpeed , boolean isFieldOriented) {
+  public void setDriveSpeeds(double forwardSpeed, double leftSpeed, double turnSpeed , boolean isFieldOriented) {
     ChassisSpeeds speeds;
 
     SmartDashboard.putNumber("Forward speed", forwardSpeed);
     SmartDashboard.putNumber("Left speed", leftSpeed);
+    SmartDashboard.putNumber("Pidgey Heading", getHeading());
 
     // turnSpeed = turnSpeed * MotorGlobalValues.TURN_CONSTANT;
 

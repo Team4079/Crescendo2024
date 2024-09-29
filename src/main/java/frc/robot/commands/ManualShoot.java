@@ -8,14 +8,16 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SwerveSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ManualShoot extends SequentialCommandGroup {
-  public ManualShoot(Shooter shooter, Limelight limelight, Pivot pivot) {
-    addRequirements(shooter, limelight, pivot);
+  public ManualShoot(SwerveSubsystem swerve, Shooter shooter, Limelight limelight, Pivot pivot) {
+    addRequirements(swerve, shooter, limelight, pivot);
     addCommands(
+        new PassNoteGyro(swerve, pivot, shooter),
         new StagePassPivot(pivot).withTimeout(0.75),
         new StagePass(shooter).withTimeout(0.4414),
         new PushRing(shooter, limelight, false).withTimeout(0.5),

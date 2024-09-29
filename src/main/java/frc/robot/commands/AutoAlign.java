@@ -45,7 +45,7 @@ public class AutoAlign extends Command {
     double horizontalError = -limelight.getTx() - 1;
     System.out.println(horizontalError);
     if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
-      swerveSubsystem.getDriveSpeeds(0, 0, rotationalController.calculate(horizontalError, 1), false);
+      swerveSubsystem.setDriveSpeeds(0, 0, rotationalController.calculate(horizontalError, 1), false);
     } else {
       swerveSubsystem.stop();
     }

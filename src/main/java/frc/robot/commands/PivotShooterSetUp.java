@@ -93,7 +93,7 @@ public class PivotShooterSetUp extends Command {
     double horizontalError = -limelight.getTx();
     System.out.println(horizontalError);
     if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
-      swerveSubsystem.getDriveSpeeds(0, 0, rotationalController.calculate(horizontalError, 0), false);
+      swerveSubsystem.setDriveSpeeds(0, 0, rotationalController.calculate(horizontalError, 0), false);
     } else {
       swerveSubsystem.stop();
     }
