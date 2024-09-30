@@ -88,20 +88,17 @@ public class Photonvision extends SubsystemBase {
 
     // target2 = result2.hasTargets() ? result2.getBestTarget() : target2;
 
-      if (targetPoseAmbiguity1 > targetPoseAmbiguity2)
-      {
-        targetYaw = targetYaw1;
-        rangeToTarget = range1;
-      }
-      else
-      {
-        targetYaw = targetYaw2;
-        rangeToTarget = range2;
-      }
+    if (targetPoseAmbiguity1 > targetPoseAmbiguity2) {
+      targetYaw = targetYaw1;
+      rangeToTarget = range1;
+    } else {
+      targetYaw = targetYaw2;
+      rangeToTarget = range2;
+    }
 
-      SmartDashboard.putNumber("photon yaw", targetYaw);
-      SmartDashboard.putNumber("range target", rangeToTarget);
-      SmartDashboard.putNumber("april tag distance", getDistanceSubwoofer());
+    SmartDashboard.putNumber("photon yaw", targetYaw);
+    SmartDashboard.putNumber("range target", rangeToTarget);
+    SmartDashboard.putNumber("april tag distance", getDistanceSubwoofer());
   }
 
   /**
@@ -116,13 +113,21 @@ public class Photonvision extends SubsystemBase {
     return targetPoseAmbiguity1 > targetPoseAmbiguity2 ? photonPoseEstimator2.update() : photonPoseEstimator1.update();
   }
 
-  public double getYaw()
-  {
+  /**
+   * Horizontal
+   * <p>
+   * See <a href="https://docs.photonvision.org/en/latest/docs/additional-resources/nt-api.html#getting-target-information">NetworkTables API</a>
+   */
+  public double getYaw() {
     return targetYaw;
   }
 
-  public double getRange()
-  {
+  /**
+   * Forward distance to target
+   * <p>
+   * See <a href="https://docs.photonvision.org/en/latest/docs/additional-resources/nt-api.html#getting-target-information">NetworkTables API</a>
+   */
+  public double getRange() {
     return rangeToTarget;
   }
 
@@ -131,23 +136,22 @@ public class Photonvision extends SubsystemBase {
     // Camera processed a new frame since last
     // Get the last one in the list.
       for (var tag : result1.getTargets()) {
-          // IMPORTANT: CHANGE DA TAGRGET ID FOR STUFF AND THIGNS LOLOLOLOL
-          // if (tag.getFiducialId() == 7) {
-          if (true) {
-            // Found Tag 7, record its information
+        // TODO: CHANGE DA TAGRGET ID FOR STUFF AND THIGNS LOLOLOLOL
+        // if (tag.getFiducialId() == 7 || tag.getFiducialId() == 4) {
+        if (true) {
+          // Found Tag 7, record its information
 
-            targetPoseAmbiguity1 = tag.getPoseAmbiguity();
-            targetYaw1 = tag.getYaw();
-            targetVisible1 = true;
+          targetPoseAmbiguity1 = tag.getPoseAmbiguity();
+          targetYaw1 = tag.getYaw();
+          targetVisible1 = true;
 
-            range1 = PhotonUtils.calculateDistanceToTargetMeters(
-              PhotonVisionConstants.CAMERA_ONE_HEIGHT,
-              1.435, // From 2024 game manual for ID 7 | IMPORTANT TO CHANGE
-              PhotonVisionConstants.CAMERA_ONE_ANGLE, // Rotation about Y = Pitch | UP IS POSITIVE
-              Units.degreesToRadians(tag.getPitch()));
-
-            }
+          range1 = PhotonUtils.calculateDistanceToTargetMeters(
+            PhotonVisionConstants.CAMERA_ONE_HEIGHT_METER,
+            1.435, // From 2024 game manual for ID 7 | IMPORTANT TO CHANGE
+            Units.degreesToRadians(PhotonVisionConstants.CAMERA_ONE_ANGLE_DEG), // Rotation about Y = Pitch | UP IS POSITIVE
+            Units.degreesToRadians(tag.getPitch()));
           }
+        }
       }
 
         else {
@@ -158,8 +162,8 @@ public class Photonvision extends SubsystemBase {
       // Get the last one in the list.
 
       for (var tag : result2.getTargets()) {
-          // IMPORTANT: CHANGE DA TAGRGET ID FOR STUFF AND THIGNS LOLOLOLOL
-          // if (tag.getFiducialId() == 7) {
+          // TODO: CHANGE DA TAGRGET ID FOR STUFF AND THIGNS LOLOLOLOL
+          // if (tag.getFiducialId() == 7 || tag.getFiducialId() == 4) {
           if (true) {
             // Found Tag 7, record its information
 
@@ -168,9 +172,9 @@ public class Photonvision extends SubsystemBase {
             targetVisible2 = true;
 
             range2 = PhotonUtils.calculateDistanceToTargetMeters(
-              PhotonVisionConstants.CAMERA_TWO_HEIGHT,
+              PhotonVisionConstants.CAMERA_TWO_HEIGHT_METER,
               1.435, // From 2024 game manual for ID 7 | IMPORTANT TO CHANGE
-              PhotonVisionConstants.CAMERA_TWO_ANGLE, // Rotation about Y = Pitch | UP IS POSITIVE
+              Units.degreesToRadians(PhotonVisionConstants.CAMERA_TWO_ANGLE_DEG), // Rotation about Y = Pitch | UP IS POSITIVE
               Units.degreesToRadians(tag.getPitch()));
           }
       }

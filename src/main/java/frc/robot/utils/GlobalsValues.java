@@ -5,16 +5,12 @@
 package frc.robot.utils;
 
 import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -340,11 +336,11 @@ public final class GlobalsValues {
     public static double tv = 0.0;
 
     // Camera One
-    public static final double CAMERA_ONE_HEIGHT = 0.0;
-    public static final double CAMERA_ONE_ANGLE = 0.0; // up is postive
+    public static final double CAMERA_ONE_HEIGHT_METER = 0.61;
+    public static final double CAMERA_ONE_ANGLE_DEG = 7.5; // up is positive
 
     // Camera Two
-    public static final double CAMERA_TWO_HEIGHT = 0.0;
-    public static final double CAMERA_TWO_ANGLE = 0.0; // up is postive
+    public static final double CAMERA_TWO_HEIGHT_METER = 0.61;
+    public static final double CAMERA_TWO_ANGLE_DEG = 7.5; // up is positive
   }
 }

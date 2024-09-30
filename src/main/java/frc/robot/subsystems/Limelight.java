@@ -161,6 +161,7 @@ public class Limelight extends SubsystemBase {
     public void lowPixel() {
     LimelightHelpers.setPipelineIndex("", 0);
   }
+
   /**
    * Returns the tag number of the april tag
    * 
@@ -189,7 +190,7 @@ public class Limelight extends SubsystemBase {
     LimelightHelpers.setLEDMode_ForceOff("limelight");
   }
 
-  /*
+  /**
    * index from 0
    * 0 is left-right distance from tag (left is +, right is -, accurate to +- 5cm
    * per meter)
@@ -200,7 +201,7 @@ public class Limelight extends SubsystemBase {
    * 4 is rotation (clockwise is -) (accurate to +-0.5 a degree)
    * 5 is undocumented
    * 
-   * @returns
+   * @return distance from the limelight to the target
    *
    */
   public double getDistance() {
