@@ -4,10 +4,7 @@
 
 package frc.robot.commands;
 
-import java.util.Optional;
-
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.proto.Geometry2D;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,19 +27,13 @@ public class PassNoteGyro extends Command {
     this.pivot = pivot;
     this.shooter = shooter;
 
-    Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
-    if (alliance.isPresent()) {
-      isBlueSide = alliance.get().equals(DriverStation.Alliance.Blue);
-    } else {
-      isBlueSide = true;
-    }
+    isBlueSide = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue).equals(DriverStation.Alliance.Blue);
 
-    if (isBlueSide)
-    {
+    if (isBlueSide) {
       angle = -ShooterGlobalValues.blueSideAngle;
     }
 
-    else{
+    else {
       angle = -ShooterGlobalValues.redSideAngle;
     }
 
@@ -67,28 +58,16 @@ public class PassNoteGyro extends Command {
   @Override
   public void execute() {
     SmartDashboard.putNumber("Positional Error", pidController.getPositionError());
-    double rotationalError = swerve.getHeading() - angle;
-    if (Math.abs(pidController.getPositionError()) < 10)
-    {
+    if (Math.abs(pidController.getPositionError()) < 10) {
       swerve.stop();
-    }
-    else
-    {
+    } else {
       swerve.setDriveSpeeds(0, 0, pidController.calculate(-swerve.getHeading(), angle), false);
-    }    
+    }
   }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(pidController.getPositionError()) < 10)
-    {
-      return true;
-    }
-    return false;
+    return Math.abs(pidController.getPositionError()) < 10;
   }
 }
