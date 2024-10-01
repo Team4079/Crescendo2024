@@ -232,10 +232,12 @@ public final class GlobalsValues {
     // //Ued to be 49.55
     public static final double PIVOT_AMP_ANGLE = 50.2;
     public static final double PIVOT_SUBWOOFER_ANGLE = (13 + PivotGlobalValues.offset);
-    public static final double PIVOT_SOURCE = 93;
-    public static final double PIVOT_FENDER_ANGLE = (305 + PivotGlobalValues.offset);
-    public static final double PIVOT_MAX_ANGLE = (1000 + PivotGlobalValues.offset);
-    public static final double PIVOT_MIN_ANGLE = (0 + PivotGlobalValues.offset);
+    // public static final double PIVOT_SOURCE = 93;
+    public static final double PIVOT_FENDER_ANGLE = (30.5 + PivotGlobalValues.offset); // 305 instead of 30.5
+    // public static final double PIVOT_MAX_ANGLE = (55 + PivotGlobalValues.offset);
+    // public static final double PIVOT_MIN_ANGLE = (0 + PivotGlobalValues.offset);
+
+    public static final double PIVOT_PASS_ANGLE = (PivotGlobalValues.offset);
 
     // Pivot Motor Speed Values
     public static boolean IS_NEUTRAL = true;

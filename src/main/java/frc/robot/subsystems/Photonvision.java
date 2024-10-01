@@ -46,12 +46,12 @@ public class Photonvision extends SubsystemBase {
 
 
   boolean targetVisible1 = false;
-  double targetYaw1 = 0.0;
+  double targetYaw1 = -15.0;
   double targetPoseAmbiguity1 = 0.0;
   double range1 = 0.0;
 
   boolean targetVisible2 = false;
-  double targetYaw2 = 0.0;
+  double targetYaw2 = 15.0;
   double targetPoseAmbiguity2 = 0.0;
   double range2 = 0.0;
 

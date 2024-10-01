@@ -34,8 +34,8 @@ public class SubwooferShot extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ParallelCommandGroup(new SetPivot(pivot, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(0.6),
-      new ShooterRampUp(shooter, limelight).withTimeout(0.6)),
+        new ParallelCommandGroup(new SetPivot(pivot, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(0.6),
+            new ShooterRampUp(shooter, limelight).withTimeout(0.6)),
         new PushRing(shooter, limelight, false).withTimeout(0.3),
         new StopShooter(shooter).withTimeout(0.1),
         new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.4));
