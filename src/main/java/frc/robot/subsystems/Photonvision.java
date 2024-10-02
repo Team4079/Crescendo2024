@@ -46,8 +46,8 @@ public class Photonvision extends SubsystemBase {
 
   // Transformation from the robot to the camera
   // TODO: Make function to convert Translation2d to Translation3d
-  Transform3d robotToCam = new Transform3d(new Translation3d(-BASE_LENGTH_ERICK_TRAN/2, BASE_LENGTH_ERICK_TRAN/2, PhotonVisionConstants.CAMERA_ONE_HEIGHT_METER), new Rotation3d(0,360-PhotonVisionConstants.CAMERA_ONE_ANGLE_DEG,150));
-  Transform3d robotToCam2 = new Transform3d(new Translation3d(-BASE_LENGTH_ERICK_TRAN/2, -BASE_LENGTH_ERICK_TRAN/2, PhotonVisionConstants.CAMERA_TWO_HEIGHT_METER), new Rotation3d(0,360-PhotonVisionConstants.CAMERA_TWO_ANGLE_DEG,210));
+  Transform3d leftCameraPos = new Transform3d(new Translation3d(-BASE_LENGTH_ERICK_TRAN/2, -BASE_LENGTH_ERICK_TRAN/2, PhotonVisionConstants.CAMERA_ONE_HEIGHT_METER), new Rotation3d(0,360-PhotonVisionConstants.CAMERA_ONE_ANGLE_DEG,150));
+  Transform3d rightCameraPos = new Transform3d(new Translation3d(BASE_LENGTH_ERICK_TRAN/2, -BASE_LENGTH_ERICK_TRAN/2, PhotonVisionConstants.CAMERA_TWO_HEIGHT_METER), new Rotation3d(0,360-PhotonVisionConstants.CAMERA_TWO_ANGLE_DEG,210));
 
   boolean targetVisible1 = false;
   double targetYaw1 = -15.0;
@@ -69,8 +69,8 @@ public class Photonvision extends SubsystemBase {
    * Constructs a new PhotonVision subsystem.
    */
   public Photonvision() {
-    photonPoseEstimator1 = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera1, robotToCam);
-    photonPoseEstimator2 = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera2, robotToCam2);
+    photonPoseEstimator1 = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera1, leftCameraPos);
+    photonPoseEstimator2 = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera2, rightCameraPos);
   }
 
   /**
