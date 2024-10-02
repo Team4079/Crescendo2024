@@ -112,6 +112,8 @@ public final class GlobalsValues {
         BACK_LEFT,
         BACK_RIGHT);
 
+    public static final double BASE_LENGTH_ERICK_TRAN = 0.3048 * 2;
+
     // uselses
     public static final double STATE_SPEED_THRESHOLD = 0.05;
 

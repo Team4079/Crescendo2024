@@ -19,15 +19,18 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.PhotonVisionConstants;
+
+import static frc.robot.utils.GlobalsValues.SwerveGlobalValues.BASE_LENGTH_ERICK_TRAN;
 
 /**
  * The PhotonVision subsystem handles vision processing using PhotonVision cameras.
  */
 public class Photonvision extends SubsystemBase {
   // PhotonVision cameras
-  PhotonCamera camera1 = new PhotonCamera("Camera One");
-  PhotonCamera camera2 = new PhotonCamera("Camera Two");
+  PhotonCamera camera1 = new PhotonCamera("Left");
+  PhotonCamera camera2 = new PhotonCamera("Right");
 
   // Tracked targets from the cameras
   PhotonTrackedTarget target1;
@@ -42,8 +45,9 @@ public class Photonvision extends SubsystemBase {
   AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
   // Transformation from the robot to the camera
-  Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0)); // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
-
+  // TODO: Make function to convert Translation2d to Translation3d
+  Transform3d robotToCam = new Transform3d(new Translation3d(-BASE_LENGTH_ERICK_TRAN/2, BASE_LENGTH_ERICK_TRAN/2, PhotonVisionConstants.CAMERA_ONE_HEIGHT_METER), new Rotation3d(0,360-PhotonVisionConstants.CAMERA_ONE_ANGLE_DEG,150));
+  Transform3d robotToCam2 = new Transform3d(new Translation3d(-BASE_LENGTH_ERICK_TRAN/2, -BASE_LENGTH_ERICK_TRAN/2, PhotonVisionConstants.CAMERA_TWO_HEIGHT_METER), new Rotation3d(0,360-PhotonVisionConstants.CAMERA_TWO_ANGLE_DEG,210));
 
   boolean targetVisible1 = false;
   double targetYaw1 = -15.0;
@@ -66,7 +70,7 @@ public class Photonvision extends SubsystemBase {
    */
   public Photonvision() {
     photonPoseEstimator1 = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera1, robotToCam);
-    photonPoseEstimator2 = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera2, robotToCam);
+    photonPoseEstimator2 = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera2, robotToCam2);
   }
 
   /**
@@ -132,6 +136,8 @@ public class Photonvision extends SubsystemBase {
   }
 
   public double getDistanceSubwoofer() {
+    targetPoseAmbiguity1 = 0.0;
+    targetPoseAmbiguity2 = 0.0;
     if (result1.hasTargets()) {
     // Camera processed a new frame since last
     // Get the last one in the list.
