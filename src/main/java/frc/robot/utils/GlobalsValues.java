@@ -301,8 +301,8 @@ public final class GlobalsValues {
     public static final int RING_SENSOR_PORT = 8;
 
     // Side Angles
-    public static final double blueSideAngle = 90.0;
-    public static final double redSideAngle = 90.0;
+    public static final double blueSideAngle = 22.0;
+    public static final double redSideAngle = 360.0 - 22.0;
   }
 
   public static class LimelightGlobalValues {
