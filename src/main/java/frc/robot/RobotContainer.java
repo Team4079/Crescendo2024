@@ -36,6 +36,7 @@ public class RobotContainer {
     private final Pivot pivotyboi;
     private final Shooter shootyboi;
     private final Intake intakeyboi;
+    private final Elevator elevator;
 
     private final JoystickButton padA;
     private final JoystickButton padB;
@@ -84,6 +85,7 @@ public class RobotContainer {
         opLeftBumper = new JoystickButton(opPad, 5);
 
         swerveSubsystem = new SwerveSubsystem(photonvision);
+        elevator = new Elevator();
 
         // index from 0
         // 0 is left-right distance from tag (left is +, right is -, accurate to +- 5cm
@@ -103,10 +105,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("setPivotDown", new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE));
         NamedCommands.registerCommand("setPivot", new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
         NamedCommands.registerCommand("pushback", new PulseDown(intakeyboi, shootyboi));
+        
         swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveGlobalValues.FIELD_ORIENTATED));
-        // led.setDefaultCommand(new SetLED(led));
-        // intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, opPad,
-        // limelety));
         intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, pad, limelety, led));
         pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, pad));
         limelety.setDefaultCommand(new LimelightValues(limelety));
@@ -135,7 +135,7 @@ public class RobotContainer {
         // padY.whileTrue(new AutoAlign(swerveSubsystem, limelety).withTimeout(2));
         padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
         rightBumper.onTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, limelety));
-        leftBumper.onTrue(new AmpScore(shootyboi, pivotyboi, limelety));
+        leftBumper.onTrue(new AmpScore(shootyboi, pivotyboi, limelety, elevator));
         // startButton.onTrue(new StagePass(shootyboi));
         startButton.onTrue(new PassNoteGyro(swerveSubsystem, pivotyboi, shootyboi));
     }
@@ -148,16 +148,13 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         swerveSubsystem.resetPidgey();
-        swerveSubsystem.zeroPose();
-        // swerveSubsystem.addRotorPositionsforModules();
-        // System.out.println(swerveSubsystem.getPose());
+        // swerveSubsystem.zeroPose();
 
         // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
         // return new PathPlannerAuto("4NoteNoRotation");
 
         // return new WaitShoot(shootyboi, pivotyboi, limelety);
-        return new PathPlannerAuto("4NoteNoRotation");
+        return new PathPlannerAuto("TestAuto");
         // return new InstantCommand();
-        // return new ShootingSequence(pivotyboi, shootyboi, limelety, swerveSubsystem);
     }
 }

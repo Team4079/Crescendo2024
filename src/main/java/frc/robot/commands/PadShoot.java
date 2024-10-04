@@ -67,6 +67,10 @@ public class PadShoot extends Command {
     } else {
       shooter.stopShooter();
     }
+
+    if (pad.getLeftTriggerValue() > 0.5) {
+      new PassNoteGyro(swerve, pivot, shooter).schedule();
+    }
   }
 
   /**

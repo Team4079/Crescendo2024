@@ -30,11 +30,11 @@ public class PassNoteGyro extends Command {
     isBlueSide = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue).equals(DriverStation.Alliance.Blue);
 
     if (isBlueSide) {
-      angle = -ShooterGlobalValues.blueSideAngle;
+      angle = ShooterGlobalValues.blueSideAngle;
     }
 
     else {
-      angle = -ShooterGlobalValues.redSideAngle;
+      angle = ShooterGlobalValues.redSideAngle;
     }
 
     pidController =

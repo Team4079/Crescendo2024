@@ -151,7 +151,7 @@ public final class GlobalsValues {
       public static final PID STEER_PID = new PID(13, 0.00085, 0.008, 0);
       // public static final PID STEER_PID = new PID(0.15, 0.0000, 0.000005, 0); //
       // 0.05 P, 0 D
-      public static final PID DRIVE_PID = new PID(0.7, 0.0, 0.0); // new PID(0.05, 0.00, 0, 0);
+      public static final PID DRIVE_PID = new PID(1.5, 0.0, 0.0); // new PID(0.05, 0.00, 0, 0);
       // DON'T SET D PAST 0.03 - Erick or else the swerve moduls make funny nosie
 
       // AutoAlign PID
@@ -161,16 +161,13 @@ public final class GlobalsValues {
       public static final PID PASS_ROTATIONAL_PID = new PID(0.023, 0, 0.005, 0);
       // public static final PID rotationalPID = new PID(0.063, 0.001, 0.035, 0);
 
-      public static HolonomicPathFollowerConfig pathFollower = new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig,
-                                                                                                // this should likely
-                                                                                                // live in your
-                                                                                                // Constants class
-          new PIDConstants(5, 0.00085, 0.008), // translation
-          new PIDConstants(0.1, 0.0, 0.0), // rotation
-          4.96824, // Max module speed, in m/s
-          SwerveGlobalValues.ROBOT_SIZE, // Drive base radius in meters. Distance from robot center to furthest //
-          // module.
-          new ReplanningConfig(false, false)); // Default path replanning config. See the API for the options here
+      public static HolonomicPathFollowerConfig pathFollower = new HolonomicPathFollowerConfig(
+        new PIDConstants(5, 0.00, 0), // translation
+        new PIDConstants(0, 0.0, 0.0), // rotation
+        4.96824, // Max module speed, in m/s
+        SwerveGlobalValues.ROBOT_SIZE, // Drive base radius in meters. Distance from robot center to furthest //
+        // module.
+        new ReplanningConfig(false, false)); // Default path replanning config. See the API for the options here
     }
 
     // Controller X and Y deadbands
@@ -304,7 +301,7 @@ public final class GlobalsValues {
 
     // Side Angles
     public static final double blueSideAngle = 22.0;
-    public static final double redSideAngle = 360.0 - 22.0;
+    public static final double redSideAngle = -22.0;
   }
 
   public static class LimelightGlobalValues {
