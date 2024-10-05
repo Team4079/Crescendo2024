@@ -32,7 +32,6 @@ public class RobotContainer {
     private final SwerveSubsystem swerveSubsystem;
     private final LogitechGamingPad pad;
     private final LogitechGamingPad opPad;
-    private final Limelight limelety;
     private final Pivot pivotyboi;
     private final Shooter shootyboi;
     private final Intake intakeyboi;
@@ -62,7 +61,6 @@ public class RobotContainer {
         pad = new LogitechGamingPad(0);
         opPad = new LogitechGamingPad(1);
         LED led = new LED();
-        limelety = new Limelight();
         // jevois = new Jevois();
         pivotyboi = new Pivot();
         shootyboi = new Shooter();
@@ -107,9 +105,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("pushback", new PulseDown(intakeyboi, shootyboi));
         
         swerveSubsystem.setDefaultCommand(new PadDrive(swerveSubsystem, pad, SwerveGlobalValues.FIELD_ORIENTATED));
-        intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, pad, limelety, led));
+        intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, pad, photonvision, led));
         pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, pad));
-        limelety.setDefaultCommand(new LimelightValues(limelety));
         shootyboi.setDefaultCommand(new PadShoot(shootyboi, swerveSubsystem, pad, photonvision, pivotyboi));
 
         configureBindings();

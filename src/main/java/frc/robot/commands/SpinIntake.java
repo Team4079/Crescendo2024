@@ -7,10 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.LED;
-import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.*;
 import frc.robot.utils.GlobalsValues.IntakeGlobalValues;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 import frc.robot.utils.LogitechGamingPad;
@@ -21,7 +18,7 @@ import frc.robot.utils.LogitechGamingPad;
 public class SpinIntake extends Command {
     private final Intake intake;
     private final Shooter shooter;
-    private final Limelight limelight;
+    private final Photonvision photonvision;
     private final LED led;
     private final LogitechGamingPad pad;
     private final Timer timer;
@@ -34,14 +31,14 @@ public class SpinIntake extends Command {
      * @param intake the intake subsystem
      * @param shooter the shooter subsystem
      * @param pad the gamepad controller
-     * @param limelight the limelight subsystem
+     * @param photonvision the limelight subsystem
      * @param led the LED subsystem
      */
-    public SpinIntake(Intake intake, Shooter shooter, LogitechGamingPad pad, Limelight limelight, LED led) {
+    public SpinIntake(Intake intake, Shooter shooter, LogitechGamingPad pad, Photonvision photonvision, LED led) {
         this.intake = intake;
         this.shooter = shooter;
         this.pad = pad;
-        this.limelight = limelight;
+        this.photonvision = photonvision;
         this.led = led;
         timer = new Timer();
         limelightTimer = new Timer();
@@ -120,7 +117,6 @@ public class SpinIntake extends Command {
             handleShooterTiming();
         }
 
-        handleLimelightFlash();
         shooter.stopKraken();
         intake.stopKraken();
         timer.stop();
@@ -144,20 +140,6 @@ public class SpinIntake extends Command {
     }
 
     /**
-     * Controls the flashing of the limelight.
-     *
-     * This method flashes the limelight if the limelight timer is less than 3
-     * seconds, otherwise it stops the flashing.
-     */
-    private void handleLimelightFlash() {
-        if (limelightTimer.get() < 3) {
-            limelight.flash();
-        } else {
-            limelight.unflash();
-        }
-    }
-
-    /**
      * Controls the LED state based on the shooter and intake status.
      *
      * This method sets the LED color based on the ring sensor status of the shooter
@@ -168,7 +150,7 @@ public class SpinIntake extends Command {
             led.setTan();
         } else if (!shooter.getRingSensor()) {
             led.setRed();
-        } else if (shooter.getRingSensor() && Math.abs(limelight.getTx()) == 0) {
+        } else if (shooter.getRingSensor() && Math.abs(photonvision.getYaw()) == 0) {
             led.setHighTide();
         } else {
             led.setGreen();

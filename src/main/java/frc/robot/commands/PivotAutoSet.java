@@ -5,8 +5,11 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.Pivot;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
+import org.opencv.photo.Photo;
+import org.photonvision.proto.Photon;
 
 /**
  * The {@link PivotAutoSet} class is a command that resets the pivot to its neutral position.
@@ -25,7 +28,7 @@ public class PivotAutoSet extends Command {
   /** Whether the command is done. */
   private boolean isDone;
   /** The Limelight subsystem used by this command. */
-  private final Limelight limelight;
+  private final Photonvision photonvision;
 
   /**
    * Creates a new PivotAutoSet command.
@@ -33,12 +36,12 @@ public class PivotAutoSet extends Command {
    * @param pivot The Pivot subsystem used by this command.
    * @param limelight The Limelight subsystem used by this command.
    */
-  public PivotAutoSet(Pivot pivot, Limelight limelight) {
+  public PivotAutoSet(Pivot pivot, Photonvision photonvision) {
     this.pivot = pivot;
-    this.limelight = limelight;
+    this.photonvision = photonvision;
     timer = new Timer();
     pidController = new PIDController(0.00825, 0.000000, 0.00035);
-    addRequirements(pivot, limelight);
+    addRequirements(pivot);
   }
 
   /**
@@ -49,7 +52,7 @@ public class PivotAutoSet extends Command {
     deadband = 0.1;
     isDone = false;
     pos = PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE;
-    pos = limelight.getPivotPosition();
+    pos = photonvision.getPivotPosition();
     // pidController.setTolerance(50);
   }
 

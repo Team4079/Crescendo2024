@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
@@ -14,22 +15,22 @@ import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
 /** The {@link AutoAlign} command is a command that aligns the robot to the target. */
 public class AutoAlign extends Command {
   private final SwerveSubsystem swerveSubsystem;
-  private final Limelight limelight;
+  private final Photonvision photonvision;
 
   /** Rotation PID and offset **/
   private final PIDController rotationalController;
 
-	public AutoAlign(SwerveSubsystem swerveSubsystem, Limelight limelight) {
+	public AutoAlign(SwerveSubsystem swerveSubsystem, Photonvision limelety) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.swerveSubsystem = swerveSubsystem;
-    this.limelight = limelight;
+    this.photonvision = limelety;
     rotationalController =
         new PIDController(
             BasePIDGlobal.ROTATIONAL_PID.p,
             BasePIDGlobal.ROTATIONAL_PID.i,
             BasePIDGlobal.ROTATIONAL_PID.d);
     rotationalController.setTolerance(2);
-    addRequirements(swerveSubsystem, limelight);
+    addRequirements(swerveSubsystem, photonvision);
   }
 
   // Called when the command is initially scheduled.
@@ -42,7 +43,7 @@ public class AutoAlign extends Command {
   @Override
   public void execute() {
     // Horizontal PID and offset
-    double horizontalError = -limelight.getTx() - 1;
+    double horizontalError = -photonvision.getYaw() - 1;
     System.out.println(horizontalError);
     if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
       swerveSubsystem.setDriveSpeeds(0, 0, rotationalController.calculate(horizontalError, 1), false);
