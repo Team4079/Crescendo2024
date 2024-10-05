@@ -59,18 +59,20 @@ public class PadShoot extends Command {
 
     if (pad.getDPadUp()) {
       new ManualShoot(swerve, shooter, photonvision, pivot).schedule();
-    } else {
-      shooter.stopShooter();
     }
+//    } else {
+//      shooter.stopShooter();
+//    }
 
     if (pad.getDPadRight()) {
-      new AmpScoreAlt(shooter, pivot, photonvision).schedule(); // Uses Alt
-    } else {
-      shooter.stopShooter();
+      new ShootRing(shooter, pivot, swerve, photonvision).schedule(); // Uses Alt
+//    } else {
+//      shooter.stopShooter();
     }
 
     if (pad.getLeftTriggerValue() > 0.5) {
       new PassNoteGyro(swerve, pivot, shooter).schedule();
+
     }
   }
 

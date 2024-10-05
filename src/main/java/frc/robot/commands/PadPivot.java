@@ -47,16 +47,6 @@ public class PadPivot extends Command {
   }
 
   /**
-   * Called once the command ends or is interrupted.
-   *
-   * @param interrupted Whether the command was interrupted/canceled.
-   */
-  @Override
-  public void end(boolean interrupted) {
-    // No specific action needed when the command ends.
-  }
-
-  /**
    * Returns true when the command should end.
    *
    * @return false, as this command never finishes on its own.

@@ -286,7 +286,7 @@ public final class GlobalsValues {
 
     // Shooter Motor Speeds
     public static final double SHOOTER_RPS = -40.0; // Positive is shooting, negative is intake
-    public static final double STAGE_PASS_RPS = -10.0;
+    public static final double STAGE_PASS_RPS = -15.0;
     public static final double PASSTHROUGH_RPS = -30.0; // Positive is shooting, negative is intake
     public static final double AUTO_PASSTHROUGH_RPS = -35.0; // Positive is shooting, negative is intake
     public static final double PUSH_RING_AMP_RPS = -30;

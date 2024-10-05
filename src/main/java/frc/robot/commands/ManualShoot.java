@@ -18,8 +18,8 @@ public class ManualShoot extends SequentialCommandGroup {
   public ManualShoot(SwerveSubsystem swerve, Shooter shooter, Photonvision photonvision, Pivot pivot) {
     addRequirements(swerve, shooter, pivot);
     addCommands(
-        new PassNoteGyro(swerve, pivot, shooter),
-        new StagePassPivot(pivot).withTimeout(0.75),
+//        new PassNoteGyro(swerve, pivot, shooter),
+//        new StagePassPivot(pivot).withTimeout(0.75),
         new StagePass(shooter).withTimeout(0.4414),
         new PushRing(shooter, photonvision, false).withTimeout(0.5),
         new StopShooter(shooter));

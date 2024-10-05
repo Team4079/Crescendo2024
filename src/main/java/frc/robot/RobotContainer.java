@@ -132,7 +132,7 @@ public class RobotContainer {
         // padY.whileTrue(new AutoAlign(swerveSubsystem, limelety).withTimeout(2));
         padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
         rightBumper.onTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, photonvision));
-        leftBumper.onTrue(new AmpScore(shootyboi, pivotyboi, photonvision, elevator));
+        //leftBumper.onTrue(new AmpScore(shootyboi, pivotyboi, photonvision, elevator));
         // startButton.onTrue(new StagePass(shootyboi));
         startButton.onTrue(new PassNoteGyro(swerveSubsystem, pivotyboi, shootyboi));
     }
