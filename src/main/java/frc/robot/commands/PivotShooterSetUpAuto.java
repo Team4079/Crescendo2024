@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -24,8 +25,8 @@ public class PivotShooterSetUpAuto extends Command {
   /** The Shooter subsystem used by this command. */
   private final Shooter shooter;
 
-  /** The Limelight subsystem used by this command. */
-  private final Limelight limelight;
+  /** The photonvision subsystem used by this command. */
+  private final Photonvision photonvision;
 
   /** The Timer used to manage timing within the command. */
   private final Timer timer;
@@ -50,12 +51,12 @@ public class PivotShooterSetUpAuto extends Command {
    *
    * @param pivot The Pivot subsystem used by this command.
    * @param shooter The Shooter subsystem used by this command.
-   * @param limelight The Limelight subsystem used by this command.
+   * @param photonvision The photonvision subsystem used by this command.
    * @param swerveSubsystem The SwerveSubsystem used by this command.
    */
   public PivotShooterSetUpAuto(
-      Pivot pivot, Shooter shooter, Limelight limelight, SwerveSubsystem swerveSubsystem) {
-    addRequirements(pivot, shooter, limelight, swerveSubsystem);
+      Pivot pivot, Shooter shooter, Photonvision photonvision, SwerveSubsystem swerveSubsystem) {
+    addRequirements(pivot, shooter, swerveSubsystem);
     this.swerveSubsystem = swerveSubsystem;
     timer = new Timer();
     rotationalController =
@@ -66,7 +67,7 @@ public class PivotShooterSetUpAuto extends Command {
     velocityPIDController = new PIDController(0.00825, 0.000000, 0.00035);
     rotationalController.setTolerance(3);
     this.pivot = pivot;
-    this.limelight = limelight;
+    this.photonvision = photonvision;
     this.shooter = shooter;
   }
 
@@ -74,13 +75,13 @@ public class PivotShooterSetUpAuto extends Command {
   @Override
   public void initialize() {
     deadband = 0.1;
-    if (limelight.getDistance() < 1.5) {
+    if (photonvision.getDistanceSubwoofer() < 1.5) {
       pos = PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE;
     } else {
-      pos = limelight.getPivotPosition();
+      pos = photonvision.getPivotPosition();
     }
 
-    double rps = ShooterGlobalValues.SHOOTER_SPEED + (limelight.getDistance() - 1.5) * 5;
+    double rps = ShooterGlobalValues.SHOOTER_SPEED + (photonvision.getDistanceSubwoofer() - 1.5) * 5;
     shooter.setShooterVelocity(-rps, -rps);
   }
 
@@ -92,7 +93,7 @@ public class PivotShooterSetUpAuto extends Command {
     SmartDashboard.putNumber("Error Pivot Left", -pivot.getAbsoluteEncoder() + pos);
 
     // Horizontal PID and offset
-    double horizontalError = -limelight.getTx();
+    double horizontalError = -photonvision.getYaw();
     System.out.println(horizontalError);
     if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
       swerveSubsystem.setDriveSpeeds(0, 0, rotationalController.calculate(horizontalError, 0), false);

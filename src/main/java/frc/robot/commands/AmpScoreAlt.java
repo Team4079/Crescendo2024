@@ -9,6 +9,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.GlobalsValues;
@@ -18,13 +19,13 @@ import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AmpScoreAlt extends SequentialCommandGroup {
-  public AmpScoreAlt(Shooter shooter, Pivot pivot, Limelight limelight) {
-    addRequirements(shooter, pivot, limelight);
+  public AmpScoreAlt(Shooter shooter, Pivot pivot, Photonvision photonvision) {
+    addRequirements(shooter, pivot, photonvision);
     addCommands(
         new ParallelCommandGroup(
             new SetPivot(pivot, GlobalsValues.PivotGlobalValues.PIVOT_AMP_ANGLE).withTimeout(1),
             new AmpRampUpAlt(shooter).withTimeout(1)),
-        new PushRingAmp(shooter, limelight).withTimeout(0.3),
+        new PushRingAmp(shooter, photonvision).withTimeout(0.3),
         new StopShooter(shooter).withTimeout(0.05),
         new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.5));
   }

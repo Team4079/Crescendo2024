@@ -163,7 +163,7 @@ public final class GlobalsValues {
 
       public static HolonomicPathFollowerConfig pathFollower = new HolonomicPathFollowerConfig(
         new PIDConstants(5, 0.00, 0), // translation
-        new PIDConstants(0, 0.0, 0.0), // rotation
+        new PIDConstants(4.75, 0.0, 0.01), // rotation
         4.96824, // Max module speed, in m/s
         SwerveGlobalValues.ROBOT_SIZE, // Drive base radius in meters. Distance from robot center to furthest //
         // module.

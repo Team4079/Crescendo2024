@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -14,13 +15,13 @@ import frc.robot.subsystems.SwerveSubsystem;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ManualShoot extends SequentialCommandGroup {
-  public ManualShoot(SwerveSubsystem swerve, Shooter shooter, Limelight limelight, Pivot pivot) {
-    addRequirements(swerve, shooter, limelight, pivot);
+  public ManualShoot(SwerveSubsystem swerve, Shooter shooter, Photonvision photonvision, Pivot pivot) {
+    addRequirements(swerve, shooter, pivot);
     addCommands(
         new PassNoteGyro(swerve, pivot, shooter),
         new StagePassPivot(pivot).withTimeout(0.75),
         new StagePass(shooter).withTimeout(0.4414),
-        new PushRing(shooter, limelight, false).withTimeout(0.5),
+        new PushRing(shooter, photonvision, false).withTimeout(0.5),
         new StopShooter(shooter));
   }
 }

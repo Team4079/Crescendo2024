@@ -100,8 +100,8 @@ public class RobotContainer {
         // NamedCommands.registerCommand("autoAlign", new AutoAlign(swerveSubsystem));
         NamedCommands.registerCommand("startIntake", new StartIntake(intakeyboi, shootyboi).withTimeout(6));
         NamedCommands.registerCommand("stopIntake", new StopIntake(intakeyboi, shootyboi));
-        NamedCommands.registerCommand("pushRing", new PushRing(shootyboi, limelety, true));
-        NamedCommands.registerCommand("shootSequence", new ShootingSequence(pivotyboi, shootyboi, limelety, swerveSubsystem));
+        NamedCommands.registerCommand("pushRing", new PushRing(shootyboi, photonvision, true));
+        NamedCommands.registerCommand("shootSequence", new ShootingSequence(pivotyboi, shootyboi, photonvision, swerveSubsystem));
         NamedCommands.registerCommand("setPivotDown", new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE));
         NamedCommands.registerCommand("setPivot", new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
         NamedCommands.registerCommand("pushback", new PulseDown(intakeyboi, shootyboi));
@@ -110,7 +110,7 @@ public class RobotContainer {
         intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, pad, limelety, led));
         pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, pad));
         limelety.setDefaultCommand(new LimelightValues(limelety));
-        shootyboi.setDefaultCommand(new PadShoot(shootyboi, swerveSubsystem, pad, limelety, pivotyboi));
+        shootyboi.setDefaultCommand(new PadShoot(shootyboi, swerveSubsystem, pad, photonvision, pivotyboi));
 
         configureBindings();
     }
@@ -130,12 +130,12 @@ public class RobotContainer {
      * joysticks}.
      */
     private void configureBindings() {
-        padA.onTrue(new SubwooferShot(shootyboi, pivotyboi, swerveSubsystem, limelety));
+        padA.onTrue(new SubwooferShot(shootyboi, pivotyboi, swerveSubsystem, photonvision));
         padB.onTrue(new InstantCommand(swerveSubsystem::resetPidgey));
         // padY.whileTrue(new AutoAlign(swerveSubsystem, limelety).withTimeout(2));
         padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
-        rightBumper.onTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, limelety));
-        leftBumper.onTrue(new AmpScore(shootyboi, pivotyboi, limelety, elevator));
+        rightBumper.onTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, photonvision));
+        leftBumper.onTrue(new AmpScore(shootyboi, pivotyboi, photonvision, elevator));
         // startButton.onTrue(new StagePass(shootyboi));
         startButton.onTrue(new PassNoteGyro(swerveSubsystem, pivotyboi, shootyboi));
     }

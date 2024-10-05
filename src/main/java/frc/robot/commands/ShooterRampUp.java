@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.Shooter;
 // import frc.robot.utils.GlobalsValues.ShooterConstants;
 // import frc.robot.utils.GlobalsValues;
@@ -20,21 +21,21 @@ public class ShooterRampUp extends Command {
   private Shooter shooter;
 
   private double rps;
-  private Limelight limelight;
+  private Photonvision photonvision;
 
   /** Creates a new Shoot. */
-  public ShooterRampUp(Shooter shooter, Limelight limelight) {
+  public ShooterRampUp(Shooter shooter, Photonvision photonvision) {
     deadband = 5;
     this.shooter = shooter;
     // this.rps = rps;
-    this.limelight = limelight;
-    addRequirements(shooter, limelight);
+    this.photonvision = photonvision;
+    addRequirements(shooter, photonvision);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    rps = ShooterGlobalValues.SHOOTER_SPEED + limelight.getDistance() * 3;
+    rps = ShooterGlobalValues.SHOOTER_SPEED + photonvision.getDistanceSubwoofer() * 3;
     SmartDashboard.putNumber("Jessica is smart", rps);
     // shooter.setShooterVelocity(-rps, -rps);
     shooter.setShooterVelocity(-rps, -rps);

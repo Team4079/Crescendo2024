@@ -21,12 +21,13 @@ public class ElevatorAmpSetup extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    elevator.setState(ElevatorState.UP);
+    // elevator.setState(ElevatorState.UP);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(elevator.getElevatorPosition() - ElevatorGlobalValues.ELEVATOR_UP) < 0.5;
+    // return Math.abs(elevator.getElevatorPosition() - ElevatorGlobalValues.ELEVATOR_UP) < 0.5;
+    return false;
   }
 }

@@ -202,4 +202,11 @@ public class Photonvision extends SubsystemBase {
       return 0.0;
     }
   }
+
+  public double getPivotPosition() {
+    // return (-0.288051 * Math.pow(getDistance(), 5) + 4.37563 * Math.pow(getDistance(), 4) + -24.8164 * Math.pow(getDistance(), 3) + 63.047 * Math.pow(getDistance(), 2) + getDistance() * -61.9595 + 28.877);
+      // return (-0.288051 * Math.pow(getDis(), 5) + 4.37563 * Math.pow(getDis(), 4) + -24.8164 * Math.pow(getDis(), 3) + 63.047 * Math.pow(getDis(), 2) + getDis() * -61.9595 + 28.577);
+    return (-0.273166 * Math.pow(getDistanceSubwoofer(), 5) + 4.16168 * Math.pow(getDistanceSubwoofer(), 4) + -23.6466 * Math.pow(getDistanceSubwoofer(), 3) + 60.022 * Math.pow(getDistanceSubwoofer(), 2) + getDistanceSubwoofer() * -58.4714 + 27.1329); //( 27.0538)
+    // return (-1
+  }
 }

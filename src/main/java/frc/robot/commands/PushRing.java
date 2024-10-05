@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
@@ -11,7 +12,7 @@ public class PushRing extends Command {
   private final Shooter shooter;
 
   /** The Limelight subsystem used by this command. */
-  private final Limelight limelight;
+  private final Photonvision photonvision;
 
   /** Whether the Limelight is enabled. */
   private final boolean limelightEnabled;
@@ -23,11 +24,11 @@ public class PushRing extends Command {
    * @param limelight The Limelight subsystem used by this command.
    * @param limelightEnabled Whether the Limelight is enabled.
    */
-  public PushRing(Shooter shooter, Limelight limelight, boolean limelightEnabled) {
+  public PushRing(Shooter shooter, Photonvision photonvision, boolean limelightEnabled) {
     this.shooter = shooter;
-    this.limelight = limelight;
+    this.photonvision = photonvision;
     this.limelightEnabled = limelightEnabled;
-    addRequirements(shooter, limelight);
+    addRequirements(shooter);
   }
 
   /** Called when the command is initially scheduled. */
@@ -40,7 +41,7 @@ public class PushRing extends Command {
   @Override
   public void execute() {
     if (limelightEnabled) {
-      if (limelight.getDistance() > 0.1) {
+      if (photonvision.getDistanceSubwoofer() > 0.1) {
         shooter.setKrakenVelocity(ShooterGlobalValues.PUSH_RING_RPS);
       } else {
         shooter.stopAllMotors();

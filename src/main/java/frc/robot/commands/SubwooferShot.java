@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -22,21 +23,21 @@ public class SubwooferShot extends SequentialCommandGroup {
   private Shooter shooter;
   private Pivot pivot;
   private SwerveSubsystem swerveSubsystem;
-  private Limelight limelight;
+  private Photonvision photonvision;
 
-  public SubwooferShot(Shooter shooter, Pivot pivot, SwerveSubsystem swerveSubsystem, Limelight limelight) {
+  public SubwooferShot(Shooter shooter, Pivot pivot, SwerveSubsystem swerveSubsystem, Photonvision photonvision) {
     this.shooter = shooter;
     this.pivot = pivot;
     this.swerveSubsystem = swerveSubsystem;
-    this.limelight = limelight;
-    addRequirements(shooter, pivot, swerveSubsystem, limelight);
+    this.photonvision = photonvision;
+    addRequirements(shooter, pivot, swerveSubsystem);
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new ParallelCommandGroup(new SetPivot(pivot, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(0.6),
-            new ShooterRampUp(shooter, limelight).withTimeout(0.6)),
-        new PushRing(shooter, limelight, false).withTimeout(0.3),
+            new ShooterRampUp(shooter, photonvision).withTimeout(0.6)),
+        new PushRing(shooter, photonvision, false).withTimeout(0.3),
         new StopShooter(shooter).withTimeout(0.1),
         new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.4));
   }
