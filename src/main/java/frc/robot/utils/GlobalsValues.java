@@ -92,6 +92,8 @@ public final class GlobalsValues {
     public static final double PasskP = 0.1; // TODO: git gud
     public static final double PasskI = 0; // TODO: git gud
     public static final double PasskD = 0; // TODO: git gud
+    public static final float SOFTLIMIT_FOWARD = 0;
+    public static final float SOFTLIMIT_REVERSE = 0;
   }
 
   public static class SwerveGlobalValues {
@@ -339,9 +341,11 @@ public final class GlobalsValues {
     // Camera One
     public static final double CAMERA_ONE_HEIGHT_METER = 0.61;
     public static final double CAMERA_ONE_ANGLE_DEG = 7.5; // up is positive
+    public static final double OFFSET_TOWARD_MID_LEFT = 0.0;
 
     // Camera Two
     public static final double CAMERA_TWO_HEIGHT_METER = 0.61;
     public static final double CAMERA_TWO_ANGLE_DEG = 7.5; // up is positive
+    public static final double OFFSET_TOWARD_MID_RIGHT = 0.0;
   }
 }

@@ -61,10 +61,10 @@ public class PivotAutoSet extends Command {
    */
   @Override
   public void execute() {
-    double velocity = pidController.calculate(pivot.getAbsoluteEncoder(), pos);
+    double velocity = pidController.calculate(pivot.getPivotPos(), pos);
     SetPivot.motorPivot(velocity, pivot, pos, deadband);
 
-    if (Math.abs(pivot.getAbsoluteEncoder() - pos) <= deadband) {
+    if (Math.abs(pivot.getPivotPos() - pos) <= deadband) {
       timer.start();
       if (timer.get() >= 0.1) {
         isDone = true;

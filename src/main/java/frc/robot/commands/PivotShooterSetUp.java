@@ -86,12 +86,12 @@ public class PivotShooterSetUp extends Command {
   /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
-    double velocity = velocityPIDController.calculate(pivot.getAbsoluteEncoder(), pos);
+    double velocity = velocityPIDController.calculate(pivot.getPivotPos(), pos);
     SmartDashboard.putNumber("Error Pivot Right", -pivot.getPivotRightPos() + pos);
-    SmartDashboard.putNumber("Error Pivot Left", -pivot.getAbsoluteEncoder() + pos);
+    SmartDashboard.putNumber("Error Pivot Left", -pivot.getPivotLeftPos() + pos);
 
     // Horizontal PID and offset
-    double horizontalError = -photonvision.getYaw();
+    double horizontalError = -photonvision.getYaw() + photonvision.getOffset();
     System.out.println(horizontalError);
     if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
       swerveSubsystem.setDriveSpeeds(0, 0, rotationalController.calculate(horizontalError, 0), false);
@@ -99,13 +99,13 @@ public class PivotShooterSetUp extends Command {
       swerveSubsystem.stop();
     }
 
-    if (Math.abs(pivot.getAbsoluteEncoder() - pos) < deadband) {
+    if (Math.abs(pivot.getPivotPos() - pos) < deadband) {
       pivot.stopMotors();
     } else {
       pivot.movePivot(velocity);
     }
 
-    if (Math.abs(pivot.getAbsoluteEncoder() - pos) <= deadband) {
+    if (Math.abs(pivot.getPivotPos() - pos) <= deadband) {
       timer.start();
     } else {
       timer.reset();

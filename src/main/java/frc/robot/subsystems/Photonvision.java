@@ -203,6 +203,21 @@ public class Photonvision extends SubsystemBase {
     }
   }
 
+  public double getOffset() {
+    if (targetPoseAmbiguity1 > targetPoseAmbiguity2 && targetVisible1)
+    {
+      return PhotonVisionConstants.OFFSET_TOWARD_MID_LEFT;
+    }
+    else if (targetVisible2)
+    {
+      return PhotonVisionConstants.OFFSET_TOWARD_MID_RIGHT;
+    }
+    else
+    {
+      return 0.0;
+    }
+  }
+
   public double getPivotPosition() {
     // return (-0.288051 * Math.pow(getDistance(), 5) + 4.37563 * Math.pow(getDistance(), 4) + -24.8164 * Math.pow(getDistance(), 3) + 63.047 * Math.pow(getDistance(), 2) + getDistance() * -61.9595 + 28.877);
       // return (-0.288051 * Math.pow(getDis(), 5) + 4.37563 * Math.pow(getDis(), 4) + -24.8164 * Math.pow(getDis(), 3) + 63.047 * Math.pow(getDis(), 2) + getDis() * -61.9595 + 28.577);
