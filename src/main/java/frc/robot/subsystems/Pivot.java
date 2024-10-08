@@ -238,6 +238,10 @@ public class Pivot extends SubsystemBase {
     return pivotMotorRight.getPosition().getValue();
   }
 
+  public double getPivotPos() {
+    return (getPivotLeftPos() + getPivotRightPos()) / 2;
+  }
+
   /**
    * Run distance through a best fit line and return the value
    * 
@@ -271,10 +275,10 @@ public class Pivot extends SubsystemBase {
   }
 
   /**
-   * Get the absolute encoder position
-   * 
-   * @return double, the absolute encoder position of the pivot motor
-   */
+  //  * Get the absolute encoder position
+  //  * 
+  //  * @return double, the absolute encoder position of the pivot motor
+  //  */
   // public double getAbsoluteEncoder() {
   //   // return actualAbsEnc.getAbsolutePosition() * 2048;
   //   if (absoluteEncoder.getPosition() > 190) {
@@ -284,6 +288,7 @@ public class Pivot extends SubsystemBase {
   //     return absoluteEncoder.getPosition();
   //   }
   // }
+
 
   public void movePivot(double velocity) {
     if (Math.abs(velocity) >= deadband) {

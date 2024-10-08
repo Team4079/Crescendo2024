@@ -66,12 +66,12 @@ public class StagePassPivot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    velocity = velocityPIDController.calculate(pivot.getPivotPositionAvg(), pos);
-    SmartDashboard.putNumber("Error Pivot Right", -pivot.getPivotRightPos() + pos);
-    SmartDashboard.putNumber("Error Pivot Left", -pivot.getPivotPositionAvg() + pos);
+    velocity = velocityPIDController.calculate(pivot.getPivotPos(), pos);
+    SmartDashboard.putNumber("Error Pivot Right", -pivot.getPivotPos() + pos);
+    SmartDashboard.putNumber("Error Pivot Left", -pivot.getPivotPos() + pos);
 
 
-    if (Math.abs(pivot.getPivotPositionAvg() - pos) < deadband)
+    if (Math.abs(pivot.getPivotPos() - pos) < deadband)
     {
        pivot.stopMotors();
     }
@@ -79,7 +79,7 @@ public class StagePassPivot extends Command {
       pivot.movePivot(velocity);
     }
     
-    if (Math.abs(pivot.getPivotPositionAvg() - pos) <= deadband)
+    if (Math.abs(pivot.getPivotPos() - pos) <= deadband)
     {
       timer.start();
       if (timer.get() >= 0.1) {

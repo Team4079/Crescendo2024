@@ -53,13 +53,10 @@ public class SetPivot extends Command {
   /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
-    currPos = (pivot.getPivotLeftPos() + pivot.getPivotRightPos())/2;
-    double velocity = pidController.calculate(currPos, pos);
+    double velocity = pidController.calculate(pivot.getPivotPos(), pos);
     motorPivot(velocity, pivot, pos, deadband);
 
-    
-
-    if (Math.abs(pivot.getPivotPositionAvg() - pos) <= deadband) {
+    if (Math.abs(pivot.getPivotPos() - pos) <= deadband) {
       isDone = true;
     }
   }
@@ -73,11 +70,11 @@ public class SetPivot extends Command {
    * @param deadband The deadband value for the position error.
    */
   static void motorPivot(double velocity, Pivot pivot, double pos, double deadband) {
-    // SmartDashboard.putNumber("Error Pivot", -currPos + pos);
-    // SmartDashboard.putNumber("Setpoint", pos);
-    // SmartDashboard.putNumber("Velocity Pivot", velocity);
+    SmartDashboard.putNumber("Error Pivot", -pivot.getPivotPos() + pos);
+    SmartDashboard.putNumber("Setpoint", pos);
+    SmartDashboard.putNumber("Velocity Pivot", velocity);
 
-    if (Math.abs(currPos - pos) < deadband) {
+    if (Math.abs(pivot.getPivotPos() - pos) < deadband) {
       pivot.stopMotors();
     } else {
       pivot.movePivot(velocity);
