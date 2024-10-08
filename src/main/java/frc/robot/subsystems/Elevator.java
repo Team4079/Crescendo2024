@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.hardware.TalonFX;
+//import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -14,7 +14,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.GlobalsValues;
+//import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.ElevatorGlobalValues;
 
 
@@ -24,9 +24,11 @@ public class Elevator extends SubsystemBase {
       UP,
       DOWN
     }
+
     private final CANSparkMax elevatorMotorSparkMax;
     private final CANSparkMax passMotorSparkMax;
     private ElevatorState state = ElevatorState.DOWN;
+
     // Creates a new Elevator. 
     public Elevator() {
       elevatorMotorSparkMax = new CANSparkMax(ElevatorGlobalValues.ELEVATOR_NEO_ID, MotorType.kBrushless);

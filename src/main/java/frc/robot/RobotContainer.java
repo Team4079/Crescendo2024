@@ -7,6 +7,9 @@ package frc.robot;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+//import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -132,7 +135,7 @@ public class RobotContainer {
         // padY.whileTrue(new AutoAlign(swerveSubsystem, limelety).withTimeout(2));
         padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
         rightBumper.onTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, photonvision));
-        //leftBumper.onTrue(new AmpScore(shootyboi, pivotyboi, photonvision, elevator));
+        leftBumper.whileTrue(new AmpScore(shootyboi, pivotyboi, photonvision, elevator));
         // startButton.onTrue(new StagePass(shootyboi));
         startButton.onTrue(new PassNoteGyro(swerveSubsystem, pivotyboi, shootyboi));
     }
