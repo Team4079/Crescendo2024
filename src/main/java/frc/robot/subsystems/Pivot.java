@@ -184,7 +184,7 @@ public class Pivot extends SubsystemBase {
     // 0.545533063638327 High limit before 2048 mulitplier = 1,117.251714331294
     // 0.201015130025378 Low limit before 2048 multiplier = 411.6789862919741
     // absPos = absoluteEncoder.getPosition();
-    SmartDashboard.putNumber("Absolute Encoder Position", getAbsoluteEncoder());
+    // SmartDashboard.putNumber("Absolute Encoder Position", getAbsoluteEncoder());
     SmartDashboard.putNumber("Pivot Left Position", pivotMotorLeft.getPosition().getValue());
     SmartDashboard.putNumber("Pivot Right Position", pivotMotorRight.getPosition().getValue());
     SmartDashboard.putBoolean("Pivot SoftLimit", getSoftLimit());
@@ -275,15 +275,15 @@ public class Pivot extends SubsystemBase {
    * 
    * @return double, the absolute encoder position of the pivot motor
    */
-  public double getAbsoluteEncoder() {
-    // return actualAbsEnc.getAbsolutePosition() * 2048;
-    if (absoluteEncoder.getPosition() > 190) {
-      return 0;
-    }
-    else {
-      return absoluteEncoder.getPosition();
-    }
-  }
+  // public double getAbsoluteEncoder() {
+  //   // return actualAbsEnc.getAbsolutePosition() * 2048;
+  //   if (absoluteEncoder.getPosition() > 190) {
+  //     return 0;
+  //   }
+  //   else {
+  //     return absoluteEncoder.getPosition();
+  //   }
+  // }
 
   public void movePivot(double velocity) {
     if (Math.abs(velocity) >= deadband) {
@@ -306,8 +306,13 @@ public class Pivot extends SubsystemBase {
     PivotGlobalValues.is_SOFTLIMIT = !PivotGlobalValues.is_SOFTLIMIT;
   }
 
-  public void recalibrateEncoders() {
-    PivotGlobalValues.offset = PivotGlobalValues.PIVOT_NEUTRAL_ANGLE - getAbsoluteEncoder();
+  // public void recalibrateEncoders() {
+  //   PivotGlobalValues.offset = PivotGlobalValues.PIVOT_NEUTRAL_ANGLE - getAbsoluteEncoder();
+  // }
+
+  public double getPivotPositionAvg()
+  {
+    return (getPivotLeftPos() + getPivotRightPos()) / 2;
   }
 
   public boolean getSoftLimit() {

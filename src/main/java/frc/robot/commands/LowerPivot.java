@@ -39,7 +39,7 @@ public class LowerPivot extends Command {
   @Override
   public void execute() {
     if (!ShooterGlobalValues.HAS_PIECE) {
-      if (Math.abs(pivot.getAbsoluteEncoder() - PivotGlobalValues.PIVOT_NEUTRAL_ANGLE) > deadband) {
+      if (Math.abs(pivot.getPivotPositionAvg() - PivotGlobalValues.PIVOT_NEUTRAL_ANGLE) > deadband) {
         pivot.setMotorPosition(
             PivotGlobalValues.PIVOT_NEUTRAL_ANGLE, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE);
       } else {

@@ -41,7 +41,7 @@ public class PivotAlign extends Command {
     double setPoint = pivot.shootPos(llValues[2]);
     pivot.setMotorPosition(pivot.shootPos(setPoint), pivot.shootPos(setPoint)); // yessica noted
 
-    timeout = Math.abs(setPoint - pivot.getAbsoluteEncoder()) < deadband ? timeout + 1 : 0;
+    timeout = Math.abs(setPoint - pivot.getPivotPositionAvg()) < deadband ? timeout + 1 : 0;
   }
 
   /**
