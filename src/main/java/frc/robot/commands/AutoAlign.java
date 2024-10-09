@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
@@ -17,10 +16,10 @@ public class AutoAlign extends Command {
   private final SwerveSubsystem swerveSubsystem;
   private final Photonvision photonvision;
 
-  /** Rotation PID and offset **/
+  /** Rotation PID and offset * */
   private final PIDController rotationalController;
 
-	public AutoAlign(SwerveSubsystem swerveSubsystem, Photonvision limelety) {
+  public AutoAlign(SwerveSubsystem swerveSubsystem, Photonvision limelety) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.swerveSubsystem = swerveSubsystem;
     this.photonvision = limelety;
@@ -46,7 +45,8 @@ public class AutoAlign extends Command {
     double horizontalError = -photonvision.getYaw() - 1;
     System.out.println(horizontalError);
     if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
-      swerveSubsystem.setDriveSpeeds(0, 0, rotationalController.calculate(horizontalError, 1), false);
+      swerveSubsystem.setDriveSpeeds(
+          0, 0, rotationalController.calculate(horizontalError, 1), false);
     } else {
       swerveSubsystem.stop();
     }

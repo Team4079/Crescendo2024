@@ -17,23 +17,20 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 
-/**
- * The {@link Pivot} class includes all the motors to pivot the shooter.
- */
+/** The {@link Pivot} class includes all the motors to pivot the shooter. */
 public class Pivot extends SubsystemBase {
   /** Creates a new Pivot. */
-
   private TalonFX pivotMotorLeft;
+
   private TalonFX pivotMotorRight;
 
   private TalonFXConfigurator pivotLeftConfigurator;
@@ -200,7 +197,7 @@ public class Pivot extends SubsystemBase {
 
   /**
    * Stops the pivot motors
-   * 
+   *
    * @param void
    * @return void
    */
@@ -214,8 +211,8 @@ public class Pivot extends SubsystemBase {
 
   /**
    * Set the position of the left and right pivot motors
-   * 
-   * @param left  Left motor position
+   *
+   * @param left Left motor position
    * @param right Right motor position
    * @return void
    */
@@ -226,7 +223,7 @@ public class Pivot extends SubsystemBase {
 
   /**
    * Get the position of the pivot motor
-   * 
+   *
    * @param void
    * @return double, the position of the pivot motor
    */
@@ -244,7 +241,7 @@ public class Pivot extends SubsystemBase {
 
   /**
    * Run distance through a best fit line and return the value
-   * 
+   *
    * @param distance
    * @return double, the position of the pivot motor
    */
@@ -275,10 +272,9 @@ public class Pivot extends SubsystemBase {
   }
 
   /**
-  //  * Get the absolute encoder position
-  //  * 
-  //  * @return double, the absolute encoder position of the pivot motor
-  //  */
+   * // * Get the absolute encoder position // * // * @return double, the absolute encoder position
+   * of the pivot motor //
+   */
   // public double getAbsoluteEncoder() {
   //   // return actualAbsEnc.getAbsolutePosition() * 2048;
   //   if (absoluteEncoder.getPosition() > 190) {
@@ -288,7 +284,6 @@ public class Pivot extends SubsystemBase {
   //     return absoluteEncoder.getPosition();
   //   }
   // }
-
 
   public void movePivot(double velocity) {
     if (Math.abs(velocity) >= deadband) {
@@ -315,8 +310,7 @@ public class Pivot extends SubsystemBase {
   //   PivotGlobalValues.offset = PivotGlobalValues.PIVOT_NEUTRAL_ANGLE - getAbsoluteEncoder();
   // }
 
-  public double getPivotPositionAvg()
-  {
+  public double getPivotPositionAvg() {
     return (getPivotLeftPos() + getPivotRightPos()) / 2;
   }
 

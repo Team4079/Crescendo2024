@@ -11,6 +11,7 @@ import frc.robot.utils.GlobalsValues.ElevatorGlobalValues;
 
 public class ElevatorRampDown extends Command {
   Elevator elevator;
+
   /** Creates a new ElevatorAmpSetup. */
   public ElevatorRampDown(Elevator elevator) {
     this.elevator = elevator;

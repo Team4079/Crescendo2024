@@ -10,6 +10,7 @@ import frc.robot.subsystems.Shooter;
 public class StopShooter extends Command {
   /** Creates a new StopShooter. */
   private Shooter shooter;
+
   private boolean isFinished;
 
   public StopShooter(Shooter shooter) {

@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 
 /**
- * This class is a wrapper for the Logitech F310 gamepad. It is used to simplify
- * the use of the gamepad in the robot code.
+ * This class is a wrapper for the Logitech F310 gamepad. It is used to simplify the use of the
+ * gamepad in the robot code.
  */
 public class LogitechGamingPad extends GenericHID {
 
@@ -137,31 +137,24 @@ public class LogitechGamingPad extends GenericHID {
   }
 
   public boolean checkDPad(int index) {
-    if (0 <= index && index <= 7)
-      return (index * 45) == gamepad.getPOV();
-    else
-      return false;
+    if (0 <= index && index <= 7) return (index * 45) == gamepad.getPOV();
+    else return false;
   }
 
   public boolean checkDPad(double angle, boolean inDegrees) {
-    if (!inDegrees)
-      angle = Math.toDegrees(angle);
+    if (!inDegrees) angle = Math.toDegrees(angle);
     return (int) angle == gamepad.getPOV();
   }
 
   public int getDPad() {
     int pov = gamepad.getPOV();
-    if (pov == -1)
-      return pov;
-    else
-      return pov / 45;
+    if (pov == -1) return pov;
+    else return pov / 45;
   }
 
   public double getDPad(boolean inDegrees) {
-    if (inDegrees)
-      return gamepad.getPOV();
-    else
-      return Math.toRadians(gamepad.getPOV());
+    if (inDegrees) return gamepad.getPOV();
+    else return Math.toRadians(gamepad.getPOV());
   }
 
   public boolean dPadIsPressed() {

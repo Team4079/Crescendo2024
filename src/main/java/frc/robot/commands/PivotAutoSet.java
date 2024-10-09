@@ -2,31 +2,31 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.Pivot;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
-import org.opencv.photo.Photo;
-import org.photonvision.proto.Photon;
 
-/**
- * The {@link PivotAutoSet} class is a command that resets the pivot to its neutral position.
- */
+/** The {@link PivotAutoSet} class is a command that resets the pivot to its neutral position. */
 public class PivotAutoSet extends Command {
   /** The Pivot subsystem used by this command. */
   private final Pivot pivot;
+
   /** The target position for the pivot. */
   private double pos;
+
   /** The PID controller for the pivot. */
   private final PIDController pidController;
+
   /** The timer used to determine when the command is done. */
   private final Timer timer;
+
   /** The deadband value for the pivot position. */
   private double deadband;
+
   /** Whether the command is done. */
   private boolean isDone;
+
   /** The Limelight subsystem used by this command. */
   private final Photonvision photonvision;
 
@@ -44,9 +44,7 @@ public class PivotAutoSet extends Command {
     addRequirements(pivot);
   }
 
-  /**
-   * Called when the command is initially scheduled.
-   */
+  /** Called when the command is initially scheduled. */
   @Override
   public void initialize() {
     deadband = 0.1;
@@ -56,9 +54,7 @@ public class PivotAutoSet extends Command {
     // pidController.setTolerance(50);
   }
 
-  /**
-   * Called every time the scheduler runs while the command is scheduled.
-   */
+  /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
     double velocity = pidController.calculate(pivot.getPivotPositionAvg(), pos);

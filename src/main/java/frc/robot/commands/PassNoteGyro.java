@@ -21,19 +21,21 @@ public class PassNoteGyro extends Command {
   private final boolean isBlueSide;
   private final double angle;
   private final PIDController pidController;
+
   /** Creates a new PassNoteGyro. */
   public PassNoteGyro(SwerveSubsystem swerve, Pivot pivot, Shooter shooter) {
     this.swerve = swerve;
     this.pivot = pivot;
     this.shooter = shooter;
 
-    isBlueSide = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue).equals(DriverStation.Alliance.Blue);
+    isBlueSide =
+        DriverStation.getAlliance()
+            .orElse(DriverStation.Alliance.Blue)
+            .equals(DriverStation.Alliance.Blue);
 
     if (isBlueSide) {
       angle = ShooterGlobalValues.blueSideAngle;
-    }
-
-    else {
+    } else {
       angle = ShooterGlobalValues.redSideAngle;
     }
 

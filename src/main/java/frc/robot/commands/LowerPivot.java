@@ -5,12 +5,11 @@ import frc.robot.subsystems.Pivot;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
-/**
- * The {@link LowerPivot} class is a command that lowers the pivot to its neutral position.
- */
+/** The {@link LowerPivot} class is a command that lowers the pivot to its neutral position. */
 public class LowerPivot extends Command {
   /** The Pivot subsystem used by this command. */
   private final Pivot pivot;
+
   /** The deadband value for the pivot position. */
   private final double deadband;
 
@@ -25,17 +24,13 @@ public class LowerPivot extends Command {
     addRequirements(pivot);
   }
 
-  /**
-   * Called when the command is initially scheduled.
-   */
+  /** Called when the command is initially scheduled. */
   @Override
   public void initialize() {
     // No specific action needed when the command is initialized.
   }
 
-  /**
-   * Called every time the scheduler runs while the command is scheduled.
-   */
+  /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
     if (!ShooterGlobalValues.HAS_PIECE) {

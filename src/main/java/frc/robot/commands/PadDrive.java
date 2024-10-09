@@ -6,9 +6,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.GlobalsValues.MotorGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
-import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.LogitechGamingPad;
 
 public class PadDrive extends Command {
@@ -17,23 +17,28 @@ public class PadDrive extends Command {
   private final boolean isFieldOriented;
   private final LogitechGamingPad pad;
 
-  /** Creates a new SwerveJoystick. */
   public PadDrive(SwerveSubsystem swerveSubsystem, LogitechGamingPad pad, boolean isFieldOriented) {
     this.swerveSubsystem = swerveSubsystem;
     this.pad = pad;
     this.isFieldOriented = isFieldOriented;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(this.swerveSubsystem); // this.limelety, this.led
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
+    addRequirements(this.swerveSubsystem);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    Coordinate position = positionSet(pad);
+
+    double rotation = -pad.getRightAnalogXAxis() * MotorGlobalValues.MAX_ANGULAR_SPEED;
+
+    SmartDashboard.putNumber("X Jostick", position.getX());
+    SmartDashboard.putNumber("Y Joystick", position.getY());
+
+    swerveSubsystem.setDriveSpeeds(
+        position.getY(), position.getX(), rotation * 0.5, isFieldOriented);
+  }
+
+  public static Coordinate positionSet(LogitechGamingPad pad) {
     double x = -pad.getLeftAnalogXAxis() * MotorGlobalValues.MAX_SPEED;
     if (Math.abs(x) < SwerveGlobalValues.xDEADZONE) {
       x = 0;
@@ -43,24 +48,23 @@ public class PadDrive extends Command {
     if (Math.abs(y) < SwerveGlobalValues.yDEADZONE) {
       y = 0;
     }
-    
-    double rotation = -pad.getRightAnalogXAxis() * MotorGlobalValues.MAX_ANGULAR_SPEED;
 
-    SmartDashboard.putNumber("Y Joystick", y);
-    SmartDashboard.putNumber("X Jostick", x);
-
-    swerveSubsystem.setDriveSpeeds(y, x, rotation * 0.5, isFieldOriented);
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-
+    return new Coordinate(x, y);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  public record Coordinate(double x, double y) {
+    public double getX() {
+      return x;
+    }
+
+    public double getY() {
+      return y;
+    }
   }
 }

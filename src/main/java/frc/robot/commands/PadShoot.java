@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
@@ -32,7 +31,12 @@ public class PadShoot extends Command {
    * @param photonvision The photonvision subsystem used by this command.
    * @param pivot The Pivot subsystem used by this command.
    */
-  public PadShoot(Shooter shooter, SwerveSubsystem swerve, LogitechGamingPad pad, Photonvision photonvision, Pivot pivot) {
+  public PadShoot(
+      Shooter shooter,
+      SwerveSubsystem swerve,
+      LogitechGamingPad pad,
+      Photonvision photonvision,
+      Pivot pivot) {
     this.shooter = shooter;
     this.pad = pad;
     this.photonvision = photonvision;
@@ -60,19 +64,18 @@ public class PadShoot extends Command {
     if (pad.getDPadUp()) {
       new ManualShoot(swerve, shooter, photonvision, pivot).schedule();
     }
-//    } else {
-//      shooter.stopShooter();
-//    }
+    //    } else {
+    //      shooter.stopShooter();
+    //    }
 
     if (pad.getDPadRight()) {
       new ShootRing(shooter, pivot, swerve, photonvision).schedule(); // Uses Alt
-//    } else {
-//      shooter.stopShooter();
+      //    } else {
+      //      shooter.stopShooter();
     }
 
     if (pad.getLeftTriggerValue() > 0.5) {
       new PassNoteGyro(swerve, pivot, shooter).schedule();
-
     }
   }
 

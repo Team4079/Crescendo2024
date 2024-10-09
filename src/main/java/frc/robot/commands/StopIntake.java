@@ -12,7 +12,7 @@ import frc.robot.subsystems.Shooter;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class StopIntake extends InstantCommand {
-  private Intake intake; 
+  private Intake intake;
   private Shooter shooter;
 
   public StopIntake(Intake intake, Shooter shooter) {

@@ -13,19 +13,17 @@ import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
-/**
- * The {@link Shooter} class includes all the motors to shoot the power cells.
- */
+/** The {@link Shooter} class includes all the motors to shoot the power cells. */
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
   private TalonFX leftFalcon;
+
   private TalonFX rightFalcon;
   private TalonFX passthroughKraken;
 
@@ -169,8 +167,8 @@ public class Shooter extends SubsystemBase {
 
   /**
    * Sets the velocity of the shooter motors
-   * 
-   * @param left  Left motor speed in RPS
+   *
+   * @param left Left motor speed in RPS
    * @param right Right motor speed in RPS
    * @return void
    */
@@ -183,7 +181,7 @@ public class Shooter extends SubsystemBase {
 
   /**
    * Operator command to toggle shooter using Left Trigger
-   * 
+   *
    * @param void
    * @return void
    */
@@ -198,7 +196,7 @@ public class Shooter extends SubsystemBase {
 
   /**
    * Gets the RPM of the left falcon motor on the shooter
-   * 
+   *
    * @param void
    * @return double, leftFalcon RPM
    */
@@ -208,7 +206,7 @@ public class Shooter extends SubsystemBase {
 
   /**
    * Gets the RP of the right falcon motor on the shooter
-   * 
+   *
    * @param void
    * @return double, rightFalcon RPS
    */
@@ -218,7 +216,7 @@ public class Shooter extends SubsystemBase {
 
   /**
    * Sets the velocity of the kraken motor
-   * 
+   *
    * @param speed in RPM
    * @return void
    */
@@ -229,7 +227,7 @@ public class Shooter extends SubsystemBase {
 
   /**
    * Gets the velocity of the kraken motor
-   * 
+   *
    * @param void
    * @return double, kraken RPM
    */
@@ -239,7 +237,7 @@ public class Shooter extends SubsystemBase {
 
   /**
    * Stops the shooter motors
-   * 
+   *
    * @param void
    * @return void
    */
@@ -254,7 +252,7 @@ public class Shooter extends SubsystemBase {
 
   /**
    * Stops the kraken motor
-   * 
+   *
    * @param void
    * @return void
    */
@@ -267,7 +265,7 @@ public class Shooter extends SubsystemBase {
 
   /**
    * Stops all motors
-   * 
+   *
    * @param void
    * @return void
    */
@@ -283,7 +281,7 @@ public class Shooter extends SubsystemBase {
 
   /**
    * Gets the value of the ring sensor
-   * 
+   *
    * @return boolean, ring sensor value, default false
    */
   public boolean getRingSensor() {

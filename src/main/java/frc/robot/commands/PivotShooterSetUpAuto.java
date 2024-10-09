@@ -4,7 +4,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
@@ -81,7 +80,8 @@ public class PivotShooterSetUpAuto extends Command {
       pos = photonvision.getPivotPosition();
     }
 
-    double rps = ShooterGlobalValues.SHOOTER_SPEED + (photonvision.getDistanceSubwoofer() - 1.5) * 5;
+    double rps =
+        ShooterGlobalValues.SHOOTER_SPEED + (photonvision.getDistanceSubwoofer() - 1.5) * 5;
     shooter.setShooterVelocity(-rps, -rps);
   }
 
@@ -96,7 +96,8 @@ public class PivotShooterSetUpAuto extends Command {
     double horizontalError = -photonvision.getYaw() + photonvision.getOffset();
     System.out.println(horizontalError);
     if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
-      swerveSubsystem.setDriveSpeeds(0, 0, rotationalController.calculate(horizontalError, 0), false);
+      swerveSubsystem.setDriveSpeeds(
+          0, 0, rotationalController.calculate(horizontalError, 0), false);
     } else {
       swerveSubsystem.stop();
     }

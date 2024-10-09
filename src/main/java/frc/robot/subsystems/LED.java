@@ -6,16 +6,16 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
- * The LED subsystem controls the LED strip on the robot.
- * It uses an AddressableLED and AddressableLEDBuffer to manage the LED colors and patterns.
+ * The LED subsystem controls the LED strip on the robot. It uses an AddressableLED and
+ * AddressableLEDBuffer to manage the LED colors and patterns.
  */
 public class LED extends SubsystemBase {
   private final AddressableLED alignmentIndication1;
   private final AddressableLEDBuffer addressableLEDBuffer;
 
   /**
-   * Constructs a new LED subsystem.
-   * Initializes the AddressableLED and AddressableLEDBuffer with a specified length.
+   * Constructs a new LED subsystem. Initializes the AddressableLED and AddressableLEDBuffer with a
+   * specified length.
    */
   public LED() {
     alignmentIndication1 = new AddressableLED(9);
@@ -26,8 +26,8 @@ public class LED extends SubsystemBase {
   }
 
   /**
-   * This method will be called once per scheduler run.
-   * Updates the LED pattern based on the robot state.
+   * This method will be called once per scheduler run. Updates the LED pattern based on the robot
+   * state.
    */
   @Override
   public void periodic() {
@@ -64,51 +64,43 @@ public class LED extends SubsystemBase {
     alignmentIndication1.setData(addressableLEDBuffer);
   }
 
-  /**
-   * Sets the LED color to tan.
-   */
+  /** Sets the LED color to tan. */
   public void setTan() {
     setRGB(255, 120, 20);
   }
 
-  /**
-   * Sets the LED color to red.
-   */
+  /** Sets the LED color to red. */
   public void setRed() {
     setRGB(255, 0, 0);
   }
 
-  /**
-   * Sets the LED color to green.
-   */
+  /** Sets the LED color to green. */
   public void setGreen() {
     setRGB(0, 255, 0);
   }
 
   /**
    * Sets the LED color to green version 2.
-   * <p>
-   * (Colin says hi)
+   *
+   * <p>(Colin says hi)
    */
   public void setOrange() {
     setRGB(255, 165, 0);
   }
 
-  /**
-   * Sets the LED color to purple.
-   */
-  public void setPurpleColor() { setRGB(160, 32, 240); }
+  /** Sets the LED color to purple. */
+  public void setPurpleColor() {
+    setRGB(160, 32, 240);
+  }
 
-  /**
-   * Sets the LED color to high tide (a specific shade of blue-green).
-   */
+  /** Sets the LED color to high tide (a specific shade of blue-green). */
   public void setHighTide() {
     setRGB(0, 182, 174);
   }
 
   /**
-   * Creates a flowing high tide effect on the LED strip.
-   * The effect is based on a sine wave pattern that changes over time.
+   * Creates a flowing high tide effect on the LED strip. The effect is based on a sine wave pattern
+   * that changes over time.
    */
   public void highTideFlow() {
     long currentTime = System.currentTimeMillis();
@@ -118,13 +110,14 @@ public class LED extends SubsystemBase {
     final int waveWidth = 55;
 
     for (int i = 0; i < length; i++) {
-      double wave = Math.sin((i + ((double)currentTime / waveSpeed)) % length * (2 * Math.PI / waveWidth));
+      double wave =
+          Math.sin((i + ((double) currentTime / waveSpeed)) % length * (2 * Math.PI / waveWidth));
 
       wave = (wave + 1) / 2;
 
-      int r = (int)(wave * 0);
-      int g = (int)(wave * 200);
-      int b = (int)(wave * 50);
+      int r = (int) (wave * 0);
+      int g = (int) (wave * 200);
+      int b = (int) (wave * 50);
 
       addressableLEDBuffer.setRGB(i, r, g, b);
     }
