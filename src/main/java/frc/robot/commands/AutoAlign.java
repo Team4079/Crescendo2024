@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
 
@@ -42,11 +43,11 @@ public class AutoAlign extends Command {
   @Override
   public void execute() {
     // Horizontal PID and offset
-    double horizontalError = -photonvision.getYaw() - 1;
+    double horizontalError = photonvision.getYaw();
     System.out.println(horizontalError);
     if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
       swerveSubsystem.setDriveSpeeds(
-          0, 0, rotationalController.calculate(horizontalError, 1), false);
+          0, 0, rotationalController.calculate(horizontalError, photonvision.getOffset()), false);
     } else {
       swerveSubsystem.stop();
     }

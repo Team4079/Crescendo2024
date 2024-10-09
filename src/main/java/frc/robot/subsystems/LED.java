@@ -19,7 +19,7 @@ public class LED extends SubsystemBase {
    */
   public LED() {
     alignmentIndication1 = new AddressableLED(9);
-    addressableLEDBuffer = new AddressableLEDBuffer(55);
+    addressableLEDBuffer = new AddressableLEDBuffer(120);
     alignmentIndication1.setLength(addressableLEDBuffer.getLength());
     alignmentIndication1.setData(addressableLEDBuffer);
     alignmentIndication1.start();
