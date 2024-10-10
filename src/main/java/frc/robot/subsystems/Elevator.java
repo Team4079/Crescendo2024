@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-// import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -13,11 +12,9 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-// import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.ElevatorGlobalValues;
 
 public class Elevator extends SubsystemBase {
-
   public enum ElevatorState {
     UP,
     DOWN
@@ -27,7 +24,6 @@ public class Elevator extends SubsystemBase {
   private final CANSparkMax passMotorSparkMax;
   private ElevatorState state = ElevatorState.DOWN;
 
-  // Creates a new Elevator.
   public Elevator() {
     elevatorMotorSparkMax =
         new CANSparkMax(ElevatorGlobalValues.ELEVATOR_NEO_ID, MotorType.kBrushless);
@@ -65,7 +61,7 @@ public class Elevator extends SubsystemBase {
   // If the state is DOWN, it sets the elevator position to the down position defined in
   // ElevatorGlobalValues.
 
-  // @Override
+  @Override
   public void periodic() {
     if (state == ElevatorState.UP) {
       setElevatorPosition(ElevatorGlobalValues.ELEVATOR_UP);
@@ -76,11 +72,10 @@ public class Elevator extends SubsystemBase {
     }
   }
 
-  /*
+  /**
    * Sets the state of the elevator.
    * @param state The state to set the elevator to.
    */
-
   public void setState(ElevatorState state) {
     this.state = state;
   }
