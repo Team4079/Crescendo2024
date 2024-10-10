@@ -93,13 +93,27 @@ public class Photonvision extends SubsystemBase {
     result1 = camera1.getLatestResult();
     result2 = camera2.getLatestResult();
 
-    // if (result1.hasTargets()){
-    //   target1 = result1.getBestTarget();
-    //   if (result1.getMultiTagResult().estimatedPose.isPresent) {
-    //     Transform3d fieldToCamera = result1.getMultiTagResult().estimatedPose.best;
-    //     SmartDashboard.putNumber("field to camera", fieldToCamera.getX());
-    //   }
-    // }
+    if (result1.hasTargets()){
+      target1 = result1.getBestTarget();
+
+      var dist = target1.getBestCameraToTarget().getTranslation().getNorm();
+      SmartDashboard.putNumber("dist1", dist);
+
+      // if (result1.getMultiTagResult().estimatedPose.isPresent) {
+      //   Transform3d fieldToCamera = result1.getMultiTagResult().estimatedPose.best;
+      //   SmartDashboard.putNumber("field to camera", fieldToCamera.getX());
+      // }
+    } 
+
+    if (result2.hasTargets()){
+      target2 = result2.getBestTarget();
+      // if (result1.getMultiTagResult().estimatedPose.isPresent) {
+      //   Transform3d fieldToCamera = result1.getMultiTagResult().estimatedPose.best;
+      //   SmartDashboard.putNumber("field to camera", fieldToCamera.getX());
+      // }
+      var dist = target2.getBestCameraToTarget().getTranslation().getNorm();
+      SmartDashboard.putNumber("dist2", dist);
+    } 
 
     // target2 = result2.hasTargets() ? result2.getBestTarget() : target2;
 
