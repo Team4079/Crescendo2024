@@ -1,13 +1,10 @@
 package frc.robot.subsystems;
 
-import static frc.robot.utils.GlobalsValues.SwerveGlobalValues.BASE_LENGTH_ERICK_TRAN;
+import static frc.robot.utils.GlobalsValues.SwerveGlobalValues.*;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,10 +24,6 @@ public class Photonvision extends SubsystemBase {
   PhotonCamera camera1 = new PhotonCamera("Left");
   PhotonCamera camera2 = new PhotonCamera("Right");
 
-  // Tracked targets from the cameras
-  PhotonTrackedTarget target1;
-  PhotonTrackedTarget target2;
-
   // Pose estimator for determining the robot's position on the field
   PhotonPoseEstimator photonPoseEstimator1;
   PhotonPoseEstimator photonPoseEstimator2;
@@ -42,24 +35,20 @@ public class Photonvision extends SubsystemBase {
   // TODO: Make function to convert Translation2d to Translation3d
   Transform3d leftCameraPos =
       new Transform3d(
-          new Translation3d(
-              -BASE_LENGTH_ERICK_TRAN / 2,
-              -BASE_LENGTH_ERICK_TRAN / 2,
-              PhotonVisionConstants.CAMERA_ONE_HEIGHT_METER),
+          conv2dTo3d(BACK_LEFT, PhotonVisionConstants.CAMERA_ONE_HEIGHT_METER),
           new Rotation3d(0, 360 - PhotonVisionConstants.CAMERA_ONE_ANGLE_DEG, 150));
   Transform3d rightCameraPos =
       new Transform3d(
-          new Translation3d(
-              BASE_LENGTH_ERICK_TRAN / 2,
-              -BASE_LENGTH_ERICK_TRAN / 2,
-              PhotonVisionConstants.CAMERA_TWO_HEIGHT_METER),
+          conv2dTo3d(BACK_RIGHT, PhotonVisionConstants.CAMERA_TWO_HEIGHT_METER),
           new Rotation3d(0, 360 - PhotonVisionConstants.CAMERA_TWO_ANGLE_DEG, 210));
 
+  PhotonTrackedTarget target1;
   boolean targetVisible1 = false;
   double targetYaw1 = -15.0;
   double targetPoseAmbiguity1 = 0.0;
   double range1 = 0.0;
 
+  PhotonTrackedTarget target2;
   boolean targetVisible2 = false;
   double targetYaw2 = 15.0;
   double targetPoseAmbiguity2 = 0.0;
@@ -171,14 +160,10 @@ public class Photonvision extends SubsystemBase {
     targetPoseAmbiguity1 = 0.0;
     targetPoseAmbiguity2 = 0.0;
     if (result1.hasTargets()) {
-      // Camera processed a new frame since last
-      // Get the last one in the list.
       for (var tag : result1.getTargets()) {
-        // TODO: CHANGE DA TAGRGET ID FOR STUFF AND THIGNS LOLOLOLOL
+        // TODO: Change the target ID depending on what we are looking for
         // if (tag.getFiducialId() == 7 || tag.getFiducialId() == 4) {
         if (true) {
-          // Found Tag 7, record its information
-
           targetPoseAmbiguity1 = tag.getPoseAmbiguity();
           targetYaw1 = tag.getYaw();
           targetVisible1 = true;
@@ -197,15 +182,10 @@ public class Photonvision extends SubsystemBase {
       targetVisible1 = false;
     }
     if (result2.hasTargets()) {
-      // Camera processed a new frame since last
-      // Get the last one in the list.
-
       for (var tag : result2.getTargets()) {
-        // TODO: CHANGE DA TAGRGET ID FOR STUFF AND THIGNS LOLOLOLOL
+        // TODO: Change the target ID depending on what we are looking for
         // if (tag.getFiducialId() == 7 || tag.getFiducialId() == 4) {
         if (true) {
-          // Found Tag 7, record its information
-
           targetPoseAmbiguity2 = tag.getPoseAmbiguity();
           targetYaw2 = tag.getYaw();
           targetVisible2 = true;
@@ -243,17 +223,15 @@ public class Photonvision extends SubsystemBase {
   }
 
   public double getPivotPosition() {
-    // return (-0.288051 * Math.pow(getDistance(), 5) + 4.37563 * Math.pow(getDistance(), 4) +
-    // -24.8164 * Math.pow(getDistance(), 3) + 63.047 * Math.pow(getDistance(), 2) + getDistance() *
-    // -61.9595 + 28.877);
-    // return (-0.288051 * Math.pow(getDis(), 5) + 4.37563 * Math.pow(getDis(), 4) + -24.8164 *
-    // Math.pow(getDis(), 3) + 63.047 * Math.pow(getDis(), 2) + getDis() * -61.9595 + 28.577);
     return (-0.273166 * Math.pow(getDistanceSubwoofer(), 5)
         + 4.16168 * Math.pow(getDistanceSubwoofer(), 4)
         + -23.6466 * Math.pow(getDistanceSubwoofer(), 3)
         + 60.022 * Math.pow(getDistanceSubwoofer(), 2)
         + getDistanceSubwoofer() * -58.4714
-        + 27.1329); // ( 27.0538)
-    // return (-1
+        + 27.1329);
+  }
+
+  public Translation3d conv2dTo3d(Translation2d translation2d, double z) {
+    return new Translation3d(translation2d.getX(), translation2d.getY(), z);
   }
 }

@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-// import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -13,29 +12,28 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-// import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.ElevatorGlobalValues;
 
 public class Elevator extends SubsystemBase {
 
-  // public enum ElevatorState {
-  //   UP,
-  //   DOWN
-  // }
+  public enum ElevatorState {
+    UP,
+    DOWN
+  }
 
   // // private final CANSparkMax elevatorMotorSparkMax;
   // // private final CANSparkMax passMotorSparkMax;
   // private ElevatorState state = ElevatorState.DOWN;
 
-  // // Creates a new Elevator.
-  // public Elevator() {
-  //   // elevatorMotorSparkMax =
-  //       // new CANSparkMax(ElevatorGlobalValues.ELEVATOR_NEO_ID, MotorType.kBrushless);
-  //   // passMotorSparkMax = new CANSparkMax(ElevatorGlobalValues.PASS_NEO_ID, MotorType.kBrushless);
-  //   // elevatorMotorSparkMax.restoreFactoryDefaults();
-  //   // elevatorMotorSparkMax.setIdleMode(IdleMode.kBrake);
-  //   // passMotorSparkMax.restoreFactoryDefaults();
-  //   // passMotorSparkMax.setIdleMode(IdleMode.kBrake);
+  // Creates a new Elevator.
+  public Elevator() {
+    elevatorMotorSparkMax =
+        new CANSparkMax(ElevatorGlobalValues.ELEVATOR_NEO_ID, MotorType.kBrushless);
+    passMotorSparkMax = new CANSparkMax(ElevatorGlobalValues.PASS_NEO_ID, MotorType.kBrushless);
+    elevatorMotorSparkMax.restoreFactoryDefaults();
+    elevatorMotorSparkMax.setIdleMode(IdleMode.kBrake);
+    passMotorSparkMax.restoreFactoryDefaults();
+    passMotorSparkMax.setIdleMode(IdleMode.kBrake);
 
   //   // elevatorMotorSparkMax.setClosedLoopRampRate(ElevatorGlobalValues.closedLoopRampRate);
   //   // passMotorSparkMax.setClosedLoopRampRate(ElevatorGlobalValues.passClosedLoopRampRate);
@@ -65,25 +63,25 @@ public class Elevator extends SubsystemBase {
   // // If the state is DOWN, it sets the elevator position to the down position defined in
   // // ElevatorGlobalValues.
 
-  // // @Override
-  // public void periodic() {
-  //   if (state == ElevatorState.UP) {
-  //     setElevatorPosition(ElevatorGlobalValues.ELEVATOR_UP);
-  //     setPassSpeed(0.5);
-  //   } else if (state == ElevatorState.DOWN) {
-  //     setElevatorPosition(ElevatorGlobalValues.ELEVATOR_DOWN);
-  //     stopPassMotor();
-  //   }
-  // }
+  // @Override
+  public void periodic() {
+    if (state == ElevatorState.UP) {
+      setElevatorPosition(ElevatorGlobalValues.ELEVATOR_UP);
+      setPassSpeed(0.5);
+    } else if (state == ElevatorState.DOWN) {
+      setElevatorPosition(ElevatorGlobalValues.ELEVATOR_DOWN);
+      stopPassMotor();
+    }
+  }
 
-  // /*
-  //  * Sets the state of the elevator.
-  //  * @param state The state to set the elevator to.
-  //  */
+  /*
+   * Sets the state of the elevator.
+   * @param state The state to set the elevator to.
+   */
 
-  // public void setState(ElevatorState state) {
-  //   this.state = state;
-  // }
+  public void setState(ElevatorState state) {
+    this.state = state;
+  }
 
   // /**
   //  * Gets the current state of the elevator.
