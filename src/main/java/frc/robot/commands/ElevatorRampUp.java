@@ -9,26 +9,24 @@ import frc.robot.subsystems.Elevator;
 // import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.utils.GlobalsValues.ElevatorGlobalValues;
 
-public class ElevatorAmpSetup extends Command {
+public class ElevatorRampUp extends Command {
   Elevator elevator;
 
   /** Creates a new ElevatorAmpSetup. */
-  public ElevatorAmpSetup(Elevator elevator) {
+  public ElevatorRampUp(Elevator elevator) {
     this.elevator = elevator;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevator);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // elevator.setState(ElevatorState.UP);
+    elevator.setState(Elevator.ElevatorState.UP);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // return Math.abs(elevator.getElevatorPosition() - ElevatorGlobalValues.ELEVATOR_UP) < 0.5;
-    return false;
+    return Math.abs(elevator.getElevatorPosition() - ElevatorGlobalValues.ELEVATOR_UP) < 0.5;
   }
 }
