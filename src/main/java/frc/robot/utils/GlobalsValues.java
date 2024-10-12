@@ -87,7 +87,7 @@ public final class GlobalsValues {
     public static final double kIz = 0.0;
     public static final double kFF = 0.0002;
     public static final double kMaxOutput = 0.8;
-    public static final double kMinOutput = -0.2;
+    public static final double kMinOutput = -0.1;
 
     public static final double PasskP = 0.1; // TODO: git gud
     public static final double PasskI = 0; // TODO: git gud
