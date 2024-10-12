@@ -80,13 +80,13 @@ public final class GlobalsValues {
     public static final double closedLoopRampRate = 0.5;
     public static final double passClosedLoopRampRate = 0.1;
     public static final double ELEVATOR_UP = 7.0; // TODO: git gud
-    public static final double ELEVATOR_DOWN = 2;
-    public static final double kP = 0.0009; // TODO: git gud
-    public static final double kI = 0.00; // TODO: git gud
-    public static final double kD = 0; // TODO: git gud
+    public static final double ELEVATOR_DOWN = 0.7157;
+    public static final double kP = 0.0007157; // TODO: git gud
+    public static final double kI = 0.0000001; // TODO: git gud
+    public static final double kD = 0.0007157; // TODO: git gud
     public static final double kIz = 0;
-    public static final double kFF = 0;
-    public static final double kMaxOutput = 0.6;
+    public static final double kFF = 0.0000;
+    public static final double kMaxOutput = 0.55;
     public static final double kMinOutput = -0.5;
 
     public static final double PasskP = 0.1; // TODO: git gud
