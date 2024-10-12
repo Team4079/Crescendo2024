@@ -93,7 +93,7 @@ public final class GlobalsValues {
     public static final double PasskI = 0; // TODO: git gud
     public static final double PasskD = 0; // TODO: git gud
     public static final float SOFTLIMIT_FOWARD = 7.5f;
-    public static final float SOFTLIMIT_REVERSE = 0.1f;
+    public static final float SOFTLIMIT_REVERSE = 0.5f;
 
     public static final boolean ELEVATOR_TEST = true;
   }
