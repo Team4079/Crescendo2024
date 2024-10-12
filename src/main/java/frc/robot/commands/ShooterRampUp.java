@@ -1,46 +1,53 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.Shooter;
-// import frc.robot.utils.GlobalsValues.ShooterConstants;
-// import frc.robot.utils.GlobalsValues;
-// import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
+/** Command to ramp up the shooter to a specified velocity. */
 public class ShooterRampUp extends Command {
-
+  // Deadband value for velocity comparison.
   private final double deadband;
 
+  // Shooter subsystem instance.
   private final Shooter shooter;
 
+  // Desired revolutions per second for the shooter.
   private double rps;
+
+  // Photonvision subsystem instance.
   private final Photonvision photonvision;
 
-  /** Creates a new Shoot. */
+  /**
+   * Constructor for ShooterRampUp command.
+   *
+   * @param shooter The shooter subsystem.
+   * @param photonvision The photonvision subsystem.
+   */
   public ShooterRampUp(Shooter shooter, Photonvision photonvision) {
     deadband = 5;
     this.shooter = shooter;
-    // this.rps = rps;
     this.photonvision = photonvision;
     addRequirements(shooter, photonvision);
   }
 
-  // Called when the command is initially scheduled.
+  /**
+   * Initializes the command by calculating the desired shooter velocity and setting the shooter to
+   * that velocity.
+   */
   @Override
   public void initialize() {
     rps = ShooterGlobalValues.SHOOTER_SPEED + photonvision.getRange() * 3;
     SmartDashboard.putNumber("Jessica is smart", rps);
-    // shooter.setShooterVelocity(-rps, -rps);
     shooter.setShooterVelocity(-rps, -rps);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
+  /**
+   * Executes the command by checking if the shooter velocity is within the limit and updating the
+   * SmartDashboard.
+   */
   @Override
   public void execute() {
     SmartDashboard.putBoolean(
@@ -48,13 +55,15 @@ public class ShooterRampUp extends Command {
         Math.abs(shooter.getKrakenVelocity() - rps) < ShooterGlobalValues.RPM_THRESHOLD);
   }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
+  /**
+   * Checks if the command is finished by comparing the current shooter velocity with the desired
+   * velocity within a deadband.
+   *
+   * @return true if the command is finished, false otherwise.
+   */
   @Override
   public boolean isFinished() {
-    return Math.abs(shooter.getLeftShooterVelocity() - ShooterGlobalValues.SHOOTER_SPEED) < deadband;
+    return Math.abs(shooter.getLeftShooterVelocity() - ShooterGlobalValues.SHOOTER_SPEED)
+        < deadband;
   }
 }
