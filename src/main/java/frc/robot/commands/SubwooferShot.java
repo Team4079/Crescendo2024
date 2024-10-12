@@ -38,7 +38,7 @@ public class SubwooferShot extends SequentialCommandGroup {
             new SetPivot(pivot, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(0.6),
             new ShooterRampUp(shooter, photonvision).withTimeout(0.6)),
         new PushRing(shooter, photonvision, false).withTimeout(0.3),
-        new StopShooter(shooter).withTimeout(0.1),
+        new StopShooter(shooter).withTimeout(0.01),
         new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.4));
   }
 }

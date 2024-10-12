@@ -81,13 +81,13 @@ public final class GlobalsValues {
     public static final double passClosedLoopRampRate = 0.1;
     public static final double ELEVATOR_UP = 7.0; // TODO: git gud
     public static final double ELEVATOR_DOWN = 0.7157;
-    public static final double kP = 0.0007157; // TODO: git gud
-    public static final double kI = 0.0000001; // TODO: git gud
-    public static final double kD = 0.0007157; // TODO: git gud
-    public static final double kIz = 0;
-    public static final double kFF = 0.0000;
-    public static final double kMaxOutput = 0.55;
-    public static final double kMinOutput = -0.5;
+    public static final double kP = 0.00003; // TODO: git gud
+    public static final double kI = 0.000000; // TODO: git gud
+    public static final double kD = 0.0; // TODO: git gud
+    public static final double kIz = 0.0;
+    public static final double kFF = 0.0002;
+    public static final double kMaxOutput = 0.8;
+    public static final double kMinOutput = -0.2;
 
     public static final double PasskP = 0.1; // TODO: git gud
     public static final double PasskI = 0; // TODO: git gud
@@ -241,7 +241,7 @@ public final class GlobalsValues {
     public static final double PIVOT_NEUTRAL_ANGLE = (0.5 + PivotGlobalValues.offset); // All 3\
     // public static final double PIVOT_AMP_ANGLE = (46 + PivotGlobalValues.offset);
     // //Ued to be 49.55
-    public static final double PIVOT_AMP_ANGLE = 50.2;
+    public static final double PIVOT_AMP_ANGLE = 25.2;
     public static final double PIVOT_SUBWOOFER_ANGLE = (12.9 + PivotGlobalValues.offset);
     // public static final double PIVOT_SOURCE = 93;
     public static final double PIVOT_FENDER_ANGLE =
@@ -293,7 +293,7 @@ public final class GlobalsValues {
 
     // Shooter Motor Speed Values
     public static final double SHOOTER_SPEED = 35.0;
-    public static double AMP_SPEED = 9.87;
+    public static double AMP_SPEED = -5;
     public static boolean AMP_SPEED_JESSICA = true;
     public static final double KRAKEN_SPEED = 15.0;
 
@@ -303,7 +303,7 @@ public final class GlobalsValues {
     public static final double PASSTHROUGH_RPS = -30.0; // Positive is shooting, negative is intake
     public static final double AUTO_PASSTHROUGH_RPS =
         -35.0; // Positive is shooting, negative is intake
-    public static final double PUSH_RING_AMP_RPS = -30;
+    public static final double PUSH_RING_AMP_RPS = -5;
     public static final double PUSH_RING_RPS = -30;
 
     // Shooter Misc Values

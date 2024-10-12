@@ -56,9 +56,9 @@ public class Elevator extends SubsystemBase {
     getPIDController().setFF(ElevatorGlobalValues.kFF);
     getPIDController().setOutputRange(ElevatorGlobalValues.kMinOutput, ElevatorGlobalValues.kMaxOutput);
 
-    getPIDController().setSmartMotionAllowedClosedLoopError(0.07157, 0);
-    getPIDController().setSmartMotionMaxAccel(1500, 0);
-    getPIDController().setSmartMotionMaxVelocity(2000, 0);
+    getPIDController().setSmartMotionAllowedClosedLoopError(0.0987, 0);
+    getPIDController().setSmartMotionMaxAccel(10500, 0);
+    getPIDController().setSmartMotionMaxVelocity(11000, 0);
 
     // getPIDController().setP(ElevatorGlobalValues.PasskP);
     // getPIDController().setI(ElevatorGlobalValues.PasskI);

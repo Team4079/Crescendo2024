@@ -32,7 +32,7 @@ public class AmpRampUp extends Command {
   @Override
   public void initialize() {
     rps = ShooterGlobalValues.AMP_SPEED;
-    shooter.setShooterVelocity(-rps, -rps - 10);
+    shooter.setShooterVelocity(-rps, -rps);
   }
 
   /**
