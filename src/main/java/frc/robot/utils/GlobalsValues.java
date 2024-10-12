@@ -81,13 +81,13 @@ public final class GlobalsValues {
     public static final double passClosedLoopRampRate = 0.1;
     public static final double ELEVATOR_UP = 7.0; // TODO: git gud
     public static final double ELEVATOR_DOWN = 2;
-    public static final double kP = 0.1; // TODO: git gud
+    public static final double kP = 0.0009; // TODO: git gud
     public static final double kI = 0.00; // TODO: git gud
     public static final double kD = 0; // TODO: git gud
     public static final double kIz = 0;
     public static final double kFF = 0;
-    public static final double kMaxOutput = -0.3;
-    public static final double kMinOutput = 0.3;
+    public static final double kMaxOutput = 0.6;
+    public static final double kMinOutput = -0.5;
 
     public static final double PasskP = 0.1; // TODO: git gud
     public static final double PasskI = 0; // TODO: git gud
@@ -95,7 +95,7 @@ public final class GlobalsValues {
     public static final float SOFTLIMIT_FOWARD = 7.5f;
     public static final float SOFTLIMIT_REVERSE = 0.5f;
 
-    public static final boolean ELEVATOR_TEST = true;
+    public static final boolean ELEVATOR_TEST = false;
   }
 
   public static class SwerveGlobalValues {
