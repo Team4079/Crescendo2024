@@ -82,11 +82,14 @@ public class Photonvision extends SubsystemBase {
     result1 = camera1.getLatestResult();
     result2 = camera2.getLatestResult();
 
+    double dist1 = 0;
+    double dist2 = 0;
+
     if (result1.hasTargets()){
       target1 = result1.getBestTarget();
 
-      var dist = target1.getBestCameraToTarget().getTranslation().getNorm();
-      SmartDashboard.putNumber("dist1", dist);
+      dist1 = target1.getBestCameraToTarget().getTranslation().getNorm();
+      SmartDashboard.putNumber("dist1", dist1);
 
       // if (result1.getMultiTagResult().estimatedPose.isPresent) {
       //   Transform3d fieldToCamera = result1.getMultiTagResult().estimatedPose.best;
@@ -100,23 +103,23 @@ public class Photonvision extends SubsystemBase {
       //   Transform3d fieldToCamera = result1.getMultiTagResult().estimatedPose.best;
       //   SmartDashboard.putNumber("field to camera", fieldToCamera.getX());
       // }
-      var dist = target2.getBestCameraToTarget().getTranslation().getNorm();
-      SmartDashboard.putNumber("dist2", dist);
+      dist2 = target2.getBestCameraToTarget().getTranslation().getNorm();
+      SmartDashboard.putNumber("dist2", dist2);
     } 
 
     // target2 = result2.hasTargets() ? result2.getBestTarget() : target2;
 
     if (targetPoseAmbiguity1 > targetPoseAmbiguity2) {
       targetYaw = targetYaw1;
-      rangeToTarget = range1;
+      rangeToTarget = dist1;
     } else {
       targetYaw = targetYaw2;
-      rangeToTarget = range2;
+      rangeToTarget = dist2;
     }
 
     SmartDashboard.putNumber("photon yaw", targetYaw);
     SmartDashboard.putNumber("range target", rangeToTarget);
-    SmartDashboard.putNumber("april tag distance", getDistanceSubwoofer());
+    SmartDashboard.putNumber("april tag distance", getRange());
   }
 
   /**
@@ -153,10 +156,6 @@ public class Photonvision extends SubsystemBase {
    * API</a>
    */
   public double getRange() {
-    return rangeToTarget;
-  }
-
-  public double getDistanceSubwoofer() {
     targetPoseAmbiguity1 = 0.0;
     targetPoseAmbiguity2 = 0.0;
     if (result1.hasTargets()) {
@@ -223,11 +222,11 @@ public class Photonvision extends SubsystemBase {
   }
 
   public double getPivotPosition() {
-    return (-0.273166 * Math.pow(getDistanceSubwoofer(), 5)
-        + 4.16168 * Math.pow(getDistanceSubwoofer(), 4)
-        + -23.6466 * Math.pow(getDistanceSubwoofer(), 3)
-        + 60.022 * Math.pow(getDistanceSubwoofer(), 2)
-        + getDistanceSubwoofer() * -58.4714
+    return (-0.273166 * Math.pow(getRange(), 5)
+        + 4.16168 * Math.pow(getRange(), 4)
+        + -23.6466 * Math.pow(getRange(), 3)
+        + 60.022 * Math.pow(getRange(), 2)
+        + getRange() * -58.4714
         + 27.1329);
   }
 

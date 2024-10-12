@@ -34,7 +34,7 @@ public class ShooterRampUp extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    rps = ShooterGlobalValues.SHOOTER_SPEED + photonvision.getDistanceSubwoofer() * 3;
+    rps = ShooterGlobalValues.SHOOTER_SPEED + photonvision.getRange() * 3;
     SmartDashboard.putNumber("Jessica is smart", rps);
     // shooter.setShooterVelocity(-rps, -rps);
     shooter.setShooterVelocity(-rps, -rps);
