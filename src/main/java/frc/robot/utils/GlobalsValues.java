@@ -78,17 +78,24 @@ public final class GlobalsValues {
     public static final int ELEVATOR_NEO_ID = 21;
     public static final int PASS_NEO_ID = 22; // TODO: this should not be the same
     public static final double closedLoopRampRate = 0.5;
-    public static final double passClosedLoopRampRate = 0.5;
-    public static final double ELEVATOR_UP = 1; // TODO: git gud
-    public static final double ELEVATOR_DOWN = 0;
-    public static final double kP = 0.1; // TODO: git gud
-    public static final double kI = 0; // TODO: git gud
+    public static final double passClosedLoopRampRate = 0.1;
+    public static final double ELEVATOR_UP = 7.0; // TODO: git gud
+    public static final double ELEVATOR_DOWN = 2;
+    public static final double kP = 0.0987; // TODO: git gud
+    public static final double kI = 0.00; // TODO: git gud
     public static final double kD = 0; // TODO: git gud
+    public static final double kIz = 0;
+    public static final double kFF = 0;
+    public static final double kMaxOutput = -0.3;
+    public static final double kMinOutput = 0.3;
+
     public static final double PasskP = 0.1; // TODO: git gud
     public static final double PasskI = 0; // TODO: git gud
     public static final double PasskD = 0; // TODO: git gud
-    public static final float SOFTLIMIT_FOWARD = 0;
-    public static final float SOFTLIMIT_REVERSE = 0;
+    public static final float SOFTLIMIT_FOWARD = 7.5f;
+    public static final float SOFTLIMIT_REVERSE = 0.1f;
+
+    public static final boolean ELEVATOR_TEST = false;
   }
 
   public static class SwerveGlobalValues {
@@ -151,7 +158,7 @@ public final class GlobalsValues {
       public static final PID STEER_PID = new PID(13, 0.00085, 0.008, 0);
       // public static final PID STEER_PID = new PID(0.15, 0.0000, 0.000005, 0); //
       // 0.05 P, 0 D
-      public static final PID DRIVE_PID = new PID(1.5, 0.0, 0.0); // new PID(0.05, 0.00, 0, 0);
+      public static final PID DRIVE_PID = new PID(1, 0.0, 0.0); // new PID(0.05, 0.00, 0, 0);
       // DON'T SET D PAST 0.03 - Erick or else the swerve moduls make funny nosie
 
       // AutoAlign PID
@@ -163,7 +170,7 @@ public final class GlobalsValues {
 
       public static HolonomicPathFollowerConfig pathFollower =
           new HolonomicPathFollowerConfig(
-              new PIDConstants(5, 0.00, 0), // translation
+              new PIDConstants(6, 0.00, 0), // translation
               new PIDConstants(4.75, 0.0, 0.01), // rotation
               4.96824, // Max module speed, in m/s
               SwerveGlobalValues

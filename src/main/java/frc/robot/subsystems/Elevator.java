@@ -21,57 +21,74 @@ public class Elevator extends SubsystemBase {
     DOWN
   }
 
-  // // private final CANSparkMax elevatorMotorSparkMax;
-  // // private final CANSparkMax passMotorSparkMax;
-  // private ElevatorState state = ElevatorState.DOWN;
+  private final CANSparkMax elevatorMotorSparkMax =
+    new CANSparkMax(ElevatorGlobalValues.ELEVATOR_NEO_ID, MotorType.kBrushless);
+  // private final CANSparkMax passMotorSparkMax;
+  private ElevatorState state = ElevatorState.DOWN;
 
   // Creates a new Elevator.
   public Elevator() {
-    elevatorMotorSparkMax =
-        new CANSparkMax(ElevatorGlobalValues.ELEVATOR_NEO_ID, MotorType.kBrushless);
-    passMotorSparkMax = new CANSparkMax(ElevatorGlobalValues.PASS_NEO_ID, MotorType.kBrushless);
+    
+    // passMotorSparkMax = new CANSparkMax(ElevatorGlobalValues.PASS_NEO_ID, MotorType.kBrushless);
     elevatorMotorSparkMax.restoreFactoryDefaults();
     elevatorMotorSparkMax.setIdleMode(IdleMode.kBrake);
-    passMotorSparkMax.restoreFactoryDefaults();
-    passMotorSparkMax.setIdleMode(IdleMode.kBrake);
+    elevatorMotorSparkMax.setInverted(true);
+    
+    // passMotorSparkMax.restoreFactoryDefaults();
+    // passMotorSparkMax.setIdleMode(IdleMode.kBrake);
 
-  //   // elevatorMotorSparkMax.setClosedLoopRampRate(ElevatorGlobalValues.closedLoopRampRate);
-  //   // passMotorSparkMax.setClosedLoopRampRate(ElevatorGlobalValues.passClosedLoopRampRate);
-  //   getEncoder().setPosition(0);
+    elevatorMotorSparkMax.setClosedLoopRampRate(ElevatorGlobalValues.closedLoopRampRate);
+    // passMotorSparkMax.setClosedLoopRampRate(ElevatorGlobalValues.passClosedLoopRampRate);
+    getEncoder().setPosition(0);
 
-  //   // elevatorMotorSparkMax.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-  //   // elevatorMotorSparkMax.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+    elevatorMotorSparkMax.setSoftLimit(
+        CANSparkMax.SoftLimitDirection.kForward, ElevatorGlobalValues.SOFTLIMIT_FOWARD);
+    elevatorMotorSparkMax.setSoftLimit(
+        CANSparkMax.SoftLimitDirection.kReverse, ElevatorGlobalValues.SOFTLIMIT_REVERSE);
+        
+    elevatorMotorSparkMax.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    elevatorMotorSparkMax.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
 
-  //   // elevatorMotorSparkMax.setSoftLimit(
-  //       // CANSparkMax.SoftLimitDirection.kForward, ElevatorGlobalValues.SOFTLIMIT_FOWARD);
-  //   // elevatorMotorSparkMax.setSoftLimit(
-  //       // CANSparkMax.SoftLimitDirection.kReverse, ElevatorGlobalValues.SOFTLIMIT_REVERSE);
+    getPIDController().setP(ElevatorGlobalValues.kP);
+    getPIDController().setI(ElevatorGlobalValues.kI);
+    getPIDController().setD(ElevatorGlobalValues.kD);
+    getPIDController().setIZone(ElevatorGlobalValues.kIz);
+    getPIDController().setFF(ElevatorGlobalValues.kFF);
+    getPIDController().setOutputRange(ElevatorGlobalValues.kMinOutput, ElevatorGlobalValues.kMaxOutput);
 
-  //   getPIDController().setP(ElevatorGlobalValues.kP);
-  //   getPIDController().setI(ElevatorGlobalValues.kI);
-  //   getPIDController().setD(ElevatorGlobalValues.kD);
+    // getPIDController().setP(ElevatorGlobalValues.PasskP);
+    // getPIDController().setI(ElevatorGlobalValues.PasskI);
+    // getPIDController().setD(ElevatorGlobalValues.PasskD);
+    
+    logData();
 
-  //   getPIDController().setP(ElevatorGlobalValues.PasskP);
-  //   getPIDController().setI(ElevatorGlobalValues.PasskI);
-  //   getPIDController().setD(ElevatorGlobalValues.PasskD);
-  //   logData();
-  // }
+  }
 
-  // // This method is called periodically to update the elevator position based on its current state.
-  // // If the state is UP, it sets the elevator position to the up position defined in
-  // // ElevatorGlobalValues.
-  // // If the state is DOWN, it sets the elevator position to the down position defined in
-  // // ElevatorGlobalValues.
+  // This method is called periodically to update the elevator position based on its current state.
+  // If the state is UP, it sets the elevator position to the up position defined in
+  // ElevatorGlobalValues.
+  // If the state is DOWN, it sets the elevator position to the down position defined in
+  // ElevatorGlobalValues.
 
-  // @Override
+  @Override
   public void periodic() {
-    if (state == ElevatorState.UP) {
-      setElevatorPosition(ElevatorGlobalValues.ELEVATOR_UP);
-      setPassSpeed(0.5);
-    } else if (state == ElevatorState.DOWN) {
-      setElevatorPosition(ElevatorGlobalValues.ELEVATOR_DOWN);
-      stopPassMotor();
+    SmartDashboard.putNumber("Elevator Output", elevatorMotorSparkMax.getAppliedOutput());
+
+    if (!ElevatorGlobalValues.ELEVATOR_TEST){
+      if (state == ElevatorState.UP) {
+        setElevatorPosition(ElevatorGlobalValues.ELEVATOR_UP);
+        // setPassSpeed(0.5);
+      } else if (state == ElevatorState.DOWN) {
+        setElevatorPosition(ElevatorGlobalValues.ELEVATOR_DOWN);
+        // stopPassMotor();
+      }
     }
+
+    if (Math.abs(elevatorMotorSparkMax.getAppliedOutput()) < 0.01 && ElevatorGlobalValues.ELEVATOR_TEST) {
+      moveElevator(0.1);
+    }
+
+    logData();
   }
 
   /*
@@ -83,71 +100,79 @@ public class Elevator extends SubsystemBase {
     this.state = state;
   }
 
-  // /**
-  //  * Gets the current state of the elevator.
-  //  *
-  //  * @return The current state of the elevator.
-  //  */
-  // public ElevatorState getState() {
-  //   return state;
-  // }
+  /**
+   * Gets the current state of the elevator.
+   *
+   * @return The current state of the elevator.
+   */
+  public ElevatorState getState() {
+    return state;
+  }
 
   // public void setPassSpeed(double speed) {
-  //   // passMotorSparkMax.set(speed);
+  //   passMotorSparkMax.set(speed);
   // }
 
   // public void stopPassMotor() {
-  //   // passMotorSparkMax.set(0);
+  //   passMotorSparkMax.set(0);
   // }
 
-  // /**
-  //  * Sets the position of the elevator.
-  //  *
-  //  * @param position The position to set the elevator to.
-  //  */
-  // public void setElevatorPosition(double position) {
+  /**
+   * Sets the position of the elevator.
+   *
+   * @param position The position to set the elevator to.
+   */
+  public void setElevatorPosition(double position) {
+    elevatorMotorSparkMax.getPIDController().setReference(position, ControlType.kSmartMotion);
+  }
 
-  //   // elevatorMotorSparkMax.getPIDController().setReference(position, ControlType.kPosition);
-  // }
+  /**
+   * Gets the SparkMax motor of the elevator.
+   *
+   * @return The SparkMax motor of the elevator.
+   */
+  public double getElevatorPosition() {
+    // return 0.0;
+    return elevatorMotorSparkMax.getEncoder().getPosition();
+  }
 
-  // /**
-  //  * Gets the SparkMax motor of the elevator.
-  //  *
-  //  * @return The SparkMax motor of the elevator.
-  //  */
-  // public double getElevatorPosition() {
-  //   return 0.0;
-  //   // return elevatorMotorSparkMax.getEncoder().getPosition();
-  // }
+  public CANSparkMax getElevatorMotorSparkMax() {
+    // return null;
+    return elevatorMotorSparkMax;
+  }
 
-  // public CANSparkMax getElevatorMotorSparkMax() {
-  //   return null;
-  //   // return elevatorMotorSparkMax;
-  // }
+  /**
+   * Gets the pid controller of the elevator's motor.
+   *
+   * @return The pid controller of the elevator.
+   */
+  public SparkPIDController getPIDController() {
+    // return null;
+    return elevatorMotorSparkMax.getPIDController();
+  }
 
-  // /**
-  //  * Gets the pid controller of the elevator's motor.
-  //  *
-  //  * @return The pid controller of the elevator.
-  //  */
-  // public SparkPIDController getPIDController() {
-  //   return null;
-  //   // return elevatorMotorSparkMax.getPIDController();
-  // }
+  /**
+   * Gets the encoder of the elevator's motor.
+   *
+   * @return The encoder of the elevator.
+   */
+  public RelativeEncoder getEncoder() {
+    // return null;
+    return elevatorMotorSparkMax.getEncoder();
+  }
 
-  // /**
-  //  * Gets the encoder of the elevator's motor.
-  //  *
-  //  * @return The encoder of the elevator.
-  //  */
-  // public RelativeEncoder getEncoder() {
-  //   return null;
-  //   // return elevatorMotorSparkMax.getEncoder();
-  // }
+  public void moveElevator(double speed) {
+    SmartDashboard.putNumber("Elevator Speed", speed);
+    elevatorMotorSparkMax.set(speed);
+  }
 
-  // /** Logs data to the SmartDashboard. */
-  // private void logData() {
-  //   SmartDashboard.putString("Elevator State", state.toString());
-  //   SmartDashboard.putNumber("Elevator Position", getEncoder().getPosition());
-  // }
+  /** Logs data to the SmartDashboard. */
+  private void logData() {
+    SmartDashboard.putString("Elevator State", state.toString());
+    SmartDashboard.putNumber("Elevator Position", getEncoder().getPosition());
+    SmartDashboard.putNumber("Elevator Speed", elevatorMotorSparkMax.get());
+
+    // For PID Tuning
+    
+  }
 }

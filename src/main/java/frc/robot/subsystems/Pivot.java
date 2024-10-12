@@ -56,9 +56,6 @@ public class Pivot extends SubsystemBase {
   private SoftwareLimitSwitchConfigs leftSoftLimitConfig;
   private SoftwareLimitSwitchConfigs rightSoftLimitConfig;
 
-  private SparkAbsoluteEncoder absoluteEncoder;
-  private CANSparkMax encodeSparkMax;
-
   private VoltageOut voltageOut;
 
   private double deadband = 0.001;
@@ -158,11 +155,6 @@ public class Pivot extends SubsystemBase {
     pivotMotorRight.getConfigurator().apply(rightSoftLimitConfig);
 
     // absoluteEncoder = new DigitalInput(9);
-    // encoder = new AbsoluteEncoder(8);
-
-    encodeSparkMax = new CANSparkMax(21, MotorType.kBrushless);
-    absoluteEncoder = encodeSparkMax.getAbsoluteEncoder(Type.kDutyCycle);
-    absoluteEncoder.setPositionConversionFactor(PivotGlobalValues.PIVOT_GEAR_RATIO);
 
     vel_voltage = new VelocityVoltage(0);
     pos_reqest = new PositionVoltage(0);
