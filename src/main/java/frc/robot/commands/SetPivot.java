@@ -67,7 +67,7 @@ public class SetPivot extends Command {
    * @param pos The target position for the pivot.
    * @param deadband The deadband value for the position error.
    */
-  static void motorPivot(double velocity, Pivot pivot, double pos, double deadband) {
+  public static void motorPivot(double velocity, Pivot pivot, double pos, double deadband) {
     SmartDashboard.putNumber("Error Pivot", -pivot.getPivotPos() + pos);
     SmartDashboard.putNumber("Setpoint", pos);
     SmartDashboard.putNumber("Velocity Pivot", velocity);
