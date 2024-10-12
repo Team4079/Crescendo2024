@@ -94,15 +94,7 @@ public class Elevator extends SubsystemBase {
    */
   public void setState(ElevatorState state) {
     this.state = state;
-  }
-
-  /**
-   * Gets the current state of the elevator.
-   * @return The current state of the elevator.
-   */
-  public ElevatorState getState() {
-    return state;
-  }
+ }
 
   /**
    * Sets the position of the elevator.
@@ -118,14 +110,6 @@ public class Elevator extends SubsystemBase {
    */
   public double getElevatorPosition() {
     return elevatorMotorSparkMax.getEncoder().getPosition();
-  }
-
-  /**
-   * Gets the motor controller for the elevator.
-   * @return The motor controller for the elevator.
-   */
-  public CANSparkMax getElevatorMotorSparkMax() {
-    return elevatorMotorSparkMax;
   }
 
   /**

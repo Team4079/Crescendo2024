@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 import frc.robot.utils.LogitechGamingPad;
@@ -129,7 +128,7 @@ public class RobotContainer {
     padY.whileTrue(new AutoAlign(swerveSubsystem, photonvision).withTimeout(2));
     // padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
 
-    opPadA.onTrue(new ElevatorAmpScore(elevator));
+    opPadA.onTrue(new ElevatorRampUp(elevator));
     opPadB.onTrue(new ElevatorRampDown(elevator));
 
     rightBumper.onTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, photonvision));

@@ -9,11 +9,11 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.utils.GlobalsValues.ElevatorGlobalValues;
 
-public class ElevatorAmpScore extends Command {
+public class ElevatorRampUp extends Command {
   Elevator elevator;
 
   /** Creates a new ElevatorAmpSetup. */
-  public ElevatorAmpScore(Elevator elevator) {
+  public ElevatorRampUp(Elevator elevator) {
     this.elevator = elevator;
     addRequirements(elevator);
   }
@@ -28,6 +28,5 @@ public class ElevatorAmpScore extends Command {
   @Override
   public boolean isFinished() {
     return Math.abs(elevator.getElevatorPosition() - ElevatorGlobalValues.ELEVATOR_UP) < 0.5;
-    // return false;
   }
 }

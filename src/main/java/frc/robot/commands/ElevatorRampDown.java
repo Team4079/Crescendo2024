@@ -28,6 +28,5 @@ public class ElevatorRampDown extends Command {
   @Override
   public boolean isFinished() {
     return Math.abs(elevator.getElevatorPosition() - ElevatorGlobalValues.ELEVATOR_DOWN) < 0.5;
-    // return false;
   }
 }
