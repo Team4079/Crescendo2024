@@ -75,8 +75,8 @@ public final class GlobalsValues {
   }
 
   public static class ElevatorGlobalValues {
-    public static final int ELEVATOR_NEO_ID = 21;
-    public static final int PASS_NEO_ID = 22; // TODO: this should not be the same
+    public static final int ELEVATOR_NEO_ID = 22;
+    public static final int PASS_NEO_ID = 23;
     public static final double closedLoopRampRate = 0.5;
     public static final double passClosedLoopRampRate = 0.1;
     public static final double ELEVATOR_UP = 7.0; // TODO: git gud

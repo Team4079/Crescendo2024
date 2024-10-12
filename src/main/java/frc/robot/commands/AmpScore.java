@@ -21,7 +21,7 @@ public class AmpScore extends SequentialCommandGroup {
     addRequirements(shooter, pivot, elevator);
     addCommands(
         new ParallelCommandGroup(
-            new ElevatorAmpSetup(elevator).withTimeout(0.75),
+            new ElevatorAmpScore(elevator).withTimeout(0.75),
             new SetPivot(pivot, PivotGlobalValues.PIVOT_AMP_ANGLE).withTimeout(1.5),
             new AmpRampUp(shooter).withTimeout(1.5)),
         new PushRingAmp(shooter, photonvision).withTimeout(0.625),

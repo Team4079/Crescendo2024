@@ -9,13 +9,12 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.utils.GlobalsValues.ElevatorGlobalValues;
 
-public class ElevatorAmpSetup extends Command {
+public class ElevatorAmpScore extends Command {
   Elevator elevator;
 
   /** Creates a new ElevatorAmpSetup. */
-  public ElevatorAmpSetup(Elevator elevator) {
+  public ElevatorAmpScore(Elevator elevator) {
     this.elevator = elevator;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevator);
   }
 

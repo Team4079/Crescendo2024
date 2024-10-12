@@ -15,7 +15,6 @@ public class ElevatorRampDown extends Command {
   /** Creates a new ElevatorAmpSetup. */
   public ElevatorRampDown(Elevator elevator) {
     this.elevator = elevator;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevator);
   }
 

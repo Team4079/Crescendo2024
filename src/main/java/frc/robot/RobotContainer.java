@@ -130,7 +130,7 @@ public class RobotContainer {
     padY.whileTrue(new AutoAlign(swerveSubsystem, photonvision).withTimeout(2));
     // padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
 
-    opPadA.onTrue(new ElevatorAmpSetup(elevator));
+    opPadA.onTrue(new ElevatorAmpScore(elevator));
     opPadB.onTrue(new ElevatorRampDown(elevator));
 
     rightBumper.onTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, photonvision));

@@ -147,7 +147,6 @@ public class Elevator extends SubsystemBase {
    * @return The pid controller of the elevator.
    */
   public SparkPIDController getPIDController() {
-    // return null;
     return elevatorMotorSparkMax.getPIDController();
   }
 
@@ -172,7 +171,6 @@ public class Elevator extends SubsystemBase {
     SmartDashboard.putNumber("Elevator Position", getEncoder().getPosition());
     SmartDashboard.putNumber("Elevator Speed", elevatorMotorSparkMax.get());
 
-    // For PID Tuning
-    
+    // For
   }
 }
