@@ -303,7 +303,7 @@ public final class GlobalsValues {
     public static final double PASSTHROUGH_RPS = -30.0; // Positive is shooting, negative is intake
     public static final double AUTO_PASSTHROUGH_RPS =
         -35.0; // Positive is shooting, negative is intake
-    public static final double PUSH_RING_AMP_RPS = -5;
+    public static final double PUSH_RING_AMP_RPS = -30;
     public static final double PUSH_RING_RPS = -30;
 
     // Shooter Misc Values

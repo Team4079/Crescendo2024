@@ -130,7 +130,9 @@ public class RobotContainer {
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
    * predicate, or via the named factories in {@link
    * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * CommandXboxC
+   * 
+   * ontroller Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
@@ -147,7 +149,7 @@ public class RobotContainer {
 
     rightBumper.onTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, photonvision));
     // rightBumper.whileTrue(new ElevatorRampDown(elevator));
-    leftBumper.whileTrue(new AmpScore(shootyboi, pivotyboi, photonvision, elevator));
+    leftBumper.onTrue(new AmpScore(shootyboi, pivotyboi, photonvision, elevator));
     // startButton.onTrue(new StagePass(shootyboi));
     startButton.onTrue(new PassNoteGyro(swerveSubsystem, pivotyboi, shootyboi));
   }
