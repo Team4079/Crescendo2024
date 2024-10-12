@@ -6,7 +6,9 @@ import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 
-/** Command to ramp up the shooter to a specified velocity. */
+/**
+ * Command to ramp up the shooter to a specified velocity.
+ */
 public class ShooterRampUp extends Command {
   // Deadband value for velocity comparison.
   private final double deadband;
@@ -34,8 +36,8 @@ public class ShooterRampUp extends Command {
   }
 
   /**
-   * Initializes the command by calculating the desired shooter velocity and setting the shooter to
-   * that velocity.
+   * Initializes the command by calculating the desired shooter velocity
+   * and setting the shooter to that velocity.
    */
   @Override
   public void initialize() {
@@ -45,8 +47,8 @@ public class ShooterRampUp extends Command {
   }
 
   /**
-   * Executes the command by checking if the shooter velocity is within the limit and updating the
-   * SmartDashboard.
+   * Executes the command by checking if the shooter velocity is within the limit
+   * and updating the SmartDashboard.
    */
   @Override
   public void execute() {
@@ -56,14 +58,13 @@ public class ShooterRampUp extends Command {
   }
 
   /**
-   * Checks if the command is finished by comparing the current shooter velocity with the desired
-   * velocity within a deadband.
+   * Checks if the command is finished by comparing the current shooter velocity
+   * with the desired velocity within a deadband.
    *
    * @return true if the command is finished, false otherwise.
    */
   @Override
   public boolean isFinished() {
-    return Math.abs(shooter.getLeftShooterVelocity() - ShooterGlobalValues.SHOOTER_SPEED)
-        < deadband;
+    return Math.abs(shooter.getLeftShooterVelocity() - ShooterGlobalValues.SHOOTER_SPEED) < deadband;
   }
 }
