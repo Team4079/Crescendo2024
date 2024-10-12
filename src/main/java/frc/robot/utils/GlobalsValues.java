@@ -75,13 +75,13 @@ public final class GlobalsValues {
   }
 
   public static class ElevatorGlobalValues {
-    public static final int ELEVATOR_NEO_ID = 22;
-    public static final int PASS_NEO_ID = 23;
+    public static final int ELEVATOR_NEO_ID = 21;
+    public static final int PASS_NEO_ID = 22;
     public static final double closedLoopRampRate = 0.5;
     public static final double passClosedLoopRampRate = 0.1;
     public static final double ELEVATOR_UP = 7.0; // TODO: git gud
     public static final double ELEVATOR_DOWN = 2;
-    public static final double kP = 0.0987; // TODO: git gud
+    public static final double kP = 0.1; // TODO: git gud
     public static final double kI = 0.00; // TODO: git gud
     public static final double kD = 0; // TODO: git gud
     public static final double kIz = 0;
@@ -95,7 +95,7 @@ public final class GlobalsValues {
     public static final float SOFTLIMIT_FOWARD = 7.5f;
     public static final float SOFTLIMIT_REVERSE = 0.1f;
 
-    public static final boolean ELEVATOR_TEST = false;
+    public static final boolean ELEVATOR_TEST = true;
   }
 
   public static class SwerveGlobalValues {

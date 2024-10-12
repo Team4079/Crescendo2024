@@ -41,7 +41,7 @@ public class PadElevator extends Command {
   }
 
   /**
-   * Returns true when the command should end.
+   * Returns true when the %command should end.
    *
    * @return false, as this command never finishes on its own.
    */

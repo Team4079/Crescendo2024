@@ -179,9 +179,6 @@ public class Pivot extends SubsystemBase {
     SmartDashboard.putBoolean("Pivot SoftLimit", getSoftLimit());
     // SmartDashboard.putBoolean("limit", limit);
 
-    // pivotMotorLeft.setPosition(getAbsoluteEncoder());
-    // pivotMotorRight.setPosition(getAbsoluteEncoder());
-
     if (absPos == PivotGlobalValues.PIVOT_NEUTRAL_ANGLE) {
       GlobalsValues.PivotGlobalValues.IS_NEUTRAL = true;
     }
