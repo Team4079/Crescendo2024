@@ -95,7 +95,7 @@ public final class GlobalsValues {
     public static final float SOFTLIMIT_FOWARD = 7.5f;
     public static final float SOFTLIMIT_REVERSE = 0.5f;
 
-    public static final boolean ELEVATOR_TEST = false;
+    public static final boolean ELEVATOR_JOYSTICKS = false;
   }
 
   public static class SwerveGlobalValues {
