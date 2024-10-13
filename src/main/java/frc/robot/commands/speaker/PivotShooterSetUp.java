@@ -91,11 +91,11 @@ public class PivotShooterSetUp extends Command {
     SmartDashboard.putNumber("Error Pivot Left", -pivot.getPivotLeftPos() + pos);
 
     // Horizontal PID and offset
-    double horizontalError = -photonvision.getYaw() + photonvision.getOffset();
+    double horizontalError = -photonvision.getYaw();
     System.out.println(horizontalError);
     if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
       swerveSubsystem.setDriveSpeeds(
-          0, 0, rotationalController.calculate(horizontalError, photonvision.getOffset()), false);
+          0, 0, rotationalController.calculate(horizontalError, 0), false);
     } else {
       swerveSubsystem.stop();
     }

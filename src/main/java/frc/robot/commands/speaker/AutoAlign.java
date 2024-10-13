@@ -4,7 +4,10 @@
 
 package frc.robot.commands.speaker;
 
+import org.photonvision.PhotonCamera;
+
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -18,6 +21,8 @@ public class AutoAlign extends Command {
 
   /** Rotation PID and offset * */
   private final PIDController rotationalController;
+  private double horizontalError;
+  private PhotonCamera camera;
 
   public AutoAlign(SwerveSubsystem swerveSubsystem, Photonvision limelety) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -35,18 +40,21 @@ public class AutoAlign extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // No specific action needed when the command ends.
+    camera = photonvision.getBestCamera();
+    SmartDashboard.putString("cam used for align", camera.getName());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     // Horizontal PID and offset
-    double horizontalError = photonvision.getYaw();
+    horizontalError = photonvision.getYaw(camera);
+    SmartDashboard.putNumber("alignment error", horizontalError);
+    
     System.out.println(horizontalError);
     if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
       swerveSubsystem.setDriveSpeeds(
-          0, 0, rotationalController.calculate(horizontalError, photonvision.getOffset()), false);
+          0, 0, rotationalController.calculate(horizontalError, photonvision.getOffset(camera)), false);
     } else {
       swerveSubsystem.stop();
     }
@@ -61,12 +69,6 @@ public class AutoAlign extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // Checks if the april tag is within the deadband for at least half a second
-    // if (horizontalError <= SwerveGlobalValues.limelightDeadband && timeout == 20) {
-    //   timeout = 0;
-    //   return true;
-    // }
-
     return false;
   }
 }

@@ -79,7 +79,7 @@ public final class GlobalsValues {
     public static final int PASS_NEO_ID = 22;
     public static final double closedLoopRampRate = 0.5;
     public static final double passClosedLoopRampRate = 0.1;
-    public static final double ELEVATOR_UP = 6.32; // TODO: git gud
+    public static final double ELEVATOR_UP = 5.5; // TODO: git gud
     public static final double ELEVATOR_DOWN = 0.5;
     public static final double kP = 0.00003; // TODO: git gud
     public static final double kI = 0.000000; // TODO: git gud
@@ -89,11 +89,11 @@ public final class GlobalsValues {
     public static final double kMaxOutput = 0.8;
     public static final double kMinOutput = -0.1;
 
-    public static final double PasskP = 0.1; // TODO: git gud
+    public static final double PasskP = 0.001; // TODO: git gud
     public static final double PasskI = 0; // TODO: git gud
     public static final double PasskD = 0; // TODO: git gud
     public static final float SOFTLIMIT_FOWARD = 7.5f;
-    public static final float SOFTLIMIT_REVERSE = -0.5f;
+    public static final float SOFTLIMIT_REVERSE = -1.0f;
 
     public static final boolean ELEVATOR_JOYSTICKS = false;
   }
@@ -241,7 +241,7 @@ public final class GlobalsValues {
     public static final double PIVOT_NEUTRAL_ANGLE = (0.5 + PivotGlobalValues.offset); // All 3\
     // public static final double PIVOT_AMP_ANGLE = (46 + PivotGlobalValues.offset);
     // //Ued to be 49.55
-    public static final double PIVOT_AMP_ANGLE = 19.13;
+    public static final double PIVOT_AMP_ANGLE = 20;
     public static final double PIVOT_SUBWOOFER_ANGLE = (12.9 + PivotGlobalValues.offset);
     // public static final double PIVOT_SOURCE = 93;
     public static final double PIVOT_FENDER_ANGLE =
@@ -293,7 +293,7 @@ public final class GlobalsValues {
 
     // Shooter Motor Speed Values
     public static final double SHOOTER_SPEED = 35.0;
-    public static double AMP_SPEED = 6;
+    public static double AMP_SPEED = 5;
     public static boolean AMP_SPEED_JESSICA = true;
     public static final double KRAKEN_SPEED = 15.0;
 
@@ -353,11 +353,11 @@ public final class GlobalsValues {
     // Camera One
     public static final double CAMERA_ONE_HEIGHT_METER = 0.61;
     public static final double CAMERA_ONE_ANGLE_DEG = 7.5; // up is positive
-    public static final double OFFSET_TOWARD_MID_LEFT = -45.00;
+    public static final double OFFSET_TOWARD_MID_LEFT = 15.00;
 
     // Camera Two
     public static final double CAMERA_TWO_HEIGHT_METER = 0.61;
     public static final double CAMERA_TWO_ANGLE_DEG = 7.5; // up is positive
-    public static final double OFFSET_TOWARD_MID_RIGHT = 45.0;
+    public static final double OFFSET_TOWARD_MID_RIGHT = -15.0;
   }
 }

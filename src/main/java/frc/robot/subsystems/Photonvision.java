@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues.PhotonVisionConstants;
 import java.util.Optional;
+
+import org.opencv.photo.Photo;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -21,12 +23,12 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 /** The PhotonVision subsystem handles vision processing using PhotonVision cameras. */
 public class Photonvision extends SubsystemBase {
   // PhotonVision cameras
-  PhotonCamera camera1 = new PhotonCamera("Left");
-  PhotonCamera camera2 = new PhotonCamera("Right");
+  PhotonCamera cameraleft = new PhotonCamera("Left");
+  PhotonCamera cameraright = new PhotonCamera("Right");
 
   // Pose estimator for determining the robot's position on the field
-  PhotonPoseEstimator photonPoseEstimator1;
-  PhotonPoseEstimator photonPoseEstimator2;
+  PhotonPoseEstimator photonPoseEstimatorleft;
+  PhotonPoseEstimator photonPoseEstimatorright;
 
   // AprilTag field layout for the 2024 Crescendo field
   AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
@@ -42,34 +44,38 @@ public class Photonvision extends SubsystemBase {
           conv2dTo3d(BACK_RIGHT, PhotonVisionConstants.CAMERA_TWO_HEIGHT_METER),
           new Rotation3d(0, 360 - PhotonVisionConstants.CAMERA_TWO_ANGLE_DEG, 210));
 
-  PhotonTrackedTarget target1;
-  boolean targetVisible1 = false;
-  double targetYaw1 = -15.0;
-  double targetPoseAmbiguity1 = 0.0;
-  double range1 = 0.0;
+  PhotonTrackedTarget targetleft;
+  boolean targetVisibleleft = false;
+  double targetYawleft = -15.0;
+  double targetPoseAmbiguityleft = 0.0;
+  double rangeleft = 0.0;
 
-  PhotonTrackedTarget target2;
-  boolean targetVisible2 = false;
-  double targetYaw2 = 15.0;
-  double targetPoseAmbiguity2 = 0.0;
-  double range2 = 0.0;
+  PhotonTrackedTarget targetright;
+  boolean targetVisibleright = false;
+  double targetYawright = 15.0;
+  double targetPoseAmbiguityright = 0.0;
+  double rangeright = 0.0;
 
   double targetYaw = 0.0;
   double rangeToTarget = 0.0;
 
-  PhotonPipelineResult result1;
-  PhotonPipelineResult result2;
+  PhotonPipelineResult resultleft;
+  PhotonPipelineResult resultright;
+  PhotonPipelineResult currentResult;
+
+  boolean camleftTag = false;
+  boolean camrightTag = false;
 
   /** Constructs a new PhotonVision subsystem. */
   public Photonvision() {
-    photonPoseEstimator1 =
+    photonPoseEstimatorleft =
         new PhotonPoseEstimator(
-            aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera1, leftCameraPos);
-    photonPoseEstimator2 =
+            aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, cameraleft, leftCameraPos);
+    photonPoseEstimatorright =
         new PhotonPoseEstimator(
             aprilTagFieldLayout,
             PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-            camera2,
+            cameraright,
             rightCameraPos);
   }
 
@@ -79,47 +85,54 @@ public class Photonvision extends SubsystemBase {
    */
   @Override
   public void periodic() {
-    result1 = camera1.getLatestResult();
-    result2 = camera2.getLatestResult();
+    resultleft = cameraleft.getLatestResult();
+    resultright = cameraright.getLatestResult();
 
-    double dist1 = 0;
-    double dist2 = 0;
+    double distleft = 0;
+    double distright = 0;
 
-    if (result1.hasTargets()){
-      target1 = result1.getBestTarget();
+    if (resultleft.hasTargets()){
+      targetleft = resultleft.getBestTarget();
+      targetPoseAmbiguityleft = targetleft.getPoseAmbiguity();
+      SmartDashboard.putNumber("right cam ambiguity", targetPoseAmbiguityleft);
 
-      dist1 = target1.getBestCameraToTarget().getTranslation().getNorm();
-      SmartDashboard.putNumber("dist1", dist1);
 
-      // if (result1.getMultiTagResult().estimatedPose.isPresent) {
-      //   Transform3d fieldToCamera = result1.getMultiTagResult().estimatedPose.best;
+      distleft = targetleft.getBestCameraToTarget().getTranslation().getNorm();
+      SmartDashboard.putNumber("distleft", distleft);
+
+      // if (resultleft.getMultiTagResult().estimatedPose.isPresent) {
+      //   Transform3d fieldToCamera = resultleft.getMultiTagResult().estimatedPose.best;
       //   SmartDashboard.putNumber("field to camera", fieldToCamera.getX());
       // }
     } 
 
-    if (result2.hasTargets()){
-      target2 = result2.getBestTarget();
-      // if (result1.getMultiTagResult().estimatedPose.isPresent) {
-      //   Transform3d fieldToCamera = result1.getMultiTagResult().estimatedPose.best;
+    else {
+      targetPoseAmbiguityleft = 1e9;
+    }
+
+    if (resultright.hasTargets()){
+      targetright = resultright.getBestTarget();
+      targetPoseAmbiguityright = targetright.getPoseAmbiguity();
+      SmartDashboard.putNumber("left cam ambiguity", targetPoseAmbiguityright);
+
+      // if (resultleft.getMultiTagResult().estimatedPose.isPresent) {
+      //   Transform3d fieldToCamera = resultleft.getMultiTagResult().estimatedPose.best;
       //   SmartDashboard.putNumber("field to camera", fieldToCamera.getX());
       // }
-      dist2 = target2.getBestCameraToTarget().getTranslation().getNorm();
-      SmartDashboard.putNumber("dist2", dist2);
+
+      
+      distright = targetright.getBestCameraToTarget().getTranslation().getNorm();
+      SmartDashboard.putNumber("distright", distright);
     } 
 
-    // target2 = result2.hasTargets() ? result2.getBestTarget() : target2;
-
-    if (targetPoseAmbiguity1 > targetPoseAmbiguity2) {
-      targetYaw = targetYaw1;
-      rangeToTarget = dist1;
-    } else {
-      targetYaw = targetYaw2;
-      rangeToTarget = dist2;
+    else{
+      targetPoseAmbiguityright = 1e9;
     }
 
     SmartDashboard.putNumber("photon yaw", targetYaw);
     SmartDashboard.putNumber("range target", rangeToTarget);
     SmartDashboard.putNumber("april tag distance", getRange());
+
   }
 
   /**
@@ -130,11 +143,11 @@ public class Photonvision extends SubsystemBase {
    *     estimated.
    */
   public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
-    photonPoseEstimator1.setReferencePose(prevEstimatedRobotPose);
-    photonPoseEstimator2.setReferencePose(prevEstimatedRobotPose);
-    return targetPoseAmbiguity1 > targetPoseAmbiguity2
-        ? photonPoseEstimator2.update()
-        : photonPoseEstimator1.update();
+    photonPoseEstimatorleft.setReferencePose(prevEstimatedRobotPose);
+    photonPoseEstimatorright.setReferencePose(prevEstimatedRobotPose);
+    return targetPoseAmbiguityleft > targetPoseAmbiguityright
+        ? photonPoseEstimatorright.update()
+        : photonPoseEstimatorleft.update();
   }
 
   /**
@@ -156,21 +169,21 @@ public class Photonvision extends SubsystemBase {
    * API</a>
    */
   public double getRange() {
-    targetPoseAmbiguity1 = 0.0;
-    targetPoseAmbiguity2 = 0.0;
-    if (result1.hasTargets()) {
-      for (var tag : result1.getTargets()) {
+    targetPoseAmbiguityleft = 0.0;
+    targetPoseAmbiguityright = 0.0;
+    if (resultleft.hasTargets()) {
+      for (var tag : resultleft.getTargets()) {
         // TODO: Change the target ID depending on what we are looking for
         // if (tag.getFiducialId() == 7 || tag.getFiducialId() == 4) {
         if (true) {
-          targetPoseAmbiguity1 = tag.getPoseAmbiguity();
-          targetYaw1 = tag.getYaw();
-          targetVisible1 = true;
+          targetPoseAmbiguityleft = tag.getPoseAmbiguity();
+          targetYawleft = tag.getYaw();
+          targetVisibleleft = true;
 
-          range1 =
+          rangeleft =
               PhotonUtils.calculateDistanceToTargetMeters(
                   PhotonVisionConstants.CAMERA_ONE_HEIGHT_METER,
-                  1.435, // From 2024 game manual for ID 7 | IMPORTANT TO CHANGE
+                  1.435, // From right0right4 game manual for ID 7 | IMPORTANT TO CHANGE
                   Units.degreesToRadians(
                       PhotonVisionConstants
                           .CAMERA_ONE_ANGLE_DEG), // Rotation about Y = Pitch | UP IS POSITIVE
@@ -178,21 +191,21 @@ public class Photonvision extends SubsystemBase {
         }
       }
     } else {
-      targetVisible1 = false;
+      targetVisibleleft = false;
     }
-    if (result2.hasTargets()) {
-      for (var tag : result2.getTargets()) {
+    if (resultright.hasTargets()) {
+      for (var tag : resultright.getTargets()) {
         // TODO: Change the target ID depending on what we are looking for
         // if (tag.getFiducialId() == 7 || tag.getFiducialId() == 4) {
         if (true) {
-          targetPoseAmbiguity2 = tag.getPoseAmbiguity();
-          targetYaw2 = tag.getYaw();
-          targetVisible2 = true;
+          targetPoseAmbiguityright = tag.getPoseAmbiguity();
+          targetYawright = tag.getYaw();
+          targetVisibleright = true;
 
-          range2 =
+          rangeright =
               PhotonUtils.calculateDistanceToTargetMeters(
                   PhotonVisionConstants.CAMERA_TWO_HEIGHT_METER,
-                  1.435, // From 2024 game manual for ID 7 | IMPORTANT TO CHANGE
+                  1.435, // From right0right4 game manual for ID 7 | IMPORTANT TO CHANGE
                   Units.degreesToRadians(
                       PhotonVisionConstants
                           .CAMERA_TWO_ANGLE_DEG), // Rotation about Y = Pitch | UP IS POSITIVE
@@ -200,25 +213,29 @@ public class Photonvision extends SubsystemBase {
         }
       }
     } else {
-      targetVisible2 = false;
+      targetVisibleright = false;
     }
-    if (targetPoseAmbiguity1 > targetPoseAmbiguity2 && targetVisible1) {
-      return range1;
-    } else if (targetVisible2) {
-      return range2;
+    if (targetPoseAmbiguityleft > targetPoseAmbiguityright && targetVisibleleft) {
+      return rangeleft;
+    } else if (targetVisibleright) {
+      return rangeright;
     } else {
       return 0.0;
     }
   }
 
-  public double getOffset() {
-    if (targetPoseAmbiguity1 > targetPoseAmbiguity2 && targetVisible1) {
+  public double getOffset(PhotonCamera camera) {
+    if (camera.getName() == "left")
+    {
       return PhotonVisionConstants.OFFSET_TOWARD_MID_LEFT;
-    } else if (targetVisible2) {
-      return PhotonVisionConstants.OFFSET_TOWARD_MID_RIGHT;
-    } else {
-      return 0.0;
     }
+
+    if (camera.getName() == "right")
+    {
+      return PhotonVisionConstants.OFFSET_TOWARD_MID_RIGHT;
+    }
+
+    return 0.0;
   }
 
   public double getPivotPosition() {
@@ -232,5 +249,17 @@ public class Photonvision extends SubsystemBase {
 
   public Translation3d conv2dTo3d(Translation2d translation2d, double z) {
     return new Translation3d(translation2d.getX(), translation2d.getY(), z);
+  }
+
+  public PhotonCamera getBestCamera() {
+    return (targetPoseAmbiguityleft > targetPoseAmbiguityright) ? cameraright : cameraleft;
+  }
+  
+  public double getYaw(PhotonCamera camera) {
+    if (camera.getLatestResult().hasTargets())
+    {
+      return camera.getLatestResult().getBestTarget().getYaw();
+    }
+    return -1;
   }
 }

@@ -28,6 +28,9 @@ public class Elevator extends SubsystemBase {
   private final CANSparkMax elevatorMotorSparkMax =
       new CANSparkMax(ElevatorGlobalValues.ELEVATOR_NEO_ID, MotorType.kBrushless);
 
+  private final CANSparkMax passMotorSparkMax = 
+      new CANSparkMax(ElevatorGlobalValues.PASS_NEO_ID, MotorType.kBrushless);
+
   // The current state of the elevator.
   private ElevatorState state = ElevatorState.DOWN;
 
@@ -48,7 +51,14 @@ public class Elevator extends SubsystemBase {
         CANSparkMax.SoftLimitDirection.kReverse, ElevatorGlobalValues.SOFTLIMIT_REVERSE);
 
     elevatorMotorSparkMax.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    
+
     elevatorMotorSparkMax.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+
+    passMotorSparkMax.restoreFactoryDefaults();
+    passMotorSparkMax.setIdleMode(IdleMode.kBrake);
+
+    passMotorSparkMax.setClosedLoopRampRate(ElevatorGlobalValues.passClosedLoopRampRate);
 
     getPIDController().setP(ElevatorGlobalValues.kP);
     getPIDController().setI(ElevatorGlobalValues.kI);
@@ -60,6 +70,10 @@ public class Elevator extends SubsystemBase {
     getPIDController().setSmartMotionAllowedClosedLoopError(0.0987, 0);
     getPIDController().setSmartMotionMaxAccel(10500, 0);
     getPIDController().setSmartMotionMaxVelocity(11000, 0);
+
+    getPassPIDController().setP(ElevatorGlobalValues.PasskP);
+    getPassPIDController().setI(ElevatorGlobalValues.PasskI);
+    getPassPIDController().setD(ElevatorGlobalValues.PasskD);
 
     logData();
   }
@@ -76,8 +90,11 @@ public class Elevator extends SubsystemBase {
     if (!ElevatorGlobalValues.ELEVATOR_JOYSTICKS){
       if (state == ElevatorState.UP) {
         setElevatorPosition(ElevatorGlobalValues.ELEVATOR_UP);
+        setPassSpeed(0.5);
+        
       } else if (state == ElevatorState.DOWN) {
         setElevatorPosition(ElevatorGlobalValues.ELEVATOR_DOWN);
+        stopPassMotor();
       }
     }
 
@@ -86,6 +103,15 @@ public class Elevator extends SubsystemBase {
     }
 
     logData();
+  }
+
+
+  public void setPassSpeed(double speed) {
+    passMotorSparkMax.set(speed);
+  }
+
+  public void stopPassMotor() {
+    passMotorSparkMax.set(0);
   }
 
   /**
@@ -118,6 +144,10 @@ public class Elevator extends SubsystemBase {
    */
   public SparkPIDController getPIDController() {
     return elevatorMotorSparkMax.getPIDController();
+  }
+
+  public SparkPIDController getPassPIDController() {
+    return passMotorSparkMax.getPIDController();
   }
 
   /**
