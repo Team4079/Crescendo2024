@@ -118,7 +118,7 @@ public class RobotContainer {
     swerveSubsystem.setDefaultCommand(
         new PadDrive(swerveSubsystem, pad, SwerveGlobalValues.FIELD_ORIENTATED));
     intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, pad, photonvision, led));
-    pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, pad));
+    pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, opPad));
     shootyboi.setDefaultCommand(
         new PadShoot(shootyboi, swerveSubsystem, pad, photonvision, pivotyboi));
     elevator.setDefaultCommand(new PadElevator(elevator, opPad));

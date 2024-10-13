@@ -40,7 +40,7 @@ public class Elevator extends SubsystemBase {
     elevatorMotorSparkMax.setIdleMode(IdleMode.kBrake);
     elevatorMotorSparkMax.setInverted(true);
     elevatorMotorSparkMax.setClosedLoopRampRate(ElevatorGlobalValues.closedLoopRampRate);
-    getEncoder().setPosition(0);
+    getEncoder().setPosition(0.25);
 
     elevatorMotorSparkMax.setSoftLimit(
         CANSparkMax.SoftLimitDirection.kForward, ElevatorGlobalValues.SOFTLIMIT_FOWARD);
