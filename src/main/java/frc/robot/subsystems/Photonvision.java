@@ -9,6 +9,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues.PhotonVisionConstants;
+
+import java.util.List;
 import java.util.Optional;
 
 import org.opencv.photo.Photo;
@@ -47,13 +49,13 @@ public class Photonvision extends SubsystemBase {
   PhotonTrackedTarget targetleft;
   boolean targetVisibleleft = false;
   double targetYawleft = -15.0;
-  double targetPoseAmbiguityleft = 0.0;
+  double targetPoseAmbiguityleft = 7157;
   double rangeleft = 0.0;
 
   PhotonTrackedTarget targetright;
   boolean targetVisibleright = false;
   double targetYawright = 15.0;
-  double targetPoseAmbiguityright = 0.0;
+  double targetPoseAmbiguityright = 7157;
   double rangeright = 0.0;
 
   double targetYaw = 0.0;
@@ -94,8 +96,6 @@ public class Photonvision extends SubsystemBase {
     if (resultleft.hasTargets()){
       targetleft = resultleft.getBestTarget();
       targetPoseAmbiguityleft = targetleft.getPoseAmbiguity();
-      SmartDashboard.putNumber("right cam ambiguity", targetPoseAmbiguityleft);
-
 
       distleft = targetleft.getBestCameraToTarget().getTranslation().getNorm();
       SmartDashboard.putNumber("distleft", distleft);
@@ -107,31 +107,28 @@ public class Photonvision extends SubsystemBase {
     } 
 
     else {
-      targetPoseAmbiguityleft = 1e9;
+      targetPoseAmbiguityleft = 7157;
     }
 
     if (resultright.hasTargets()){
       targetright = resultright.getBestTarget();
       targetPoseAmbiguityright = targetright.getPoseAmbiguity();
-      SmartDashboard.putNumber("left cam ambiguity", targetPoseAmbiguityright);
 
-      // if (resultleft.getMultiTagResult().estimatedPose.isPresent) {
-      //   Transform3d fieldToCamera = resultleft.getMultiTagResult().estimatedPose.best;
-      //   SmartDashboard.putNumber("field to camera", fieldToCamera.getX());
-      // }
-
-      
       distright = targetright.getBestCameraToTarget().getTranslation().getNorm();
       SmartDashboard.putNumber("distright", distright);
     } 
 
     else{
-      targetPoseAmbiguityright = 1e9;
+      targetPoseAmbiguityright = 7157;
     }
 
     SmartDashboard.putNumber("photon yaw", targetYaw);
     SmartDashboard.putNumber("range target", rangeToTarget);
     SmartDashboard.putNumber("april tag distance", getRange());
+    SmartDashboard.putNumber("left cam ambiguity", targetPoseAmbiguityleft);
+    SmartDashboard.putNumber("right cam ambiguity", targetPoseAmbiguityright);
+    SmartDashboard.putBoolean("right_targets", resultright.hasTargets());
+    SmartDashboard.putBoolean("left_targets", resultleft.hasTargets());
 
   }
 
@@ -169,14 +166,14 @@ public class Photonvision extends SubsystemBase {
    * API</a>
    */
   public double getRange() {
-    targetPoseAmbiguityleft = 0.0;
-    targetPoseAmbiguityright = 0.0;
+    double leftSubwooferTagAmbiguity = 0;
+    double rigthSubwooferTagAmbiguity = 0;
     if (resultleft.hasTargets()) {
       for (var tag : resultleft.getTargets()) {
         // TODO: Change the target ID depending on what we are looking for
         // if (tag.getFiducialId() == 7 || tag.getFiducialId() == 4) {
         if (true) {
-          targetPoseAmbiguityleft = tag.getPoseAmbiguity();
+          leftSubwooferTagAmbiguity = tag.getPoseAmbiguity();
           targetYawleft = tag.getYaw();
           targetVisibleleft = true;
 
@@ -198,7 +195,7 @@ public class Photonvision extends SubsystemBase {
         // TODO: Change the target ID depending on what we are looking for
         // if (tag.getFiducialId() == 7 || tag.getFiducialId() == 4) {
         if (true) {
-          targetPoseAmbiguityright = tag.getPoseAmbiguity();
+          rigthSubwooferTagAmbiguity = tag.getPoseAmbiguity();
           targetYawright = tag.getYaw();
           targetVisibleright = true;
 
@@ -215,7 +212,7 @@ public class Photonvision extends SubsystemBase {
     } else {
       targetVisibleright = false;
     }
-    if (targetPoseAmbiguityleft > targetPoseAmbiguityright && targetVisibleleft) {
+    if (leftSubwooferTagAmbiguity > rigthSubwooferTagAmbiguity && targetVisibleleft) {
       return rangeleft;
     } else if (targetVisibleright) {
       return rangeright;
@@ -225,12 +222,12 @@ public class Photonvision extends SubsystemBase {
   }
 
   public double getOffset(PhotonCamera camera) {
-    if (camera.getName() == "left")
+    if (camera.getName().equals("Left"))
     {
       return PhotonVisionConstants.OFFSET_TOWARD_MID_LEFT;
     }
 
-    if (camera.getName() == "right")
+    if (camera.getName().equals("Right"))
     {
       return PhotonVisionConstants.OFFSET_TOWARD_MID_RIGHT;
     }
@@ -256,10 +253,21 @@ public class Photonvision extends SubsystemBase {
   }
   
   public double getYaw(PhotonCamera camera) {
-    if (camera.getLatestResult().hasTargets())
+    List<PhotonTrackedTarget> results = camera.getLatestResult().getTargets();
+    boolean frontOfSubwoofer = false;
+
+    for (PhotonTrackedTarget tag : results) {
+      if (tag.getFiducialId() == 7 || tag.getFiducialId() == 4) {
+        frontOfSubwoofer = true;
+      }
+    }
+
+    SmartDashboard.putBoolean("front of subwoofer", frontOfSubwoofer);
+
+    if (camera.getLatestResult().hasTargets() && frontOfSubwoofer)
     {
       return camera.getLatestResult().getBestTarget().getYaw();
     }
-    return -1;
+    return 4079;
   }
 }

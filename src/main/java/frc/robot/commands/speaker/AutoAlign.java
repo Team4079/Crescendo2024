@@ -21,7 +21,7 @@ public class AutoAlign extends Command {
 
   /** Rotation PID and offset * */
   private final PIDController rotationalController;
-  private double horizontalError;
+  private double measurement_yaw;
   private PhotonCamera camera;
 
   public AutoAlign(SwerveSubsystem swerveSubsystem, Photonvision limelety) {
@@ -48,13 +48,15 @@ public class AutoAlign extends Command {
   @Override
   public void execute() {
     // Horizontal PID and offset
-    horizontalError = photonvision.getYaw(camera);
-    SmartDashboard.putNumber("alignment error", horizontalError);
+    measurement_yaw = photonvision.getYaw(camera);
+    SmartDashboard.putNumber("alignment error", rotationalController.getPositionError());
+    SmartDashboard.putNumber("alignment setpoint", rotationalController.getSetpoint());
+    SmartDashboard.putString("Camera Used", camera.getName());
     
-    System.out.println(horizontalError);
-    if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
+    System.out.println(measurement_yaw);
+    if (Math.abs(measurement_yaw) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
       swerveSubsystem.setDriveSpeeds(
-          0, 0, rotationalController.calculate(horizontalError, photonvision.getOffset(camera)), false);
+          0, 0, rotationalController.calculate(measurement_yaw, photonvision.getOffset(camera)), false);
     } else {
       swerveSubsystem.stop();
     }
@@ -69,6 +71,6 @@ public class AutoAlign extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return photonvision.getYaw(camera) == 4079;
   }
 }

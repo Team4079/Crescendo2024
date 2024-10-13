@@ -164,9 +164,8 @@ public final class GlobalsValues {
       // AutoAlign PID
       public static final PID HORIZONTAL_PID = new PID(0.05, 0.075, 0.03, 0);
       public static final PID VERTICAL_PID = new PID(0.25, 0.0085, 0.03);
-      public static final PID ROTATIONAL_PID = new PID(0.05509, 0.00, 0.09, 0);
+      public static final PID ROTATIONAL_PID = new PID(0.2, 0.00, 0.09, 0);
       public static final PID PASS_ROTATIONAL_PID = new PID(0.023, 0, 0.005, 0);
-      // public static final PID rotationalPID = new PID(0.063, 0.001, 0.035, 0);
 
       public static HolonomicPathFollowerConfig pathFollower =
           new HolonomicPathFollowerConfig(
@@ -353,11 +352,11 @@ public final class GlobalsValues {
     // Camera One
     public static final double CAMERA_ONE_HEIGHT_METER = 0.61;
     public static final double CAMERA_ONE_ANGLE_DEG = 7.5; // up is positive
-    public static final double OFFSET_TOWARD_MID_LEFT = 15.00;
+    public static final double OFFSET_TOWARD_MID_LEFT = -15.00;
 
     // Camera Two
     public static final double CAMERA_TWO_HEIGHT_METER = 0.61;
     public static final double CAMERA_TWO_ANGLE_DEG = 7.5; // up is positive
-    public static final double OFFSET_TOWARD_MID_RIGHT = -15.0;
+    public static final double OFFSET_TOWARD_MID_RIGHT = 15.0;
   }
 }
