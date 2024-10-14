@@ -63,6 +63,7 @@ public class SwerveModule {
     driveConfigs.Slot0.kP = BasePIDGlobal.DRIVE_PID.p;
     driveConfigs.Slot0.kI = BasePIDGlobal.DRIVE_PID.i;
     driveConfigs.Slot0.kD = BasePIDGlobal.DRIVE_PID.d;
+    driveConfigs.Slot0.kV = BasePIDGlobal.DRIVE_PID_V;
 
     steerConfigs.Slot0.kP = BasePIDGlobal.STEER_PID.p;
     steerConfigs.Slot0.kI = BasePIDGlobal.STEER_PID.i;
