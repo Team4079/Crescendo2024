@@ -164,14 +164,14 @@ public final class GlobalsValues {
       // AutoAlign PID
       public static final PID HORIZONTAL_PID = new PID(0.05, 0.075, 0.03, 0);
       public static final PID VERTICAL_PID = new PID(0.25, 0.0085, 0.03);
-      public static final PID ROTATIONAL_PID = new PID(0.2, 0.00, 0.09, 0);
-      public static final PID PASS_ROTATIONAL_PID = new PID(0.023, 0, 0.005, 0);
+      public static final PID ROTATIONAL_PID = new PID(0.20, 0.000001, 0, 0);
+      public static final PID PASS_ROTATIONAL_PID = new PID(0.20, 000001, 0.00, 0);
 
       public static HolonomicPathFollowerConfig pathFollower =
           new HolonomicPathFollowerConfig(
-              new PIDConstants(6, 0.00, 0), // translation
-              new PIDConstants(4.75, 0.0, 0.01), // rotation
-              4.96824, // Max module speed, in m/s
+              new PIDConstants(5, 0.00, 0), // translation
+              new PIDConstants(3, 0.0, 0.0), // rotation
+              4.78536, // Max module speed, in m/s
               SwerveGlobalValues
                   .ROBOT_SIZE, // Drive base radius in meters. Distance from robot center to
               // furthest //
@@ -313,8 +313,8 @@ public final class GlobalsValues {
     public static final int RING_SENSOR_PORT = 8;
 
     // Side Angles
-    public static final double blueSideAngle = 22.0;
-    public static final double redSideAngle = -22.0;
+    public static final double blueSideAngle = -22.0;
+    public static final double redSideAngle = 22.0;
   }
 
   public static class LimelightGlobalValues {

@@ -52,8 +52,11 @@ public class AutoAlign extends Command {
     SmartDashboard.putNumber("alignment error", rotationalController.getPositionError());
     SmartDashboard.putNumber("alignment setpoint", rotationalController.getSetpoint());
     SmartDashboard.putString("Camera Used", camera.getName());
+    SmartDashboard.putBoolean("Robot Aligned", rotationalController.atSetpoint());
+    SmartDashboard.putNumber("measurement yaw", photonvision.getYaw(camera));
     
     System.out.println(measurement_yaw);
+    
     if (Math.abs(measurement_yaw) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
       swerveSubsystem.setDriveSpeeds(
           0, 0, rotationalController.calculate(measurement_yaw, photonvision.getOffset(camera)), false);

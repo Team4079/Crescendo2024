@@ -114,14 +114,16 @@ public class SwerveModule {
    */
   public SwerveModulePosition getPosition() {
     driveVelocity = driveMotor.getVelocity().getValueAsDouble();
-    drivePosition = driveMotor.getPosition().getValueAsDouble();
+    drivePosition = driveMotor.getRotorPosition().getValueAsDouble();
     steerVelocity = steerMotor.getVelocity().getValueAsDouble();
     steerPosition = steerMotor.getPosition().getValueAsDouble();
 
-    swerveModulePosition.angle = Rotation2d.fromRotations(steerPosition);
+    // swerveModulePosition.angle = Rotation2d.fromRotations(steerPosition);
+
+    swerveModulePosition.angle = Rotation2d.fromDegrees(((360 * canCoder.getAbsolutePosition().getValue()) % 360 + 360) % 360);
     swerveModulePosition.distanceMeters =
         drivePosition
-            / (MotorGlobalValues.DRIVE_MOTOR_GEAR_RATIO / MotorGlobalValues.MetersPerRevolution);
+            * MotorGlobalValues.DRIVE_MOTOR_GEAR_RATIO * MotorGlobalValues.MetersPerRevolution;
 
     return swerveModulePosition;
   }

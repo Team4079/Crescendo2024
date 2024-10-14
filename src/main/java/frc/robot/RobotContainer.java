@@ -141,8 +141,10 @@ public class RobotContainer {
     // padA.onTrue(new InstantCommand(elevator::setState(ElevatorState.UP)));
     padB.onTrue(new InstantCommand(swerveSubsystem::resetPidgey));
     // x is intake
-    padY.whileTrue(new AutoAlign(swerveSubsystem, photonvision).withTimeout(2));
+
+    // padY.whileTrue(new AutoAlign(swerveSubsystem, photonvision));
     // padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
+    padY.whileTrue(new PassNoteGyro(swerveSubsystem, pivotyboi, shootyboi));
 
     opPadA.onTrue(new ElevatorRampUp(elevator));
     opPadB.onTrue(new ElevatorRampDown(elevator));
@@ -162,7 +164,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     swerveSubsystem.resetPidgey();
-    // swerveSubsystem.zeroPose();
+    swerveSubsystem.zeroPose();
 
     // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
     // return new PathPlannerAuto("4NoteNoRotation");
@@ -172,3 +174,4 @@ public class RobotContainer {
     // return new InstantCommand();
   }
 }
+

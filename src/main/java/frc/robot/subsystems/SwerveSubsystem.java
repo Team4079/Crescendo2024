@@ -118,11 +118,16 @@ public class SwerveSubsystem extends SubsystemBase {
 
     poseEstimator.update(getPidgeyRotation(), getModulePositions());
 
-    poseEstimator.addVisionMeasurement(visionMeasurement2d, timestamp);
+    // poseEstimator.addVisionMeasurement(visionMeasurement2d, timestamp);
 
     field.setRobotPose(poseEstimator.getEstimatedPosition());
-    SmartDashboard.putData(field);
-  }
+    SmartDashboard.putData("Robot Pose", field);
+    SmartDashboard.putData("feild lol", field);
+
+    SmartDashboard.putNumber("shawn", 0.1);
+
+    // SmartDashboard.putData("Pose", getPose().getTranslation().get);
+  } 
 
   /**
    * Sets the desired module states.
@@ -237,10 +242,12 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param chassisSpeeds The desired chassis speeds.
    */
   public void chassisSpeedsDrive(ChassisSpeeds chassisSpeeds) {
-    ChassisSpeeds speeds =
-        ChassisSpeeds.fromRobotRelativeSpeeds(chassisSpeeds, getRotationPidggy());
-    SwerveModuleState[] newStates = SwerveGlobalValues.kinematics.toSwerveModuleStates(speeds);
-    SwerveDriveKinematics.desaturateWheelSpeeds(newStates, MotorGlobalValues.MAX_SPEED);
+    // ChassisSpeeds speeds =
+    //     ChassisSpeeds.fromRobotRelativeSpeeds(chassisSpeeds, getRotationPidggy());
+    // SwerveModuleState[] newStates = SwerveGlobalValues.kinematics.toSwerveModuleStates(speeds);
+    // SwerveDriveKinematics.desaturateWheelSpeeds(newStates, MotorGlobalValues.MAX_SPEED);
+
+    SwerveModuleState[] newStates = SwerveGlobalValues.kinematics.toSwerveModuleStates(chassisSpeeds);
     setModuleStates(newStates);
   }
 
