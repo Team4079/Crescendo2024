@@ -292,7 +292,7 @@ public final class GlobalsValues {
     public static final double KRAKEN_V = 0.1;
 
     // Shooter Motor Speed Values
-    public static final double SHOOTER_SPEED = 35.0;
+    public static final double SHOOTER_SPEED = 30.0;
     public static double AMP_SPEED = 5;
     public static boolean AMP_SPEED_JESSICA = true;
     public static final double KRAKEN_SPEED = 15.0;

@@ -118,7 +118,7 @@ public class RobotContainer {
     swerveSubsystem.setDefaultCommand(
         new PadDrive(swerveSubsystem, pad, SwerveGlobalValues.FIELD_ORIENTATED));
     intakeyboi.setDefaultCommand(new SpinIntake(intakeyboi, shootyboi, pad, photonvision, led));
-    pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, opPad));
+    pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, pad));
     shootyboi.setDefaultCommand(
         new PadShoot(shootyboi, swerveSubsystem, pad, photonvision, pivotyboi));
     elevator.setDefaultCommand(new PadElevator(elevator, opPad));
@@ -142,9 +142,9 @@ public class RobotContainer {
     padB.onTrue(new InstantCommand(swerveSubsystem::resetPidgey));
     // x is intake
 
-    // padY.whileTrue(new AutoAlign(swerveSubsystem, photonvision));
+    padY.whileTrue(new AutoAlign(swerveSubsystem, photonvision));
     // padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
-    padY.whileTrue(new PassNoteGyro(swerveSubsystem, pivotyboi, shootyboi));
+    // padY.whileTrue(new PassNoteGyro(swerveSubsystem, pivotyboi, shootyboi));
 
     opPadA.onTrue(new ElevatorRampUp(elevator));
     opPadB.onTrue(new ElevatorRampDown(elevator));
