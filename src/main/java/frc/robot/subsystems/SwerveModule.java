@@ -20,7 +20,6 @@ import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
 
 /** The {@link SwerveModule} class includes all the motors to control the swerve drive. */
 public class SwerveModule {
-  /** Creates a new SwerveModule. */
   private final TalonFX driveMotor;
 
   private final CANcoder canCoder;
@@ -43,10 +42,10 @@ public class SwerveModule {
    * @param driveId The CAN ID of the drive motor.
    * @param steerId The CAN ID of the steer motor.
    * @param canCoderID The CAN ID of the CANcoder.
-   * @param CANCoderDriveStraightSteerSetPoint The setpoint for the CANcoder when driving straight.
+   * @param canCoderDriveStraightSteerSetPoint The setpoint for the CANcoder when driving straight.
    */
   public SwerveModule(
-      int driveId, int steerId, int canCoderID, double CANCoderDriveStraightSteerSetPoint) {
+      int driveId, int steerId, int canCoderID, double canCoderDriveStraightSteerSetPoint) {
     driveMotor = new TalonFX(driveId);
     steerMotor = new TalonFX(steerId);
     canCoder = new CANcoder(canCoderID);
@@ -95,7 +94,7 @@ public class SwerveModule {
     canCoderConfiguration.MagnetSensor.SensorDirection =
         SensorDirectionValue.CounterClockwise_Positive;
     canCoderConfiguration.MagnetSensor.MagnetOffset =
-        SwerveGlobalValues.ENCODER_OFFSET + CANCoderDriveStraightSteerSetPoint;
+        SwerveGlobalValues.ENCODER_OFFSET + canCoderDriveStraightSteerSetPoint;
 
     driveMotor.getConfigurator().apply(driveConfigs);
     steerMotor.getConfigurator().apply(steerConfigs);
@@ -130,25 +129,14 @@ public class SwerveModule {
    * Sets the desired state of the swerve module.
    *
    * @param state The desired state of the swerve module.
-   * @param motor The motor associated with the swerve module.
    */
-  public void setState(SwerveModuleState state) { // SwerveSubsystem.Motor motor
+  public void setState(SwerveModuleState state) {
     SwerveModulePosition newPosition = getPosition();
-    // SmartDashboard.putNumber("desired state before optimize " + motor.name(),
-    // state.angle.getDegrees());
-    // SmartDashboard.putNumber("voltage " + motor.name(),
-    // steerMotor.getMotorVoltage().getValueAsDouble());
-    // SmartDashboard.putNumber("Applied " + motor.name(),
-    // steerMotor.getSupplyCurrent().getValueAsDouble());
     SwerveModuleState optimized = SwerveModuleState.optimize(state, newPosition.angle);
 
     double angleToSet = optimized.angle.getRotations();
     SmartDashboard.putNumber(
         "desired state after optimize " + canCoder.getDeviceID(), optimized.angle.getRotations());
-    // SmartDashboard.putNumber("current angle " + motor.name(), steerPosition);
-    // SmartDashboard.putNumber("steer angle " + motor.name(),
-    // steerMotor.getPosition().getValueAsDouble());
-
     steerMotor.setControl(positionSetter.withPosition(angleToSet));
 
     double velocityToSet =
@@ -175,6 +163,5 @@ public class SwerveModule {
   public void stop() {
     steerMotor.stopMotor();
     driveMotor.stopMotor();
-    ;
   }
 }
