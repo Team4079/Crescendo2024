@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.PhotonVisionConstants;
 import java.util.List;
 import java.util.Optional;
@@ -120,7 +121,7 @@ public class Photonvision extends SubsystemBase {
 
     SmartDashboard.putNumber("photon yaw", targetYaw);
     SmartDashboard.putNumber("range target", rangeToTarget);
-    SmartDashboard.putNumber("april tag distance", getRange());
+    // SmartDashboard.putNumber("april tag distance", getRange());
     SmartDashboard.putNumber("left cam ambiguity", targetPoseAmbiguityleft);
     SmartDashboard.putNumber("right cam ambiguity", targetPoseAmbiguityright);
     SmartDashboard.putBoolean("right_targets", resultright.hasTargets());
@@ -160,60 +161,79 @@ public class Photonvision extends SubsystemBase {
    * href="https://docs.photonvision.org/en/latest/docs/additional-resources/nt-api.html#getting-target-information">NetworkTables
    * API</a>
    */
-  public double getRange() {
-    double leftSubwooferTagAmbiguity = 0;
-    double rigthSubwooferTagAmbiguity = 0;
-    if (resultleft.hasTargets()) {
-      for (var tag : resultleft.getTargets()) {
-        // TODO: Change the target ID depending on what we are looking for
-        // if (tag.getFiducialId() == 7 || tag.getFiducialId() == 4) {
-        if (true) {
-          leftSubwooferTagAmbiguity = tag.getPoseAmbiguity();
-          targetYawleft = tag.getYaw();
-          targetVisibleleft = true;
+  // public double getRange() {
+  //   double leftSubwooferTagAmbiguity = 0;
+  //   double rigthSubwooferTagAmbiguity = 0;
+  //   if (resultleft.hasTargets()) {
+  //     for (var tag : resultleft.getTargets()) {
+  //       // TODO: Change the target ID depending on what we are looking for
+  //       // if (tag.getFiducialId() == 7 || tag.getFiducialId() == 4) {
+  //       if (true) {
+  //         leftSubwooferTagAmbiguity = tag.getPoseAmbiguity();
+  //         targetYawleft = tag.getYaw();
+  //         targetVisibleleft = true;
 
-          rangeleft =
-              PhotonUtils.calculateDistanceToTargetMeters(
-                  PhotonVisionConstants.CAMERA_ONE_HEIGHT_METER,
-                  1.435, // From right0right4 game manual for ID 7 | IMPORTANT TO CHANGE
-                  Units.degreesToRadians(
-                      PhotonVisionConstants
-                          .CAMERA_ONE_ANGLE_DEG), // Rotation about Y = Pitch | UP IS POSITIVE
-                  Units.degreesToRadians(tag.getPitch()));
-        }
-      }
-    } else {
-      targetVisibleleft = false;
-    }
-    if (resultright.hasTargets()) {
-      for (var tag : resultright.getTargets()) {
-        // TODO: Change the target ID depending on what we are looking for
-        // if (tag.getFiducialId() == 7 || tag.getFiducialId() == 4) {
-        if (true) {
-          rigthSubwooferTagAmbiguity = tag.getPoseAmbiguity();
-          targetYawright = tag.getYaw();
-          targetVisibleright = true;
+  //         rangeleft =
+  //             PhotonUtils.calculateDistanceToTargetMeters(
+  //                 PhotonVisionConstants.CAMERA_ONE_HEIGHT_METER,
+  //                 1.435, // From right0right4 game manual for ID 7 | IMPORTANT TO CHANGE
+  //                 Units.degreesToRadians(
+  //                     PhotonVisionConstants
+  //                         .CAMERA_ONE_ANGLE_DEG), // Rotation about Y = Pitch | UP IS POSITIVE
+  //                 Units.degreesToRadians(tag.getPitch()));
+  //       }
+  //     }
+  //   } else {
+  //     targetVisibleleft = false;
+  //   }
+  //   if (resultright.hasTargets()) {
+  //     for (var tag : resultright.getTargets()) {
+  //       // TODO: Change the target ID depending on what we are looking for
+  //       // if (tag.getFiducialId() == 7 || tag.getFiducialId() == 4) {
+  //       if (true) {
+  //         rigthSubwooferTagAmbiguity = tag.getPoseAmbiguity();
+  //         targetYawright = tag.getYaw();
+  //         targetVisibleright = true;
 
-          rangeright =
-              PhotonUtils.calculateDistanceToTargetMeters(
-                  PhotonVisionConstants.CAMERA_TWO_HEIGHT_METER,
-                  1.435, // From right0right4 game manual for ID 7 | IMPORTANT TO CHANGE
-                  Units.degreesToRadians(
-                      PhotonVisionConstants
-                          .CAMERA_TWO_ANGLE_DEG), // Rotation about Y = Pitch | UP IS POSITIVE
-                  Units.degreesToRadians(tag.getPitch()));
+  //         rangeright =
+  //             PhotonUtils.calculateDistanceToTargetMeters(
+  //                 PhotonVisionConstants.CAMERA_TWO_HEIGHT_METER,
+  //                 1.435, // From right0right4 game manual for ID 7 | IMPORTANT TO CHANGE
+  //                 Units.degreesToRadians(
+  //                     PhotonVisionConstants
+  //                         .CAMERA_TWO_ANGLE_DEG), // Rotation about Y = Pitch | UP IS POSITIVE
+  //                 Units.degreesToRadians(tag.getPitch()));
+  //       }
+  //     }
+  //   } else {
+  //     targetVisibleright = false;
+  //   }
+  //   if (leftSubwooferTagAmbiguity > rigthSubwooferTagAmbiguity && targetVisibleleft) {
+  //     return rangeleft;
+  //   } else if (targetVisibleright) {
+  //     return rangeright;
+  //   } else {
+  //     return 0.0;
+  //   }
+  // }
+
+  public double getRange(PhotonCamera camera)
+  {
+    var resutls = camera.getLatestResult();
+
+    if (resutls.hasTargets())
+    {
+      for (var tag : resutls.getTargets())
+      {
+        if (tag.getFiducialId() == 4 || tag.getFiducialId() == 7)
+        {
+          return tag.getBestCameraToTarget().getTranslation().getNorm();
         }
+        return -1.0;
       }
-    } else {
-      targetVisibleright = false;
     }
-    if (leftSubwooferTagAmbiguity > rigthSubwooferTagAmbiguity && targetVisibleleft) {
-      return rangeleft;
-    } else if (targetVisibleright) {
-      return rangeright;
-    } else {
-      return 0.0;
-    }
+
+    return -1.0;
   }
 
   public double getOffset(PhotonCamera camera) {
@@ -232,13 +252,18 @@ public class Photonvision extends SubsystemBase {
     // 10/14/2024 outside tuning
     // jayden why are you so bad at tuning
     // Desmos: https://www.desmos.com/calculator/naalukjxze
-    double r = getRange();
+    double r = getRange(getBestCamera());
     double f = -1.19541; // power 5
     double e = 18.0904; // power 4
     double d = -108.07; // power 3
     double c = 317.396; // power 2
     double b = -453.088; // power 1
     double a = 267.288; // constant
+
+    if (r == -1)
+    {
+      return GlobalsValues.PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE;
+    }
     return ((f * Math.pow(r, 5))
         + (e * Math.pow(r, 4))
         + (d * Math.pow(r, 3))

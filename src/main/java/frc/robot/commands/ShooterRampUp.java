@@ -39,7 +39,7 @@ public class ShooterRampUp extends Command {
    */
   @Override
   public void initialize() {
-    rps = ShooterGlobalValues.SHOOTER_SPEED + photonvision.getRange() * 3;
+    rps = ShooterGlobalValues.SHOOTER_SPEED + photonvision.getRange(photonvision.getBestCamera()) * 3;
     SmartDashboard.putNumber("Jessica is smart", rps);
     shooter.setShooterVelocity(-rps, -rps);
   }

@@ -36,7 +36,6 @@ public class ShootRing extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new WaitCommand(0.05),
         new PivotShooterSetUp(pivot, shooter, photonvision, swerveSubsystem).withTimeout(0.6),
         new PushRing(shooter, photonvision, true).withTimeout(0.5),
         new StopShooter(shooter).withTimeout(0.01),

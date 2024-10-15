@@ -74,13 +74,13 @@ public class PivotShooterSetUpAuto extends Command {
   @Override
   public void initialize() {
     deadband = 0.1;
-    if (photonvision.getRange() < 1.5) {
+    if (photonvision.getRange(photonvision.getBestCamera()) < 1.5) {
       pos = PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE;
     } else {
       pos = photonvision.getPivotPosition();
     }
 
-    double rps = ShooterGlobalValues.SHOOTER_SPEED + (photonvision.getRange() - 1.5) * 5;
+    double rps = ShooterGlobalValues.SHOOTER_SPEED + (photonvision.getRange(photonvision.getBestCamera()) - 1.5) * 5;
     shooter.setShooterVelocity(-rps, -rps);
   }
 

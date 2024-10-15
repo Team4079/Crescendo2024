@@ -40,7 +40,7 @@ public class PushRing extends Command {
   @Override
   public void execute() {
     if (limelightEnabled) {
-      if (photonvision.getRange() > 0.1) {
+      if (photonvision.getRange(photonvision.getBestCamera()) > 0.1) {
         shooter.setKrakenVelocity(ShooterGlobalValues.PUSH_RING_RPS);
       } else {
         shooter.stopAllMotors();
