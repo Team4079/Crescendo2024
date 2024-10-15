@@ -236,12 +236,16 @@ public class Photonvision extends SubsystemBase {
   }
 
   public double getPivotPosition() {
-    return (-0.273166 * Math.pow(getRange(), 5)
-        + 4.16168 * Math.pow(getRange(), 4)
-        + -23.6466 * Math.pow(getRange(), 3)
-        + 60.022 * Math.pow(getRange(), 2)
-        + getRange() * -58.4714
-        + 27.1329);
+    // return (-0.273166 * Math.pow(getRange(), 5)
+    //     + 4.16168 * Math.pow(getRange(), 4)
+    //     + -23.6466 * Math.pow(getRange(), 3)
+    //     + 60.022 * Math.pow(getRange(), 2)
+    //     + getRange() * -58.4714
+    //     + 27.1329);
+
+    // 10/14/2024 outside tuning
+
+    return ((-0.044599 * Math.pow(getRange(), 4)) + (1.41778 * Math.pow(getRange(), 2))  + (12.3919 * getRange()) + (-5));
   }
 
   public Translation3d conv2dTo3d(Translation2d translation2d, double z) {
