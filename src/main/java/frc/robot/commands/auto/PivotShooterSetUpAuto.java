@@ -80,8 +80,7 @@ public class PivotShooterSetUpAuto extends Command {
       pos = photonvision.getPivotPosition();
     }
 
-    double rps =
-        ShooterGlobalValues.SHOOTER_SPEED + (photonvision.getRange() - 1.5) * 5;
+    double rps = ShooterGlobalValues.SHOOTER_SPEED + (photonvision.getRange() - 1.5) * 5;
     shooter.setShooterVelocity(-rps, -rps);
   }
 

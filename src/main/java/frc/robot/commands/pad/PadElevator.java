@@ -2,8 +2,8 @@ package frc.robot.commands.pad;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator;
-import frc.robot.utils.LogitechGamingPad;
 import frc.robot.utils.GlobalsValues.ElevatorGlobalValues;
+import frc.robot.utils.LogitechGamingPad;
 
 /** The {@link PadPivot} class is a command that controls the pivot using a gamepad. */
 public class PadElevator extends Command {
@@ -34,7 +34,7 @@ public class PadElevator extends Command {
   /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
-    if (Math.abs(pad.getLeftAnalogYAxis()) > 0.15 && ElevatorGlobalValues.ELEVATOR_JOYSTICKS){
+    if (Math.abs(pad.getLeftAnalogYAxis()) > 0.15 && ElevatorGlobalValues.ELEVATOR_JOYSTICKS) {
       elevator.moveElevator(-pad.getLeftAnalogYAxis() * 0.75);
     }
   }

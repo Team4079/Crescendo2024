@@ -11,14 +11,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues.ElevatorGlobalValues;
 
 /**
- * The Elevator subsystem controls the elevator mechanism of the robot.
- * It uses a CANSparkMax motor controller and a PID controller to manage the elevator's position.
+ * The Elevator subsystem controls the elevator mechanism of the robot. It uses a CANSparkMax motor
+ * controller and a PID controller to manage the elevator's position.
  */
 public class Elevator extends SubsystemBase {
 
-  /**
-   * Enum representing the possible states of the elevator.
-   */
+  /** Enum representing the possible states of the elevator. */
   public enum ElevatorState {
     UP,
     DOWN
@@ -28,15 +26,15 @@ public class Elevator extends SubsystemBase {
   private final CANSparkMax elevatorMotorSparkMax =
       new CANSparkMax(ElevatorGlobalValues.ELEVATOR_NEO_ID, MotorType.kBrushless);
 
-  private final CANSparkMax passMotorSparkMax = 
+  private final CANSparkMax passMotorSparkMax =
       new CANSparkMax(ElevatorGlobalValues.PASS_NEO_ID, MotorType.kBrushless);
 
   // The current state of the elevator.
   private ElevatorState state = ElevatorState.DOWN;
 
   /**
-   * Constructor for the Elevator subsystem.
-   * Initializes the motor controller, sets default configurations, and logs initial data.
+   * Constructor for the Elevator subsystem. Initializes the motor controller, sets default
+   * configurations, and logs initial data.
    */
   public Elevator() {
     elevatorMotorSparkMax.restoreFactoryDefaults();
@@ -51,7 +49,6 @@ public class Elevator extends SubsystemBase {
         CANSparkMax.SoftLimitDirection.kReverse, ElevatorGlobalValues.SOFTLIMIT_REVERSE);
 
     elevatorMotorSparkMax.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    
 
     elevatorMotorSparkMax.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
 
@@ -65,7 +62,8 @@ public class Elevator extends SubsystemBase {
     getPIDController().setD(ElevatorGlobalValues.kD);
     getPIDController().setIZone(ElevatorGlobalValues.kIz);
     getPIDController().setFF(ElevatorGlobalValues.kFF);
-    getPIDController().setOutputRange(ElevatorGlobalValues.kMinOutput, ElevatorGlobalValues.kMaxOutput);
+    getPIDController()
+        .setOutputRange(ElevatorGlobalValues.kMinOutput, ElevatorGlobalValues.kMaxOutput);
 
     getPIDController().setSmartMotionAllowedClosedLoopError(0.0987, 0);
     getPIDController().setSmartMotionMaxAccel(10500, 0);
@@ -80,31 +78,32 @@ public class Elevator extends SubsystemBase {
 
   /**
    * This method is called periodically to update the elevator position based on its current state.
-   * If the state is UP, it sets the elevator position to the up position defined in ElevatorGlobalValues.
-   * If the state is DOWN, it sets the elevator position to the down position defined in ElevatorGlobalValues.
+   * If the state is UP, it sets the elevator position to the up position defined in
+   * ElevatorGlobalValues. If the state is DOWN, it sets the elevator position to the down position
+   * defined in ElevatorGlobalValues.
    */
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Elevator Output", elevatorMotorSparkMax.getAppliedOutput());
 
-    if (!ElevatorGlobalValues.ELEVATOR_JOYSTICKS){
+    if (!ElevatorGlobalValues.ELEVATOR_JOYSTICKS) {
       if (state == ElevatorState.UP) {
         setElevatorPosition(ElevatorGlobalValues.ELEVATOR_UP);
         setPassSpeed(0.5);
-        
+
       } else if (state == ElevatorState.DOWN) {
         setElevatorPosition(ElevatorGlobalValues.ELEVATOR_DOWN);
         stopPassMotor();
       }
     }
 
-    if (Math.abs(elevatorMotorSparkMax.getAppliedOutput()) < 0.01 && ElevatorGlobalValues.ELEVATOR_JOYSTICKS) {
+    if (Math.abs(elevatorMotorSparkMax.getAppliedOutput()) < 0.01
+        && ElevatorGlobalValues.ELEVATOR_JOYSTICKS) {
       moveElevator(0.1);
     }
 
     logData();
   }
-
 
   public void setPassSpeed(double speed) {
     passMotorSparkMax.set(speed);
@@ -116,14 +115,16 @@ public class Elevator extends SubsystemBase {
 
   /**
    * Sets the state of the elevator.
+   *
    * @param state The state to set the elevator to.
    */
   public void setState(ElevatorState state) {
     this.state = state;
- }
+  }
 
   /**
    * Sets the position of the elevator.
+   *
    * @param position The position to set the elevator to.
    */
   public void setElevatorPosition(double position) {
@@ -132,6 +133,7 @@ public class Elevator extends SubsystemBase {
 
   /**
    * Gets the current position of the elevator.
+   *
    * @return The current position of the elevator.
    */
   public double getElevatorPosition() {
@@ -140,6 +142,7 @@ public class Elevator extends SubsystemBase {
 
   /**
    * Gets the PID controller for the elevator's motor.
+   *
    * @return The PID controller for the elevator's motor.
    */
   public SparkPIDController getPIDController() {
@@ -152,6 +155,7 @@ public class Elevator extends SubsystemBase {
 
   /**
    * Gets the encoder for the elevator's motor.
+   *
    * @return The encoder for the elevator's motor.
    */
   public RelativeEncoder getEncoder() {
@@ -160,6 +164,7 @@ public class Elevator extends SubsystemBase {
 
   /**
    * Moves the elevator at a specified speed.
+   *
    * @param speed The speed to move the elevator at.
    */
   public void moveElevator(double speed) {
@@ -167,9 +172,7 @@ public class Elevator extends SubsystemBase {
     elevatorMotorSparkMax.set(speed);
   }
 
-  /**
-   * Logs data to the SmartDashboard.
-   */
+  /** Logs data to the SmartDashboard. */
   private void logData() {
     SmartDashboard.putString("Elevator State", state.toString());
     SmartDashboard.putNumber("Elevator Position", getEncoder().getPosition());

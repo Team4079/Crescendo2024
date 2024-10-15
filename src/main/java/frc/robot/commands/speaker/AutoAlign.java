@@ -4,8 +4,6 @@
 
 package frc.robot.commands.speaker;
 
-import org.photonvision.PhotonCamera;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -13,6 +11,7 @@ import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
+import org.photonvision.PhotonCamera;
 
 /** The {@link AutoAlign} command is a command that aligns the robot to the target. */
 public class AutoAlign extends Command {
@@ -21,6 +20,7 @@ public class AutoAlign extends Command {
 
   /** Rotation PID and offset * */
   private final PIDController rotationalController;
+
   private double measurement_yaw;
   private PhotonCamera camera;
 
@@ -54,12 +54,15 @@ public class AutoAlign extends Command {
     SmartDashboard.putString("Camera Used", camera.getName());
     SmartDashboard.putBoolean("Robot Aligned", rotationalController.atSetpoint());
     SmartDashboard.putNumber("measurement yaw", photonvision.getYaw(camera));
-    
+
     System.out.println(measurement_yaw);
-    
+
     if (Math.abs(measurement_yaw) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
       swerveSubsystem.setDriveSpeeds(
-          0, 0, rotationalController.calculate(measurement_yaw, photonvision.getOffset(camera)), false);
+          0,
+          0,
+          rotationalController.calculate(measurement_yaw, photonvision.getOffset(camera)),
+          false);
     } else {
       swerveSubsystem.stop();
     }

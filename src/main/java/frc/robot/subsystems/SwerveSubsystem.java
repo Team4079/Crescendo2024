@@ -127,7 +127,7 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("shawn", 0.1);
 
     // SmartDashboard.putData("Pose", getPose().getTranslation().get);
-  } 
+  }
 
   /**
    * Sets the desired module states.
@@ -247,7 +247,8 @@ public class SwerveSubsystem extends SubsystemBase {
     // SwerveModuleState[] newStates = SwerveGlobalValues.kinematics.toSwerveModuleStates(speeds);
     // SwerveDriveKinematics.desaturateWheelSpeeds(newStates, MotorGlobalValues.MAX_SPEED);
 
-    SwerveModuleState[] newStates = SwerveGlobalValues.kinematics.toSwerveModuleStates(chassisSpeeds);
+    SwerveModuleState[] newStates =
+        SwerveGlobalValues.kinematics.toSwerveModuleStates(chassisSpeeds);
     setModuleStates(newStates);
   }
 

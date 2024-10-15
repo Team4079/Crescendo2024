@@ -1,9 +1,9 @@
 package frc.robot.commands.pad;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.ShootRing;
 import frc.robot.commands.speaker.ManualShoot;
 import frc.robot.commands.stage.PassNoteGyro;
-import frc.robot.commands.ShootRing;
 import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
