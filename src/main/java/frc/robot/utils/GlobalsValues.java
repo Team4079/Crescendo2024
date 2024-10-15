@@ -242,7 +242,7 @@ public final class GlobalsValues {
     // public static final double PIVOT_AMP_ANGLE = (46 + PivotGlobalValues.offset);
     // //Ued to be 49.55
     public static final double PIVOT_AMP_ANGLE = 20;
-    public static final double PIVOT_SUBWOOFER_ANGLE = (12.9 + PivotGlobalValues.offset);
+    public static final double PIVOT_SUBWOOFER_ANGLE = (13.9 + PivotGlobalValues.offset);
     // public static final double PIVOT_SOURCE = 93;
     public static final double PIVOT_FENDER_ANGLE =
         (30.5 + PivotGlobalValues.offset); // 305 instead of 30.5
