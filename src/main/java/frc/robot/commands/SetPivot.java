@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Pivot;
+import frc.robot.utils.GlobalsValues;
 
 /** The {@link SetPivot} class is a command that sets the pivot to a specified position. */
 public class SetPivot extends Command {
@@ -23,11 +24,6 @@ public class SetPivot extends Command {
   /** The deadband value for the position error. */
   private double deadband;
 
-  /** Indicates whether the command is done. */
-  private boolean isDone;
-
-  private static double currPos = 0.0;
-
   /**
    * Creates a new SetPivot command.
    *
@@ -37,7 +33,11 @@ public class SetPivot extends Command {
   public SetPivot(Pivot pivot, double pos) {
     this.pivot = pivot;
     this.pos = pos;
-    pidController = new PIDController(0.00825, 0.000000, 0.00035);
+    pidController =
+        new PIDController(
+            GlobalsValues.PivotGlobalValues.SETPIVOT_PID_P,
+            GlobalsValues.PivotGlobalValues.SETPIVOT_PID_I,
+            GlobalsValues.PivotGlobalValues.SETPIVOT_PID_D);
     addRequirements(pivot);
   }
 
@@ -45,7 +45,6 @@ public class SetPivot extends Command {
   @Override
   public void initialize() {
     deadband = 0.5;
-    isDone = false;
   }
 
   /** Called every time the scheduler runs while the command is scheduled. */
@@ -53,10 +52,6 @@ public class SetPivot extends Command {
   public void execute() {
     double velocity = pidController.calculate(pivot.getPivotPos(), pos);
     motorPivot(velocity, pivot, pos, deadband);
-
-    if (Math.abs(pivot.getPivotPos() - pos) <= deadband) {
-      isDone = true;
-    }
   }
 
   /**
@@ -68,9 +63,9 @@ public class SetPivot extends Command {
    * @param deadband The deadband value for the position error.
    */
   public static void motorPivot(double velocity, Pivot pivot, double pos, double deadband) {
-    SmartDashboard.putNumber("Error Pivot", -pivot.getPivotPos() + pos);
-    SmartDashboard.putNumber("Setpoint", pos);
-    SmartDashboard.putNumber("Velocity Pivot", velocity);
+    SmartDashboard.putNumber("Pivot Error", pos - pivot.getPivotPos());
+    SmartDashboard.putNumber("Target Pivot Pos", pos);
+    SmartDashboard.putNumber("Pivot Velocity", velocity);
 
     if (Math.abs(pivot.getPivotPos() - pos) < deadband) {
       pivot.stopMotors();
@@ -96,6 +91,6 @@ public class SetPivot extends Command {
    */
   @Override
   public boolean isFinished() {
-    return isDone;
+    return Math.abs(pivot.getPivotPos() - pos) <= deadband;
   }
 }
