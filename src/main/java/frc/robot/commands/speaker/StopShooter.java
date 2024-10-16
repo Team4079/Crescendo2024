@@ -1,47 +1,45 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands.speaker;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
+/**
+ * Command to stop the shooter subsystem.
+ */
 public class StopShooter extends Command {
-  /** Creates a new StopShooter. */
-  private Shooter shooter;
+  /** Shooter subsystem instance. */
+  private final Shooter shooter;
 
-  private boolean isFinished;
+  /** Flag to indicate if the command is finished. */
+  private boolean isFinished = false;
 
+  /**
+   * Constructor for StopShooter command.
+   *
+   * @param shooter The shooter subsystem.
+   */
   public StopShooter(Shooter shooter) {
-    addRequirements(shooter);
     this.shooter = shooter;
-
-    isFinished = false;
-    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(shooter);
   }
 
-  // Called when the command is initially scheduled.
+  /**
+   * Initializes the command by stopping all motors in the shooter subsystem
+   * and setting the isFinished flag to true.
+   */
   @Override
   public void initialize() {
     shooter.stopAllMotors();
-    isFinished = !isFinished;
+    isFinished = true;
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
+  /**
+   * Checks if the command is finished.
+   *
+   * @return true if the command is finished, false otherwise.
+   */
   @Override
   public boolean isFinished() {
-    if (isFinished) {
-      return true;
-    }
-    return false;
+    return isFinished;
   }
 }

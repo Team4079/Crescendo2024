@@ -19,23 +19,10 @@ import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class SubwooferShot extends SequentialCommandGroup {
-  /** Creates a new SubwooferShot. */
-  private Shooter shooter;
-
-  private Pivot pivot;
-  private SwerveSubsystem swerveSubsystem;
-  private Photonvision photonvision;
 
   public SubwooferShot(
       Shooter shooter, Pivot pivot, SwerveSubsystem swerveSubsystem, Photonvision photonvision) {
-    this.shooter = shooter;
-    this.pivot = pivot;
-    this.swerveSubsystem = swerveSubsystem;
-    this.photonvision = photonvision;
     addRequirements(shooter, pivot, swerveSubsystem);
-
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new ParallelCommandGroup(
             new SetPivot(pivot, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(0.6),

@@ -12,7 +12,7 @@ import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 public class AmpRampUp extends Command {
   private final double deadband;
   private final Shooter shooter;
-  private double rps;
+  private final double rps = ShooterGlobalValues.AMP_SPEED;
 
   /**
    * Creates a new AmpRampUp command.
@@ -31,7 +31,6 @@ public class AmpRampUp extends Command {
    */
   @Override
   public void initialize() {
-    rps = ShooterGlobalValues.AMP_SPEED;
     shooter.setShooterVelocity(-rps, -rps);
   }
 
@@ -44,16 +43,6 @@ public class AmpRampUp extends Command {
     SmartDashboard.putBoolean(
         "Shooter Within Limit",
         Math.abs(shooter.getKrakenVelocity() - rps) < ShooterGlobalValues.RPM_THRESHOLD);
-  }
-
-  /**
-   * Called once the command ends or is interrupted.
-   *
-   * @param interrupted Whether the command was interrupted/canceled.
-   */
-  @Override
-  public void end(boolean interrupted) {
-    // No specific action needed when the command ends.
   }
 
   /**
