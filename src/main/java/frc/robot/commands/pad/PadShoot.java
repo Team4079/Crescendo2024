@@ -51,24 +51,12 @@ public class PadShoot extends Command {
   /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
-    // if (opPad.getRightBumperReleased()) {
-    //   shooter.setShooterVelocity(ShooterGlobalValues.PASSTHROUGH_RPS,
-    // ShooterGlobalValues.PASSTHROUGH_RPS);
-    // } else {
-    //   shooter.stopShooter();
-    // }
-
     if (pad.getDPadUp()) {
       new ManualShoot(swerve, shooter, photonvision, pivot).schedule();
     }
-    //    } else {
-    //      shooter.stopShooter();
-    //    }
 
     if (pad.getDPadRight()) {
-      new ShootRing(shooter, pivot, swerve, photonvision).schedule(); // Uses Alt
-      //    } else {
-      //      shooter.stopShooter();
+      new ShootRing(shooter, pivot, swerve, photonvision).schedule();
     }
 
     if (pad.getLeftTriggerValue() > 0.5) {

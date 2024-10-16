@@ -19,7 +19,6 @@ public class StagePass extends Command {
 
   private double rps;
 
-  /** Creates a new Shoot. */
   public StagePass(Shooter shooter) {
     deadband = 5;
     this.shooter = shooter;

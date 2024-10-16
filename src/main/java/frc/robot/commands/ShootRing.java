@@ -19,23 +19,9 @@ import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShootRing extends SequentialCommandGroup {
-  /** Creates a new ShootRing. */
-  private Shooter shooter;
-
-  private Pivot pivot;
-  private SwerveSubsystem swerveSubsystem;
-  private Photonvision photonvision;
-
   public ShootRing(
       Shooter shooter, Pivot pivot, SwerveSubsystem swerveSubsystem, Photonvision photonvision) {
-    this.shooter = shooter;
-    this.pivot = pivot;
-    this.swerveSubsystem = swerveSubsystem;
-    this.photonvision = photonvision;
     addRequirements(shooter, pivot, swerveSubsystem, photonvision);
-
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new ParallelCommandGroup(
             new PivotShooterSetUp(pivot, shooter, photonvision).withTimeout(0.6),
