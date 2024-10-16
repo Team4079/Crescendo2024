@@ -155,16 +155,18 @@ public final class GlobalsValues {
     public static final int[] HIGHTIDE_LED = {0, 182, 174};
 
     public static class BasePIDGlobal {
-      public static final PID STEER_PID = new PID(13, 0.00085, 0.008, 0);
+      public static final PID STEER_PID_TELE = new PID(13, 0.000, 0.1, 0);
+      public static final PID STEER_PID_AUTO = new PID(15, 0.000, 0.1, 0);
       // public static final PID STEER_PID = new PID(0.15, 0.0000, 0.000005, 0); //
       // 0.05 P, 0 D
-      public static final PID DRIVE_PID = new PID(1, 0.0, 0.0); // new PID(0.05, 0.00, 0, 0);
-      public static final double DRIVE_PID_V = 0.0;
+      public static final PID DRIVE_PID_AUTO = new PID(0.05, 0.0, 0.0); // new PID(0.05, 0.00, 0, 0);
+      public static final double DRIVE_PID_V_AUTO = 0.5;
+
+      public static final PID DRIVE_PID_TELE = new PID(1, 0.0, 0.0); // new PID(0.05, 0.00, 0, 0);
+      public static final double DRIVE_PID_V_TELE = 0;
       // DON'T SET D PAST 0.03 - Erick or else the swerve moduls make funny nosie
 
       // AutoAlign PID
-      public static final PID HORIZONTAL_PID = new PID(0.05, 0.075, 0.03, 0);
-      public static final PID VERTICAL_PID = new PID(0.25, 0.0085, 0.03);
       public static final PID ROTATIONAL_PID = new PID(0.20, 0.000001, 0, 0);
       public static final PID PASS_ROTATIONAL_PID = new PID(0.20, 000001, 0.00, 0);
 
@@ -183,8 +185,8 @@ public final class GlobalsValues {
     }
 
     // Controller X and Y deadbands
-    public static final double xDEADZONE = 0.15;
-    public static final double yDEADZONE = 0.15;
+    public static final double xDEADZONE = 0.15 * 5.76;
+    public static final double yDEADZONE = 0.15 * 5.76;
 
     public static final double offBalanceAngleThreshold = 10;
     public static final double onBalanceAngleThreshold = 5;
@@ -352,12 +354,12 @@ public final class GlobalsValues {
 
     // Camera One
     public static final double CAMERA_ONE_HEIGHT_METER = 0.61;
-    public static final double CAMERA_ONE_ANGLE_DEG = 12.5; // up is positive
+    public static final double CAMERA_ONE_ANGLE_DEG = 27.5; // up is positive
     public static final double OFFSET_TOWARD_MID_LEFT = -15.00;
 
     // Camera Two
     public static final double CAMERA_TWO_HEIGHT_METER = 0.61;
-    public static final double CAMERA_TWO_ANGLE_DEG = 12.5; // up is positive
+    public static final double CAMERA_TWO_ANGLE_DEG = 27.5; // up is positive
     public static final double OFFSET_TOWARD_MID_RIGHT = 15.0;
   }
 }

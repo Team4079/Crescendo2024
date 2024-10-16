@@ -35,10 +35,7 @@ public class PivotShooterSetUp extends Command {
 
   /** The target position for the pivot. */
   private double pos;
-
-  /** The SwerveSubsystem used by this command. */
-  private final SwerveSubsystem swerveSubsystem;
-
+  
   /** The PID controller for rotational alignment. */
   private final PIDController rotationalController;
 
@@ -54,9 +51,8 @@ public class PivotShooterSetUp extends Command {
    * @param swerveSubsystem The SwerveSubsystem used by this command.
    */
   public PivotShooterSetUp(
-      Pivot pivot, Shooter shooter, Photonvision photonvision, SwerveSubsystem swerveSubsystem) {
-    addRequirements(pivot, shooter, photonvision, swerveSubsystem);
-    this.swerveSubsystem = swerveSubsystem;
+      Pivot pivot, Shooter shooter, Photonvision photonvision) {
+    addRequirements(pivot, shooter);
     timer = new Timer();
     rotationalController =
         new PIDController(
@@ -78,7 +74,7 @@ public class PivotShooterSetUp extends Command {
         photonvision.getRange(photonvision.getBestCamera()) < 1.5
             ? PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE
             : photonvision.getPivotPosition();
-    double rps = ShooterGlobalValues.SHOOTER_SPEED + (photonvision.getRange(photonvision.getBestCamera()) - 1.5) * 5;
+    double rps = ShooterGlobalValues.SHOOTER_SPEED ;
     shooter.setShooterVelocity(-rps, -rps);
   }
 
@@ -91,13 +87,6 @@ public class PivotShooterSetUp extends Command {
 
     // Horizontal PID and offset
     double horizontalError = -photonvision.getYaw();
-    System.out.println(horizontalError);
-    if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
-      swerveSubsystem.setDriveSpeeds(
-          0, 0, rotationalController.calculate(horizontalError, 0), false);
-    } else {
-      swerveSubsystem.stop();
-    }
 
     if (Math.abs(pivot.getPivotPos() - pos) < deadband) {
       pivot.stopMotors();
@@ -120,7 +109,6 @@ public class PivotShooterSetUp extends Command {
   @Override
   public void end(boolean interrupted) {
     pivot.stopMotors();
-    swerveSubsystem.stop();
   }
 
   /**

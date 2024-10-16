@@ -36,6 +36,9 @@ public class SwerveModule {
   private double steerPosition;
   private double steerVelocity;
 
+  private TalonFXConfiguration driveConfigs;
+  private TalonFXConfiguration steerConfigs;
+
   /**
    * Constructs a new SwerveModule.
    *
@@ -53,24 +56,30 @@ public class SwerveModule {
     positionSetter = new PositionVoltage(0, 0, true, 0.0, 0, true, false, false).withSlot(0);
     velocitySetter = new VelocityTorqueCurrentFOC(0);
 
+    positionSetter.EnableFOC = true;
+
     swerveModulePosition = new SwerveModulePosition();
     state = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
 
-    TalonFXConfiguration driveConfigs = new TalonFXConfiguration();
-    TalonFXConfiguration steerConfigs = new TalonFXConfiguration();
+    driveConfigs = new TalonFXConfiguration();
+    steerConfigs = new TalonFXConfiguration();
     CANcoderConfiguration canCoderConfiguration = new CANcoderConfiguration();
 
-    driveConfigs.Slot0.kP = BasePIDGlobal.DRIVE_PID.p;
-    driveConfigs.Slot0.kI = BasePIDGlobal.DRIVE_PID.i;
-    driveConfigs.Slot0.kD = BasePIDGlobal.DRIVE_PID.d;
-    driveConfigs.Slot0.kV = BasePIDGlobal.DRIVE_PID_V;
+    driveConfigs.Slot0.kP = BasePIDGlobal.DRIVE_PID_AUTO.p;
+    driveConfigs.Slot0.kI = BasePIDGlobal.DRIVE_PID_AUTO.i;
+    driveConfigs.Slot0.kD = BasePIDGlobal.DRIVE_PID_AUTO.d;
+    driveConfigs.Slot0.kV = BasePIDGlobal.DRIVE_PID_V_AUTO;
 
-    steerConfigs.Slot0.kP = BasePIDGlobal.STEER_PID.p;
-    steerConfigs.Slot0.kI = BasePIDGlobal.STEER_PID.i;
-    steerConfigs.Slot0.kD = BasePIDGlobal.STEER_PID.d;
+    steerConfigs.Slot0.kP = BasePIDGlobal.STEER_PID_AUTO.p;
+    steerConfigs.Slot0.kI = BasePIDGlobal.STEER_PID_AUTO.i;
+    steerConfigs.Slot0.kD = BasePIDGlobal.STEER_PID_AUTO.d;
+    steerConfigs.Slot0.kV = 0;
 
     driveConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     steerConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+    driveConfigs.MotorOutput.DutyCycleNeutralDeadband = 0.02;
+    steerConfigs.MotorOutput.DutyCycleNeutralDeadband = 0.001;
 
     driveConfigs.MotorOutput.Inverted = SwerveGlobalValues.DRIVE_MOTOR_INVERETED;
     steerConfigs.MotorOutput.Inverted = SwerveGlobalValues.STEER_MOTOR_INVERTED;
@@ -169,5 +178,35 @@ public class SwerveModule {
   public void stop() {
     steerMotor.stopMotor();
     driveMotor.stopMotor();
+  }
+
+  public void setTELEPID() {
+        driveConfigs.Slot0.kP = BasePIDGlobal.DRIVE_PID_TELE.p;
+    driveConfigs.Slot0.kI = BasePIDGlobal.DRIVE_PID_TELE.i;
+    driveConfigs.Slot0.kD = BasePIDGlobal.DRIVE_PID_TELE.d;
+    driveConfigs.Slot0.kV = BasePIDGlobal.DRIVE_PID_V_TELE;
+
+    steerConfigs.Slot0.kP = BasePIDGlobal.STEER_PID_TELE.p;
+    steerConfigs.Slot0.kI = BasePIDGlobal.STEER_PID_TELE.i;
+    steerConfigs.Slot0.kD = BasePIDGlobal.STEER_PID_TELE.d;
+    steerConfigs.Slot0.kV = 0;
+
+        driveMotor.getConfigurator().apply(driveConfigs);
+    steerMotor.getConfigurator().apply(steerConfigs);
+  }
+
+    public void setAUTOPID() {
+    driveConfigs.Slot0.kP = BasePIDGlobal.DRIVE_PID_AUTO.p;
+    driveConfigs.Slot0.kI = BasePIDGlobal.DRIVE_PID_AUTO.i;
+    driveConfigs.Slot0.kD = BasePIDGlobal.DRIVE_PID_AUTO.d;
+    driveConfigs.Slot0.kV = BasePIDGlobal.DRIVE_PID_V_AUTO;
+
+    steerConfigs.Slot0.kP = BasePIDGlobal.STEER_PID_AUTO.p;
+    steerConfigs.Slot0.kI = BasePIDGlobal.STEER_PID_AUTO.i;
+    steerConfigs.Slot0.kD = BasePIDGlobal.STEER_PID_AUTO.d;
+    steerConfigs.Slot0.kV = 0;
+
+    driveMotor.getConfigurator().apply(driveConfigs);
+    steerMotor.getConfigurator().apply(steerConfigs);
   }
 }

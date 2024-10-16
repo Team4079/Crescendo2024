@@ -16,6 +16,7 @@ import frc.robot.commands.amp.AmpScore;
 import frc.robot.commands.amp.ElevatorRampDown;
 import frc.robot.commands.amp.ElevatorRampUp;
 import frc.robot.commands.intake.PulseDown;
+import frc.robot.commands.intake.ReverseIntake;
 import frc.robot.commands.intake.SpinIntake;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
@@ -142,8 +143,8 @@ public class RobotContainer {
     padB.onTrue(new InstantCommand(swerveSubsystem::resetPidgey));
     // x is intake
 
-    padY.whileTrue(new AutoAlign(swerveSubsystem, photonvision));
-    // padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
+    // padY.whileTrue(new AutoAlign(swerveSubsystem, photonvision));
+    padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
     // padY.whileTrue(new PassNoteGyro(swerveSubsystem, pivotyboi, shootyboi));
 
     opPadA.onTrue(new ElevatorRampUp(elevator));
@@ -172,6 +173,14 @@ public class RobotContainer {
     // return new WaitShoot(shootyboi, pivotyboi, limelety);
     return new PathPlannerAuto("TestAuto");
     // return new InstantCommand();
+  }
+
+  public Command setTeleopPID() {
+    return new InstantCommand(swerveSubsystem::setTelePID);
+  }
+
+  public Command setAutoPID() {
+    return new InstantCommand(swerveSubsystem::setAutoPID);
   }
 }
 

@@ -286,4 +286,16 @@ public class SwerveSubsystem extends SubsystemBase {
       module.stop();
     }
   }
+
+  public void setAutoPID() {
+    for (SwerveModule module : modules) {
+      module.setAUTOPID();
+    }
+  }
+
+  public void setTelePID() {
+    for (SwerveModule module : modules) {
+      module.setTELEPID();
+    }
+  }
 }

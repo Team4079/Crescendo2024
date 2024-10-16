@@ -30,6 +30,9 @@ public class PadDrive extends Command {
     Coordinate position = positionSet(pad);
 
     double rotation = -pad.getRightAnalogXAxis() * MotorGlobalValues.MAX_ANGULAR_SPEED;
+    if (Math.abs(pad.getRightAnalogXAxis()) < 0.2) {
+      rotation = 0;
+    }
 
     SmartDashboard.putNumber("X Jostick", position.getX());
     SmartDashboard.putNumber("Y Joystick", position.getY());

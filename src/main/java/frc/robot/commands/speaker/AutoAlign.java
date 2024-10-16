@@ -34,7 +34,7 @@ public class AutoAlign extends Command {
             BasePIDGlobal.ROTATIONAL_PID.i,
             BasePIDGlobal.ROTATIONAL_PID.d);
     rotationalController.setTolerance(2);
-    addRequirements(swerveSubsystem, photonvision);
+    addRequirements(swerveSubsystem);
   }
 
   // Called when the command is initially scheduled.

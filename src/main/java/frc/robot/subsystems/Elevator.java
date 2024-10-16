@@ -89,7 +89,7 @@ public class Elevator extends SubsystemBase {
     if (!ElevatorGlobalValues.ELEVATOR_JOYSTICKS) {
       if (state == ElevatorState.UP) {
         setElevatorPosition(ElevatorGlobalValues.ELEVATOR_UP);
-        setPassSpeed(0.75);
+        setPassSpeed(0.5);
 
       } else if (state == ElevatorState.DOWN) {
         setElevatorPosition(ElevatorGlobalValues.ELEVATOR_DOWN);

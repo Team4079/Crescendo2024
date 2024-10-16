@@ -260,10 +260,10 @@ public class Photonvision extends SubsystemBase {
     double b = -453.088; // power 1
     double a = 267.288; // constant
 
-    if (r == -1)
-    {
-      return GlobalsValues.PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE;
-    }
+    // if (r == -1)
+    // {
+    //   return GlobalsValues.PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE;
+    // }
     return ((f * Math.pow(r, 5))
         + (e * Math.pow(r, 4))
         + (d * Math.pow(r, 3))
