@@ -181,7 +181,7 @@ public class SwerveModule {
   }
 
   public void setTELEPID() {
-        driveConfigs.Slot0.kP = BasePIDGlobal.DRIVE_PID_TELE.p;
+    driveConfigs.Slot0.kP = BasePIDGlobal.DRIVE_PID_TELE.p;
     driveConfigs.Slot0.kI = BasePIDGlobal.DRIVE_PID_TELE.i;
     driveConfigs.Slot0.kD = BasePIDGlobal.DRIVE_PID_TELE.d;
     driveConfigs.Slot0.kV = BasePIDGlobal.DRIVE_PID_V_TELE;
@@ -191,11 +191,11 @@ public class SwerveModule {
     steerConfigs.Slot0.kD = BasePIDGlobal.STEER_PID_TELE.d;
     steerConfigs.Slot0.kV = 0;
 
-        driveMotor.getConfigurator().apply(driveConfigs);
+    driveMotor.getConfigurator().apply(driveConfigs);
     steerMotor.getConfigurator().apply(steerConfigs);
   }
 
-    public void setAUTOPID() {
+  public void setAUTOPID() {
     driveConfigs.Slot0.kP = BasePIDGlobal.DRIVE_PID_AUTO.p;
     driveConfigs.Slot0.kI = BasePIDGlobal.DRIVE_PID_AUTO.i;
     driveConfigs.Slot0.kD = BasePIDGlobal.DRIVE_PID_AUTO.d;
