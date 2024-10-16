@@ -41,6 +41,7 @@ public class RobotContainer {
   private final SwerveSubsystem swerveSubsystem;
   private final LogitechGamingPad pad;
   private final LogitechGamingPad opPad;
+  private final LogitechGamingPad commandCheckPad;
   private final Pivot pivotyboi;
   private final Shooter shootyboi;
   private final Intake intakeyboi;
@@ -53,6 +54,8 @@ public class RobotContainer {
   private final JoystickButton rightBumper;
   private final JoystickButton leftBumper;
   private final JoystickButton startButton;
+
+  private final JoystickButton commandCheckPadA;
 
   private final JoystickButton opPadA;
   private final JoystickButton opPadB;
@@ -67,6 +70,7 @@ public class RobotContainer {
   public RobotContainer() {
     pad = new LogitechGamingPad(0);
     opPad = new LogitechGamingPad(1);
+    commandCheckPad = new LogitechGamingPad(2);
     LED led = new LED();
     // jevois = new Jevois();
     pivotyboi = new Pivot();
@@ -81,6 +85,8 @@ public class RobotContainer {
     rightBumper = new JoystickButton(pad, 6);
     leftBumper = new JoystickButton(pad, 5);
     startButton = new JoystickButton(pad, 8);
+
+    commandCheckPadA = new JoystickButton(commandCheckPad, 1);
 
     opPadA = new JoystickButton(opPad, 1);
     opPadB = new JoystickButton(opPad, 2);
@@ -130,7 +136,7 @@ public class RobotContainer {
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
    * predicate, or via the named factories in {@link
    * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxC
+   * CommandXboxController
    * 
    * ontroller Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
@@ -149,6 +155,8 @@ public class RobotContainer {
     opPadA.onTrue(new ElevatorRampUp(elevator));
     opPadB.onTrue(new ElevatorRampDown(elevator));
 
+    commandCheckPadA.onTrue(new InstantCommand());
+
     rightBumper.onTrue(new ShootRing(shootyboi, pivotyboi, swerveSubsystem, photonvision));
     // rightBumper.whileTrue(new ElevatorRampDown(elevator));
     leftBumper.onTrue(new AmpScore(shootyboi, pivotyboi, photonvision, elevator));
@@ -159,7 +167,6 @@ public class RobotContainer {
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
-   * @param void
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
