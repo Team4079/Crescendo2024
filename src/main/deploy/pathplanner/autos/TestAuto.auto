@@ -16,6 +16,12 @@
           "data": {
             "pathName": "Forward1Meter"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopIntake"
+          }
         }
       ]
     }

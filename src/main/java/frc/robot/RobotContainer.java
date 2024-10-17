@@ -121,6 +121,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "setPivot", new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
     NamedCommands.registerCommand("pushback", new PulseDown(intakeyboi, shootyboi));
+    NamedCommands.registerCommand("stop", new InstantCommand(swerveSubsystem::stop));
 
     swerveSubsystem.setDefaultCommand(
         new PadDrive(swerveSubsystem, pad, SwerveGlobalValues.FIELD_ORIENTATED));
