@@ -78,8 +78,8 @@ public class SwerveModule {
     driveConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     steerConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-    driveConfigs.MotorOutput.DutyCycleNeutralDeadband = 0.02;
-    steerConfigs.MotorOutput.DutyCycleNeutralDeadband = 0.001;
+    // driveConfigs.MotorOutput.DutyCycleNeutralDeadband = 0.02;
+    // steerConfigs.MotorOutput.DutyCycleNeutralDeadband = 0.001;
 
     driveConfigs.MotorOutput.Inverted = SwerveGlobalValues.DRIVE_MOTOR_INVERETED;
     steerConfigs.MotorOutput.Inverted = SwerveGlobalValues.STEER_MOTOR_INVERTED;
@@ -110,6 +110,7 @@ public class SwerveModule {
     steerMotor.getConfigurator().apply(steerConfigs);
     canCoder.getConfigurator().apply(canCoderConfiguration);
 
+
     driveVelocity = driveMotor.getVelocity().getValueAsDouble();
     drivePosition = driveMotor.getPosition().getValueAsDouble();
     steerVelocity = steerMotor.getVelocity().getValueAsDouble();
@@ -134,9 +135,9 @@ public class SwerveModule {
             ((360 * canCoder.getAbsolutePosition().getValue()) % 360 + 360) % 360);
     swerveModulePosition.distanceMeters =
         drivePosition
-            * MotorGlobalValues.DRIVE_MOTOR_GEAR_RATIO
+            / MotorGlobalValues.DRIVE_MOTOR_GEAR_RATIO
             * MotorGlobalValues.MetersPerRevolution;
-
+    System.out.println(swerveModulePosition.distanceMeters);
     return swerveModulePosition;
   }
 
@@ -170,8 +171,8 @@ public class SwerveModule {
   public SwerveModuleState getState() {
     state.angle = Rotation2d.fromRotations(steerMotor.getPosition().getValueAsDouble());
     state.speedMetersPerSecond =
-        driveMotor.getVelocity().getValueAsDouble()
-            * (MotorGlobalValues.DRIVE_MOTOR_GEAR_RATIO / MotorGlobalValues.MetersPerRevolution);
+        driveMotor.getRotorVelocity().getValueAsDouble()
+            / MotorGlobalValues.DRIVE_MOTOR_GEAR_RATIO * MotorGlobalValues.MetersPerRevolution;
     return state;
   }
 
@@ -209,4 +210,9 @@ public class SwerveModule {
     driveMotor.getConfigurator().apply(driveConfigs);
     steerMotor.getConfigurator().apply(steerConfigs);
   }
+
+  public void resetDrivePosition() {
+    driveMotor.setPosition(0);
+  }
+
 }

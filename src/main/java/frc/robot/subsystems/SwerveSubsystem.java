@@ -103,18 +103,18 @@ public class SwerveSubsystem extends SubsystemBase {
         );
   }
 
-  /** Periodically updates the pose estimator and field data. */
+  // This method will be called once per scheduler run
   @Override
   public void periodic() {
     Optional<EstimatedRobotPose> visionMeasurement3d =
         photonvision.getEstimatedGlobalPose(poseEstimator.getEstimatedPosition());
-    if (visionMeasurement3d.isEmpty()) {
-      return;
-    }
+    // if (visionMeasurement3d.isEmpty()) {
+    //   return;
+    // }
 
-    double timestamp = visionMeasurement3d.get().timestampSeconds;
-    Pose3d estimatedPose = visionMeasurement3d.get().estimatedPose;
-    Pose2d visionMeasurement2d = estimatedPose.toPose2d();
+    // double timestamp = visionMeasurement3d.get().timestampSeconds;
+    // Pose3d estimatedPose = visionMeasurement3d.get().estimatedPose;
+    // Pose2d visionMeasurement2d = estimatedPose.toPose2d();
 
     poseEstimator.update(getPidgeyRotation(), getModulePositions());
 
@@ -124,7 +124,11 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putData("Robot Pose", field);
     SmartDashboard.putData("feild lol", field);
 
-    SmartDashboard.putNumber("shawn", 0.1);
+    // Pidgeon Stuff
+    SmartDashboard.putNumber("Pitch", pidgey.getPitch().getValueAsDouble());
+    SmartDashboard.putNumber("Heading", pidgey.getAngle());
+    SmartDashboard.putNumber("Yaw", pidgey.getYaw().getValueAsDouble());
+    SmartDashboard.putNumber("Roll", pidgey.getRoll().getValueAsDouble());
 
     // SmartDashboard.putData("Pose", getPose().getTranslation().get);
   }
@@ -155,6 +159,8 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Forward speed", forwardSpeed);
     SmartDashboard.putNumber("Left speed", leftSpeed);
     SmartDashboard.putNumber("Pidgey Heading", getHeading());
+
+    System.out.println("AARON");
 
     if (isFieldOriented) {
       speeds =
@@ -215,7 +221,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param pose The new pose to set.
    */
   public void newPose(Pose2d pose) {
-    poseEstimator.resetPosition(pidgey.getRotation2d(), getModulePositions(), pose);
+    poseEstimator.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), pose);
   }
 
   /**
@@ -296,6 +302,12 @@ public class SwerveSubsystem extends SubsystemBase {
   public void setTelePID() {
     for (SwerveModule module : modules) {
       module.setTELEPID();
+    }
+  }
+
+  public void resetDrive() {
+    for (SwerveModule module : modules) {
+      module.resetDrivePosition();
     }
   }
 }

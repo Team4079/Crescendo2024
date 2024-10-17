@@ -159,8 +159,9 @@ public final class GlobalsValues {
       public static final PID STEER_PID_AUTO = new PID(15, 0.000, 0.1, 0);
       // public static final PID STEER_PID = new PID(0.15, 0.0000, 0.000005, 0);
       // 0.05 P, 0 D
-      public static final PID DRIVE_PID_AUTO = new PID(0.05, 0.0, 0.0);
-      public static final double DRIVE_PID_V_AUTO = 0.5;
+
+      public static final PID DRIVE_PID_AUTO = new PID(0.5, 0.0, 0.00);
+      public static final double DRIVE_PID_V_AUTO = 0.23;
 
       public static final PID DRIVE_PID_TELE = new PID(1, 0.0, 0.0);
       public static final double DRIVE_PID_V_TELE = 0;
@@ -173,7 +174,7 @@ public final class GlobalsValues {
       public static HolonomicPathFollowerConfig pathFollower =
           new HolonomicPathFollowerConfig(
               new PIDConstants(5, 0.00, 0), // translation
-              new PIDConstants(0.25, 0.0, 0.0), // rotation
+              new PIDConstants(3, 0.0, 0.1), // rotation
               4.78536, // Max module speed, in m/s
               SwerveGlobalValues
                   .ROBOT_SIZE, // Drive base radius in meters. Distance from robot center to
