@@ -79,7 +79,7 @@ public final class GlobalsValues {
     public static final int PASS_NEO_ID = 22;
     public static final double closedLoopRampRate = 0.5;
     public static final double passClosedLoopRampRate = 0.1;
-    public static final double ELEVATOR_UP = 5.5; // TODO: git gud
+    public static final double ELEVATOR_UP = 6.5; // TODO: git gud
     public static final double ELEVATOR_DOWN = 0.5;
     public static final double kP = 0.00003; // TODO: git gud
     public static final double kI = 0.000000; // TODO: git gud
@@ -157,12 +157,13 @@ public final class GlobalsValues {
     public static class BasePIDGlobal {
       public static final PID STEER_PID_TELE = new PID(13, 0.000, 0.1, 0);
       public static final PID STEER_PID_AUTO = new PID(15, 0.000, 0.1, 0);
-      // public static final PID STEER_PID = new PID(0.15, 0.0000, 0.000005, 0); //
+      // public static final PID STEER_PID = new PID(0.15, 0.0000, 0.000005, 0);
       // 0.05 P, 0 D
-      public static final PID DRIVE_PID_AUTO = new PID(0.05, 0.0, 0.0); // new PID(0.05, 0.00, 0, 0);
-      public static final double DRIVE_PID_V_AUTO = 0.5;
 
-      public static final PID DRIVE_PID_TELE = new PID(1, 0.0, 0.0); // new PID(0.05, 0.00, 0, 0);
+      public static final PID DRIVE_PID_AUTO = new PID(0.5, 0.0, 0.00);
+      public static final double DRIVE_PID_V_AUTO = 0.23;
+
+      public static final PID DRIVE_PID_TELE = new PID(1, 0.0, 0.0);
       public static final double DRIVE_PID_V_TELE = 0;
       // DON'T SET D PAST 0.03 - Erick or else the swerve moduls make funny nosie
 
@@ -173,7 +174,7 @@ public final class GlobalsValues {
       public static HolonomicPathFollowerConfig pathFollower =
           new HolonomicPathFollowerConfig(
               new PIDConstants(5, 0.00, 0), // translation
-              new PIDConstants(0.25, 0.0, 0.0), // rotation
+              new PIDConstants(3, 0.0, 0.1), // rotation
               4.78536, // Max module speed, in m/s
               SwerveGlobalValues
                   .ROBOT_SIZE, // Drive base radius in meters. Distance from robot center to
@@ -240,10 +241,15 @@ public final class GlobalsValues {
     public static final double PIVOT_PID_RIGHT_V = 0.5;
     public static final double PIVOT_PID_RIGHT_F = 0.1;
 
+    // SetPivot PID Controller
+    public static final double SETPIVOT_PID_P = 0.00825;
+    public static final double SETPIVOT_PID_I = 0;
+    public static final double SETPIVOT_PID_D = 0.00035;
+
     public static final double PIVOT_NEUTRAL_ANGLE = (0.5 + PivotGlobalValues.offset); // All 3\
     // public static final double PIVOT_AMP_ANGLE = (46 + PivotGlobalValues.offset);
     // //Ued to be 49.55
-    public static final double PIVOT_AMP_ANGLE = 20;
+    public static final double PIVOT_AMP_ANGLE = 19;
     public static final double PIVOT_SUBWOOFER_ANGLE = (13.9 + PivotGlobalValues.offset);
     // public static final double PIVOT_SOURCE = 93;
     public static final double PIVOT_FENDER_ANGLE =

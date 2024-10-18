@@ -49,12 +49,6 @@ public class PadShoot extends Command {
     addRequirements(shooter);
   }
 
-  /** Called when the command is initially scheduled. */
-  @Override
-  public void initialize() {
-    // No specific action needed when the command is initialized.
-  }
-
   /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {

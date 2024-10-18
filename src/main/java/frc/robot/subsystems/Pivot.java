@@ -183,7 +183,6 @@ public class Pivot extends SubsystemBase {
   /**
    * Stops the pivot motors
    *
-   * @param void
    * @return void
    */
   public void stopMotors() {
@@ -209,7 +208,6 @@ public class Pivot extends SubsystemBase {
   /**
    * Get the position of the pivot motor
    *
-   * @param void
    * @return double, the position of the pivot motor
    */
   public double getPivotLeftPos() {

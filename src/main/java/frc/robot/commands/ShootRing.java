@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.speaker.AutoAlign;
 import frc.robot.commands.speaker.PivotShooterSetUp;
 import frc.robot.commands.speaker.StopShooter;
@@ -20,29 +19,15 @@ import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShootRing extends SequentialCommandGroup {
-  /** Creates a new ShootRing. */
-  private Shooter shooter;
-
-  private Pivot pivot;
-  private SwerveSubsystem swerveSubsystem;
-  private Photonvision photonvision;
-
   public ShootRing(
       Shooter shooter, Pivot pivot, SwerveSubsystem swerveSubsystem, Photonvision photonvision) {
-    this.shooter = shooter;
-    this.pivot = pivot;
-    this.swerveSubsystem = swerveSubsystem;
-    this.photonvision = photonvision;
     addRequirements(shooter, pivot, swerveSubsystem, photonvision);
-
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ParallelCommandGroup(
-        new PivotShooterSetUp(pivot, shooter, photonvision).withTimeout(0.6),
-        new AutoAlign(swerveSubsystem, photonvision).withTimeout(0.6)),
-      new PushRing(shooter, photonvision, true).withTimeout(0.5),
-      new StopShooter(shooter).withTimeout(0.01),
-      new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.4));
+        new ParallelCommandGroup(
+            new PivotShooterSetUp(pivot, shooter, photonvision).withTimeout(0.6),
+            new AutoAlign(swerveSubsystem, photonvision).withTimeout(0.6)),
+        new PushRing(shooter, photonvision, true).withTimeout(0.5),
+        new StopShooter(shooter).withTimeout(0.01),
+        new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.4));
   }
 }

@@ -5,10 +5,8 @@ import static frc.robot.utils.GlobalsValues.SwerveGlobalValues.*;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.PhotonVisionConstants;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +14,6 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -217,16 +214,12 @@ public class Photonvision extends SubsystemBase {
   //   }
   // }
 
-  public double getRange(PhotonCamera camera)
-  {
+  public double getRange(PhotonCamera camera) {
     var resutls = camera.getLatestResult();
 
-    if (resutls.hasTargets())
-    {
-      for (var tag : resutls.getTargets())
-      {
-        if (tag.getFiducialId() == 4 || tag.getFiducialId() == 7)
-        {
+    if (resutls.hasTargets()) {
+      for (var tag : resutls.getTargets()) {
+        if (tag.getFiducialId() == 4 || tag.getFiducialId() == 7) {
           return tag.getBestCameraToTarget().getTranslation().getNorm();
         }
         return -1.0;

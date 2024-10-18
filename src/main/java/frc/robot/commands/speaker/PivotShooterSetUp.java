@@ -7,10 +7,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
-import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
 
 /**
@@ -35,7 +33,7 @@ public class PivotShooterSetUp extends Command {
 
   /** The target position for the pivot. */
   private double pos;
-  
+
   /** The PID controller for rotational alignment. */
   private final PIDController rotationalController;
 
@@ -50,8 +48,7 @@ public class PivotShooterSetUp extends Command {
    * @param limelight The Limelight subsystem used by this command.
    * @param swerveSubsystem The SwerveSubsystem used by this command.
    */
-  public PivotShooterSetUp(
-      Pivot pivot, Shooter shooter, Photonvision photonvision) {
+  public PivotShooterSetUp(Pivot pivot, Shooter shooter, Photonvision photonvision) {
     addRequirements(pivot, shooter);
     timer = new Timer();
     rotationalController =
@@ -74,7 +71,7 @@ public class PivotShooterSetUp extends Command {
         photonvision.getRange(photonvision.getBestCamera()) < 1.5
             ? PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE
             : photonvision.getPivotPosition();
-    double rps = ShooterGlobalValues.SHOOTER_SPEED ;
+    double rps = ShooterGlobalValues.SHOOTER_SPEED;
     shooter.setShooterVelocity(-rps, -rps);
   }
 
