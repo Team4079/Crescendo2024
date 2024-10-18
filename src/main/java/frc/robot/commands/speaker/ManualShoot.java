@@ -6,7 +6,9 @@ package frc.robot.commands.speaker;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.PushRing;
+import frc.robot.commands.stage.PassNoteGyro;
 import frc.robot.commands.stage.StagePass;
+import frc.robot.commands.stage.StagePassPivot;
 import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
@@ -20,8 +22,8 @@ public class ManualShoot extends SequentialCommandGroup {
       SwerveSubsystem swerve, Shooter shooter, Photonvision photonvision, Pivot pivot) {
     addRequirements(swerve, shooter, pivot);
     addCommands(
-        //        new PassNoteGyro(swerve, pivot, shooter),
-        //        new StagePassPivot(pivot).withTimeout(0.75),
+        new PassNoteGyro(swerve, pivot, shooter),
+        new StagePassPivot(pivot).withTimeout(0.75),
         new StagePass(shooter).withTimeout(0.4414),
         new PushRing(shooter, photonvision, false).withTimeout(0.5),
         new StopShooter(shooter));

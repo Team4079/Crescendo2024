@@ -33,12 +33,10 @@ public class PadPivot extends Command {
   /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
-    if (Math.abs(pad.getLeftTriggerValue()) > 0.01) {
-      pivot.movePivot(-pad.getLeftTriggerValue() * 0.3);
-    } else if (Math.abs(pad.getRightTriggerValue()) > 0.01) {
+    // if (Math.abs(pad.getLeftTriggerValue()) > 0.01) {
+    //   pivot.movePivot(-pad.getLeftTriggerValue() * 0.3);
+    if (Math.abs(pad.getRightTriggerValue()) > 0.01) {
       pivot.movePivot(pad.getRightTriggerValue() * 0.3);
-    } else {
-      pivot.stopMotors();
     }
 
     // if (pad.getDPadDown()) {

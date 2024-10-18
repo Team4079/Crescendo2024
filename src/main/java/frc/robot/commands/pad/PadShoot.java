@@ -1,6 +1,7 @@
 package frc.robot.commands.pad;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.PushRing;
 import frc.robot.commands.ShootRing;
 import frc.robot.commands.speaker.ManualShoot;
 import frc.robot.commands.stage.PassNoteGyro;
@@ -64,22 +65,27 @@ public class PadShoot extends Command {
     //   shooter.stopShooter();
     // }
 
-    if (pad.getDPadUp()) {
+    if (pad.getLeftTriggerValue() > 0.5)
+    {
       new ManualShoot(swerve, shooter, photonvision, pivot).schedule();
     }
-    //    } else {
-    //      shooter.stopShooter();
-    //    }
 
-    if (pad.getDPadRight()) {
-      new ShootRing(shooter, pivot, swerve, photonvision).schedule(); // Uses Alt
-      //    } else {
-      //      shooter.stopShooter();
+    if (pad.getDPadUp()) {
+      new PushRing(shooter, photonvision, false).schedule();
     }
+      //  } else {
+      //    shooter.stopShooter();
+      //  }
 
-    if (pad.getLeftTriggerValue() > 0.5) {
-      new PassNoteGyro(swerve, pivot, shooter).schedule();
-    }
+    // if (pad.getDPadRight()) {
+    //   new ShootRing(shooter, pivot, swerve, photonvision).schedule(); // Uses Alt
+    //   //    } else {
+    //   //      shooter.stopShooter();
+    // }
+
+    // if (pad.getLeftTriggerValue() > 0.5) {
+    //   new PassNoteGyro(swerve, pivot, shooter).schedule();
+    // }
   }
 
   /**
