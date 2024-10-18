@@ -37,6 +37,16 @@ public class PadElevator extends Command {
     if (Math.abs(pad.getLeftAnalogYAxis()) > 0.15 && ElevatorGlobalValues.ELEVATOR_JOYSTICKS) {
       elevator.moveElevator(-pad.getLeftAnalogYAxis() * 0.75);
     }
+
+    if (pad.getDPadLeft())
+    {
+      elevator.moveElevator(-0.5);
+    }
+
+    if (pad.getDPadRight())
+    {
+      elevator.moveElevator(0.5);
+    }
   }
 
   /**

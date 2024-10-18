@@ -35,6 +35,11 @@ public class PadPivot extends Command {
   public void execute() {
     // if (Math.abs(pad.getLeftTriggerValue()) > 0.01) {
     //   pivot.movePivot(-pad.getLeftTriggerValue() * 0.3);
+
+    if (pad.getDPadDown())
+    {
+      pivot.movePivot(0.2);
+    }
     if (Math.abs(pad.getRightTriggerValue()) > 0.01) {
       pivot.movePivot(pad.getRightTriggerValue() * 0.3);
     }
