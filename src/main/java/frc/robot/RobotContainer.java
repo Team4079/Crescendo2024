@@ -113,13 +113,15 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "startIntake", new StartIntake(intakeyboi, shootyboi).withTimeout(6));
     NamedCommands.registerCommand("stopIntake", new StopIntake(intakeyboi, shootyboi));
-    NamedCommands.registerCommand("pushRing", new PushRing(shootyboi, photonvision, true));
+    NamedCommands.registerCommand("pushRing", new PushRing(shootyboi, photonvision, false));
     NamedCommands.registerCommand(
-        "shootSequence", new ShootingSequence(pivotyboi, shootyboi, photonvision, swerveSubsystem));
+        "shootRing", new ShootRing(shootyboi, pivotyboi, swerveSubsystem, photonvision));
     NamedCommands.registerCommand(
         "setPivotDown", new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE));
     NamedCommands.registerCommand(
         "setPivot", new SetPivot(pivotyboi, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE));
+    NamedCommands.registerCommand(
+        "SubwooferShot", new SubwooferShot(shootyboi, pivotyboi, photonvision));
     NamedCommands.registerCommand("pushback", new PulseDown(intakeyboi, shootyboi));
     NamedCommands.registerCommand("stop", new InstantCommand(swerveSubsystem::stop));
 
@@ -145,7 +147,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    padA.onTrue(new SubwooferShot(shootyboi, pivotyboi, swerveSubsystem, photonvision));
+    padA.onTrue(new SubwooferShot(shootyboi, pivotyboi, photonvision));
     // padA.onTrue(new InstantCommand(elevator::setState(ElevatorState.UP)));
     padB.onTrue(new InstantCommand(swerveSubsystem::resetPidgey));
     // x is intake
@@ -181,7 +183,7 @@ public class RobotContainer {
     // return new PathPlannerAuto("4NoteNoRotation");
 
     // return new WaitShoot(shootyboi, pivotyboi, limelety);
-    return new PathPlannerAuto("JustShoot");
+    return new PathPlannerAuto("TestAuto");
     // return new InstantCommand();
   }
 

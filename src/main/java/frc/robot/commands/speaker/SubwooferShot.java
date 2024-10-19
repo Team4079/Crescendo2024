@@ -21,14 +21,14 @@ import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 public class SubwooferShot extends SequentialCommandGroup {
 
   public SubwooferShot(
-      Shooter shooter, Pivot pivot, SwerveSubsystem swerveSubsystem, Photonvision photonvision) {
-    addRequirements(shooter, pivot, swerveSubsystem);
+      Shooter shooter, Pivot pivot, Photonvision photonvision) {
+    addRequirements(shooter, pivot);
     addCommands(
         new ParallelCommandGroup(
-            new SetPivot(pivot, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(0.6),
-            new ShooterRampUp(shooter, photonvision).withTimeout(0.6)),
-        new PushRing(shooter, photonvision, false).withTimeout(0.3),
+            new SetPivot(pivot, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(0.687),
+            new ShooterRampUp(shooter, photonvision).withTimeout(0.687)),
+        new PushRing(shooter, photonvision, false).withTimeout(0.3309),
         new StopShooter(shooter).withTimeout(0.01),
-        new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.4));
+        new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.4079));
   }
 }

@@ -14,50 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "shootSequence"
+            "name": "SubwooferShot"
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "1NoteNoRot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "startIntake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "setPivotDown"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "pushback"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootSequence"
+            "pathName": "Forward1Meter"
           }
         }
       ]

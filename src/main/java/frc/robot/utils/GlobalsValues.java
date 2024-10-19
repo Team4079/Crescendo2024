@@ -160,10 +160,10 @@ public final class GlobalsValues {
       // public static final PID STEER_PID = new PID(0.15, 0.0000, 0.000005, 0);
       // 0.05 P, 0 D
 
-      public static final PID DRIVE_PID_AUTO = new PID(0, 0.0, 0.00);
-      public static final double DRIVE_PID_V_AUTO = 1.5;
+      public static final PID DRIVE_PID_AUTO = new PID(0.0, 0.0, 0.00);
+      public static final double DRIVE_PID_V_AUTO = 1.25;
 
-      public static final PID DRIVE_PID_TELE = new PID(1, 0.0, 0.0);
+      public static final PID DRIVE_PID_TELE = new PID(0.8, 0.0, 0.0);
       public static final double DRIVE_PID_V_TELE = 0;
       // DON'T SET D PAST 0.03 - Erick or else the swerve moduls make funny nosie
 

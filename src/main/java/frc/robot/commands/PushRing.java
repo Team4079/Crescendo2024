@@ -14,19 +14,19 @@ public class PushRing extends Command {
   private final Photonvision photonvision;
 
   /** Whether the Limelight is enabled. */
-  private final boolean limelightEnabled;
+  private final boolean photonEnabled;
 
   /**
    * Creates a new PushRing command.
    *
    * @param shooter The Shooter subsystem used by this command.
    * @param limelight The Limelight subsystem used by this command.
-   * @param limelightEnabled Whether the Limelight is enabled.
+   * @param photonEnabled Whether the Limelight is enabled.
    */
-  public PushRing(Shooter shooter, Photonvision photonvision, boolean limelightEnabled) {
+  public PushRing(Shooter shooter, Photonvision photonvision, boolean photonEnabled) {
     this.shooter = shooter;
     this.photonvision = photonvision;
-    this.limelightEnabled = limelightEnabled;
+    this.photonEnabled = photonEnabled;
     addRequirements(shooter);
   }
 
@@ -39,15 +39,16 @@ public class PushRing extends Command {
   /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
-    if (limelightEnabled) {
-      if (photonvision.getRange(photonvision.getBestCamera()) > 0.1) {
-        shooter.setKrakenVelocity(ShooterGlobalValues.PUSH_RING_RPS);
-      } else {
-        shooter.stopAllMotors();
-      }
-    } else {
-      shooter.setKrakenVelocity(ShooterGlobalValues.PUSH_RING_RPS);
-    }
+    // if (photonEnabled) {
+    //   if (photonvision.getRange(photonvision.getBestCamera()) > 0.1) {
+    //     shooter.setKrakenVelocity(ShooterGlobalValues.PUSH_RING_RPS);
+    //   } else {
+    //     shooter.stopAllMotors();
+    //   }
+    // } else {
+    //   shooter.setKrakenVelocity(ShooterGlobalValues.PUSH_RING_RPS);
+    // }
+    shooter.setKrakenVelocity(ShooterGlobalValues.PUSH_RING_RPS);
   }
 
   /**

@@ -16,6 +16,12 @@
           "data": {
             "name": "shootSequence"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "setPivotDown"
+          }
         }
       ]
     }
