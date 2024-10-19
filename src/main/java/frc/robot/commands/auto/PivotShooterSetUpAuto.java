@@ -1,5 +1,7 @@
 package frc.robot.commands.auto;
 
+import org.photonvision.PhotonCamera;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -45,6 +47,8 @@ public class PivotShooterSetUpAuto extends Command {
   /** The PID controller for velocity control. */
   private final PIDController velocityPIDController;
 
+  private PhotonCamera camera;
+
   /**
    * Creates a new PivotShooterSetUpAuto command.
    *
@@ -68,6 +72,8 @@ public class PivotShooterSetUpAuto extends Command {
     this.pivot = pivot;
     this.photonvision = photonvision;
     this.shooter = shooter;
+
+    camera = photonvision.getBestCamera();
   }
 
   /** Called when the command is initially scheduled. */
@@ -98,7 +104,7 @@ public class PivotShooterSetUpAuto extends Command {
     // System.out.println(horizontalError);
     if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
       swerveSubsystem.setDriveSpeeds(
-          0, 0, rotationalController.calculate(horizontalError, 0), false);
+          0, 0, rotationalController.calculate(horizontalError, photonvision.getYaw(camera)), false);
     } else {
       swerveSubsystem.stop();
     }

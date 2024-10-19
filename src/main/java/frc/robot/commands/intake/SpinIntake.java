@@ -70,6 +70,9 @@ public class SpinIntake extends Command {
 
     if (!ShooterGlobalValues.HAS_PIECE && shouldSpin) {
       startIntakeAndShooter();
+    }
+    else if (ShooterGlobalValues.HAS_PIECE && pad.getXButton()) {
+      moveUp();
     } else {
       stopIntakeAndShooter();
       handleTimers();
@@ -132,6 +135,11 @@ public class SpinIntake extends Command {
       shooter.setKrakenVelocity(20);
     }
   }
+
+    private void moveUp() {
+      shooter.setKrakenVelocity(ShooterGlobalValues.PUSH_UP_RPS);
+      intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
+    }
 
   /**
    * Controls the LED state based on the shooter and intake status.

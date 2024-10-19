@@ -79,7 +79,7 @@ public final class GlobalsValues {
     public static final int PASS_NEO_ID = 22;
     public static final double closedLoopRampRate = 0.5;
     public static final double passClosedLoopRampRate = 0.1;
-    public static final double ELEVATOR_UP = 6.5; // TODO: git gud
+    public static final double ELEVATOR_UP = 7; // TODO: git gud
     public static final double ELEVATOR_DOWN = 0.5;
     public static final double kP = 0.00003; // TODO: git gud
     public static final double kI = 0.000000; // TODO: git gud
@@ -309,7 +309,8 @@ public final class GlobalsValues {
     public static final double SHOOTER_RPS = -40.0;
     public static final double SHOOTER_PASS = -8.0; // Positive is shooting, negative is intake
     public static final double STAGE_PASS_RPS = -15.0;
-    public static final double PASSTHROUGH_RPS = -30.0; // Positive is shooting, negative is intake
+    public static final double PASSTHROUGH_RPS = -30.0;
+    public static final double PUSH_UP_RPS = -10.0; // Positive is shooting, negative is intake
     public static final double AUTO_PASSTHROUGH_RPS =
         -35.0; // Positive is shooting, negative is intake
     public static final double PUSH_RING_AMP_RPS = -30;
