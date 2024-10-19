@@ -129,7 +129,7 @@ public class RobotContainer {
     pivotyboi.setDefaultCommand(new PadPivot(pivotyboi, pad));
     shootyboi.setDefaultCommand(
         new PadShoot(shootyboi, swerveSubsystem, pad, photonvision, pivotyboi));
-    elevator.setDefaultCommand(new PadElevator(elevator, opPad));
+    elevator.setDefaultCommand(new PadElevator(elevator, pad));
     configureBindings();
   }
 
@@ -156,6 +156,7 @@ public class RobotContainer {
 
     opPadA.onTrue(new ElevatorRampUp(elevator));
     opPadB.onTrue(new ElevatorRampDown(elevator));
+    opPadX.onTrue(new InstantCommand(() -> swerveSubsystem.setAutoPID()));
 
     commandCheckPadA.onTrue(new InstantCommand());
 
@@ -180,7 +181,7 @@ public class RobotContainer {
     // return new PathPlannerAuto("4NoteNoRotation");
 
     // return new WaitShoot(shootyboi, pivotyboi, limelety);
-    return new PathPlannerAuto("4NoteNoRotation");
+    return new PathPlannerAuto("TestAuto");
     // return new InstantCommand();
   }
 

@@ -160,6 +160,12 @@ public class SwerveModule {
             * (MotorGlobalValues.DRIVE_MOTOR_GEAR_RATIO / MotorGlobalValues.MetersPerRevolution);
     driveMotor.setControl(velocitySetter.withVelocity(velocityToSet));
 
+    SmartDashboard.putNumber(
+        "drive actual speed " + canCoder.getDeviceID(), driveMotor.getVelocity().getValueAsDouble());
+      
+    SmartDashboard.putNumber(
+        "drive set speed " + canCoder.getDeviceID(), velocityToSet);
+
     this.state = state;
   }
 
@@ -197,14 +203,10 @@ public class SwerveModule {
   }
 
   public void setAUTOPID() {
-    driveConfigs.Slot0.kP = BasePIDGlobal.DRIVE_PID_AUTO.p;
-    driveConfigs.Slot0.kI = BasePIDGlobal.DRIVE_PID_AUTO.i;
-    driveConfigs.Slot0.kD = BasePIDGlobal.DRIVE_PID_AUTO.d;
-    driveConfigs.Slot0.kV = BasePIDGlobal.DRIVE_PID_V_AUTO;
-
-    steerConfigs.Slot0.kP = BasePIDGlobal.STEER_PID_AUTO.p;
-    steerConfigs.Slot0.kI = BasePIDGlobal.STEER_PID_AUTO.i;
-    steerConfigs.Slot0.kD = BasePIDGlobal.STEER_PID_AUTO.d;
+    driveConfigs.Slot0.kP = SmartDashboard.getNumber("AUTO: P", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.p);
+    driveConfigs.Slot0.kI = SmartDashboard.getNumber("AUTO: I", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.i);
+    driveConfigs.Slot0.kD = SmartDashboard.getNumber("AUTO: D", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.d);
+    driveConfigs.Slot0.kV = SmartDashboard.getNumber("AUTO: V", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_V_AUTO);
     steerConfigs.Slot0.kV = 0;
 
     driveMotor.getConfigurator().apply(driveConfigs);

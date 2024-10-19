@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.VecBuilder;
@@ -106,19 +107,19 @@ public class SwerveSubsystem extends SubsystemBase {
   // This method will be called once per scheduler run
   @Override
   public void periodic() {
+
+
+
     Optional<EstimatedRobotPose> visionMeasurement3d =
         photonvision.getEstimatedGlobalPose(poseEstimator.getEstimatedPosition());
-    // if (visionMeasurement3d.isEmpty()) {
-    //   return;
-    // }
-
-    // double timestamp = visionMeasurement3d.get().timestampSeconds;
-    // Pose3d estimatedPose = visionMeasurement3d.get().estimatedPose;
-    // Pose2d visionMeasurement2d = estimatedPose.toPose2d();
+    if (!visionMeasurement3d.isEmpty()) {
+      double timestamp = visionMeasurement3d.get().timestampSeconds;
+      Pose3d estimatedPose = visionMeasurement3d.get().estimatedPose;
+      Pose2d visionMeasurement2d = estimatedPose.toPose2d();
+      poseEstimator.addVisionMeasurement(visionMeasurement2d, timestamp);
+    }
 
     poseEstimator.update(getPidgeyRotation(), getModulePositions());
-
-    // poseEstimator.addVisionMeasurement(visionMeasurement2d, timestamp);
 
     field.setRobotPose(poseEstimator.getEstimatedPosition());
     SmartDashboard.putData("Robot Pose", field);

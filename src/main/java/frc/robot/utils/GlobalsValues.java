@@ -160,8 +160,8 @@ public final class GlobalsValues {
       // public static final PID STEER_PID = new PID(0.15, 0.0000, 0.000005, 0);
       // 0.05 P, 0 D
 
-      public static final PID DRIVE_PID_AUTO = new PID(0.5, 0.0, 0.00);
-      public static final double DRIVE_PID_V_AUTO = 0.23;
+      public static final PID DRIVE_PID_AUTO = new PID(0, 0.0, 0.00);
+      public static final double DRIVE_PID_V_AUTO = 1.5;
 
       public static final PID DRIVE_PID_TELE = new PID(1, 0.0, 0.0);
       public static final double DRIVE_PID_V_TELE = 0;
@@ -203,7 +203,7 @@ public final class GlobalsValues {
 
     public static final int INTAKE_MOTOR_ID = 17;
 
-    public static final double INTAKE_SPEED = 50;
+    public static final double INTAKE_SPEED = 30;
 
     // Intake PID Values
     public static final double INTAKE_PID_V = 0.1;
