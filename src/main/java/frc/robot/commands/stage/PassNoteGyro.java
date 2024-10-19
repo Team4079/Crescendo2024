@@ -16,17 +16,13 @@ import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
 
 public class PassNoteGyro extends Command {
   private final SwerveSubsystem swerve;
-  private final Pivot pivot;
-  private final Shooter shooter;
   private final boolean isBlueSide;
   private final double angle;
   private final PIDController pidController;
 
   /** Creates a new PassNoteGyro. */
-  public PassNoteGyro(SwerveSubsystem swerve, Pivot pivot, Shooter shooter) {
+  public PassNoteGyro(SwerveSubsystem swerve) {
     this.swerve = swerve;
-    this.pivot = pivot;
-    this.shooter = shooter;
 
     isBlueSide =
         DriverStation.getAlliance()
@@ -47,20 +43,20 @@ public class PassNoteGyro extends Command {
     pidController.setTolerance(10);
     pidController.enableContinuousInput(0, 360);
 
-    addRequirements(swerve, pivot, shooter);
+    addRequirements(swerve);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pidController.calculate(swerve.getHeading(), angle);
+    pidController.calculate(-swerve.getHeading(), angle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     SmartDashboard.putNumber("Positional Error", pidController.getPositionError());
-    if (Math.abs(pidController.getPositionError()) < 10) {
+    if (Math.abs(pidController.getPositionError()) < 5) {
       swerve.stop();
     } else {
       swerve.setDriveSpeeds(0, 0, pidController.calculate(-swerve.getHeading(), angle), false);
@@ -70,6 +66,7 @@ public class PassNoteGyro extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(pidController.getPositionError()) < 10;
+    // return Math.abs(pidController.getPositionError()) < 10;
+    return false;
   }
 }

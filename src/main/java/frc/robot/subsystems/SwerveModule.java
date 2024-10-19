@@ -137,8 +137,8 @@ public class SwerveModule {
         drivePosition
             / MotorGlobalValues.DRIVE_MOTOR_GEAR_RATIO
             * MotorGlobalValues.MetersPerRevolution;
-    System.out.println(swerveModulePosition.distanceMeters);
-    return swerveModulePosition;
+    // System.out.println(swerveModulePosition.distanceMeters);
+    return swerveModulePosition; 
   }
 
   /**

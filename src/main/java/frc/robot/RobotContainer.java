@@ -163,7 +163,7 @@ public class RobotContainer {
     // rightBumper.whileTrue(new ElevatorRampDown(elevator));
     leftBumper.onTrue(new AmpScore(shootyboi, pivotyboi, photonvision, elevator));
     // startButton.onTrue(new StagePass(shootyboi));
-    startButton.onTrue(new PassNoteGyro(swerveSubsystem, pivotyboi, shootyboi));
+    startButton.onTrue(new PassNoteGyro(swerveSubsystem));
   }
 
   /**

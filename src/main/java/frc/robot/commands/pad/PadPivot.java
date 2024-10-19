@@ -38,10 +38,17 @@ public class PadPivot extends Command {
 
     if (pad.getDPadDown())
     {
-      pivot.movePivot(0.2);
+      pivot.movePivot(-0.1);
     }
-    if (Math.abs(pad.getRightTriggerValue()) > 0.01) {
+
+
+    else if (Math.abs(pad.getRightTriggerValue()) > 0.01) {
       pivot.movePivot(pad.getRightTriggerValue() * 0.3);
+    }
+
+    else
+    {
+      pivot.stopMotors();
     }
 
     // if (pad.getDPadDown()) {

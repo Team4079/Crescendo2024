@@ -36,7 +36,7 @@ public class StagePass extends Command {
   @Override
   public void execute() {
     shooter.setShooterVelocity(
-        -ShooterGlobalValues.SHOOTER_SPEED, -ShooterGlobalValues.SHOOTER_SPEED);
+      ShooterGlobalValues.SHOOTER_PASS, ShooterGlobalValues.SHOOTER_PASS);
   }
 
   // Called once the command ends or is interrupted.

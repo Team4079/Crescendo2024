@@ -169,7 +169,7 @@ public final class GlobalsValues {
 
       // AutoAlign PID
       public static final PID ROTATIONAL_PID = new PID(0.20, 0.000001, 0, 0);
-      public static final PID PASS_ROTATIONAL_PID = new PID(0.20, 000001, 0.00, 0);
+      public static final PID PASS_ROTATIONAL_PID = new PID(0.075, 0000, 0.00, 0);
 
       public static HolonomicPathFollowerConfig pathFollower =
           new HolonomicPathFollowerConfig(
@@ -306,7 +306,8 @@ public final class GlobalsValues {
     public static final double KRAKEN_SPEED = 15.0;
 
     // Shooter Motor Speeds
-    public static final double SHOOTER_RPS = -40.0; // Positive is shooting, negative is intake
+    public static final double SHOOTER_RPS = -40.0;
+    public static final double SHOOTER_PASS = -8.0; // Positive is shooting, negative is intake
     public static final double STAGE_PASS_RPS = -15.0;
     public static final double PASSTHROUGH_RPS = -30.0; // Positive is shooting, negative is intake
     public static final double AUTO_PASSTHROUGH_RPS =
@@ -322,8 +323,8 @@ public final class GlobalsValues {
     public static final int RING_SENSOR_PORT = 8;
 
     // Side Angles
-    public static final double blueSideAngle = -22.0;
-    public static final double redSideAngle = 22.0;
+    public static final double blueSideAngle = -25.0;
+    public static final double redSideAngle = 25.0;
   }
 
   public static class LimelightGlobalValues {

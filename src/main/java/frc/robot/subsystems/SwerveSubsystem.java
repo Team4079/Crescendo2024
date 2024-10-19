@@ -160,8 +160,6 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Left speed", leftSpeed);
     SmartDashboard.putNumber("Pidgey Heading", getHeading());
 
-    System.out.println("AARON");
-
     if (isFieldOriented) {
       speeds =
           ChassisSpeeds.fromFieldRelativeSpeeds(

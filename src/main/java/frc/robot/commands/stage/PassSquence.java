@@ -7,11 +7,13 @@ package frc.robot.commands.stage;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.PushRing;
+import frc.robot.commands.SetPivot;
 import frc.robot.commands.speaker.StopShooter;
 import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -22,10 +24,11 @@ public class PassSquence extends SequentialCommandGroup {
     addRequirements(swerve, shooter, pivot);
     addCommands(
       new ParallelCommandGroup(
-        new PassNoteGyro(swerve, pivot, shooter).withTimeout(0.75),
+        new PassNoteGyro(swerve).withTimeout(0.75),
         new StagePassPivot(pivot).withTimeout(0.75),
         new StagePass(shooter).withTimeout(0.4414)),
         new PushRing(shooter, photonvision, false).withTimeout(0.5),
+        new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.4),
         new StopShooter(shooter));
   }
 }

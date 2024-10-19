@@ -42,6 +42,7 @@ public class AutoAlign extends Command {
   public void initialize() {
     camera = photonvision.getBestCamera();
     SmartDashboard.putString("cam used for align", camera.getName());
+    rotationalController.setSetpoint(photonvision.getOffset(camera));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
