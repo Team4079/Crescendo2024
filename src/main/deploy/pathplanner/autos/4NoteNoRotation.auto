@@ -59,6 +59,100 @@
           "data": {
             "name": "shootSequence"
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "4NoteNoRot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "setPivotDown"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "startIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "5NoteNoRot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "pushback"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootSequence"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "startIntake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "setPivotDown"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "6NoteNoRot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "7NoteNoRot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootSequence"
+          }
         }
       ]
     }

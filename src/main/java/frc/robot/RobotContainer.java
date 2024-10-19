@@ -180,7 +180,7 @@ public class RobotContainer {
     // return new PathPlannerAuto("4NoteNoRotation");
 
     // return new WaitShoot(shootyboi, pivotyboi, limelety);
-    return new PathPlannerAuto("TestAuto");
+    return new PathPlannerAuto("4NoteNoRotation");
     // return new InstantCommand();
   }
 
@@ -192,4 +192,3 @@ public class RobotContainer {
     return new InstantCommand(swerveSubsystem::setAutoPID);
   }
 }
-
