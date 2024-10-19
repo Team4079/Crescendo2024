@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.utils.PID;
 import frc.robot.utils.GlobalsValues.MotorGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
@@ -202,12 +203,20 @@ public class SwerveModule {
     steerMotor.getConfigurator().apply(steerConfigs);
   }
 
+  public void setAUTOPID(PID pid, double velocity) {
+    driveConfigs.Slot0.kP = pid.p;
+    driveConfigs.Slot0.kI = pid.i;
+    driveConfigs.Slot0.kD = pid.d;
+    driveConfigs.Slot0.kV = velocity;
+
+    driveMotor.getConfigurator().apply(driveConfigs);
+  }
+
   public void setAUTOPID() {
-    driveConfigs.Slot0.kP = SmartDashboard.getNumber("AUTO: P", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.p);
-    driveConfigs.Slot0.kI = SmartDashboard.getNumber("AUTO: I", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.i);
-    driveConfigs.Slot0.kD = SmartDashboard.getNumber("AUTO: D", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.d);
-    driveConfigs.Slot0.kV = SmartDashboard.getNumber("AUTO: V", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_V_AUTO);
-    steerConfigs.Slot0.kV = 0;
+    driveConfigs.Slot0.kP = SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.p;
+    driveConfigs.Slot0.kI = SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.i;
+    driveConfigs.Slot0.kD = SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.d;
+    driveConfigs.Slot0.kV = SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_V_AUTO;
 
     driveMotor.getConfigurator().apply(driveConfigs);
     steerMotor.getConfigurator().apply(steerConfigs);

@@ -156,7 +156,7 @@ public class RobotContainer {
 
     opPadA.onTrue(new ElevatorRampUp(elevator));
     opPadB.onTrue(new ElevatorRampDown(elevator));
-    opPadX.onTrue(new InstantCommand(() -> swerveSubsystem.setAutoPID()));
+    opPadX.onTrue(new InstantCommand(swerveSubsystem::setCustomDrivePID));
 
     commandCheckPadA.onTrue(new InstantCommand());
 

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues;
+import frc.robot.utils.PID;
 import frc.robot.utils.GlobalsValues.MotorGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 import java.util.Optional;
@@ -35,6 +36,8 @@ public class SwerveSubsystem extends SubsystemBase {
   private final Photonvision photonvision;
 
   private static final boolean SHOULD_INVERT = false;
+  private PID pid;
+  private double velocity;
 
   /**
    * Constructs a new SwerveSubsystem.
@@ -102,6 +105,11 @@ public class SwerveSubsystem extends SubsystemBase {
         },
         this // Reference to this subsystem to set requirements
         );
+
+    SmartDashboard.getNumber("AUTO: P", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.p);
+    SmartDashboard.getNumber("AUTO: I", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.i);
+    SmartDashboard.getNumber("AUTO: D", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.d);
+    SmartDashboard.getNumber("AUTO: V", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_V_AUTO);
   }
 
   // This method will be called once per scheduler run
@@ -122,6 +130,7 @@ public class SwerveSubsystem extends SubsystemBase {
     poseEstimator.update(getPidgeyRotation(), getModulePositions());
 
     field.setRobotPose(poseEstimator.getEstimatedPosition());
+
     SmartDashboard.putData("Robot Pose", field);
     SmartDashboard.putData("feild lol", field);
 
@@ -307,6 +316,16 @@ public class SwerveSubsystem extends SubsystemBase {
   public void resetDrive() {
     for (SwerveModule module : modules) {
       module.resetDrivePosition();
+    }
+  }
+
+  public void setCustomDrivePID() {
+    for (int i = 0; i < modules.length; i++) {
+      pid.p = SmartDashboard.getNumber("AUTO: P", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.p);
+      pid.i = SmartDashboard.getNumber("AUTO: I", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.i);
+      pid.d = SmartDashboard.getNumber("AUTO: D", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.d);
+      velocity = SmartDashboard.getNumber("AUTO: V", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_V_AUTO);
+      modules[i].setAUTOPID(pid, velocity);
     }
   }
 }
