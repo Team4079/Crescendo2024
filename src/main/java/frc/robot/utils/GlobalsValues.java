@@ -161,8 +161,8 @@ public final class GlobalsValues {
       // public static final PID STEER_PID = new PID(0.15, 0.0000, 0.000005, 0);
       // 0.05 P, 0 D
 
-      public static final PID DRIVE_PID_AUTO = new PID(0.01, 0.0, 0.00);
-      public static final double DRIVE_PID_V_AUTO = 1.15;
+      public static final PID DRIVE_PID_AUTO = new PID(0.005, 0.0, 0.00);
+      public static final double DRIVE_PID_V_AUTO = 1.25;
 
       public static final PID DRIVE_PID_TELE = new PID(1, 0.0, 0.0);
       public static final double DRIVE_PID_V_TELE = 0;
@@ -174,7 +174,7 @@ public final class GlobalsValues {
 
       public static HolonomicPathFollowerConfig pathFollower =
           new HolonomicPathFollowerConfig(
-              new PIDConstants(5, 0.00, 0), // translation
+              new PIDConstants(4, 0.00, 0), // translation
               new PIDConstants(3, 0.0, 0), // rotation
               4.78536, // Max module speed, in m/s
               SwerveGlobalValues
@@ -251,7 +251,7 @@ public final class GlobalsValues {
     // public static final double PIVOT_AMP_ANGLE = (46 + PivotGlobalValues.offset);
     // //Ued to be 49.55
     public static final double PIVOT_AMP_ANGLE = 19;
-    public static final double PIVOT_SUBWOOFER_ANGLE = (13.9 + PivotGlobalValues.offset);
+    public static final double PIVOT_SUBWOOFER_ANGLE = (13.4 + PivotGlobalValues.offset);
     // public static final double PIVOT_SOURCE = 93;
     public static final double PIVOT_FENDER_ANGLE =
         (30.5 + PivotGlobalValues.offset); // 305 instead of 30.5
