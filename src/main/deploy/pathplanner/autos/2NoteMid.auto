@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.34082249982681784,
-      "y": 1.9217216616251425
+      "x": 1.3464015540130732,
+      "y": 5.5
     },
     "rotation": 0
   },
@@ -18,9 +18,40 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "1NoteNoRot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "setPivotDown"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "startIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Forward1Meter"
+            "pathName": "2NoteBack"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SubwooferShot"
           }
         }
       ]
