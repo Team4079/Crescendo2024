@@ -38,7 +38,7 @@ public class PadDrive extends Command {
     SmartDashboard.putNumber("Y Joystick", position.getY());
 
     swerveSubsystem.setDriveSpeeds(
-        position.getY(), position.getX(), rotation * 0.5, isFieldOriented);
+        position.getY(), position.getX(), rotation * 0.8, isFieldOriented);
   }
 
   public static Coordinate positionSet(LogitechGamingPad pad) {

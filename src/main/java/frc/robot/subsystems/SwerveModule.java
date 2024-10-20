@@ -219,7 +219,6 @@ public class SwerveModule {
     driveConfigs.Slot0.kV = SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_V_AUTO;
 
     driveMotor.getConfigurator().apply(driveConfigs);
-    steerMotor.getConfigurator().apply(steerConfigs);
   }
 
   public void resetDrivePosition() {

@@ -66,6 +66,7 @@ public class Robot extends TimedRobot {
     }
 
     robotContainer.setTeleopPID().schedule();
+    robotContainer.setRotationPidgey().schedule();
   }
 
   @Override

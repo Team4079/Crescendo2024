@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -36,7 +37,7 @@ public class SwerveSubsystem extends SubsystemBase {
   private final Photonvision photonvision;
 
   private static final boolean SHOULD_INVERT = false;
-  private PID pid;
+  private PID pid = new PID(SmartDashboard.getNumber("AUTO: P", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.p), SmartDashboard.getNumber("AUTO: I", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.i), SmartDashboard.getNumber("AUTO: D", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.d));
   private double velocity;
 
   /**
@@ -199,6 +200,16 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public double getHeading() {
     return pidgey.getAngle();
+  }
+
+  public void setHeading() {
+    Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
+    if (alliance.get() == DriverStation.Alliance.Red) {
+      pidgey.setYaw(27.4);
+    }
+    else {
+      pidgey.setYaw(-27.4);
+    }
   }
 
   /** Resets the pidgey(gyro) heading to 0. */
