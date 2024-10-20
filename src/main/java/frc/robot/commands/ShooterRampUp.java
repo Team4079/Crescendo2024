@@ -35,8 +35,7 @@ public class ShooterRampUp extends Command {
    */
   @Override
   public void initialize() {
-    rps =
-        ShooterGlobalValues.SHOOTER_SPEED;
+    rps = ShooterGlobalValues.SHOOTER_SPEED;
     SmartDashboard.putNumber("Jessica is smart", rps);
     shooter.setShooterVelocity(-ShooterGlobalValues.SHOOTER_SPEED, -ShooterGlobalValues.SHOOTER_SPEED);
   }

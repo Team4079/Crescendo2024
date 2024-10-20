@@ -47,6 +47,7 @@ public class RobotContainer {
   private final Shooter shootyboi;
   private final Intake intakeyboi;
   private final Elevator elevator;
+  private final LED led;
 
   private final JoystickButton padA;
   private final JoystickButton padB;
@@ -72,7 +73,7 @@ public class RobotContainer {
     pad = new LogitechGamingPad(0);
     opPad = new LogitechGamingPad(1);
     commandCheckPad = new LogitechGamingPad(2);
-    LED led = new LED();
+    led = new LED();
     // jevois = new Jevois();
     pivotyboi = new Pivot();
     shootyboi = new Shooter();
@@ -183,7 +184,7 @@ public class RobotContainer {
     // return new PathPlannerAuto("4NoteNoRotation");
 
     // return new WaitShoot(shootyboi, pivotyboi, limelety);
-    return new PathPlannerAuto("JustShoot");
+    return new PathPlannerAuto("TestAuto");
     // return new InstantCommand();
   }
 

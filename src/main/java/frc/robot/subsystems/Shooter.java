@@ -226,6 +226,10 @@ public class Shooter extends SubsystemBase {
     passthroughKrakenIsStopped = false;
   }
 
+    public void setKrakenVelocityAuto(double speed) {
+    passthroughKraken.setControl(velocitySetPoint.withVelocity(speed));
+  }
+
   /**
    * Gets the velocity of the kraken motor
    *

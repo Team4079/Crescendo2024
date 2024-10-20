@@ -19,7 +19,8 @@ public class Elevator extends SubsystemBase {
   /** Enum representing the possible states of the elevator. */
   public enum ElevatorState {
     UP,
-    DOWN
+    DOWN,
+    CLIMB
   }
 
   // The motor controller for the elevator.
@@ -93,6 +94,12 @@ public class Elevator extends SubsystemBase {
 
       } else if (state == ElevatorState.DOWN) {
         setElevatorPosition(ElevatorGlobalValues.ELEVATOR_DOWN);
+        stopPassMotor();
+      }
+
+      else if (state == ElevatorState.CLIMB)
+      {
+        setElevatorPosition(ElevatorGlobalValues.ELEVATOR_CLIMB);
         stopPassMotor();
       }
     }

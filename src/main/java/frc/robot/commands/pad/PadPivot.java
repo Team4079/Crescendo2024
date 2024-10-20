@@ -38,7 +38,7 @@ public class PadPivot extends Command {
 
     if (pad.getDPadDown())
     {
-      pivot.movePivot(-0.1);
+      pivot.movePivot(-0.05);
     }
 
 

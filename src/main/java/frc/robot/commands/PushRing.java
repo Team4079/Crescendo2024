@@ -8,7 +8,7 @@ import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
 /** The {@link PushRing} class is the command that pushes the ring into the shooter. */
 public class PushRing extends Command {
   /** The Shooter subsystem used by this command. */
-  private final Shooter shooter;
+  private Shooter shooter;
 
 
   /**
@@ -17,8 +17,8 @@ public class PushRing extends Command {
    * @param shooter The Shooter subsystem used by this command.
    */
   public PushRing(Shooter shooter) {
-    addRequirements(shooter);
     this.shooter = shooter;
+    addRequirements(shooter);
   }
 
   /** Called when the command is initially scheduled. */

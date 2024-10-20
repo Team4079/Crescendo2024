@@ -4,6 +4,7 @@
 
 package frc.robot.commands.intake;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -61,21 +62,23 @@ public class SpinIntake extends Command {
    */
   @Override
   public void execute() {
-    SmartDashboard.putBoolean("should spin", shouldSpin);
-    if (pad.getXReleased()) {
-      shouldSpin = !shouldSpin;
-    }
+    if (!DriverStation.isAutonomous()){
+      SmartDashboard.putBoolean("should spin", shouldSpin);
+      if (pad.getXReleased()) {
+        shouldSpin = !shouldSpin;
+      }
 
-    ledControl();
+      ledControl();
 
-    if (!ShooterGlobalValues.HAS_PIECE && shouldSpin) {
-      startIntakeAndShooter();
-    }
-    else if (ShooterGlobalValues.HAS_PIECE && pad.getXButton()) {
-      moveUp();
-    } else {
-      stopIntakeAndShooter();
-      handleTimers();
+      if (!ShooterGlobalValues.HAS_PIECE && shouldSpin) {
+        startIntakeAndShooter();
+      }
+      else if (ShooterGlobalValues.HAS_PIECE && pad.getXButton()) {
+        moveUp();
+      } else {
+        stopIntakeAndShooter();
+        handleTimers();
+      }
     }
   }
 

@@ -2,6 +2,7 @@ package frc.robot.commands.pad;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.utils.GlobalsValues.ElevatorGlobalValues;
 import frc.robot.utils.LogitechGamingPad;
 
@@ -34,18 +35,18 @@ public class PadElevator extends Command {
   /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void execute() {
-    if (Math.abs(pad.getLeftAnalogYAxis()) > 0.15 && ElevatorGlobalValues.ELEVATOR_JOYSTICKS) {
-      elevator.moveElevator(-pad.getLeftAnalogYAxis() * 0.75);
-    }
+    // if (Math.abs(pad.getLeftAnalogYAxis()) > 0.15 && ElevatorGlobalValues.ELEVATOR_JOYSTICKS) {
+    //   elevator.moveElevator(-pad.getLeftAnalogYAxis() * 0.75);
+    // }
 
     if (pad.getDPadLeft())
     {
-      elevator.moveElevator(-0.5);
+      elevator.setState(ElevatorState.CLIMB);
     }
 
-    if (pad.getDPadRight())
+    else if (pad.getDPadRight())
     {
-      elevator.moveElevator(0.5);
+      elevator.setState(ElevatorState.DOWN);
     }
   }
 

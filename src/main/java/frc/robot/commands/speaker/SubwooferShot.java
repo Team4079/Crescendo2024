@@ -30,7 +30,6 @@ public class SubwooferShot extends SequentialCommandGroup {
       Shooter shooter, Pivot pivot, Photonvision photonvision) {
     addRequirements(shooter, pivot, photonvision);
     addCommands(
-      new WaitCommand(0.5),
       new ParallelCommandGroup(
           new SetPivot(pivot, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(0.687),
           new ShooterRampUp(shooter).withTimeout(0.687)),

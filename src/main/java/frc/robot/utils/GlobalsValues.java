@@ -81,6 +81,7 @@ public final class GlobalsValues {
     public static final double passClosedLoopRampRate = 0.1;
     public static final double ELEVATOR_UP = 7; // TODO: git gud
     public static final double ELEVATOR_DOWN = 0.5;
+    public static final double ELEVATOR_CLIMB = 7.4;
     public static final double kP = 0.00003; // TODO: git gud
     public static final double kI = 0.000000; // TODO: git gud
     public static final double kD = 0.0; // TODO: git gud
@@ -161,9 +162,9 @@ public final class GlobalsValues {
       // 0.05 P, 0 D
 
       public static final PID DRIVE_PID_AUTO = new PID(0.01, 0.0, 0.00);
-      public static final double DRIVE_PID_V_AUTO = 1.25;
+      public static final double DRIVE_PID_V_AUTO = 1.15;
 
-      public static final PID DRIVE_PID_TELE = new PID(0.8, 0.0, 0.0);
+      public static final PID DRIVE_PID_TELE = new PID(1, 0.0, 0.0);
       public static final double DRIVE_PID_V_TELE = 0;
       // DON'T SET D PAST 0.03 - Erick or else the swerve moduls make funny nosie
 
@@ -174,7 +175,7 @@ public final class GlobalsValues {
       public static HolonomicPathFollowerConfig pathFollower =
           new HolonomicPathFollowerConfig(
               new PIDConstants(5, 0.00, 0), // translation
-              new PIDConstants(3, 0.0, 0.1), // rotation
+              new PIDConstants(3, 0.0, 0), // rotation
               4.78536, // Max module speed, in m/s
               SwerveGlobalValues
                   .ROBOT_SIZE, // Drive base radius in meters. Distance from robot center to
