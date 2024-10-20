@@ -98,7 +98,7 @@ public class Photonvision extends SubsystemBase {
       targetPoseAmbiguityleft = targetleft.getPoseAmbiguity();
 
       distleft = targetleft.getBestCameraToTarget().getTranslation().getNorm();
-      SmartDashboard.putNumber("distleft", distleft);
+      // SmartDashboard.putNumber("distleft", distleft);
 
       // if (resultleft.getMultiTagResult().estimatedPose.isPresent) {
       //   Transform3d fieldToCamera = resultleft.getMultiTagResult().estimatedPose.best;
@@ -113,18 +113,18 @@ public class Photonvision extends SubsystemBase {
       targetPoseAmbiguityright = targetright.getPoseAmbiguity();
 
       distright = targetright.getBestCameraToTarget().getTranslation().getNorm();
-      SmartDashboard.putNumber("distright", distright);
+      // SmartDashboard.putNumber("distright", distright);
     } else {
       targetPoseAmbiguityright = 7157;
     }
 
-    SmartDashboard.putNumber("photon yaw", targetYaw);
-    SmartDashboard.putNumber("range target", rangeToTarget);
+    // SmartDashboard.putNumber("photon yaw", targetYaw);
+    // SmartDashboard.putNumber("range target", rangeToTarget);
     // SmartDashboard.putNumber("april tag distance", getRange());
-    SmartDashboard.putNumber("left cam ambiguity", targetPoseAmbiguityleft);
-    SmartDashboard.putNumber("right cam ambiguity", targetPoseAmbiguityright);
-    SmartDashboard.putBoolean("right_targets", resultright.hasTargets());
-    SmartDashboard.putBoolean("left_targets", resultleft.hasTargets());
+    // SmartDashboard.putNumber("left cam ambiguity", targetPoseAmbiguityleft);
+    // SmartDashboard.putNumber("right cam ambiguity", targetPoseAmbiguityright);
+    // SmartDashboard.putBoolean("right_targets", resultright.hasTargets());
+    // SmartDashboard.putBoolean("left_targets", resultleft.hasTargets());
   }
 
   /**

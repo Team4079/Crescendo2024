@@ -62,7 +62,8 @@ public final class GlobalsValues {
     public static double HEADING = 0.0;
 
     // Limit Values
-    public static final double DRIVE_SUPPLY_LIMIT = 30;
+    public static final double DRIVE_SUPPLY_LIMIT = 45;
+    public static final double DRIVE_STATOR_LIMIT = 80;
     public static final double DRIVE_SUPPLY_THRESHOLD = 30;
     public static final double DRIVE_TIME_THRESHOLD = 0.25;
     public static final double STEER_SUPPLY_LIMIT = 30;

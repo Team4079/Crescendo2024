@@ -85,7 +85,7 @@ public class Elevator extends SubsystemBase {
    */
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Elevator Output", elevatorMotorSparkMax.getAppliedOutput());
+    // SmartDashboard.putNumber("Elevator Output", elevatorMotorSparkMax.getAppliedOutput());
 
     if (!ElevatorGlobalValues.ELEVATOR_JOYSTICKS) {
       if (state == ElevatorState.UP) {
@@ -104,12 +104,12 @@ public class Elevator extends SubsystemBase {
       }
     }
 
-    if (Math.abs(elevatorMotorSparkMax.getAppliedOutput()) < 0.01
-        && ElevatorGlobalValues.ELEVATOR_JOYSTICKS) {
-      moveElevator(0.1);
-    }
+    // if (Math.abs(elevatorMotorSparkMax.getAppliedOutput()) < 0.01
+    //     && ElevatorGlobalValues.ELEVATOR_JOYSTICKS) {
+    //   moveElevator(0.1);
+    // }
 
-    logData();
+    // logData();
   }
 
   public void setPassSpeed(double speed) {

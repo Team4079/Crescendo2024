@@ -184,7 +184,7 @@ public class RobotContainer {
     // return new PathPlannerAuto("4NoteNoRotation");
 
     // return new WaitShoot(shootyboi, pivotyboi, limelety);
-    return new PathPlannerAuto("TestAuto");
+    return new PathPlannerAuto("JustShoot");
     // return new InstantCommand();
   }
 
@@ -199,5 +199,5 @@ public class RobotContainer {
   public Command setRotationPidgey() {
     return new InstantCommand(swerveSubsystem::setHeading);
   }
-  
+
 }

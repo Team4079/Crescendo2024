@@ -95,6 +95,9 @@ public class SwerveModule {
     driveConfigs.CurrentLimits.SupplyTimeThreshold = MotorGlobalValues.DRIVE_TIME_THRESHOLD;
     driveConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
 
+    driveConfigs.CurrentLimits.StatorCurrentLimit = MotorGlobalValues.DRIVE_STATOR_LIMIT;
+    driveConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
+
     steerConfigs.CurrentLimits.SupplyCurrentLimit = MotorGlobalValues.STEER_SUPPLY_LIMIT;
     steerConfigs.CurrentLimits.SupplyCurrentThreshold = MotorGlobalValues.STEER_SUPPLY_THRESHOLD;
     steerConfigs.CurrentLimits.SupplyTimeThreshold = MotorGlobalValues.STEER_TIME_THRESHOLD;
