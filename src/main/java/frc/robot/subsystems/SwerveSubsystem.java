@@ -118,14 +118,14 @@ public class SwerveSubsystem extends SubsystemBase {
 
 
 
-    Optional<EstimatedRobotPose> visionMeasurement3d =
-        photonvision.getEstimatedGlobalPose(poseEstimator.getEstimatedPosition());
-    if (!visionMeasurement3d.isEmpty()) {
-      double timestamp = visionMeasurement3d.get().timestampSeconds;
-      Pose3d estimatedPose = visionMeasurement3d.get().estimatedPose;
-      Pose2d visionMeasurement2d = estimatedPose.toPose2d();
-      poseEstimator.addVisionMeasurement(visionMeasurement2d, timestamp);
-    }
+    // Optional<EstimatedRobotPose> visionMeasurement3d =
+    //     photonvision.getEstimatedGlobalPose(poseEstimator.getEstimatedPosition());
+    // if (!visionMeasurement3d.isEmpty()) {
+    //   double timestamp = visionMeasurement3d.get().timestampSeconds;
+    //   Pose3d estimatedPose = visionMeasurement3d.get().estimatedPose;
+    //   Pose2d visionMeasurement2d = estimatedPose.toPose2d();
+    //   poseEstimator.addVisionMeasurement(visionMeasurement2d, timestamp);
+    // }
 
     poseEstimator.update(getPidgeyRotation(), getModulePositions());
 

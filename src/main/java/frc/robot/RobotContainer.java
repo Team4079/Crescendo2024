@@ -113,7 +113,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "startIntake", new StartIntake(intakeyboi, shootyboi).withTimeout(6));
     NamedCommands.registerCommand("stopIntake", new StopIntake(intakeyboi, shootyboi));
-    NamedCommands.registerCommand("pushRing", new PushRing(shootyboi, photonvision, false));
+    NamedCommands.registerCommand("pushRing", new PushRing(shootyboi));
     NamedCommands.registerCommand(
         "shootRing", new ShootRing(shootyboi, pivotyboi, swerveSubsystem, photonvision));
     NamedCommands.registerCommand(
@@ -183,7 +183,7 @@ public class RobotContainer {
     // return new PathPlannerAuto("4NoteNoRotation");
 
     // return new WaitShoot(shootyboi, pivotyboi, limelety);
-    return new PathPlannerAuto("TestAuto");
+    return new PathPlannerAuto("JustShoot");
     // return new InstantCommand();
   }
 

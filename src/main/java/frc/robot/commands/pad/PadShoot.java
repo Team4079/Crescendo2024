@@ -65,7 +65,7 @@ public class PadShoot extends Command {
     }
 
     if (pad.getDPadUp()) {
-      new PushRing(shooter, photonvision, false).schedule();
+      new PushRing(shooter).schedule();
     }
       //  } else {
       //    shooter.stopShooter();

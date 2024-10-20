@@ -25,7 +25,7 @@ public class ShootingSequence extends SequentialCommandGroup {
     addCommands(
         new WaitCommand(0.02),
         new PivotShooterSetUpAuto(pivot, shooter, photonvision, swerveSubsystem).withTimeout(1.35),
-        new PushRing(shooter, photonvision, false).withTimeout(0.45),
+        new PushRing(shooter).withTimeout(0.45),
         new StopShooterAuto(shooter).withTimeout(0.02));
   }
 }

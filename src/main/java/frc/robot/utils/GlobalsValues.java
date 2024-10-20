@@ -120,7 +120,7 @@ public final class GlobalsValues {
     public static final double BASE_LENGTH_ERICK_TRAN = 0.3048 * 2;
 
     // uselses
-    public static final double STATE_SPEED_THRESHOLD = 0.05;
+    public static final double STATE_SPEED_THRESHOLD = 0.05; 
 
     // The values of the can coders when the wheels are straight according to Mr.
     // Wright
@@ -160,7 +160,7 @@ public final class GlobalsValues {
       // public static final PID STEER_PID = new PID(0.15, 0.0000, 0.000005, 0);
       // 0.05 P, 0 D
 
-      public static final PID DRIVE_PID_AUTO = new PID(0.0, 0.0, 0.00);
+      public static final PID DRIVE_PID_AUTO = new PID(0.01, 0.0, 0.00);
       public static final double DRIVE_PID_V_AUTO = 1.25;
 
       public static final PID DRIVE_PID_TELE = new PID(0.8, 0.0, 0.0);

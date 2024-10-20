@@ -128,7 +128,7 @@ public class Shooter extends SubsystemBase {
 
     leftShootRampConfig.DutyCycleClosedLoopRampPeriod = 0;
     rightShootRampConfig.DutyCycleClosedLoopRampPeriod = 0;
-    passthroughKrakenRampConfig.DutyCycleClosedLoopRampPeriod = 0.5;
+    passthroughKrakenRampConfig.DutyCycleClosedLoopRampPeriod = 0;
 
     leftFalcon.getConfigurator().apply(leftShootRampConfig);
     rightFalcon.getConfigurator().apply(rightShootRampConfig);
@@ -137,6 +137,7 @@ public class Shooter extends SubsystemBase {
     toggleShooter = false;
 
     velocitySetPoint = new VelocityVoltage(0);
+    velocitySetPoint.EnableFOC = true;
 
     timer = new Timer();
   }

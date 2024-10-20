@@ -17,20 +17,16 @@ public class ShooterRampUp extends Command {
   // Desired revolutions per second for the shooter.
   private double rps;
 
-  // Photonvision subsystem instance.
-  private final Photonvision photonvision;
-
   /**
    * Constructor for ShooterRampUp command.
    *
    * @param shooter The shooter subsystem.
    * @param photonvision The photonvision subsystem.
    */
-  public ShooterRampUp(Shooter shooter, Photonvision photonvision) {
+  public ShooterRampUp(Shooter shooter) {
+    addRequirements(shooter);
     deadband = 5;
     this.shooter = shooter;
-    this.photonvision = photonvision;
-    addRequirements(shooter, photonvision);
   }
 
   /**
@@ -40,9 +36,9 @@ public class ShooterRampUp extends Command {
   @Override
   public void initialize() {
     rps =
-        ShooterGlobalValues.SHOOTER_SPEED + photonvision.getRange(photonvision.getBestCamera()) * 3;
+        ShooterGlobalValues.SHOOTER_SPEED;
     SmartDashboard.putNumber("Jessica is smart", rps);
-    shooter.setShooterVelocity(-rps, -rps);
+    shooter.setShooterVelocity(-ShooterGlobalValues.SHOOTER_SPEED, -ShooterGlobalValues.SHOOTER_SPEED);
   }
 
   /**
@@ -51,6 +47,7 @@ public class ShooterRampUp extends Command {
    */
   @Override
   public void execute() {
+    shooter.setShooterVelocity(-ShooterGlobalValues.SHOOTER_SPEED, -ShooterGlobalValues.SHOOTER_SPEED);
     SmartDashboard.putBoolean(
         "Shooter Within Limit",
         Math.abs(shooter.getKrakenVelocity() - rps) < ShooterGlobalValues.RPM_THRESHOLD);
@@ -64,7 +61,8 @@ public class ShooterRampUp extends Command {
    */
   @Override
   public boolean isFinished() {
-    return Math.abs(shooter.getLeftShooterVelocity() - ShooterGlobalValues.SHOOTER_SPEED)
-        < deadband;
+    // return Math.abs(shooter.getLeftShooterVelocity() - ShooterGlobalValues.SHOOTER_SPEED)
+    //     < deadband;
+    return false;
   }
 }

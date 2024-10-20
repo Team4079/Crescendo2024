@@ -4,8 +4,11 @@
 
 package frc.robot.commands.speaker;
 
+import org.opencv.photo.Photo;
+
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.PushRing;
 import frc.robot.commands.SetPivot;
 import frc.robot.commands.ShooterRampUp;
@@ -19,16 +22,20 @@ import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class SubwooferShot extends SequentialCommandGroup {
+  private Shooter shooter;
+  private Pivot pivot;
+  private Photonvision photonvision;
 
   public SubwooferShot(
       Shooter shooter, Pivot pivot, Photonvision photonvision) {
-    addRequirements(shooter, pivot);
+    addRequirements(shooter, pivot, photonvision);
     addCommands(
-        new ParallelCommandGroup(
-            new SetPivot(pivot, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(0.687),
-            new ShooterRampUp(shooter, photonvision).withTimeout(0.687)),
-        new PushRing(shooter, photonvision, false).withTimeout(0.3309),
-        new StopShooter(shooter).withTimeout(0.01),
-        new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.4079));
+      new WaitCommand(0.5),
+      new ParallelCommandGroup(
+          new SetPivot(pivot, PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE).withTimeout(0.687),
+          new ShooterRampUp(shooter).withTimeout(0.687)),
+      new PushRing(shooter).withTimeout(0.5),
+      new StopShooter(shooter).withTimeout(0.01),
+      new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.4079));
   }
 }

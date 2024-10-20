@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.35,
-      "y": 5.5
+      "x": 0.34082249982681784,
+      "y": 1.9217216616251425
     },
     "rotation": 0
   },
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Forward1Meter"
+            "pathName": "Forward1Meter`"
           }
         }
       ]

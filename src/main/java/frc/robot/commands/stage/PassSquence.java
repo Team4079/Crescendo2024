@@ -27,7 +27,7 @@ public class PassSquence extends SequentialCommandGroup {
         new PassNoteGyro(swerve).withTimeout(0.75),
         new StagePassPivot(pivot).withTimeout(0.75),
         new StagePass(shooter).withTimeout(0.4414)),
-        new PushRing(shooter, photonvision, false).withTimeout(0.5),
+        new PushRing(shooter).withTimeout(0.5),
         new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.4),
         new StopShooter(shooter));
   }
