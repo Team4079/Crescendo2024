@@ -22,7 +22,7 @@ import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class SubwooferShot extends SequentialCommandGroup {
-  private Shooter shooter;
+  private Shooter shooter;;
   private Pivot pivot;
   private Photonvision photonvision;
 
