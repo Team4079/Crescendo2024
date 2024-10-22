@@ -6,6 +6,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues.PhotonVisionConstants;
@@ -23,11 +24,9 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 public class Photonvision extends SubsystemBase {
   // PhotonVision cameras
   PhotonCamera cameraleft = new PhotonCamera("Left");
-  PhotonCamera cameraright = new PhotonCamera("Right");
 
   // Pose estimator for determining the robot's position on the field
   PhotonPoseEstimator photonPoseEstimatorleft;
-  PhotonPoseEstimator photonPoseEstimatorright;
 
   // AprilTag field layout for the 2024 Crescendo field
   AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
@@ -38,10 +37,6 @@ public class Photonvision extends SubsystemBase {
       new Transform3d(
           conv2dTo3d(BACK_LEFT, PhotonVisionConstants.CAMERA_ONE_HEIGHT_METER),
           new Rotation3d(0, 360 - PhotonVisionConstants.CAMERA_ONE_ANGLE_DEG, 150));
-  Transform3d rightCameraPos =
-      new Transform3d(
-          conv2dTo3d(BACK_RIGHT, PhotonVisionConstants.CAMERA_TWO_HEIGHT_METER),
-          new Rotation3d(0, 360 - PhotonVisionConstants.CAMERA_TWO_ANGLE_DEG, 210));
 
   PhotonTrackedTarget targetleft;
   boolean targetVisibleleft = false;
@@ -49,21 +44,16 @@ public class Photonvision extends SubsystemBase {
   double targetPoseAmbiguityleft = 7157;
   double rangeleft = 0.0;
 
-  PhotonTrackedTarget targetright;
-  boolean targetVisibleright = false;
-  double targetYawright = 15.0;
-  double targetPoseAmbiguityright = 7157;
-  double rangeright = 0.0;
 
   double targetYaw = 0.0;
   double rangeToTarget = 0.0;
 
   PhotonPipelineResult resultleft;
-  PhotonPipelineResult resultright;
   PhotonPipelineResult currentResult;
 
   boolean camleftTag = false;
-  boolean camrightTag = false;
+
+  Optional<EstimatedRobotPose> currentPose;
 
   /** Constructs a new PhotonVision subsystem. */
   public Photonvision() {
@@ -73,14 +63,7 @@ public class Photonvision extends SubsystemBase {
             PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
             cameraleft,
             leftCameraPos);
-    photonPoseEstimatorright =
-        new PhotonPoseEstimator(
-            aprilTagFieldLayout,
-            PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-            cameraright,
-            rightCameraPos);
   }
-
   /**
    * This method is called periodically by the scheduler. It updates the tracked targets and
    * displays relevant information on the SmartDashboard.
@@ -88,10 +71,8 @@ public class Photonvision extends SubsystemBase {
   @Override
   public void periodic() {
     resultleft = cameraleft.getLatestResult();
-    resultright = cameraright.getLatestResult();
 
     double distleft = 0;
-    double distright = 0;
 
     if (resultleft.hasTargets()) {
       targetleft = resultleft.getBestTarget();
@@ -108,23 +89,12 @@ public class Photonvision extends SubsystemBase {
       targetPoseAmbiguityleft = 7157;
     }
 
-    if (resultright.hasTargets()) {
-      targetright = resultright.getBestTarget();
-      targetPoseAmbiguityright = targetright.getPoseAmbiguity();
-
-      distright = targetright.getBestCameraToTarget().getTranslation().getNorm();
-      // SmartDashboard.putNumber("distright", distright);
-    } else {
-      targetPoseAmbiguityright = 7157;
-    }
-
-    // SmartDashboard.putNumber("photon yaw", targetYaw);
-    // SmartDashboard.putNumber("range target", rangeToTarget);
-    // SmartDashboard.putNumber("april tag distance", getRange());
-    // SmartDashboard.putNumber("left cam ambiguity", targetPoseAmbiguityleft);
-    // SmartDashboard.putNumber("right cam ambiguity", targetPoseAmbiguityright);
-    // SmartDashboard.putBoolean("right_targets", resultright.hasTargets());
-    // SmartDashboard.putBoolean("left_targets", resultleft.hasTargets());
+    SmartDashboard.putNumber("photon yaw", targetYaw);
+    SmartDashboard.putNumber("range target", rangeToTarget);
+    SmartDashboard.putNumber("april tag distance", getDistanceSubwoofer());
+    SmartDashboard.putNumber("april tag yaw", getSubwooferYaw());
+    SmartDashboard.putNumber("left cam ambiguity", targetPoseAmbiguityleft);
+    SmartDashboard.putBoolean("left_targets", resultleft.hasTargets());
   }
 
   /**
@@ -136,10 +106,11 @@ public class Photonvision extends SubsystemBase {
    */
   public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
     photonPoseEstimatorleft.setReferencePose(prevEstimatedRobotPose);
-    photonPoseEstimatorright.setReferencePose(prevEstimatedRobotPose);
-    return targetPoseAmbiguityleft > targetPoseAmbiguityright
-        ? photonPoseEstimatorright.update()
-        : photonPoseEstimatorleft.update();
+    return photonPoseEstimatorleft.update();
+  }
+
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
+    return photonPoseEstimatorleft.update();
   }
 
   /**
@@ -160,84 +131,10 @@ public class Photonvision extends SubsystemBase {
    * href="https://docs.photonvision.org/en/latest/docs/additional-resources/nt-api.html#getting-target-information">NetworkTables
    * API</a>
    */
-  public double getRange() {
-    double leftSubwooferTagAmbiguity = 0;
-    double rigthSubwooferTagAmbiguity = 0;
-    if (resultleft.hasTargets()) {
-      for (var tag : resultleft.getTargets()) {
-        // TODO: Change the target ID depending on what we are looking for
-        // if (tag.getFiducialId() == 7 || tag.getFiducialId() == 4) {
-        if (true) {
-          leftSubwooferTagAmbiguity = tag.getPoseAmbiguity();
-          targetYawleft = tag.getYaw();
-          targetVisibleleft = true;
-
-          rangeleft =
-              PhotonUtils.calculateDistanceToTargetMeters(
-                  PhotonVisionConstants.CAMERA_ONE_HEIGHT_METER,
-                  1.435, // From right0right4 game manual for ID 7 | IMPORTANT TO CHANGE
-                  Units.degreesToRadians(
-                      PhotonVisionConstants
-                          .CAMERA_ONE_ANGLE_DEG), // Rotation about Y = Pitch | UP IS POSITIVE
-                  Units.degreesToRadians(tag.getPitch()));
-        }
-      }
-    } else {
-      targetVisibleleft = false;
-    }
-    if (resultright.hasTargets()) {
-      for (var tag : resultright.getTargets()) {
-        // TODO: Change the target ID depending on what we are looking for
-        // if (tag.getFiducialId() == 7 || tag.getFiducialId() == 4) {
-        if (true) {
-          rigthSubwooferTagAmbiguity = tag.getPoseAmbiguity();
-          targetYawright = tag.getYaw();
-          targetVisibleright = true;
-
-          rangeright =
-              PhotonUtils.calculateDistanceToTargetMeters(
-                  PhotonVisionConstants.CAMERA_TWO_HEIGHT_METER,
-                  1.435, // From right0right4 game manual for ID 7 | IMPORTANT TO CHANGE
-                  Units.degreesToRadians(
-                      PhotonVisionConstants
-                          .CAMERA_TWO_ANGLE_DEG), // Rotation about Y = Pitch | UP IS POSITIVE
-                  Units.degreesToRadians(tag.getPitch()));
-        }
-      }
-    } else {
-      targetVisibleright = false;
-    }
-    if (leftSubwooferTagAmbiguity > rigthSubwooferTagAmbiguity && targetVisibleleft) {
-      return rangeleft;
-    } else if (targetVisibleright) {
-      return rangeright;
-    } else {
-      return 0.0;
-    }
-  }
-
-  public double getRange(PhotonCamera camera) {
-    var resutls = camera.getLatestResult();
-
-    if (resutls.hasTargets()) {
-      for (var tag : resutls.getTargets()) {
-        if (tag.getFiducialId() == 4 || tag.getFiducialId() == 7) {
-          return tag.getBestCameraToTarget().getTranslation().getNorm();
-        }
-        return -1.0;
-      }
-    }
-
-    return -1.0;
-  }
 
   public double getOffset(PhotonCamera camera) {
     if (camera.getName().equals("Left")) {
       return PhotonVisionConstants.OFFSET_TOWARD_MID_LEFT;
-    }
-
-    if (camera.getName().equals("Right")) {
-      return PhotonVisionConstants.OFFSET_TOWARD_MID_RIGHT;
     }
 
     return 0.0;
@@ -247,7 +144,7 @@ public class Photonvision extends SubsystemBase {
     // 10/14/2024 outside tuning
     // jayden why are you so bad at tuning
     // Desmos: https://www.desmos.com/calculator/naalukjxze
-    double r = getRange(getBestCamera());
+    double r = getDistanceSubwoofer();
     double f = -1.19541; // power 5
     double e = 18.0904; // power 4
     double d = -108.07; // power 3
@@ -271,10 +168,6 @@ public class Photonvision extends SubsystemBase {
     return new Translation3d(translation2d.getX(), translation2d.getY(), z);
   }
 
-  public PhotonCamera getBestCamera() {
-    return (targetPoseAmbiguityleft > targetPoseAmbiguityright) ? cameraright : cameraleft;
-  }
-
   public double getYaw(PhotonCamera camera) {
     List<PhotonTrackedTarget> results = camera.getLatestResult().getTargets();
     boolean frontOfSubwoofer = false;
@@ -291,5 +184,37 @@ public class Photonvision extends SubsystemBase {
       return camera.getLatestResult().getBestTarget().getYaw();
     }
     return 4079;
+  }
+
+  public double getDistanceSubwoofer() {
+    currentPose = getEstimatedGlobalPose();
+    if (currentPose.isEmpty()) {
+      return 687;
+    }
+    else {
+      // 0.5, 5.5 coordinate for blue subwoofer
+      // 16, 5.5 coordinate for red subwoofer
+      if (DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red)) {
+        return Math.sqrt(Math.pow(currentPose.get().estimatedPose.getTranslation().getX() - 16, 2) + Math.pow(currentPose.get().estimatedPose.getTranslation().getY() - 5.5, 2));
+      } else {
+        return Math.sqrt(Math.pow(currentPose.get().estimatedPose.getTranslation().getX() - 0.5, 2) + Math.pow(currentPose.get().estimatedPose.getTranslation().getY() - 5.5, 2));
+      }
+    }
+  }
+
+  public double getSubwooferYaw() {
+    currentPose = getEstimatedGlobalPose();
+    if (currentPose.isEmpty()) {
+      return 8033;
+    }
+    else {
+      // 0.5, 5.5 coordinate for blue subwoofer
+      // 16, 5.5 coordinate for red subwoofer
+      if (DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red)) {
+        return Math.toDegrees(Math.atan2(currentPose.get().estimatedPose.getTranslation().getY() - 5.5, currentPose.get().estimatedPose.getTranslation().getX() - 16));
+      } else {
+        return Math.toDegrees(Math.atan2(currentPose.get().estimatedPose.getTranslation().getY() - 5.5, currentPose.get().estimatedPose.getTranslation().getX() - 0.5));
+      }
+    }
   }
 }

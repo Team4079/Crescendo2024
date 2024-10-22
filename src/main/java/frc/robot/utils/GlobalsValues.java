@@ -5,9 +5,11 @@
 package frc.robot.utils;
 
 import com.ctre.phoenix6.signals.InvertedValue;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
@@ -151,6 +153,8 @@ public final class GlobalsValues {
     public static final double ENCODER_OFFSET =
         0 / 360; // TODO add an offset for the canCoder getting the position at the beginning
 
+    public static Pose2d currentPose = new Pose2d(0, 0, new Rotation2d(0));
+
     // RGB Values for LED
     public static final int[] GREEN_LED = {0, 255, 0};
     public static final int[] ORANGE_LED = {255, 165, 0};
@@ -173,18 +177,13 @@ public final class GlobalsValues {
       public static final PID ROTATIONAL_PID = new PID(0.20, 0.000001, 0, 0);
       public static final PID PASS_ROTATIONAL_PID = new PID(0.075, 0000, 0.00, 0);
 
-      public static HolonomicPathFollowerConfig pathFollower =
-          new HolonomicPathFollowerConfig(
+      
+
+      public static PPHolonomicDriveController pathFollower =
+          new PPHolonomicDriveController(
               new PIDConstants(4, 0.00, 0), // translation
-              new PIDConstants(3, 0.0, 0), // rotation
-              4.78536, // Max module speed, in m/s
-              SwerveGlobalValues
-                  .ROBOT_SIZE, // Drive base radius in meters. Distance from robot center to
-              // furthest //
-              // module.
-              new ReplanningConfig(
-                  false,
-                  false)); // Default path replanning config. See the API for the options here
+              new PIDConstants(3, 0.0, 0)); // rotation
+
     }
 
     // Controller X and Y deadbands
@@ -355,6 +354,8 @@ public final class GlobalsValues {
     private PhotonVisionConstants() {
       throw new IllegalStateException(UTILITY_CLASS);
     }
+
+    public static boolean TEST_MODE = true;
 
     // Offset Values
     public static double tx = 0.0;

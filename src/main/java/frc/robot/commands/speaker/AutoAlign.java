@@ -22,7 +22,6 @@ public class AutoAlign extends Command {
   private final PIDController rotationalController;
 
   private double measurement_yaw;
-  private PhotonCamera camera;
 
   public AutoAlign(SwerveSubsystem swerveSubsystem, Photonvision limelety) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -40,21 +39,16 @@ public class AutoAlign extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    camera = photonvision.getBestCamera();
-    SmartDashboard.putString("cam used for align", camera.getName());
-    rotationalController.setSetpoint(photonvision.getOffset(camera));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     // Horizontal PID and offset
-    measurement_yaw = photonvision.getYaw(camera);
     SmartDashboard.putNumber("alignment error", rotationalController.getPositionError());
     SmartDashboard.putNumber("alignment setpoint", rotationalController.getSetpoint());
-    SmartDashboard.putString("Camera Used", camera.getName());
     SmartDashboard.putBoolean("Robot Aligned", rotationalController.atSetpoint());
-    SmartDashboard.putNumber("measurement yaw", photonvision.getYaw(camera));
+    SmartDashboard.putNumber("measurement yaw", photonvision.getSubwooferYaw());
 
     System.out.println(measurement_yaw);
 
@@ -62,7 +56,7 @@ public class AutoAlign extends Command {
       swerveSubsystem.setDriveSpeeds(
           0,
           0,
-          rotationalController.calculate(measurement_yaw, photonvision.getOffset(camera)),
+          rotationalController.calculate(measurement_yaw, photonvision.getSubwooferYaw()),
           false);
     } else {
       swerveSubsystem.stop();
@@ -78,6 +72,7 @@ public class AutoAlign extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return photonvision.getYaw(camera) == 4079;
+    // return photonvision.getYaw(camera) == 4079;
+    return false;
   }
 }

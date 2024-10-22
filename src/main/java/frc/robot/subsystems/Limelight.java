@@ -51,12 +51,6 @@ public class Limelight extends SubsystemBase {
             .getEntry("botpose_targetspace")
             .getDoubleArray(new double[6]);
 
-    // if (DriverStation.getAlliance().equals(DriverStation.Alliance.Red)) {
-    //   robotPose_FieldSpace = llresults.targetingResults.getBotPose2d_wpiRed();
-    // } else {
-    //   robotPose_FieldSpace = llresults.targetingResults.getBotPose2d_wpiBlue();
-    // }
-
     robotPoseTargetSpace = LimelightHelpers.getBotPose_TargetSpace("limelight");
     SmartDashboard.putNumber("April Tag X", LimelightHelpers.getTX("limelight"));
     // field.setRobotPose(robotPose_FieldSpace);

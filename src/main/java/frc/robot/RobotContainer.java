@@ -4,8 +4,12 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -68,6 +72,7 @@ public class RobotContainer {
 
   private final Photonvision photonvision;
 
+  private final SendableChooser<Command> autoChooser;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     pad = new LogitechGamingPad(0);
@@ -134,6 +139,10 @@ public class RobotContainer {
         new PadShoot(shootyboi, swerveSubsystem, pad, photonvision, pivotyboi));
     elevator.setDefaultCommand(new PadElevator(elevator, pad));
     configureBindings();
+
+
+    autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   /**
@@ -167,7 +176,7 @@ public class RobotContainer {
     // rightBumper.whileTrue(new ElevatorRampDown(elevator));
     leftBumper.onTrue(new AmpScore(shootyboi, pivotyboi, photonvision, elevator));
     // startButton.onTrue(new StagePass(shootyboi));
-    startButton.onTrue(new PassNoteGyro(swerveSubsystem, pad));
+    startButton.onTrue(new PassNoteGyro(swerveSubsystem, pad).withTimeout(1));
   }
 
   /**
@@ -181,10 +190,9 @@ public class RobotContainer {
     swerveSubsystem.zeroPose();
 
     // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
-    // return new PathPlannerAuto("4NoteNoRotation");
 
-    // return new WaitShoot(shootyboi, pivotyboi, limelety);
-    return new PathPlannerAuto("JustShoot");
+    //return new PathPlannerAuto("JustShoot");
+    return autoChooser.getSelected();
     // return new InstantCommand();
   }
 

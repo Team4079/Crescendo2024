@@ -47,8 +47,6 @@ public class PivotShooterSetUpAuto extends Command {
   /** The PID controller for velocity control. */
   private final PIDController velocityPIDController;
 
-  private PhotonCamera camera;
-
   /**
    * Creates a new PivotShooterSetUpAuto command.
    *
@@ -73,14 +71,13 @@ public class PivotShooterSetUpAuto extends Command {
     this.photonvision = photonvision;
     this.shooter = shooter;
 
-    camera = photonvision.getBestCamera();
   }
 
   /** Called when the command is initially scheduled. */
   @Override
   public void initialize() {
     deadband = 0.1;
-    if (photonvision.getRange(photonvision.getBestCamera()) < 1.5) {
+    if (photonvision.getDistanceSubwoofer() < 1.5) {
       pos = PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE;
     } else {
       pos = photonvision.getPivotPosition();
@@ -88,7 +85,7 @@ public class PivotShooterSetUpAuto extends Command {
 
     double rps =
         ShooterGlobalValues.SHOOTER_SPEED
-            + (photonvision.getRange(photonvision.getBestCamera()) - 1.5) * 5;
+            + (photonvision.getDistanceSubwoofer() - 1.5) * 5;
     shooter.setShooterVelocity(-rps, -rps);
   }
 
@@ -104,7 +101,7 @@ public class PivotShooterSetUpAuto extends Command {
     // System.out.println(horizontalError);
     if (Math.abs(horizontalError) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
       swerveSubsystem.setDriveSpeeds(
-          0, 0, rotationalController.calculate(horizontalError, photonvision.getYaw(camera)), false);
+          0, 0, rotationalController.calculate(horizontalError, photonvision.getSubwooferYaw()), false);
     } else {
       swerveSubsystem.stop();
     }
