@@ -6,10 +6,9 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -28,13 +27,15 @@ import frc.robot.commands.pad.PadDrive;
 import frc.robot.commands.pad.PadElevator;
 import frc.robot.commands.pad.PadPivot;
 import frc.robot.commands.pad.PadShoot;
-import frc.robot.commands.speaker.AutoAlign;
 import frc.robot.commands.speaker.SubwooferShot;
 import frc.robot.commands.stage.PassNoteGyro;
 import frc.robot.subsystems.*;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 import frc.robot.utils.LogitechGamingPad;
+import org.json.simple.parser.ParseException;
+
+import java.io.IOException;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -72,7 +73,7 @@ public class RobotContainer {
 
   private final Photonvision photonvision;
 
-  private final SendableChooser<Command> autoChooser;
+  // private final Command autoChooser;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     pad = new LogitechGamingPad(0);
@@ -141,8 +142,9 @@ public class RobotContainer {
     configureBindings();
 
 
-    autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    //autoChooser = AutoBuilder.buildAutoChooser("1MeterForward");
+    //SmartDashboard.putData("Auto Chooser", autoChooser);
+    // autoChooser = AutoBuilder.buildAuto("1MeterForward");
   }
 
   /**
@@ -184,7 +186,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+  public Command getAutonomousCommand() throws IOException, ParseException {
     swerveSubsystem.resetDrive();
     swerveSubsystem.resetPidgey();
     swerveSubsystem.zeroPose();
@@ -192,8 +194,10 @@ public class RobotContainer {
     // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
 
     //return new PathPlannerAuto("JustShoot");
-    return autoChooser.getSelected();
+    // return new PathPlannerAuto("Note4");
     // return new InstantCommand();
+
+    return AutoBuilder.followPath(PathPlannerPath.fromPathFile("1MeterForward"));
   }
 
   public Command setTeleopPID() {
