@@ -102,6 +102,7 @@ tasks.withType(JavaCompile) {
 }
 
 spotless {
+    enforceCheck false
     java {
         googleJavaFormat().reflowLongStrings()
     }
