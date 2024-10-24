@@ -22,6 +22,8 @@ import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.PID;
 import frc.robot.utils.GlobalsValues.MotorGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
+import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
+
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 
@@ -107,18 +109,15 @@ public class SwerveSubsystem extends SubsystemBase {
         this // Reference to this subsystem to set requirements
         );
 
-    SmartDashboard.getNumber("AUTO: P", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.p);
-    SmartDashboard.getNumber("AUTO: I", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.i);
-    SmartDashboard.getNumber("AUTO: D", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.d);
-    SmartDashboard.getNumber("AUTO: V", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_V_AUTO);
+    // SmartDashboard.getNumber("AUTO: P", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.p);
+    // SmartDashboard.getNumber("AUTO: I", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.i);
+    // SmartDashboard.getNumber("AUTO: D", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.d);
+    // SmartDashboard.getNumber("AUTO: V", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_V_AUTO);
   }
 
   // This method will be called once per scheduler run
   @Override
   public void periodic() {
-
-
-
     Optional<EstimatedRobotPose> visionMeasurement3d =
         photonvision.getEstimatedGlobalPose(poseEstimator.getEstimatedPosition());
     if (!visionMeasurement3d.isEmpty()) {
@@ -133,17 +132,15 @@ public class SwerveSubsystem extends SubsystemBase {
     poseEstimator.update(getPidgeyRotation(), getModulePositions());
 
     field.setRobotPose(poseEstimator.getEstimatedPosition());
-
-    SmartDashboard.putData("Robot Pose", field);
-    SmartDashboard.putData("feild lol", field);
-
     // Pidgeon Stuff
-    SmartDashboard.putNumber("Pitch", pidgey.getPitch().getValueAsDouble());
-    SmartDashboard.putNumber("Heading", pidgey.getAngle());
-    SmartDashboard.putNumber("Yaw", pidgey.getYaw().getValueAsDouble());
-    SmartDashboard.putNumber("Roll", pidgey.getRoll().getValueAsDouble());
-
-    // SmartDashboard.putData("Pose", getPose().getTranslation().get);
+    // Global Boolean Value called TEST_MODE if true graph all smartdashboard values
+  if(BasePIDGlobal.TEST_MODE == true) {
+      SmartDashboard.putData("Robot Pose", field);
+      SmartDashboard.putNumber("Pitch", pidgey.getPitch().getValueAsDouble());
+      SmartDashboard.putNumber("Heading", pidgey.getAngle());
+      SmartDashboard.putNumber("Yaw", pidgey.getYaw().getValueAsDouble());
+      SmartDashboard.putNumber("Roll", pidgey.getRoll().getValueAsDouble());
+      // SmartDashboard.putData("Pose", getPose().getTranslation().get);
   }
 
   /**
@@ -158,8 +155,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   /**
-   * Sets the drive speeds for the robot.
-   *
+   * Sets the drive speeds for the robot.F
    * @param forwardSpeed The forward speed.
    * @param leftSpeed The left speed.
    * @param turnSpeed The turn speed.
@@ -169,9 +165,11 @@ public class SwerveSubsystem extends SubsystemBase {
       double forwardSpeed, double leftSpeed, double turnSpeed, boolean isFieldOriented) {
     ChassisSpeeds speeds;
 
+  if(BasePIDGlobal.TEST_MODE == true) {
     SmartDashboard.putNumber("Forward speed", forwardSpeed);
     SmartDashboard.putNumber("Left speed", leftSpeed);
     SmartDashboard.putNumber("Pidgey Heading", getHeading());
+  }
 
     if (isFieldOriented) {
       speeds =

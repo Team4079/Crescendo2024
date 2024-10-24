@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
+import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
 
 /** The {@link Shooter} class includes all the motors to shoot the power cells. */
 public class Shooter extends SubsystemBase {
@@ -145,12 +146,13 @@ public class Shooter extends SubsystemBase {
   // This method will be called once per scheduler run
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Left Shooter", leftFalcon.getRotorVelocity().getValue());
-    SmartDashboard.putNumber("Right Shooter Velocity", rightFalcon.getRotorVelocity().getValue());
-    SmartDashboard.putNumber("Left Shooter Error", leftFalcon.getVelocity().getValue() - 50);
-    SmartDashboard.putNumber("Right Shooter Error", rightFalcon.getVelocity().getValue() - 50);
-    SmartDashboard.putNumber("Kraken Velocity", passthroughKraken.getRotorVelocity().getValue());
-
+    if(BasePIDGlobal.TEST_MODE == true){
+      SmartDashboard.putNumber("Left Shooter", leftFalcon.getRotorVelocity().getValue());
+      SmartDashboard.putNumber("Right Shooter Velocity", rightFalcon.getRotorVelocity().getValue());
+      SmartDashboard.putNumber("Left Shooter Error", leftFalcon.getVelocity().getValue() - 50);
+      SmartDashboard.putNumber("Right Shooter Error", rightFalcon.getVelocity().getValue() - 50);
+      SmartDashboard.putNumber("Kraken Velocity", passthroughKraken.getRotorVelocity().getValue());
+    }
     if (getRingSensor()) {
       timer.start();
       if (timer.get() < 0.35) {
@@ -161,11 +163,12 @@ public class Shooter extends SubsystemBase {
       timer.reset();
     }
 
-    SmartDashboard.putBoolean("has peice", ShooterGlobalValues.HAS_PIECE);
-    // setKrakenVelocity(-25);
-    // setShooterVelocity(-70, -70);
+    if(BasePIDGlobal.TEST_MODE == true){
+      SmartDashboard.putBoolean("has peice", ShooterGlobalValues.HAS_PIECE);
+      // setKrakenVelocity(-25);
+      // setShooterVelocity(-70, -70);
+    }
   }
-
   /**
    * Sets the velocity of the shooter motors
    *
@@ -226,7 +229,7 @@ public class Shooter extends SubsystemBase {
     passthroughKrakenIsStopped = false;
   }
 
-    public void setKrakenVelocityAuto(double speed) {
+  public void setKrakenVelocityAuto(double speed) {
     passthroughKraken.setControl(velocitySetPoint.withVelocity(speed));
   }
 
@@ -289,8 +292,9 @@ public class Shooter extends SubsystemBase {
    *
    * @return boolean, ring sensor value, default false
    */
+
   public boolean getRingSensor() {
     SmartDashboard.putBoolean("sensor boolean", !ringSensor.get());
     return !ringSensor.get();
   }
-}
+

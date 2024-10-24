@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
+import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
 
 /** The {@link Pivot} class includes all the motors to pivot the shooter. */
 public class Pivot extends SubsystemBase {
@@ -170,10 +171,12 @@ public class Pivot extends SubsystemBase {
     // 0.201015130025378 Low limit before 2048 multiplier = 411.6789862919741
     // absPos = absoluteEncoder.getPosition();
     // SmartDashboard.putNumber("Absolute Encoder Position", getAbsoluteEncoder());
-    SmartDashboard.putNumber("Pivot Left Position", pivotMotorLeft.getPosition().getValue());
-    SmartDashboard.putNumber("Pivot Right Position", pivotMotorRight.getPosition().getValue());
-    SmartDashboard.putBoolean("Pivot SoftLimit", getSoftLimit());
-    // SmartDashboard.putBoolean("limit", limit);
+    if(BasePIDGlobal.TEST_MODE == true) {
+      SmartDashboard.putNumber("Pivot Left Position", pivotMotorLeft.getPosition().getValue());
+      SmartDashboard.putNumber("Pivot Right Position", pivotMotorRight.getPosition().getValue());
+      SmartDashboard.putBoolean("Pivot SoftLimit", getSoftLimit());
+      // SmartDashboard.putBoolean("limit", limit);
+    }
 
     if (absPos == PivotGlobalValues.PIVOT_NEUTRAL_ANGLE) {
       GlobalsValues.PivotGlobalValues.IS_NEUTRAL = true;

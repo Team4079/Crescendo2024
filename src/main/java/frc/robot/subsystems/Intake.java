@@ -10,6 +10,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues.IntakeGlobalValues;
+import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
 
 /**
  * The Intake subsystem controls the intake mechanism of the robot. It uses a TalonFX motor
@@ -66,7 +67,9 @@ public class Intake extends SubsystemBase {
    */
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Intake Velocity", intakeKaren.getRotorPosition().getValue());
+    if(BasePIDGlobal.TEST_MODE == true) {
+      SmartDashboard.putNumber("Intake Velocity", intakeKaren.getRotorPosition().getValue());
+    }
   }
 
   /**

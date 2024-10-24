@@ -153,12 +153,12 @@ public class SwerveModule {
   public void setState(SwerveModuleState state) {
     SwerveModulePosition newPosition = getPosition();
     SwerveModuleState optimized = SwerveModuleState.optimize(state, newPosition.angle);
-
+  
     double angleToSet = optimized.angle.getRotations();
     SmartDashboard.putNumber(
         "desired state after optimize " + canCoder.getDeviceID(), optimized.angle.getRotations());
     steerMotor.setControl(positionSetter.withPosition(angleToSet));
-
+  
     double velocityToSet =
         optimized.speedMetersPerSecond
             * (MotorGlobalValues.DRIVE_MOTOR_GEAR_RATIO / MotorGlobalValues.MetersPerRevolution);

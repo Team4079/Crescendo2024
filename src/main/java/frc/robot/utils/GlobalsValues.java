@@ -179,6 +179,9 @@ public final class GlobalsValues {
       public static final PID ROTATIONAL_PID = new PID(0.20, 0.000001, 0, 0);
       public static final PID PASS_ROTATIONAL_PID = new PID(0.075, 0000, 0.00, 0);
 
+      // PathPlanner Push Variable
+      public static boolean TEST_MODE = false;
+
       public static HolonomicPathFollowerConfig pathFollower =
       new HolonomicPathFollowerConfig(
         new PIDConstants(4, 0.00, 0), // translation
