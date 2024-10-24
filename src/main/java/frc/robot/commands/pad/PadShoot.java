@@ -61,7 +61,7 @@ public class PadShoot extends Command {
 
     if (pad.getLeftTriggerValue() > 0.5)
     {
-      new PassSquence(swerve, shooter, photonvision, pivot, pad).schedule();
+      new PassSquence(swerve, shooter, photonvision, pivot).schedule();
     }
 
     if (pad.getDPadUp()) {

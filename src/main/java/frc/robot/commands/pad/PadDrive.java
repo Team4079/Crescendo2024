@@ -34,8 +34,8 @@ public class PadDrive extends Command {
       rotation = 0;
     }
 
-    // SmartDashboard.putNumber("X Jostick", position.getX());
-    // SmartDashboard.putNumber("Y Joystick", position.getY());
+    SmartDashboard.putNumber("X Jostick", position.getX());
+    SmartDashboard.putNumber("Y Joystick", position.getY());
 
     swerveSubsystem.setDriveSpeeds(
         position.getY(), position.getX(), rotation * 0.8, isFieldOriented);
