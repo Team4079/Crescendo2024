@@ -5,8 +5,10 @@
 package frc.robot.utils;
 
 import com.ctre.phoenix6.signals.InvertedValue;
-import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -177,13 +179,18 @@ public final class GlobalsValues {
       public static final PID ROTATIONAL_PID = new PID(0.20, 0.000001, 0, 0);
       public static final PID PASS_ROTATIONAL_PID = new PID(0.075, 0000, 0.00, 0);
 
-      
-
-      public static PPHolonomicDriveController pathFollower =
-          new PPHolonomicDriveController(
-              new PIDConstants(4, 0.00, 0), // translation
-              new PIDConstants(3, 0.0, 0)); // rotation
-
+      public static HolonomicPathFollowerConfig pathFollower =
+      new HolonomicPathFollowerConfig(
+        new PIDConstants(4, 0.00, 0), // translation
+        new PIDConstants(3, 0.0, 0), // rotation
+        4.78536, // Max module speed, in m/s
+        SwerveGlobalValues
+            .ROBOT_SIZE, // Drive base radius in meters. Distance from robot center to
+        // furthest //
+        // module.
+        new ReplanningConfig(
+            false,
+            false)); // Default path replanning config. See the API for the options here
     }
 
     // Controller X and Y deadbands

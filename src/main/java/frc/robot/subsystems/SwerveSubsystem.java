@@ -1,9 +1,8 @@
 package frc.robot.subsystems;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.util.DriveFeedforwards;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -15,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,8 +23,6 @@ import frc.robot.utils.PID;
 import frc.robot.utils.GlobalsValues.MotorGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 import java.util.Optional;
-import java.util.function.BiConsumer;
-
 import org.photonvision.EstimatedRobotPose;
 
 /** The {@link SwerveSubsystem} class includes all the motors to drive the robot. */
@@ -41,7 +39,6 @@ public class SwerveSubsystem extends SubsystemBase {
   private static final boolean SHOULD_INVERT = false;
   private PID pid = new PID(SmartDashboard.getNumber("AUTO: P", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.p), SmartDashboard.getNumber("AUTO: I", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.i), SmartDashboard.getNumber("AUTO: D", SwerveGlobalValues.BasePIDGlobal.DRIVE_PID_AUTO.d));
   private double velocity;
-  private RobotConfig config;
 
   /**
    * Constructs a new SwerveSubsystem.
@@ -89,22 +86,13 @@ public class SwerveSubsystem extends SubsystemBase {
             VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
             VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
 
-      try{
-        config = RobotConfig.fromGUISettings();
-      } catch (Exception e) {
-        // Handle exception as needed
-        e.printStackTrace();
-      }
-
-
-    AutoBuilder.configure(
+    AutoBuilder.configureHolonomic(
         this::getPose, // Robot pose supplier
         this::newPose, // Method to reset odometry (will be called if your auto has a starting pose)
         this::getAutoSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        (speeds, feedforwards) -> chassisSpeedsDrive(speeds), // Method that will drive the robot given ROBOT RELATIVE
+        this::chassisSpeedsDrive, // Method that will drive the robot given ROBOT RELATIVE
         // ChassisSpeeds
         SwerveGlobalValues.BasePIDGlobal.pathFollower,
-        config,
         () -> {
           Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
           if (alliance.isPresent()) {
@@ -280,7 +268,7 @@ public class SwerveSubsystem extends SubsystemBase {
    *
    * @param chassisSpeeds The desired chassis speeds.
    */
-  public BiConsumer<ChassisSpeeds, DriveFeedforwards> chassisSpeedsDrive(ChassisSpeeds chassisSpeeds) {
+  public void chassisSpeedsDrive(ChassisSpeeds chassisSpeeds) {
     // ChassisSpeeds speeds =
     //     ChassisSpeeds.fromRobotRelativeSpeeds(chassisSpeeds, getRotationPidggy());
     // SwerveModuleState[] newStates = SwerveGlobalValues.kinematics.toSwerveModuleStates(speeds);
@@ -289,11 +277,6 @@ public class SwerveSubsystem extends SubsystemBase {
     SwerveModuleState[] newStates =
         SwerveGlobalValues.kinematics.toSwerveModuleStates(chassisSpeeds);
     setModuleStates(newStates);
-
-    return (speeds, feedforwards) -> {
-      SwerveModuleState[] states = SwerveGlobalValues.kinematics.toSwerveModuleStates(speeds);
-      SwerveDriveKinematics.desaturateWheelSpeeds(states, MotorGlobalValues.MAX_SPEED);
-    };
   }
 
   /**
