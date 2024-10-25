@@ -180,7 +180,7 @@ public final class GlobalsValues {
       public static final PID PASS_ROTATIONAL_PID = new PID(0.075, 0000, 0.00, 0);
 
       // PathPlanner Push Variable
-      public static boolean TEST_MODE = false;
+      public static boolean TEST_MODE = true;
 
       public static HolonomicPathFollowerConfig pathFollower =
       new HolonomicPathFollowerConfig(

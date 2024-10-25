@@ -134,13 +134,14 @@ public class SwerveSubsystem extends SubsystemBase {
     field.setRobotPose(poseEstimator.getEstimatedPosition());
     // Pidgeon Stuff
     // Global Boolean Value called TEST_MODE if true graph all smartdashboard values
-  if(BasePIDGlobal.TEST_MODE == true) {
-      SmartDashboard.putData("Robot Pose", field);
-      SmartDashboard.putNumber("Pitch", pidgey.getPitch().getValueAsDouble());
-      SmartDashboard.putNumber("Heading", pidgey.getAngle());
-      SmartDashboard.putNumber("Yaw", pidgey.getYaw().getValueAsDouble());
-      SmartDashboard.putNumber("Roll", pidgey.getRoll().getValueAsDouble());
-      // SmartDashboard.putData("Pose", getPose().getTranslation().get);
+    if(BasePIDGlobal.TEST_MODE == true) {
+        SmartDashboard.putData("Robot Pose", field);
+        SmartDashboard.putNumber("Pitch", pidgey.getPitch().getValueAsDouble());
+        SmartDashboard.putNumber("Heading", pidgey.getAngle());
+        SmartDashboard.putNumber("Yaw", pidgey.getYaw().getValueAsDouble());
+        SmartDashboard.putNumber("Roll", pidgey.getRoll().getValueAsDouble());
+        // SmartDashboard.putData("Pose", getPose().getTranslation().get);
+    }
   }
 
   /**

@@ -297,4 +297,5 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putBoolean("sensor boolean", !ringSensor.get());
     return !ringSensor.get();
   }
+}
 
