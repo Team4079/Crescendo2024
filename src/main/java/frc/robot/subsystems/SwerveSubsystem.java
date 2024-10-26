@@ -203,6 +203,10 @@ public class SwerveSubsystem extends SubsystemBase {
     return pidgey.getAngle();
   }
 
+  public double getPidgeyYaw() {
+    return pidgey.getYaw().getValueAsDouble();
+  }
+
   public void setHeading() {
     Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
     if (alliance.get() == DriverStation.Alliance.Red) {

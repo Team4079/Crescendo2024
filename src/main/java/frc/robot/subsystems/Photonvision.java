@@ -17,6 +17,7 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonUtils;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.PNPResult;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -28,6 +29,8 @@ public class Photonvision extends SubsystemBase {
   // Pose estimator for determining the robot's position on the field
   PhotonPoseEstimator photonPoseEstimatorleft;
 
+  private Translation2d cameraTrans = new Translation2d(0.31, 0);
+
   // AprilTag field layout for the 2024 Crescendo field
   AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
@@ -35,8 +38,8 @@ public class Photonvision extends SubsystemBase {
   // TODO: Make function to convert Translation2d to Translation3d
   Transform3d leftCameraPos =
       new Transform3d(
-          conv2dTo3d(BACK_LEFT, PhotonVisionConstants.CAMERA_ONE_HEIGHT_METER),
-          new Rotation3d(0, 360 - PhotonVisionConstants.CAMERA_ONE_ANGLE_DEG, 150));
+          conv2dTo3d(cameraTrans, PhotonVisionConstants.CAMERA_ONE_HEIGHT_METER),
+          new Rotation3d(0, Math.toRadians(360 - PhotonVisionConstants.CAMERA_ONE_ANGLE_DEG), Math.toRadians(180)));
 
   PhotonTrackedTarget targetleft;
   boolean targetVisibleleft = false;
@@ -53,10 +56,13 @@ public class Photonvision extends SubsystemBase {
 
   boolean camleftTag = false;
 
-  Optional<EstimatedRobotPose> currentPose;
+  Translation3d currentPose;
+
+
 
   /** Constructs a new PhotonVision subsystem. */
   public Photonvision() {
+    resultleft = new PhotonPipelineResult();
     photonPoseEstimatorleft =
         new PhotonPoseEstimator(
             aprilTagFieldLayout,
@@ -71,31 +77,62 @@ public class Photonvision extends SubsystemBase {
   @Override
   public void periodic() {
     resultleft = cameraleft.getLatestResult();
-
-    double distleft = 0;
+    photonPoseEstimatorleft.update();
 
     if (resultleft.hasTargets()) {
       targetleft = resultleft.getBestTarget();
       targetPoseAmbiguityleft = targetleft.getPoseAmbiguity();
-
-      distleft = targetleft.getBestCameraToTarget().getTranslation().getNorm();
       // SmartDashboard.putNumber("distleft", distleft);
 
-      // if (resultleft.getMultiTagResult().estimatedPose.isPresent) {
-      //   Transform3d fieldToCamera = resultleft.getMultiTagResult().estimatedPose.best;
-      //   SmartDashboard.putNumber("field to camera", fieldToCamera.getX());
-      // }
+
+    
+        // SmartDashboard.putBoolean("front of subwoofer", frontOfSubwoofer);
+    
+        // if (camera.getLatestResult().hasTargets()) {
+        //   return camera.getLatestResult().getBestTarget().getYaw();
+        // }
+        // return 4079;
+
+    // if (resultleft.getMultiTagResult().estimatedPose.isPresent) {
+    //     Transform3d fieldToCamera = resultleft.getMultiTagResult().estimatedPose.best;
+    //     SmartDashboard.putNumber("field to camera", fieldToCamera.getX());
+    // }
     } else {
       targetPoseAmbiguityleft = 7157;
     }
-    if(BasePIDGlobal.TEST_MODE == true) {
-      SmartDashboard.putNumber("photon yaw", targetYaw);
-      SmartDashboard.putNumber("range target", rangeToTarget);
-      SmartDashboard.putNumber("april tag distance", getDistanceSubwoofer());
-      SmartDashboard.putNumber("april tag yaw", getSubwooferYaw());
-      SmartDashboard.putNumber("left cam ambiguity", targetPoseAmbiguityleft);
-      SmartDashboard.putBoolean("left_targets", resultleft.hasTargets());
+
+    // if(BasePIDGlobal.TEST_MODE == true) {
+    //   SmartDashboard.putNumber("photon yaw", targetYaw);
+    //   SmartDashboard.putNumber("range target", rangeToTarget);
+    //   SmartDashboard.putNumber("april tag distance", getDistanceSubwoofer());
+    //   SmartDashboard.putNumber("april tag yaw", getSubwooferYaw());
+    //   SmartDashboard.putNumber("left cam ambiguity", targetPoseAmbiguityleft);
+    //   SmartDashboard.putBoolean("left_targets", resultleft.hasTargets());
+    // }
+
+
+    List<PhotonTrackedTarget> results = cameraleft.getLatestResult().getTargets();
+    // boolean frontOfSubwoofer = false;
+
+    for (PhotonTrackedTarget tag : results) {
+      if (tag.getFiducialId() == 7 || tag.getFiducialId() == 4) {
+        targetYaw = tag.getYaw();
+      // } else {
+      //   targetYaw = 4079;
+      }
     }
+
+    SmartDashboard.putNumber("yaw to target", targetYaw);
+    
+  }
+
+  public boolean hasTag()
+  {
+    if (resultleft.hasTargets())
+    {
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -110,8 +147,14 @@ public class Photonvision extends SubsystemBase {
     return photonPoseEstimatorleft.update();
   }
 
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
-    return photonPoseEstimatorleft.update();
+  public Transform3d getEstimatedGlobalPose() {
+  if (resultleft.getMultiTagResult().estimatedPose.isPresent) {
+      Transform3d fieldToCamera = resultleft.getMultiTagResult().estimatedPose.best;
+      return resultleft.getMultiTagResult().estimatedPose.best;
+      // System.out.println(photonPoseEstimatorleft.getReferencePose().getX());
+  }
+  // return photonPoseEstimatorleft.getReferencePose();
+  return new Transform3d(0, 0, 0, new Rotation3d());
   }
 
   /**
@@ -133,25 +176,17 @@ public class Photonvision extends SubsystemBase {
    * API</a>
    */
 
-  public double getOffset(PhotonCamera camera) {
-    if (camera.getName().equals("Left")) {
-      return PhotonVisionConstants.OFFSET_TOWARD_MID_LEFT;
-    }
-
-    return 0.0;
-  }
-
   public double getPivotPosition() {
     // 10/14/2024 outside tuning
     // jayden why are you so bad at tuning
     // Desmos: https://www.desmos.com/calculator/naalukjxze
     double r = getDistanceSubwoofer();
-    double f = -1.19541; // power 5
-    double e = 18.0904; // power 4
-    double d = -108.07; // power 3
-    double c = 317.396; // power 2
-    double b = -453.088; // power 1
-    double a = 267.288; // constant
+    double f = -1.68024; // power 5
+    double e = 25.4589; // power 4
+    double d = -151.999; // power 3
+    double c = 445.962; // power 2
+    double b = -637.989; // power 1
+    double a = 371.92; // constant
 
     // if (r == -1)
     // {
@@ -169,53 +204,55 @@ public class Photonvision extends SubsystemBase {
     return new Translation3d(translation2d.getX(), translation2d.getY(), z);
   }
 
-  public double getYaw(PhotonCamera camera) {
-    List<PhotonTrackedTarget> results = camera.getLatestResult().getTargets();
-    boolean frontOfSubwoofer = false;
+  // public double getYaw(PhotonCamera camera) {
+  //   List<PhotonTrackedTarget> results = camera.getLatestResult().getTargets();
+  //   boolean frontOfSubwoofer = false;
 
-    for (PhotonTrackedTarget tag : results) {
-      if (tag.getFiducialId() == 7 || tag.getFiducialId() == 4) {
-        frontOfSubwoofer = true;
-      }
-    }
+  //   for (PhotonTrackedTarget tag : results) {
+  //     if (tag.getFiducialId() == 7 || tag.getFiducialId() == 4) {
+  //       frontOfSubwoofer = true;
+  //     }
+  //   }
 
-    SmartDashboard.putBoolean("front of subwoofer", frontOfSubwoofer);
+  //   SmartDashboard.putBoolean("front of subwoofer", frontOfSubwoofer);
 
-    if (camera.getLatestResult().hasTargets() && frontOfSubwoofer) {
-      return camera.getLatestResult().getBestTarget().getYaw();
-    }
-    return 4079;
-  }
+  //   if (camera.getLatestResult().hasTargets()) {
+  //     return camera.getLatestResult().getBestTarget().getYaw();
+  //   }
+  //   return 4079;
+  // }
 
   public double getDistanceSubwoofer() {
-    currentPose = getEstimatedGlobalPose();
-    if (currentPose.isEmpty()) {
+    currentPose = getEstimatedGlobalPose().getTranslation();
+    if (false) {
       return 687;
     }
     else {
       // 0.5, 5.5 coordinate for blue subwoofer
       // 16, 5.5 coordinate for red subwoofer
       if (DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red)) {
-        return Math.sqrt(Math.pow(currentPose.get().estimatedPose.getTranslation().getX() - 16, 2) + Math.pow(currentPose.get().estimatedPose.getTranslation().getY() - 5.5, 2));
+        return Math.sqrt(Math.pow(currentPose.getX() - 16.5, 2) + Math.pow(currentPose.getY() - 5.5, 2)) + 0.4;
       } else {
-        return Math.sqrt(Math.pow(currentPose.get().estimatedPose.getTranslation().getX() - 0.5, 2) + Math.pow(currentPose.get().estimatedPose.getTranslation().getY() - 5.5, 2));
+        return Math.sqrt(Math.pow(currentPose.getX(), 2) + Math.pow(currentPose.getY() - 5.5, 2)) + 0.4;
       }
+
     }
   }
 
   public double getSubwooferYaw() {
-    currentPose = getEstimatedGlobalPose();
-    if (currentPose.isEmpty()) {
-      return 8033;
-    }
-    else {
-      // 0.5, 5.5 coordinate for blue subwoofer
-      // 16, 5.5 coordinate for red subwoofer
-      if (DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red)) {
-        return Math.toDegrees(Math.atan2(currentPose.get().estimatedPose.getTranslation().getY() - 5.5, currentPose.get().estimatedPose.getTranslation().getX() - 16));
-      } else {
-        return Math.toDegrees(Math.atan2(currentPose.get().estimatedPose.getTranslation().getY() - 5.5, currentPose.get().estimatedPose.getTranslation().getX() - 0.5));
-      }
-    }
+    // currentPose = getEstimatedGlobalPose().getRotation().getAngle();
+    return 180 - Math.toDegrees(getEstimatedGlobalPose().getRotation().getAngle());
+    // if (false) {
+    //   return 8033;
+    // }
+    // else {
+    //   // 0.5, 5.5 coordinate for blue subwoofer
+    //   // 16, 5.5 coordinate for red subwoofer
+    //   if (DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red)) {
+    //     return Math.toDegrees(Math.atan2(currentPose.getY() - 5.5, currentPose.getX() - 16.5));
+    //   } else {
+    //     return Math.toDegrees(Math.atan2(currentPose.getY() - 5.5, currentPose.getX()));
+    //   }
+    // }
   }
 }

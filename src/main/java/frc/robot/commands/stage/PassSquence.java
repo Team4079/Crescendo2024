@@ -25,11 +25,17 @@ public class PassSquence extends SequentialCommandGroup {
     addRequirements(swerve, shooter, pivot);
     addCommands(
       new ParallelCommandGroup(
-        new PassNoteGyro(swerve, pad).withTimeout(0.75),
-        new StagePassPivot(pivot).withTimeout(0.75),
-        new StagePass(shooter).withTimeout(0.4414)),
-        new PushRing(shooter).withTimeout(0.5),
-        new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.4),
-        new StopShooter(shooter));
+
+        new ParallelCommandGroup(
+
+          new StagePassPivot(pivot).withTimeout(0.75),
+          new StagePass(shooter).withTimeout(0.4414)),
+
+        new PassNoteGyro(swerve, pad).withTimeout(0.75)),   
+
+      new PushRing(shooter).withTimeout(0.5),
+      new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.4),
+      new StopShooter(shooter)
+    );
   }
 }

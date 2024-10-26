@@ -27,6 +27,7 @@ import frc.robot.commands.pad.PadDrive;
 import frc.robot.commands.pad.PadElevator;
 import frc.robot.commands.pad.PadPivot;
 import frc.robot.commands.pad.PadShoot;
+import frc.robot.commands.speaker.AutoAlign;
 import frc.robot.commands.speaker.SubwooferShot;
 import frc.robot.commands.stage.PassNoteGyro;
 import frc.robot.subsystems.*;
@@ -164,8 +165,8 @@ public class RobotContainer {
     padB.onTrue(new InstantCommand(swerveSubsystem::resetPidgey));
     // x is intake
 
-    // padY.whileTrue(new AutoAlign(swerveSubsystem, photonvision));
-    padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
+    padY.whileTrue(new AutoAlign(swerveSubsystem, photonvision));
+    // padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
     // padY.whileTrue(new PassNoteGyro(swerveSubsystem, pivotyboi, shootyboi));
 
     opPadA.onTrue(new ElevatorRampUp(elevator));

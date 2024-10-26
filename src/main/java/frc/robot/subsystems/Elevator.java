@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -97,8 +98,7 @@ public class Elevator extends SubsystemBase {
         stopPassMotor();
       }
 
-      else if (state == ElevatorState.CLIMB)
-      {
+      else if (state == ElevatorState.CLIMB) {
         setElevatorPosition(ElevatorGlobalValues.ELEVATOR_CLIMB);
         stopPassMotor();
       }
@@ -135,7 +135,7 @@ public class Elevator extends SubsystemBase {
    * @param position The position to set the elevator to.
    */
   public void setElevatorPosition(double position) {
-    elevatorMotorSparkMax.getPIDController().setReference(position, ControlType.kSmartMotion);
+    elevatorMotorSparkMax.getPIDController().setReference(position, CANSparkBase.ControlType.kSmartMotion);
   }
 
   /**
@@ -184,5 +184,7 @@ public class Elevator extends SubsystemBase {
     SmartDashboard.putString("Elevator State", state.toString());
     SmartDashboard.putNumber("Elevator Position", getEncoder().getPosition());
     SmartDashboard.putNumber("Elevator Speed", elevatorMotorSparkMax.get());
+    SmartDashboard.putNumber("Elevator Roller AppOut", passMotorSparkMax.getAppliedOutput());
+    SmartDashboard.putNumber("Elevator Roller OutCur", passMotorSparkMax.getOutputCurrent());
   }
 }

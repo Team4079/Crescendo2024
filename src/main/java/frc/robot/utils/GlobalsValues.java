@@ -87,7 +87,7 @@ public final class GlobalsValues {
     public static final double ELEVATOR_UP = 7; // TODO: git gud
     public static final double ELEVATOR_DOWN = 0.5;
     public static final double ELEVATOR_CLIMB = 7.4;
-    public static final double kP = 0.00003; // TODO: git gud
+    public static final double kP = 0.000045; // TODO: git gud
     public static final double kI = 0.000000; // TODO: git gud
     public static final double kD = 0.0; // TODO: git gud
     public static final double kIz = 0.0;
@@ -148,7 +148,7 @@ public final class GlobalsValues {
 
     // Whether the limelight auto aligns and its deadband
     public static final boolean AUTO_ALIGN = false;
-    public static final double LIMELIGHT_DEADBAND = 3;
+    public static final double LIMELIGHT_DEADBAND = 1.5;
 
     public static final double MOTOR_DEADBAND = 0.05;
     public static final boolean IS_FIELD_ORIENTATED = true;
@@ -176,7 +176,7 @@ public final class GlobalsValues {
       // DON'T SET D PAST 0.03 - Erick or else the swerve moduls make funny nosie
 
       // AutoAlign PID
-      public static final PID ROTATIONAL_PID = new PID(0.20, 0.000001, 0, 0);
+      public static final PID ROTATIONAL_PID = new PID(0.15, 0.0, 0, 0);
       public static final PID PASS_ROTATIONAL_PID = new PID(0.075, 0000, 0.00, 0);
 
       // PathPlanner Push Variable
@@ -374,13 +374,13 @@ public final class GlobalsValues {
     public static double tv = 0.0;
 
     // Camera One
-    public static final double CAMERA_ONE_HEIGHT_METER = 0.61;
-    public static final double CAMERA_ONE_ANGLE_DEG = 32.5; // up is positive
+    public static final double CAMERA_ONE_HEIGHT_METER = 0.47;
+    public static final double CAMERA_ONE_ANGLE_DEG = 37.5; // up is positive
     public static final double OFFSET_TOWARD_MID_LEFT = -15.00;
 
     // Camera Two
     public static final double CAMERA_TWO_HEIGHT_METER = 0.61;
-    public static final double CAMERA_TWO_ANGLE_DEG = 32.5; // up is positive
+    public static final double CAMERA_TWO_ANGLE_DEG = 37.5; // up is positive
     public static final double OFFSET_TOWARD_MID_RIGHT = 15.0;
   }
 }

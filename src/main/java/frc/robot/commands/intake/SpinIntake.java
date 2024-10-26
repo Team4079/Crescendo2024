@@ -155,11 +155,12 @@ public class SpinIntake extends Command {
       led.setTan();
     } else if (!shooter.getRingSensor()) {
       led.setRed();
-    } else if (shooter.getRingSensor() && Math.abs(photonvision.getYaw()) == 0) {
-      led.setHighTide();
-    } else {
+    } else if (shooter.getRingSensor() && photonvision.hasTag()) {
       led.setGreen();
+    } else {
+      led.setHighTide();
     }
+
   }
 
   /**

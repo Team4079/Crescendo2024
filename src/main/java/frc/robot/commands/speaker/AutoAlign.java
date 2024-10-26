@@ -11,6 +11,9 @@ import frc.robot.subsystems.Photonvision;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
+
+import java.util.logging.LogManager;
+
 import org.photonvision.PhotonCamera;
 
 /** The {@link AutoAlign} command is a command that aligns the robot to the target. */
@@ -23,16 +26,19 @@ public class AutoAlign extends Command {
 
   private double measurement_yaw;
 
-  public AutoAlign(SwerveSubsystem swerveSubsystem, Photonvision limelety) {
+  public AutoAlign(SwerveSubsystem swerveSubsystem, Photonvision photonvision) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.swerveSubsystem = swerveSubsystem;
-    this.photonvision = limelety;
+    this.photonvision = photonvision;
+    // measurement_yaw = photonvision.getSubwooferYaw();
+    measurement_yaw = photonvision.getYaw();
     rotationalController =
         new PIDController(
             BasePIDGlobal.ROTATIONAL_PID.p,
             BasePIDGlobal.ROTATIONAL_PID.i,
             BasePIDGlobal.ROTATIONAL_PID.d);
-    rotationalController.setTolerance(2);
+    rotationalController.setTolerance(1.5);
+    rotationalController.setSetpoint(0);
     addRequirements(swerveSubsystem);
   }
 
@@ -40,28 +46,38 @@ public class AutoAlign extends Command {
   @Override
   public void initialize() {
   }
+  
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // measurement_yaw = photonvision.getSubwooferYaw();
+    measurement_yaw = photonvision.getYaw();
     // Horizontal PID and offset
-    SmartDashboard.putNumber("alignment error", rotationalController.getPositionError());
-    SmartDashboard.putNumber("alignment setpoint", rotationalController.getSetpoint());
-    SmartDashboard.putBoolean("Robot Aligned", rotationalController.atSetpoint());
-    SmartDashboard.putNumber("measurement yaw", photonvision.getSubwooferYaw());
+    // SmartDashboard.putNumber("alignment error", rotationalController.getPositionError());
+    // SmartDashboard.putNumber("alignment setpoint", rotationalController.getSetpoint());
+    // SmartDashboard.putBoolean("Robot Aligned", rotationalController.atSetpoint());
+    // SmartDashboard.putNumber("measurement yaw", photonvision.getSubwooferYaw());
 
     System.out.println(measurement_yaw);
 
-    if (Math.abs(measurement_yaw) >= SwerveGlobalValues.LIMELIGHT_DEADBAND) {
-      swerveSubsystem.setDriveSpeeds(
-          0,
-          0,
-          rotationalController.calculate(measurement_yaw, photonvision.getSubwooferYaw()),
-          false);
-    } else {
+    double error = measurement_yaw;
+
+    SmartDashboard.putNumber("align error", error);
+    SmartDashboard.putNumber("align yaw", measurement_yaw);
+
+
+
+    if (photonvision.hasTag()) {
+      // if (measurement_yaw > 0) {
+        swerveSubsystem.setDriveSpeeds(0, 0, rotationalController.calculate(error, 0), false);
+    }
+
+    else{
       swerveSubsystem.stop();
     }
   }
+
 
   // Called once the command ends or is interrupted.
   @Override
