@@ -1,17 +1,14 @@
 {
-  "robotWidth": 0.6096,
+  "robotWidth": 0.61,
   "robotLength": 0.6096,
   "holonomicMode": true,
   "pathFolders": [
-    "4 Note",
-    "MidLine",
-    "MiddleOnly",
-    "Test"
+    "screw you jayden paths"
   ],
   "autoFolders": [],
-  "defaultMaxVel": 2.0,
-  "defaultMaxAccel": 2.0,
+  "defaultMaxVel": 4.0,
+  "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 360.0,
   "defaultMaxAngAccel": 360.0,
-  "maxModuleSpeed": 4.7
+  "maxModuleSpeed": 4.0
 }

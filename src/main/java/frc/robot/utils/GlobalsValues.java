@@ -168,9 +168,11 @@ public final class GlobalsValues {
       // public static final PID STEER_PID = new PID(0.15, 0.0000, 0.000005, 0);
       // 0.05 P, 0 D
 
-      public static final PID DRIVE_PID_AUTO = new PID(0.00031, 0.0, 0.00);
-      public static final double DRIVE_PID_V_AUTO = 0.9;
+      public static final PID DRIVE_PID_AUTO = new PID(7.5, 0.0, 0.00); //0.00031
+      public static final double DRIVE_PID_V_AUTO = 0.5;
 
+      // public static final PID DRIVE_PID_TELE = new PID(0.0005, 0.0, 0.00); //0.00031
+      // public static final double DRIVE_PID_V_TELE = 1;
       public static final PID DRIVE_PID_TELE = new PID(1, 0.0, 0.0);
       public static final double DRIVE_PID_V_TELE = 0;
       // DON'T SET D PAST 0.03 - Erick or else the swerve moduls make funny nosie
@@ -184,9 +186,9 @@ public final class GlobalsValues {
 
       public static HolonomicPathFollowerConfig pathFollower =
       new HolonomicPathFollowerConfig(
-        new PIDConstants(4, 0.00, 0), // translation
-        new PIDConstants(3, 0.0, 0), // rotation
-        4.78536, // Max module speed, in m/s
+        new PIDConstants(5, 0.00, 0), // translation
+        new PIDConstants(5, 0.0, 0), // rotation
+        4, // Max module speed, in m/s
         SwerveGlobalValues
             .ROBOT_SIZE, // Drive base radius in meters. Distance from robot center to
         // furthest //
@@ -375,7 +377,7 @@ public final class GlobalsValues {
 
     // Camera One
     public static final double CAMERA_ONE_HEIGHT_METER = 0.47;
-    public static final double CAMERA_ONE_ANGLE_DEG = 37.5; // up is positive
+    public static final double CAMERA_ONE_ANGLE_DEG = 42; // up is positive
     public static final double OFFSET_TOWARD_MID_LEFT = -15.00;
 
     // Camera Two
