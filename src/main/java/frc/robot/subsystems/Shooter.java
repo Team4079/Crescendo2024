@@ -153,6 +153,7 @@ public class Shooter extends SubsystemBase {
       SmartDashboard.putNumber("Right Shooter Error", rightFalcon.getVelocity().getValue() - 50);
       SmartDashboard.putNumber("Kraken Velocity", passthroughKraken.getRotorVelocity().getValue());
     }
+    
     if (getRingSensor()) {
       timer.start();
       if (timer.get() < 0.35) {

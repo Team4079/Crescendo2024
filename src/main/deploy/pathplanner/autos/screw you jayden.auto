@@ -51,12 +51,6 @@
         {
           "type": "named",
           "data": {
-            "name": "stopIntake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "pushBack"
           }
         },
@@ -74,15 +68,71 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "4n3"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "startIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "4n3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "setPivotDown"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "4n4"
+            "name": "stopIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autoShootRing"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "4n4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "startIntake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "setPivotDown"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootRing"
           }
         }
       ]

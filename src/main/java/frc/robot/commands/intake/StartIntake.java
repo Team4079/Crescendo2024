@@ -4,72 +4,149 @@
 
 package frc.robot.commands.intake;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.ResetPivot;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.*;
 import frc.robot.utils.GlobalsValues.IntakeGlobalValues;
 import frc.robot.utils.GlobalsValues.ShooterGlobalValues;
+import frc.robot.utils.LogitechGamingPad;
 
-/** The {@link ResetPivot} class is a command that resets the pivot to its neutral position. */
+/** Command to control the spinning of the intake mechanism. */
 public class StartIntake extends Command {
+  private final Intake intake;
+  private final Shooter shooter;
 
-  private Intake intake;
-  private Shooter shooter;
-  private Timer timer;
-  private Timer timer2;
-  private boolean isDone;
+  private final Timer timer;
+  private final Timer limelightTimer;
+  private boolean shouldEnd;
 
-  // Get distance when after we mount the limelight
-
-  /** Creates a new Shoot. */
-  public StartIntake(Intake intake, Shooter shooter) {
+  /**
+   * Constructs a new SpinIntake command.
+   *
+   * @param intake the intake subsystem
+   * @param shooter the shooter subsystem
+   * @param pad the gamepad controller
+   * @param photonvision the limelight subsystem
+   * @param led the LED subsystem
+   */
+  public StartIntake(
+      Intake intake, Shooter shooter) {
     this.intake = intake;
     this.shooter = shooter;
     timer = new Timer();
-    isDone = false;
-    timer2 = new Timer();
+    limelightTimer = new Timer();
+    shouldEnd = false;
     addRequirements(intake, shooter);
   }
 
-  // // Called when the command is initially scheduled.
+  /** Called when the command is initially scheduled. */
   @Override
   public void initialize() {
-    intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
-    shooter.setKrakenVelocity(ShooterGlobalValues.PASSTHROUGH_RPS);
-    timer.reset();
-    timer2.reset();
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
+  /**
+   * Executes the SpinIntake command.
+   *
+   * <p>This method is called periodically while the command is scheduled. It updates the
+   * SmartDashboard with the current state of `shouldSpin`, toggles the `shouldSpin` state based on
+   * the gamepad input, controls the LED state, and manages the intake and shooter mechanisms based
+   * on the current conditions.
+   */
   @Override
   public void execute() {
-    if (shooter.getRingSensor()) {
-      // timer.start();
-      // while (timer.get() < 0.2) {
-      //   shooter.setKrakenVelocity(ShooterGlobalValues.AUTO_PASSTHROUGH_RPS);
-      // }
 
-      // while (timer.get() < 0.45) {
-      //   shooter.setKrakenVelocity(30);
-      // }
-
-      shooter.stopKraken();
-      shooter.stopShooter();
-      intake.stopKraken();
-      timer.stop();
-      isDone = true;
+    if (!ShooterGlobalValues.HAS_PIECE) {
+      startIntakeAndShooter();
+    } 
+    else if (ShooterGlobalValues.HAS_PIECE) {
+      stopIntakeAndShooter();
+      handleTimers();
     }
   }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
+  /**
+   * Starts the intake and shooter mechanisms.
+   *
+   * <p>This method sets the intake velocity to the predefined intake speed and the shooter velocity
+   * to the passthrough rate per second. It also resets the timers for the intake and limelight.
+   */
+  private void startIntakeAndShooter() {
+    intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
+    shooter.setKrakenVelocity(ShooterGlobalValues.PASSTHROUGH_RPS);
+    timer.reset();
+    limelightTimer.reset();
+  }
 
-  // Returns true when the command should end.
+  /**
+   * Stops the intake and shooter mechanisms.
+   *
+   * <p>This method stops the kraken motors for both the shooter and intake subsystems.
+   */
+  private void stopIntakeAndShooter() {
+    shooter.stopKraken();
+    intake.stopKraken();
+  }
+
+  /**
+   * Handles the timing logic for the shooter and limelight.
+   *
+   * <p>This method starts the timers if specific gamepad buttons are not released, manages the
+   * shooter timing, controls the limelight flashing, and stops the kraken motors and timers.
+   */
+  private void handleTimers() {
+    timer.start();
+    limelightTimer.start();
+    handleShooterTiming();
+
+    shooter.stopKraken();
+    intake.stopKraken();
+    timer.stop();
+
+    shouldEnd = true;
+  }
+
+  /**
+   * Manages the timing for the shooter mechanism.
+   *
+   * <p>This method sets the shooter velocity to the passthrough rate per second for the first 0.3
+   * seconds and then sets it to a velocity of 20 for the next 0.15 seconds.
+   */
+  private void handleShooterTiming() {
+    while (timer.get() < 0.3) {
+      shooter.setKrakenVelocity(ShooterGlobalValues.PASSTHROUGH_RPS);
+    }
+
+    while (timer.get() < 0.45) {
+      shooter.setKrakenVelocity(20);
+    }
+  }
+
+    private void moveUp() {
+      shooter.setKrakenVelocity(ShooterGlobalValues.PUSH_UP_RPS);
+      intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
+    }
+
+  
+
+  /**
+   * Called once the command ends or is interrupted.
+   *
+   * @param interrupted whether the command was interrupted
+   */
+  @Override
+  public void end(boolean interrupted) {
+    intake.stopKraken();    
+  }
+
+  /**
+   * Returns true when the command should end.
+   *
+   * @return false as this command never ends on its own
+   */
   @Override
   public boolean isFinished() {
-    return isDone;
+    return shouldEnd;
   }
 }
