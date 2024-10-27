@@ -68,7 +68,7 @@ public class PivotShooterSetUp extends Command {
   public void initialize() {
     deadband = 0.1;
     pos =
-        photonvision.getDistanceSubwoofer() < 1.5
+        photonvision.getDistanceSubwoofer() < 0.75
             ? PivotGlobalValues.PIVOT_SUBWOOFER_ANGLE
             : photonvision.getPivotPosition();
     double rps = ShooterGlobalValues.SHOOTER_SPEED;
@@ -105,6 +105,7 @@ public class PivotShooterSetUp extends Command {
    */
   @Override
   public void end(boolean interrupted) {
+    System.out.println(pos);
     pivot.stopMotors();
   }
 

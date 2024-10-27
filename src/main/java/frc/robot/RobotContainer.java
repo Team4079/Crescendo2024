@@ -30,11 +30,12 @@ import frc.robot.commands.pad.PadPivot;
 import frc.robot.commands.pad.PadShoot;
 import frc.robot.commands.speaker.AutoAlign;
 import frc.robot.commands.speaker.SubwooferShot;
-import frc.robot.commands.stage.PassNoteGyro;
 import frc.robot.subsystems.*;
 import frc.robot.utils.GlobalsValues.PivotGlobalValues;
 import frc.robot.utils.GlobalsValues.SwerveGlobalValues;
 import frc.robot.utils.LogitechGamingPad;
+import frc.robot.commands.stage.PassNoteGyro;
+
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;

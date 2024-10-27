@@ -6,6 +6,7 @@ package frc.robot.commands.stage;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.stage.PassNoteGyro;
 import frc.robot.commands.PushRing;
 import frc.robot.commands.SetPivot;
 import frc.robot.commands.speaker.StopShooter;

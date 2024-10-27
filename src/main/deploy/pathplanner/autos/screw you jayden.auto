@@ -43,6 +43,12 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "4n2"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "stopIntake"
@@ -65,12 +71,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "4n2"
           }
         },
         {
