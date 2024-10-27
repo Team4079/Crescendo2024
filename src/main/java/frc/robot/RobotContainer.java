@@ -18,6 +18,7 @@ import frc.robot.commands.*;
 import frc.robot.commands.amp.AmpScore;
 import frc.robot.commands.amp.ElevatorRampDown;
 import frc.robot.commands.amp.ElevatorRampUp;
+import frc.robot.commands.auto.ShootRingAuto;
 import frc.robot.commands.intake.PulseDown;
 import frc.robot.commands.intake.ReverseIntake;
 import frc.robot.commands.intake.SpinIntake;
@@ -37,6 +38,8 @@ import frc.robot.utils.LogitechGamingPad;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
+
+import javax.print.attribute.standard.MediaSize.NA;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -131,6 +134,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "SubwooferShot", new SubwooferShot(shootyboi, pivotyboi, photonvision));
     NamedCommands.registerCommand("pushback", new PulseDown(intakeyboi, shootyboi));
+    NamedCommands.registerCommand("autoShootRing", new ShootRingAuto(shootyboi, pivotyboi, swerveSubsystem, photonvision));
     NamedCommands.registerCommand("stop", new InstantCommand(swerveSubsystem::stop));
 
     swerveSubsystem.setDefaultCommand(
@@ -194,7 +198,7 @@ public class RobotContainer {
 
     // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
 
-    return new PathPlannerAuto("1MeterForward");
+    return new PathPlannerAuto("screw you jayden");
     // return new PathPlannerAuto("Note4");
     // return new InstantCommand();
 

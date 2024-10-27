@@ -101,14 +101,14 @@ public class Photonvision extends SubsystemBase {
       targetPoseAmbiguityleft = 7157;
     }
 
-    // if(BasePIDGlobal.TEST_MODE == true) {
-    //   SmartDashboard.putNumber("photon yaw", targetYaw);
-    //   SmartDashboard.putNumber("range target", rangeToTarget);
-    //   SmartDashboard.putNumber("april tag distance", getDistanceSubwoofer());
-    //   SmartDashboard.putNumber("april tag yaw", getSubwooferYaw());
-    //   SmartDashboard.putNumber("left cam ambiguity", targetPoseAmbiguityleft);
-    //   SmartDashboard.putBoolean("left_targets", resultleft.hasTargets());
-    // }
+    if(BasePIDGlobal.TEST_MODE == true) {
+      SmartDashboard.putNumber("photon yaw", targetYaw);
+      SmartDashboard.putNumber("range target", rangeToTarget);
+      SmartDashboard.putNumber("april tag distance", getDistanceSubwoofer());
+      SmartDashboard.putNumber("april tag yaw", getSubwooferYaw());
+      SmartDashboard.putNumber("left cam ambiguity", targetPoseAmbiguityleft);
+      SmartDashboard.putBoolean("left_targets", resultleft.hasTargets());
+    }
 
 
     List<PhotonTrackedTarget> results = cameraleft.getLatestResult().getTargets();

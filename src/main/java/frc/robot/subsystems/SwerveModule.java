@@ -170,6 +170,12 @@ public class SwerveModule {
     SmartDashboard.putNumber(
         "drive set speed " + canCoder.getDeviceID(), velocityToSet);
 
+    SmartDashboard.putNumber(
+        "steer actual angle " + canCoder.getDeviceID(), steerMotor.getRotorPosition().getValueAsDouble());
+      
+    SmartDashboard.putNumber(
+        "steer set angle " + canCoder.getDeviceID(), angleToSet);
+
     this.state = state;
   }
 
