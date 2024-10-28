@@ -153,7 +153,7 @@ public class Shooter extends SubsystemBase {
       SmartDashboard.putNumber("Right Shooter Error", rightFalcon.getVelocity().getValue() - 50);
       SmartDashboard.putNumber("Kraken Velocity", passthroughKraken.getRotorVelocity().getValue());
     }
-    
+
     if (getRingSensor()) {
       timer.start();
       if (timer.get() < 0.35) {
@@ -163,6 +163,9 @@ public class Shooter extends SubsystemBase {
       ShooterGlobalValues.HAS_PIECE = false;
       timer.reset();
     }
+
+
+    SmartDashboard.putBoolean("has peice", ShooterGlobalValues.HAS_PIECE);
 
     if(BasePIDGlobal.TEST_MODE == true){
       SmartDashboard.putBoolean("has peice", ShooterGlobalValues.HAS_PIECE);

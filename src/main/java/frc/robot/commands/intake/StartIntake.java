@@ -2,6 +2,8 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+//rishi is my pookie bear <3~
+
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -20,8 +22,7 @@ public class StartIntake extends Command {
 
   private final Timer timer;
   private final Timer limelightTimer;
-  private boolean shouldEnd;
-
+  private boolean shouldEnd = false;
   /**
    * Constructs a new SpinIntake command.
    *
@@ -37,13 +38,14 @@ public class StartIntake extends Command {
     this.shooter = shooter;
     timer = new Timer();
     limelightTimer = new Timer();
-    shouldEnd = false;
     addRequirements(intake, shooter);
   }
-
+// yall suck imo get better mech people fr -rishi mishra
   /** Called when the command is initially scheduled. */
   @Override
   public void initialize() {
+    startIntakeAndShooter();
+    shouldEnd = false;
   }
 
   /**
@@ -57,12 +59,12 @@ public class StartIntake extends Command {
   @Override
   public void execute() {
 
-    if (!ShooterGlobalValues.HAS_PIECE) {
-      startIntakeAndShooter();
-    } 
-    else if (ShooterGlobalValues.HAS_PIECE) {
+    startIntakeAndShooter();
+
+    if (ShooterGlobalValues.HAS_PIECE) {
       stopIntakeAndShooter();
-      handleTimers();
+      // shouldEnd = true;
+     handleTimers();
     }
   }
 
@@ -105,6 +107,9 @@ public class StartIntake extends Command {
     timer.stop();
 
     shouldEnd = true;
+    System.out.println("ended intkae");
+    System.out.println("ended intkae");
+    System.out.println("ended intkae");
   }
 
   /**
@@ -123,10 +128,6 @@ public class StartIntake extends Command {
     }
   }
 
-    private void moveUp() {
-      shooter.setKrakenVelocity(ShooterGlobalValues.PUSH_UP_RPS);
-      intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
-    }
 
   
 

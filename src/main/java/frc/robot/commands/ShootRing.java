@@ -24,8 +24,8 @@ public class ShootRing extends SequentialCommandGroup {
     addRequirements(shooter, pivot, swerveSubsystem, photonvision);
     addCommands(
         new ParallelCommandGroup(
-            new PivotShooterSetUp(pivot, shooter, photonvision).withTimeout(0.8),
-            new AutoAlign(swerveSubsystem, photonvision).withTimeout(0.8)),
+            new PivotShooterSetUp(pivot, shooter, photonvision).withTimeout(0.5),
+            new AutoAlign(swerveSubsystem, photonvision).withTimeout(0.5)),
         new PushRing(shooter).withTimeout(0.5),
         new StopShooter(shooter).withTimeout(0.01),
         new SetPivot(pivot, PivotGlobalValues.PIVOT_NEUTRAL_ANGLE).withTimeout(0.4));
