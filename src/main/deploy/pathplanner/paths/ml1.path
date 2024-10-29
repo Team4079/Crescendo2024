@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.6744662599645491,
+        "y": 4.5574741683291204
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.530790556243034,
+        "y": 1.5775872121139263
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.27025654051308,
+        "y": 2.4248099741751092
+      },
+      "prevControl": {
+        "x": 6.002195982940239,
+        "y": 1.5847875454444225
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 360.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "screw you aaron paths",
+  "previewStartingState": {
+    "rotation": -58.78159723565369,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

@@ -3,8 +3,9 @@
   "robotLength": 0.6096,
   "holonomicMode": true,
   "pathFolders": [
-    "screw you om part paths",
-    "screw you jayden paths"
+    "screw you aaron paths",
+    "screw you jayden paths",
+    "screw you om part paths"
   ],
   "autoFolders": [],
   "defaultMaxVel": 4.0,

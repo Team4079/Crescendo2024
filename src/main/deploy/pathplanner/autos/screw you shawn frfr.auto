@@ -1,0 +1,87 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.67,
+      "y": 4.56
+    },
+    "rotation": -60.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "SubwooferShot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "ml1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "startIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ml2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autoShootRing"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "startIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "ml3"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ml4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autoShootRing"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
