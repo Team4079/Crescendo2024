@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3074487833435935,
-        "y": 4.167946461634323
+        "x": 1.4322857736624564,
+        "y": 4.515113030226061
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.8655596101227796,
-        "y": 4.109517305630104
+        "x": 2.6263652527305057,
+        "y": 4.225921906389267
       },
       "prevControl": {
-        "x": 1.9225647230305993,
-        "y": 3.975619392289381
+        "x": 1.7121481515690302,
+        "y": 4.2912231279008015
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "screw you om part paths",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

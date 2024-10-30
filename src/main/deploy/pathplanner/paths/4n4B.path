@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.01,
-        "y": 5.54
+        "x": 2.91,
+        "y": 5.95
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8995288873969973,
-        "y": 5.690024242239298
+        "x": 1.833421848661879,
+        "y": 6.5207934052231735
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.01,
-        "y": 7.09275326677862
+        "x": 3.139446278892558,
+        "y": 7.351051793012677
       },
       "prevControl": {
-        "x": 1.4145689026846626,
-        "y": 6.320087041123074
+        "x": 2.0293255131964814,
+        "y": 7.295079317431362
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 36.025449029772936,
+    "rotation": 23.385221057213894,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "screw you om part paths",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

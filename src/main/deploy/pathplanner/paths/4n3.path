@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 2.6123666007711623,
+        "x": 2.83,
         "y": 5.375482352388193
       },
       "prevControl": {
-        "x": 2.5909248001541956,
+        "x": 2.8085581993830333,
         "y": 5.371686147910507
       },
       "nextControl": null,
@@ -49,7 +49,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "screw you jayden paths",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

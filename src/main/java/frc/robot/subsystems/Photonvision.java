@@ -180,7 +180,7 @@ public class Photonvision extends SubsystemBase {
     // 10/14/2024 outside tuning
     // jayden why are you so bad at tuning
     // Desmos: https://www.desmos.com/calculator/naalukjxze
-    double r = getDistanceSubwoofer() + 0.8;
+    double r = getDistanceSubwoofer() + 0.6;
     double f = -0.03288; // power 5
     double e = 0.6821; // power 4
     double d = -5.1422; // power 3

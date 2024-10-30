@@ -170,8 +170,8 @@ public class RobotContainer {
     padB.onTrue(new InstantCommand(swerveSubsystem::resetPidgey));
     // x is intake
 
-    padY.whileTrue(new AutoAlign(swerveSubsystem, photonvision));
-    // padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
+    // padY.whileTrue(new AutoAlign(swerveSubsystem, photonvision));
+    padY.whileTrue(new ReverseIntake(intakeyboi, shootyboi));
     // padY.whileTrue(new PassNoteGyro(swerveSubsystem, pivotyboi, shootyboi));
 
     opPadA.onTrue(new ElevatorRampUp(elevator));
@@ -199,7 +199,7 @@ public class RobotContainer {
 
     // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
 
-    return new PathPlannerAuto("screw you jayden");
+    return new PathPlannerAuto("screw you om part");
     // return new PathPlannerAuto("Note4");
     // return new InstantCommand();
 

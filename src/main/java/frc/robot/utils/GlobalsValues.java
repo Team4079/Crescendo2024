@@ -168,7 +168,7 @@ public final class GlobalsValues {
       // public static final PID STEER_PID = new PID(0.15, 0.0000, 0.000005, 0);
       // 0.05 P, 0 D
 
-      public static final PID DRIVE_PID_AUTO = new PID(7.5, 0.0, 0.00); //0.00031
+      public static final PID DRIVE_PID_AUTO = new PID(7, 0.0, 0.00); //0.00031
       public static final double DRIVE_PID_V_AUTO = 0.5;
 
       // public static final PID DRIVE_PID_TELE = new PID(0.0005, 0.0, 0.00); //0.00031
