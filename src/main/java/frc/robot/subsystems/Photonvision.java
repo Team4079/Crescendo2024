@@ -180,7 +180,7 @@ public class Photonvision extends SubsystemBase {
     // 10/14/2024 outside tuning
     // jayden why are you so bad at tuning
     // Desmos: https://www.desmos.com/calculator/naalukjxze
-    double r = getDistanceSubwoofer();
+    double r = getDistanceSubwoofer() + 0.8;
     double f = -0.03288; // power 5
     double e = 0.6821; // power 4
     double d = -5.1422; // power 3
@@ -231,9 +231,9 @@ public class Photonvision extends SubsystemBase {
       // 0.5, 5.5 coordinate for blue subwoofer
       // 16, 5.5 coordinate for red subwoofer
       if (DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red)) {
-        return Math.sqrt(Math.pow(currentPose.getX() - 16.5, 2) + Math.pow(currentPose.getY() - 5.5, 2)) + 0.4;
+        return Math.sqrt(Math.pow(currentPose.getX() - 16.5, 2) + Math.pow(currentPose.getY() - 5.5, 2));
       } else {
-        return Math.sqrt(Math.pow(currentPose.getX(), 2) + Math.pow(currentPose.getY() - 5.5, 2)) + 0.4;
+        return Math.sqrt(Math.pow(currentPose.getX(), 2) + Math.pow(currentPose.getY() - 5.5, 2));
       }
 
     }
