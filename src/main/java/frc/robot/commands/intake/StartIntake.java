@@ -59,7 +59,10 @@ public class StartIntake extends Command {
   @Override
   public void execute() {
 
-    startIntakeAndShooter();
+    if (!ShooterGlobalValues.HAS_PIECE)
+    {
+      startIntakeAndShooter();
+    }
 
     if (ShooterGlobalValues.HAS_PIECE) {
       stopIntakeAndShooter();
@@ -105,11 +108,6 @@ public class StartIntake extends Command {
     shooter.stopKraken();
     intake.stopKraken();
     timer.stop();
-
-    shouldEnd = true;
-    System.out.println("ended intkae");
-    System.out.println("ended intkae");
-    System.out.println("ended intkae");
   }
 
   /**
@@ -126,6 +124,11 @@ public class StartIntake extends Command {
     while (timer.get() < 0.45) {
       shooter.setKrakenVelocity(20);
     }
+
+    if (timer.get() > 0.45)
+    {
+      shouldEnd = true;
+    }
   }
 
 
@@ -139,6 +142,7 @@ public class StartIntake extends Command {
   @Override
   public void end(boolean interrupted) {
     intake.stopKraken();    
+    shooter.stopAllMotors();
   }
 
   /**

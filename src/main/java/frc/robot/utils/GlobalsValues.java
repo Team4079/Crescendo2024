@@ -216,7 +216,7 @@ public final class GlobalsValues {
 
     public static final int INTAKE_MOTOR_ID = 17;
 
-    public static final double INTAKE_SPEED = 50;
+    public static final double INTAKE_SPEED = 60;
 
     // Intake PID Values
     public static final double INTAKE_PID_V = 0.1;
