@@ -377,7 +377,7 @@ public final class GlobalsValues {
 
     // Camera One
     public static final double CAMERA_ONE_HEIGHT_METER = 0.47;
-    public static final double CAMERA_ONE_ANGLE_DEG = 42; // up is positive
+    public static final double CAMERA_ONE_ANGLE_DEG = 33; // up is positive
     public static final double OFFSET_TOWARD_MID_LEFT = -15.00;
 
     // Camera Two
