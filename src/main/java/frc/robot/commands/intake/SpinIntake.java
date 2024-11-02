@@ -21,7 +21,6 @@ public class SpinIntake extends Command {
   private final LED led;
   private final LogitechGamingPad pad;
   private final Timer timer;
-  private final Timer limelightTimer;
   private boolean shouldSpin;
 
   /**
@@ -41,7 +40,6 @@ public class SpinIntake extends Command {
     this.photonvision = photonvision;
     this.led = led;
     timer = new Timer();
-    limelightTimer = new Timer();
     addRequirements(intake, led);
   }
 
@@ -63,7 +61,7 @@ public class SpinIntake extends Command {
   @Override
   public void execute() {
     if (!DriverStation.isAutonomous()){
-      SmartDashboard.putBoolean("should spin", shouldSpin);
+      // SmartDashboard.putBoolean("should spin", shouldSpin);
       if (pad.getXReleased()) {
         shouldSpin = !shouldSpin;
       }
@@ -92,7 +90,6 @@ public class SpinIntake extends Command {
     intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
     shooter.setKrakenVelocity(ShooterGlobalValues.PASSTHROUGH_RPS);
     timer.reset();
-    limelightTimer.reset();
   }
 
   /**
@@ -114,7 +111,6 @@ public class SpinIntake extends Command {
   private void handleTimers() {
     if (!pad.getBReleased() && !pad.getRightBumperReleased()) {
       timer.start();
-      limelightTimer.start();
       handleShooterTiming();
     }
 
