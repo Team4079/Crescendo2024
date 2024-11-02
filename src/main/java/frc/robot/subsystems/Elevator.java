@@ -109,7 +109,7 @@ public class Elevator extends SubsystemBase {
     //   moveElevator(0.1);
     // }
 
-    // logData();
+    logData();
   }
 
   public void setPassSpeed(double speed) {
