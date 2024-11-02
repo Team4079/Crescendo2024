@@ -10,6 +10,7 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues.ElevatorGlobalValues;
+import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
 
 /**
  * The Elevator subsystem controls the elevator mechanism of the robot. It uses a CANSparkMax motor
@@ -75,7 +76,9 @@ public class Elevator extends SubsystemBase {
     getPassPIDController().setI(ElevatorGlobalValues.PasskI);
     getPassPIDController().setD(ElevatorGlobalValues.PasskD);
 
-    logData();
+    if (BasePIDGlobal.TEST_MODE == true) {
+      logData();
+    }
   }
 
   /**

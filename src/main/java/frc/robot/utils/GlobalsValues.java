@@ -181,8 +181,8 @@ public final class GlobalsValues {
       public static final PID ROTATIONAL_PID = new PID(0.15, 0.0, 0, 0);
       public static final PID PASS_ROTATIONAL_PID = new PID(0.075, 0000, 0.00, 0);
 
-      // PathPlanner Push Variable
-      public static boolean TEST_MODE = true;
+      // PathPlanner Push Variable Turn smartdasboard on or off
+      public static boolean TEST_MODE = false;
 
       public static HolonomicPathFollowerConfig pathFollower =
       new HolonomicPathFollowerConfig(
@@ -366,8 +366,6 @@ public final class GlobalsValues {
     private PhotonVisionConstants() {
       throw new IllegalStateException(UTILITY_CLASS);
     }
-
-    public static boolean TEST_MODE = true;
 
     // Offset Values
     public static double tx = 0.0;
