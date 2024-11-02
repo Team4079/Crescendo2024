@@ -76,8 +76,11 @@ public class PivotShooterSetUp extends Command {
   @Override
   public void execute() {
     double velocity = velocityPIDController.calculate(pivot.getPivotPos(), pos);
+    pos = photonvision.getPivotPosition();
+    
     SmartDashboard.putNumber("Error Pivot Right", -pivot.getPivotRightPos() + pos);
     SmartDashboard.putNumber("Error Pivot Left", -pivot.getPivotLeftPos() + pos);
+    SmartDashboard.putNumber("Pivot Auto POS", pos);
 
     // Horizontal PID and offset
     double horizontalError = -photonvision.getYaw();

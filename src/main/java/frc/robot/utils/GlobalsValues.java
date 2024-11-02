@@ -62,7 +62,7 @@ public final class GlobalsValues {
     public static final double AACORN_SPEED = 0.95;
     public static final double SLOW_SPEED = 0.3;
     public static final double TURN_CONSTANT = 0.3; // 0.3
-    public static final double MetersPerRevolution = WHEEL_DIAMETER * Math.PI;
+    public static final double MetersPerRevolution = WHEEL_DIAMETER * Math.PI * 0.99;
     public static double HEADING = 0.0;
 
     // Limit Values
