@@ -199,7 +199,7 @@ public class RobotContainer {
 
     // MUST USE PRESET STARTING POSE; SET TO SAME AS WHERE PATH STARTS
 
-    return new PathPlannerAuto("screw you om part");
+    return new PathPlannerAuto("screw you shawn frfr");
     // return new PathPlannerAuto("Note4");
     // return new InstantCommand();
 
@@ -209,6 +209,7 @@ public class RobotContainer {
   public Command setTeleopPID() {
     return new InstantCommand(swerveSubsystem::setTelePID);
   }
+
 
   public Command setAutoPID() {
     return new InstantCommand(swerveSubsystem::setAutoPID);

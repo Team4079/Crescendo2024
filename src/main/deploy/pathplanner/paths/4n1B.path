@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.6263652527305057,
-        "y": 4.225921906389267
+        "x": 2.67,
+        "y": 4.41
       },
       "prevControl": {
-        "x": 1.7121481515690302,
-        "y": 4.2912231279008015
+        "x": 1.7557828988385245,
+        "y": 4.475301221511534
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "screw you om part paths",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
