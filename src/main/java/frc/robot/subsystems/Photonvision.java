@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.GlobalsValues.PhotonVisionConstants;
+import frc.robot.utils.GlobalsValues.SwerveGlobalValues.BasePIDGlobal;
+
 import java.util.List;
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
@@ -181,12 +183,12 @@ public class Photonvision extends SubsystemBase {
     // jayden why are you so bad at tuning
     // Desmos: https://www.desmos.com/calculator/naalukjxze
     double r = getDistanceSubwoofer() + 0.6;
-    double f = -0.03288; // power 5
-    double e = 0.6821; // power 4
-    double d = -5.1422; // power 3
-    double c = 16.4425; // power 2
-    double b = -16.5582; // power 1
-    double a = 15.4507; // constant
+    double f = 0.0408512; // power 5
+    double e = -0.771361; // power 4
+    double d = 6.03679; // power 3
+    double c = -25.2466; // power 2
+    double b = 58.1422; // power 1
+    double a = -35.6947; // constant
 
     // if (r == -1)
     // {
