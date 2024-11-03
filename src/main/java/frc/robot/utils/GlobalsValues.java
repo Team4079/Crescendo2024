@@ -178,11 +178,11 @@ public final class GlobalsValues {
       // DON'T SET D PAST 0.03 - Erick or else the swerve moduls make funny nosie
 
       // AutoAlign PID
-      public static final PID ROTATIONAL_PID = new PID(0.15, 0.0, 0, 0);
-      public static final PID PASS_ROTATIONAL_PID = new PID(0.075, 0000, 0.00, 0);
+      public static final PID ROTATIONAL_PID = new PID(0.2, 0.0, 0, 0);
+      public static final PID PASS_ROTATIONAL_PID = new PID(0.1, 0000, 0.00, 0);
 
       // PathPlanner Push Variable Turn smartdasboard on or off
-      public static boolean TEST_MODE = false;
+      public static boolean TEST_MODE = true;
 
       public static HolonomicPathFollowerConfig pathFollower =
       new HolonomicPathFollowerConfig(
