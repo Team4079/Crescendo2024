@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 8.231303769843601,
-        "y": 4.099779112962734
+        "x": 8.69937885330316,
+        "y": 4.1979356685986104
       },
       "prevControl": {
-        "x": 7.0000106969660685,
-        "y": 4.118306766753913
+        "x": 7.468085780425628,
+        "y": 4.21646332238979
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "screw you shawn paths",
   "previewStartingState": {
     "rotation": -0.690277197865121,
     "velocity": 0

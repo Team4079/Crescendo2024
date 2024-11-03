@@ -20,8 +20,8 @@
         "y": 5.2
       },
       "prevControl": {
-        "x": 6.400523548378058,
-        "y": 3.4667965895836894
+        "x": 5.900755074237421,
+        "y": 3.0038561895305618
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "screw you shawn paths",
   "previewStartingState": {
     "rotation": -0.690277197865121,
     "velocity": 0

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.231303769843601,
-        "y": 4.099779112962734
+        "x": 8.7,
+        "y": 4.2
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.337570660277571,
-        "y": 4.12513604548266
+        "x": 6.806266890433969,
+        "y": 4.225356932519926
       },
       "isLocked": false,
       "linkedName": null
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "screw you shawn paths",
   "previewStartingState": {
     "rotation": -0.690277197865121,
     "velocity": 0

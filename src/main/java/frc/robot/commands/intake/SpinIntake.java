@@ -135,10 +135,10 @@ public class SpinIntake extends Command {
     }
   }
 
-    private void moveUp() {
-      shooter.setKrakenVelocity(ShooterGlobalValues.PUSH_UP_RPS);
-      intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
-    }
+  private void moveUp() {
+    shooter.setKrakenVelocity(ShooterGlobalValues.PUSH_UP_RPS);
+    intake.setIntakeVelocity(IntakeGlobalValues.INTAKE_SPEED);
+  }
 
   /**
    * Controls the LED state based on the shooter and intake status.
