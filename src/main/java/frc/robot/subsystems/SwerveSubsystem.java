@@ -131,7 +131,7 @@ public class SwerveSubsystem extends SubsystemBase {
         poseEstimator.getEstimatedPosition();
         SwerveGlobalValues.currentPose = poseEstimator.getEstimatedPosition();
       }
-  }
+    }
 
     poseEstimator.update(getPidgeyRotation(), getModulePositions());
 

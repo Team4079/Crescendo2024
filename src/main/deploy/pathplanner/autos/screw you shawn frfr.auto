@@ -37,9 +37,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "ml2"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "ml2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "startIntake"
+                }
+              }
+            ]
           }
         },
         {
