@@ -189,5 +189,6 @@ public class Elevator extends SubsystemBase {
     SmartDashboard.putNumber("Elevator Speed", elevatorMotorSparkMax.get());
     SmartDashboard.putNumber("Elevator Roller AppOut", passMotorSparkMax.getAppliedOutput());
     SmartDashboard.putNumber("Elevator Roller OutCur", passMotorSparkMax.getOutputCurrent());
+    SmartDashboard.putNumber("Elevator Output", elevatorMotorSparkMax.getAppliedOutput());
   }
 }
