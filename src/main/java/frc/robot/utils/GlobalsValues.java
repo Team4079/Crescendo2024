@@ -182,7 +182,7 @@ public final class GlobalsValues {
       public static final PID PASS_ROTATIONAL_PID = new PID(0.1, 0000, 0.00, 0);
 
       // PathPlanner Push Variable Turn smartdasboard on or off
-      public static boolean TEST_MODE = true;
+      public static boolean TEST_MODE = false;
 
       public static HolonomicPathFollowerConfig pathFollower =
       new HolonomicPathFollowerConfig(
