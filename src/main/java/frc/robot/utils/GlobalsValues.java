@@ -173,7 +173,7 @@ public final class GlobalsValues {
 
       // public static final PID DRIVE_PID_TELE = new PID(0.0005, 0.0, 0.00); //0.00031
       // public static final double DRIVE_PID_V_TELE = 1;
-      public static final PID DRIVE_PID_TELE = new PID(1, 0.0, 0.0);
+      public static final PID DRIVE_PID_TELE = new PID(1.5, 0.0, 0.0);
       public static final double DRIVE_PID_V_TELE = 0;
       // DON'T SET D PAST 0.03 - Erick or else the swerve moduls make funny nosie
 
@@ -182,7 +182,7 @@ public final class GlobalsValues {
       public static final PID PASS_ROTATIONAL_PID = new PID(0.1, 0000, 0.00, 0);
 
       // PathPlanner Push Variable Turn smartdasboard on or off
-      public static boolean TEST_MODE = false;
+      public static boolean TEST_MODE = true;
 
       public static HolonomicPathFollowerConfig pathFollower =
       new HolonomicPathFollowerConfig(
