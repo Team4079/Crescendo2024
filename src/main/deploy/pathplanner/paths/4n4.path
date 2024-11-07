@@ -1,5 +1,5 @@
 {
-  "version": 1.0,
+  "version": "2025.0",
   "waypoints": [
     {
       "anchor": {
@@ -20,7 +20,7 @@
         "y": 4.002397186289035
       },
       "prevControl": {
-        "x": 1.1711140860004146,
+        "x": 1.171114086000415,
         "y": 4.917787297021807
       },
       "nextControl": null,
@@ -31,28 +31,29 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1,
-      "rotationDegrees": -36.19569802854581,
-      "rotateFast": false
+      "rotationDegrees": -36.19569802854581
     }
   ],
   "constraintZones": [],
+  "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 2.5,
     "maxAngularVelocity": 360.0,
-    "maxAngularAcceleration": 360.0
+    "maxAngularAcceleration": 360.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -37.23842647219905,
-    "rotateFast": false
+    "rotation": -37.23842647219905
   },
   "reversed": false,
   "folder": "screw you jayden paths",
-  "previewStartingState": {
-    "rotation": 0,
-    "velocity": 0
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }
